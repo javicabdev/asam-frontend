@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { es } from 'date-fns/locale'
+import es from 'date-fns/locale/es'
 
 import { apolloClient } from '@/lib/apollo-client'
 import { theme } from '@/lib/theme'

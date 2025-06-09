@@ -3,7 +3,7 @@ import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 
 const httpLink = createHttpLink({
-  uri: import.meta.env.VITE_GRAPHQL_URL || 'http://localhost:8080/graphql',
+  uri: import.meta.env.VITE_GRAPHQL_URL || '/graphql',
 })
 
 // Authentication middleware
@@ -18,7 +18,7 @@ const authLink = setContext((_, { headers }) => {
 })
 
 // Error handling middleware
-const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
+const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     for (const err of graphQLErrors) {
       switch (err.extensions?.code) {

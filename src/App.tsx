@@ -7,7 +7,7 @@ import es from 'date-fns/locale/es'
 
 import { apolloClient } from '@/lib/apollo-client'
 import { theme } from '@/lib/theme'
-import { AppRoutes } from '@/routes'
+import { AppRoutes } from './routes'
 
 function App() {
   return (

@@ -30,7 +30,7 @@ const LoadingScreen = () => (
   </Box>
 )
 
-export function AppRoutes() {
+export const AppRoutes = () => {
   return (
     <Suspense fallback={<LoadingScreen />}>
       <Routes>

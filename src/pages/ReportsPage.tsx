@@ -4,10 +4,10 @@ export default function ReportsPage() {
   return (
     <div>
       <Typography variant="h4" component="h1" gutterBottom>
-        Reportes
+        Informes
       </Typography>
       <Typography variant="body1">
-        Aquí podrás generar reportes y ver el listado de morosos.
+        Aquí podrás generar informes y ver el listado de morosos.
       </Typography>
     </div>
   )

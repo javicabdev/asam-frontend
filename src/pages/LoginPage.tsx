@@ -50,7 +50,7 @@ export default function LoginPage() {
             ASAM
           </Typography>
           <Typography variant="body1" color="text.secondary" align="center" sx={{ mb: 4 }}>
-            Asociación solidaridad y ayudas mutuos
+            Asociación de solidaridad y ayuda mutua
           </Typography>
           
           <form onSubmit={handleSubmit(onSubmit)}>

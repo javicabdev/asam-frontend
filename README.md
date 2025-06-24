@@ -42,33 +42,32 @@ npm install
 cp .env.example .env
 ```
 
-## 🚀 Desarrollo
+## 🚀 Inicio Rápido
 
 ```bash
-# Iniciar servidor de desarrollo
+# Menú interactivo (recomendado)
+menu.bat
+
+# Verificar estado del proyecto
+verify.bat
+
+# Iniciar desarrollo directo
+start.bat
+# o
 npm run dev
-
-# El frontend estará disponible en http://localhost:5173
-```
-
-## 🏗️ Build
-
-```bash
-# Construir para producción
-npm run build
-
-# Previsualizar build
-npm run preview
 ```
 
 ## 📁 Estructura del Proyecto
 
 ```
 asam-frontend/
+├── docs/             # 📚 Documentación del proyecto
+├── scripts/          # 🛠️ Scripts de utilidad
 ├── public/           # Assets estáticos
 ├── src/
 │   ├── components/   # Componentes reutilizables
 │   ├── features/     # Módulos por funcionalidad
+│   │   └── members/  # Feature de gestión de socios
 │   ├── hooks/        # Custom hooks
 │   ├── layouts/      # Layouts de la aplicación
 │   ├── lib/          # Configuraciones (Apollo, etc)
@@ -77,12 +76,44 @@ asam-frontend/
 │   ├── stores/       # Estado global (Zustand)
 │   ├── types/        # TypeScript types
 │   └── utils/        # Utilidades
+├── menu.bat          # 🎯 Menú principal interactivo
+├── verify.bat        # ✅ Verificación rápida
+├── start.bat         # 🚀 Iniciar frontend
 ├── .env.example      # Variables de entorno ejemplo
 ├── index.html        # Entry point HTML
 ├── package.json      # Dependencias
 ├── tsconfig.json     # Configuración TypeScript
 └── vite.config.ts    # Configuración Vite
 ```
+
+## 🏗️ Scripts Disponibles
+
+### Scripts de Acceso Rápido (Raíz)
+- `menu.bat` - Menú interactivo principal
+- `verify.bat` - Verificar estado del proyecto
+- `start.bat` - Iniciar frontend
+
+### Scripts NPM
+```bash
+npm run dev      # Servidor de desarrollo
+npm run build    # Build de producción
+npm run preview  # Preview del build
+npm run lint     # Linter
+npm run format   # Formatear código
+```
+
+### Scripts de Utilidad (carpeta scripts/)
+- `verify-all.bat` - Verificación completa
+- `check-typescript.bat` - Solo verificar TypeScript
+- `start-frontend.bat` - Iniciar con mensajes
+- Y muchos más...
+
+## 📚 Documentación
+
+Ver la documentación completa en la carpeta `docs/`:
+- [Índice de Documentación](docs/DOCS_INDEX.md)
+- [Estado del Proyecto](docs/PROJECT_STATUS.md)
+- [Estado Final](docs/FINAL_STATUS.md)
 
 ## 🔐 Variables de Entorno
 

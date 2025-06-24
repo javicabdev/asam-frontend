@@ -42,7 +42,7 @@ const menuItems = [
   { text: 'Familias', icon: <FamilyIcon />, path: '/families' },
   { text: 'Pagos', icon: <PaymentIcon />, path: '/payments' },
   { text: 'Flujo de Caja', icon: <AccountBalanceIcon />, path: '/cash-flow' },
-  { text: 'Reportes', icon: <AssessmentIcon />, path: '/reports' },
+  { text: 'Informes', icon: <AssessmentIcon />, path: '/reports' },
 ]
 
 export function MainLayout() {

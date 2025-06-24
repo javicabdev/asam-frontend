@@ -27,5 +27,14 @@
     }
   },
   "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "**/*.example.ts",
+    "**/*.example.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -31,8 +31,7 @@ import {
   Person as PersonIcon,
 } from '@mui/icons-material'
 import { useAuthStore } from '@/stores/authStore'
-import { useMutation } from '@apollo/client'
-import { LOGOUT_MUTATION } from '@/graphql/auth'
+import { useAuth } from '@/hooks/useAuth'
 
 const DRAWER_WIDTH = 240
 
@@ -50,11 +49,10 @@ export function MainLayout() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const navigate = useNavigate()
   const location = useLocation()
-  const { user, logout } = useAuthStore()
+  const { user } = useAuthStore()
+  const { logout } = useAuth()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  
-  const [logoutMutation] = useMutation(LOGOUT_MUTATION)
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
@@ -69,14 +67,7 @@ export function MainLayout() {
   }
 
   const handleLogout = async () => {
-    try {
-      await logoutMutation()
-    } catch (error) {
-      console.error('Error during logout:', error)
-    } finally {
-      logout()
-      navigate('/login')
-    }
+    await logout()
   }
 
   const drawer = (

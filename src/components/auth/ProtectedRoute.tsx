@@ -34,6 +34,16 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 
+  // Check email verification
+  if (user && !user.emailVerified) {
+    // Allow access to email verification pending page
+    if (location.pathname === '/email-verification-pending') {
+      return <Outlet />;
+    }
+    // Redirect to email verification pending page
+    return <Navigate to="/email-verification-pending" replace />;
+  }
+
   // Check admin requirement
   if (requireAdmin && user?.role !== 'admin') {
     return <Navigate to="/unauthorized" replace />;

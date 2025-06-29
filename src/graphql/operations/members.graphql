@@ -7,19 +7,19 @@ fragment MemberBasicFields on Member {
   apellidos
   estado
   fecha_alta
+  fecha_baja
   correo_electronico
+  poblacion
+  provincia
+  documento_identidad
 }
 
 fragment MemberFullFields on Member {
   ...MemberBasicFields
   calle_numero_piso
   codigo_postal
-  poblacion
-  provincia
   pais
-  fecha_baja
   fecha_nacimiento
-  documento_identidad
   profesion
   nacionalidad
   observaciones

@@ -1,6 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
+import { debounce } from 'lodash';
 
 import { LIST_MEMBERS_QUERY } from '../api/queries';
 import { Member, MemberFilter, SortDirection } from '../types';
@@ -18,15 +19,18 @@ interface UseMembersTableResult {
   handleSortChange: (field: string, direction: 'ASC' | 'DESC' | null) => void;
   handleRowClick: (member: Member) => void;
   handleFilterChange: (filter: Partial<MemberFilter>) => void;
+  handleSelectionChange: (selectedIds: string[]) => void;
+  selectedMembers: string[];
   refetch: () => void;
 }
 
 export function useMembersTable(): UseMembersTableResult {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(25);
+  const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
   const [filter, setFilter] = useState<MemberFilter>({
-    pagination: { page: 1, pageSize: 10 },
+    pagination: { page: 1, pageSize: 25 },
   });
 
   // Convert internal filter to GraphQL input format
@@ -34,17 +38,41 @@ export function useMembersTable(): UseMembersTableResult {
     estado: filter.estado,
     tipo_membresia: filter.tipo_membresia,
     search_term: filter.search_term,
+    poblacion: filter.poblacion,
+    provincia: filter.provincia,
+    fecha_alta_desde: filter.fecha_alta_desde,
+    fecha_alta_hasta: filter.fecha_alta_hasta,
+    fecha_baja_desde: filter.fecha_baja_desde,
+    fecha_baja_hasta: filter.fecha_baja_hasta,
+    correo_electronico: filter.correo_electronico,
+    documento_identidad: filter.documento_identidad,
     pagination: filter.pagination,
     sort: filter.sort,
   };
 
-  const { data, loading, error, refetch } = useQuery<ListMembersQueryResponse>(
+  const { data, loading, error, refetch, fetchMore } = useQuery<ListMembersQueryResponse>(
     LIST_MEMBERS_QUERY,
     {
       variables: { filter: graphqlFilter },
       notifyOnNetworkStatusChange: true,
+      fetchPolicy: 'cache-and-network',
     }
   );
+
+  // Debounced refetch for search term changes
+  const debouncedRefetch = useCallback(
+    debounce(() => {
+      refetch();
+    }, 300),
+    [refetch]
+  );
+
+  // Effect to trigger refetch when filter changes
+  useEffect(() => {
+    if (filter.search_term !== undefined) {
+      debouncedRefetch();
+    }
+  }, [filter.search_term, debouncedRefetch]);
 
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
@@ -94,6 +122,11 @@ export function useMembersTable(): UseMembersTableResult {
       ...newFilter,
       pagination: { ...prev.pagination!, page: 1 },
     }));
+    setSelectedMembers([]); // Clear selection on filter change
+  }, []);
+
+  const handleSelectionChange = useCallback((selectedIds: string[]) => {
+    setSelectedMembers(selectedIds);
   }, []);
 
   return {
@@ -108,6 +141,8 @@ export function useMembersTable(): UseMembersTableResult {
     handleSortChange,
     handleRowClick,
     handleFilterChange,
+    handleSelectionChange,
+    selectedMembers,
     refetch,
   };
 }

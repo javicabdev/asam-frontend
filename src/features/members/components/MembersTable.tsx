@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   DataGrid,
   GridColDef,
@@ -7,8 +7,26 @@ import {
   GridToolbar,
   GridValueGetterParams,
   GridRenderCellParams,
+  GridRowParams,
+  GridCellParams,
+  GridColumnHeaderParams,
+  GridFilterModel,
+  GridRowSelectionModel,
+  esES,
 } from '@mui/x-data-grid';
-import { Chip, Box } from '@mui/material';
+import { 
+  Chip, 
+  Box, 
+  Tooltip, 
+  IconButton,
+  LinearProgress,
+  Typography,
+} from '@mui/material';
+import { 
+  Visibility as VisibilityIcon,
+  Email as EmailIcon,
+  Phone as PhoneIcon,
+} from '@mui/icons-material';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -24,6 +42,8 @@ interface MembersTableProps {
   onPageSizeChange: (pageSize: number) => void;
   onSortChange: (field: string, direction: 'ASC' | 'DESC' | null) => void;
   onRowClick: (member: Member) => void;
+  onSelectionChange?: (selectedIds: string[]) => void;
+  selectable?: boolean;
 }
 
 export function MembersTable({
@@ -36,14 +56,32 @@ export function MembersTable({
   onPageSizeChange,
   onSortChange,
   onRowClick,
+  onSelectionChange,
+  selectable = false,
 }: MembersTableProps) {
+  const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+
   const columns: GridColDef[] = useMemo(
     () => [
       {
         field: 'numero_socio',
         headerName: 'Nº Socio',
-        width: 120,
+        width: 110,
         sortable: true,
+        renderCell: (params: GridRenderCellParams) => (
+          <Tooltip title={`Ver detalles de ${params.row.nombre}`}>
+            <Box
+              sx={{
+                cursor: 'pointer',
+                fontWeight: 'medium',
+                color: 'primary.main',
+                '&:hover': { textDecoration: 'underline' },
+              }}
+            >
+              {params.value}
+            </Box>
+          </Tooltip>
+        ),
       },
       {
         field: 'nombre_completo',
@@ -52,12 +90,23 @@ export function MembersTable({
         sortable: true,
         valueGetter: (params: GridValueGetterParams) =>
           `${params.row.nombre} ${params.row.apellidos}`,
+        renderCell: (params: GridRenderCellParams) => (
+          <Box>
+            <Typography variant="body2">{params.value}</Typography>
+            {params.row.documento_identidad && (
+              <Typography variant="caption" color="text.secondary">
+                DNI: {params.row.documento_identidad}
+              </Typography>
+            )}
+          </Box>
+        ),
       },
       {
         field: 'tipo_membresia',
         headerName: 'Tipo',
         width: 120,
         sortable: true,
+        filterable: true,
         renderCell: (params: GridRenderCellParams) => (
           <Chip
             label={params.value === MembershipType.INDIVIDUAL ? 'Individual' : 'Familiar'}
@@ -71,11 +120,13 @@ export function MembersTable({
         headerName: 'Estado',
         width: 120,
         sortable: true,
+        filterable: true,
         renderCell: (params: GridRenderCellParams) => (
           <Chip
             label={params.value === MemberStatus.ACTIVE ? 'Activo' : 'Inactivo'}
             color={params.value === MemberStatus.ACTIVE ? 'success' : 'default'}
             size="small"
+            variant={params.value === MemberStatus.ACTIVE ? 'filled' : 'outlined'}
           />
         ),
       },
@@ -83,26 +134,96 @@ export function MembersTable({
         field: 'poblacion',
         headerName: 'Población',
         width: 150,
-        sortable: false,
+        sortable: true,
+        filterable: true,
+      },
+      {
+        field: 'provincia',
+        headerName: 'Provincia',
+        width: 130,
+        sortable: true,
+        filterable: true,
+        renderCell: (params: GridRenderCellParams) => params.value || '-',
       },
       {
         field: 'correo_electronico',
         headerName: 'Email',
         width: 200,
         sortable: false,
+        filterable: true,
+        renderCell: (params: GridRenderCellParams) => {
+          if (!params.value) return '-';
+          return (
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <EmailIcon sx={{ fontSize: 16, mr: 0.5, color: 'text.secondary' }} />
+              <Tooltip title={params.value}>
+                <Typography variant="body2" noWrap>
+                  {params.value}
+                </Typography>
+              </Tooltip>
+            </Box>
+          );
+        },
       },
       {
         field: 'fecha_alta',
         headerName: 'Fecha Alta',
         width: 130,
         sortable: true,
+        filterable: true,
         valueFormatter: (params) => {
           if (!params.value) return '';
           return format(new Date(params.value), 'dd/MM/yyyy', { locale: es });
         },
       },
+      {
+        field: 'fecha_baja',
+        headerName: 'Fecha Baja',
+        width: 130,
+        sortable: true,
+        filterable: true,
+        valueFormatter: (params) => {
+          if (!params.value) return '-';
+          return format(new Date(params.value), 'dd/MM/yyyy', { locale: es });
+        },
+        renderCell: (params: GridRenderCellParams) => {
+          if (!params.value) return '-';
+          return (
+            <Typography
+              variant="body2"
+              color="error"
+              sx={{ fontWeight: 'medium' }}
+            >
+              {params.formattedValue}
+            </Typography>
+          );
+        },
+      },
+      {
+        field: 'actions',
+        headerName: 'Acciones',
+        width: 100,
+        sortable: false,
+        filterable: false,
+        disableColumnMenu: true,
+        renderCell: (params: GridRenderCellParams) => (
+          <Box>
+            <Tooltip title="Ver detalles">
+              <IconButton
+                size="small"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRowClick(params.row as Member);
+                }}
+              >
+                <VisibilityIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        ),
+      },
     ],
-    []
+    [onRowClick]
   );
 
   const handlePaginationModelChange = (model: GridPaginationModel) => {
@@ -123,15 +244,29 @@ export function MembersTable({
     }
   };
 
+  const handleSelectionModelChange = (newSelectionModel: GridRowSelectionModel) => {
+    setRowSelectionModel(newSelectionModel);
+    if (onSelectionChange) {
+      onSelectionChange(newSelectionModel as string[]);
+    }
+  };
+
+  const getRowClassName = (params: GridRowParams) => {
+    if (params.row.estado === MemberStatus.INACTIVE) {
+      return 'inactive-row';
+    }
+    return '';
+  };
+
   return (
-    <Box sx={{ height: 600, width: '100%' }}>
+    <Box sx={{ width: '100%' }}>
       <DataGrid
         rows={members}
         columns={columns}
         getRowId={(row) => row.miembro_id}
         rowCount={totalCount}
         loading={loading}
-        pageSizeOptions={[10, 25, 50]}
+        pageSizeOptions={[10, 25, 50, 100]}
         paginationModel={{
           page: page - 1,
           pageSize,
@@ -142,27 +277,52 @@ export function MembersTable({
         sortingMode="server"
         onRowClick={(params) => onRowClick(params.row as Member)}
         disableRowSelectionOnClick
+        checkboxSelection={selectable}
+        rowSelectionModel={rowSelectionModel}
+        onRowSelectionModelChange={handleSelectionModelChange}
+        getRowClassName={getRowClassName}
+        autoHeight
+        density="comfortable"
         slots={{
           toolbar: GridToolbar,
+          loadingOverlay: LinearProgress,
         }}
         slotProps={{
           toolbar: {
             showQuickFilter: true,
             quickFilterProps: { debounceMs: 500 },
+            csvOptions: {
+              fileName: `socios_${format(new Date(), 'yyyy-MM-dd')}`,
+              utf8WithBom: true,
+            },
+            printOptions: {
+              hideFooter: true,
+              hideToolbar: true,
+            },
           },
         }}
-        localeText={{
-          // Spanish translations
-          noRowsLabel: 'No hay socios',
-          toolbarDensity: 'Densidad',
-          toolbarDensityLabel: 'Densidad',
-          toolbarDensityCompact: 'Compacta',
-          toolbarDensityStandard: 'Estándar',
-          toolbarDensityComfortable: 'Cómoda',
-          toolbarColumns: 'Columnas',
-          toolbarFilters: 'Filtros',
-          toolbarExport: 'Exportar',
-          toolbarQuickFilterPlaceholder: 'Buscar...',
+        localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+        sx={{
+          '& .MuiDataGrid-row': {
+            cursor: 'pointer',
+            '&:hover': {
+              backgroundColor: 'action.hover',
+            },
+          },
+          '& .inactive-row': {
+            backgroundColor: 'action.disabledBackground',
+            '&:hover': {
+              backgroundColor: 'action.disabled',
+            },
+          },
+          '& .MuiDataGrid-columnHeader': {
+            backgroundColor: 'grey.100',
+            fontWeight: 'bold',
+          },
+          '& .MuiDataGrid-cell': {
+            borderBottom: '1px solid',
+            borderBottomColor: 'divider',
+          },
         }}
       />
     </Box>

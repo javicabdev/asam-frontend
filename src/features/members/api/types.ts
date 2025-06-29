@@ -53,6 +53,14 @@ export interface MemberFilterInput {
   estado?: 'ACTIVE' | 'INACTIVE';
   tipo_membresia?: 'INDIVIDUAL' | 'FAMILY';
   search_term?: string;
+  poblacion?: string;
+  provincia?: string;
+  fecha_alta_desde?: string;
+  fecha_alta_hasta?: string;
+  fecha_baja_desde?: string;
+  fecha_baja_hasta?: string;
+  correo_electronico?: string;
+  documento_identidad?: string;
   pagination?: PaginationInput;
   sort?: SortInput;
 }

@@ -48,6 +48,14 @@ export interface MemberFilter {
   estado?: MemberStatus;
   tipo_membresia?: MembershipType;
   search_term?: string;
+  poblacion?: string;
+  provincia?: string;
+  fecha_alta_desde?: string;
+  fecha_alta_hasta?: string;
+  fecha_baja_desde?: string;
+  fecha_baja_hasta?: string;
+  correo_electronico?: string;
+  documento_identidad?: string;
   pagination?: {
     page: number;
     pageSize: number;

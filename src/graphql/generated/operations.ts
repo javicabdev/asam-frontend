@@ -124,44 +124,44 @@ export type RemoveFamilyMemberMutationVariables = Exact<{
 
 export type RemoveFamilyMemberMutation = { __typename?: 'Mutation', removeFamilyMember: { __typename?: 'MutationResponse', success: boolean, message?: string | null, error?: string | null } };
 
-export type MemberBasicFieldsFragment = { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, correo_electronico?: string | null };
+export type MemberBasicFieldsFragment = { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, correo_electronico?: string | null, poblacion: string, provincia: string, documento_identidad?: string | null };
 
-export type MemberFullFieldsFragment = { __typename?: 'Member', calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, correo_electronico?: string | null };
+export type MemberFullFieldsFragment = { __typename?: 'Member', calle_numero_piso: string, codigo_postal: string, pais: string, fecha_nacimiento?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, correo_electronico?: string | null, poblacion: string, provincia: string, documento_identidad?: string | null };
 
 export type GetMemberQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetMemberQuery = { __typename?: 'Query', getMember?: { __typename?: 'Member', calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, correo_electronico?: string | null } | null };
+export type GetMemberQuery = { __typename?: 'Query', getMember?: { __typename?: 'Member', calle_numero_piso: string, codigo_postal: string, pais: string, fecha_nacimiento?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, correo_electronico?: string | null, poblacion: string, provincia: string, documento_identidad?: string | null } | null };
 
 export type ListMembersQueryVariables = Exact<{
   filter?: InputMaybe<MemberFilter>;
 }>;
 
 
-export type ListMembersQuery = { __typename?: 'Query', listMembers: { __typename?: 'MemberConnection', nodes: Array<{ __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, correo_electronico?: string | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
+export type ListMembersQuery = { __typename?: 'Query', listMembers: { __typename?: 'MemberConnection', nodes: Array<{ __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, correo_electronico?: string | null, poblacion: string, provincia: string, documento_identidad?: string | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
 
 export type SearchMembersQueryVariables = Exact<{
   criteria: Scalars['String']['input'];
 }>;
 
 
-export type SearchMembersQuery = { __typename?: 'Query', searchMembers: Array<{ __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, correo_electronico?: string | null }> };
+export type SearchMembersQuery = { __typename?: 'Query', searchMembers: Array<{ __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, correo_electronico?: string | null, poblacion: string, provincia: string, documento_identidad?: string | null }> };
 
 export type CreateMemberMutationVariables = Exact<{
   input: CreateMemberInput;
 }>;
 
 
-export type CreateMemberMutation = { __typename?: 'Mutation', createMember: { __typename?: 'Member', calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, correo_electronico?: string | null } };
+export type CreateMemberMutation = { __typename?: 'Mutation', createMember: { __typename?: 'Member', calle_numero_piso: string, codigo_postal: string, pais: string, fecha_nacimiento?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, correo_electronico?: string | null, poblacion: string, provincia: string, documento_identidad?: string | null } };
 
 export type UpdateMemberMutationVariables = Exact<{
   input: UpdateMemberInput;
 }>;
 
 
-export type UpdateMemberMutation = { __typename?: 'Mutation', updateMember: { __typename?: 'Member', calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, correo_electronico?: string | null } };
+export type UpdateMemberMutation = { __typename?: 'Mutation', updateMember: { __typename?: 'Member', calle_numero_piso: string, codigo_postal: string, pais: string, fecha_nacimiento?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, correo_electronico?: string | null, poblacion: string, provincia: string, documento_identidad?: string | null } };
 
 export type DeleteMemberMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -176,7 +176,7 @@ export type ChangeMemberStatusMutationVariables = Exact<{
 }>;
 
 
-export type ChangeMemberStatusMutation = { __typename?: 'Mutation', changeMemberStatus: { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, correo_electronico?: string | null } };
+export type ChangeMemberStatusMutation = { __typename?: 'Mutation', changeMemberStatus: { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, correo_electronico?: string | null, poblacion: string, provincia: string, documento_identidad?: string | null } };
 
 export type PaymentFieldsFragment = { __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string, notes?: string | null };
 
@@ -385,7 +385,11 @@ export const MemberBasicFieldsFragmentDoc = gql`
   apellidos
   estado
   fecha_alta
+  fecha_baja
   correo_electronico
+  poblacion
+  provincia
+  documento_identidad
 }
     `;
 export const MemberFullFieldsFragmentDoc = gql`
@@ -393,12 +397,8 @@ export const MemberFullFieldsFragmentDoc = gql`
   ...MemberBasicFields
   calle_numero_piso
   codigo_postal
-  poblacion
-  provincia
   pais
-  fecha_baja
   fecha_nacimiento
-  documento_identidad
   profesion
   nacionalidad
   observaciones

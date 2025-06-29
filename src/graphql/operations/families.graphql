@@ -1,0 +1,77 @@
+# Fragments
+fragment FamilyFields on Family {
+  id
+  numero_socio
+  esposo_nombre
+  esposo_apellidos
+  esposa_nombre
+  esposa_apellidos
+}
+
+fragment FamiliarFields on Familiar {
+  id
+  nombre
+  apellidos
+  fecha_nacimiento
+  dni_nie
+  correo_electronico
+}
+
+# Queries
+query GetFamily($id: ID!) {
+  getFamily(id: $id) {
+    ...FamilyFields
+    miembro_origen {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    familiares {
+      ...FamiliarFields
+    }
+  }
+}
+
+query ListFamilies($filter: FamilyFilter) {
+  listFamilies(filter: $filter) {
+    nodes {
+      ...FamilyFields
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      totalCount
+    }
+  }
+}
+
+# Mutations
+mutation CreateFamily($input: CreateFamilyInput!) {
+  createFamily(input: $input) {
+    ...FamilyFields
+  }
+}
+
+mutation UpdateFamily($input: UpdateFamilyInput!) {
+  updateFamily(input: $input) {
+    ...FamilyFields
+  }
+}
+
+mutation AddFamilyMember($familyId: ID!, $familiar: FamiliarInput!) {
+  addFamilyMember(family_id: $familyId, familiar: $familiar) {
+    ...FamilyFields
+    familiares {
+      ...FamiliarFields
+    }
+  }
+}
+
+mutation RemoveFamilyMember($familiarId: ID!) {
+  removeFamilyMember(familiar_id: $familiarId) {
+    success
+    message
+    error
+  }
+}

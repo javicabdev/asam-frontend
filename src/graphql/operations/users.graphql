@@ -1,0 +1,60 @@
+# Queries
+query GetUser($id: ID!) {
+  getUser(id: $id) {
+    id
+    username
+    role
+    isActive
+    lastLogin
+    emailVerified
+    emailVerifiedAt
+  }
+}
+
+query ListUsers($page: Int = 1, $pageSize: Int = 10) {
+  listUsers(page: $page, pageSize: $pageSize) {
+    id
+    username
+    role
+    isActive
+    lastLogin
+    emailVerified
+    emailVerifiedAt
+  }
+}
+
+# Mutations
+mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    id
+    username
+    role
+    isActive
+  }
+}
+
+mutation UpdateUser($input: UpdateUserInput!) {
+  updateUser(input: $input) {
+    id
+    username
+    role
+    isActive
+    emailVerified
+  }
+}
+
+mutation DeleteUser($id: ID!) {
+  deleteUser(id: $id) {
+    success
+    message
+    error
+  }
+}
+
+mutation ResetUserPassword($userId: ID!, $newPassword: String!) {
+  resetUserPassword(userId: $userId, newPassword: $newPassword) {
+    success
+    message
+    error
+  }
+}

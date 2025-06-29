@@ -1,0 +1,19 @@
+{
+  "name": "ASAM GraphQL Schema",
+  "schemaPath": "src/graphql/schema.json",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "http://localhost:8080/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL"
+        },
+        "introspect": true
+      }
+    }
+  },
+  "documents": [
+    "src/graphql/operations/**/*.graphql",
+    "src/graphql/fragments/**/*.graphql"
+  ]
+}

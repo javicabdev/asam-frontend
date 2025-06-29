@@ -1,39 +1,15 @@
-import { gql } from '@apollo/client'
+// Re-export from generated files
+export * from '../generated/operations';
 
-// Authentication mutations
-export const LOGIN_MUTATION = gql`
-  mutation Login($input: LoginInput!) {
-    login(input: $input) {
-      user {
-        id
-        username
-        role
-        isActive
-        lastLogin
-      }
-      accessToken
-      refreshToken
-      expiresAt
-    }
-  }
-`
-
-export const LOGOUT_MUTATION = gql`
-  mutation Logout {
-    logout {
-      success
-      message
-      error
-    }
-  }
-`
-
-export const REFRESH_TOKEN_MUTATION = gql`
-  mutation RefreshToken($input: RefreshTokenInput!) {
-    refreshToken(input: $input) {
-      accessToken
-      refreshToken
-      expiresAt
-    }
-  }
-`
+// Mantener compatibilidad con imports antiguos
+export {
+  LoginDocument as LOGIN_MUTATION,
+  LogoutDocument as LOGOUT_MUTATION,  
+  RefreshTokenDocument as REFRESH_TOKEN_MUTATION,
+  ChangePasswordDocument as CHANGE_PASSWORD_MUTATION,
+  SendVerificationEmailDocument as SEND_VERIFICATION_EMAIL_MUTATION,
+  VerifyEmailDocument as VERIFY_EMAIL_MUTATION,
+  RequestPasswordResetDocument as REQUEST_PASSWORD_RESET_MUTATION,
+  ResetPasswordWithTokenDocument as RESET_PASSWORD_WITH_TOKEN_MUTATION,
+  GetCurrentUserDocument as GET_CURRENT_USER_QUERY
+} from '../generated/operations';

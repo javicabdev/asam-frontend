@@ -1,0 +1,79 @@
+# Fragments
+fragment MemberBasicFields on Member {
+  miembro_id
+  numero_socio
+  tipo_membresia
+  nombre
+  apellidos
+  estado
+  fecha_alta
+  correo_electronico
+}
+
+fragment MemberFullFields on Member {
+  ...MemberBasicFields
+  calle_numero_piso
+  codigo_postal
+  poblacion
+  provincia
+  pais
+  fecha_baja
+  fecha_nacimiento
+  documento_identidad
+  profesion
+  nacionalidad
+  observaciones
+}
+
+# Queries
+query GetMember($id: ID!) {
+  getMember(id: $id) {
+    ...MemberFullFields
+  }
+}
+
+query ListMembers($filter: MemberFilter) {
+  listMembers(filter: $filter) {
+    nodes {
+      ...MemberBasicFields
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      totalCount
+    }
+  }
+}
+
+query SearchMembers($criteria: String!) {
+  searchMembers(criteria: $criteria) {
+    ...MemberBasicFields
+  }
+}
+
+# Mutations
+mutation CreateMember($input: CreateMemberInput!) {
+  createMember(input: $input) {
+    ...MemberFullFields
+  }
+}
+
+mutation UpdateMember($input: UpdateMemberInput!) {
+  updateMember(input: $input) {
+    ...MemberFullFields
+  }
+}
+
+mutation DeleteMember($id: ID!) {
+  deleteMember(id: $id) {
+    success
+    message
+    error
+  }
+}
+
+mutation ChangeMemberStatus($id: ID!, $status: MemberStatus!) {
+  changeMemberStatus(id: $id, status: $status) {
+    ...MemberBasicFields
+  }
+}

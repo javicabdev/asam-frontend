@@ -1,0 +1,113 @@
+# Fragments
+fragment PaymentFields on Payment {
+  id
+  amount
+  payment_date
+  status
+  payment_method
+  notes
+}
+
+fragment CashFlowFields on CashFlow {
+  id
+  amount
+  date
+  operation_type
+  detail
+}
+
+# Queries
+query GetPayment($id: ID!) {
+  getPayment(id: $id) {
+    ...PaymentFields
+    member {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    family {
+      id
+      numero_socio
+    }
+  }
+}
+
+query GetMemberPayments($memberId: ID!) {
+  getMemberPayments(memberId: $memberId) {
+    ...PaymentFields
+  }
+}
+
+query GetFamilyPayments($familyId: ID!) {
+  getFamilyPayments(familyId: $familyId) {
+    ...PaymentFields
+  }
+}
+
+query GetBalance {
+  getBalance
+}
+
+query GetTransactions($filter: TransactionFilter) {
+  getTransactions(filter: $filter) {
+    nodes {
+      ...CashFlowFields
+      member {
+        miembro_id
+        numero_socio
+        nombre
+        apellidos
+      }
+      family {
+        id
+        numero_socio
+      }
+      payment {
+        id
+        amount
+        payment_method
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      totalCount
+    }
+  }
+}
+
+# Mutations
+mutation RegisterPayment($input: PaymentInput!) {
+  registerPayment(input: $input) {
+    ...PaymentFields
+  }
+}
+
+mutation UpdatePayment($id: ID!, $input: PaymentInput!) {
+  updatePayment(id: $id, input: $input) {
+    ...PaymentFields
+  }
+}
+
+mutation CancelPayment($id: ID!, $reason: String!) {
+  cancelPayment(id: $id, reason: $reason) {
+    success
+    message
+    error
+  }
+}
+
+mutation RegisterFee($year: Int!, $month: Int!, $baseAmount: Float!) {
+  registerFee(year: $year, month: $month, base_amount: $baseAmount) {
+    success
+    message
+    error
+  }
+}
+
+mutation RegisterTransaction($input: TransactionInput!) {
+  registerTransaction(input: $input) {
+    ...CashFlowFields
+  }
+}

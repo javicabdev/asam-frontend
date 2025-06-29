@@ -1,0 +1,11 @@
+schema: 
+  - ./src/graphql/schema.json
+
+documents:
+  - src/graphql/operations/**/*.graphql
+  - src/graphql/fragments/**/*.graphql
+
+extensions:
+  endpoints:
+    default:
+      url: http://localhost:8080/graphql

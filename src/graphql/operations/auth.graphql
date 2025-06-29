@@ -1,0 +1,89 @@
+# Fragments
+fragment UserFields on User {
+  id
+  username
+  role
+  isActive
+  lastLogin
+  emailVerified
+  emailVerifiedAt
+}
+
+fragment AuthTokens on AuthResponse {
+  accessToken
+  refreshToken
+  expiresAt
+}
+
+# Queries
+query GetCurrentUser {
+  getCurrentUser {
+    ...UserFields
+  }
+}
+
+# Mutations
+mutation Login($input: LoginInput!) {
+  login(input: $input) {
+    user {
+      ...UserFields
+    }
+    ...AuthTokens
+  }
+}
+
+mutation Logout {
+  logout {
+    success
+    message
+    error
+  }
+}
+
+mutation RefreshToken($input: RefreshTokenInput!) {
+  refreshToken(input: $input) {
+    accessToken
+    refreshToken
+    expiresAt
+  }
+}
+
+mutation ChangePassword($input: ChangePasswordInput!) {
+  changePassword(input: $input) {
+    success
+    message
+    error
+  }
+}
+
+mutation SendVerificationEmail {
+  sendVerificationEmail {
+    success
+    message
+    error
+  }
+}
+
+mutation VerifyEmail($token: String!) {
+  verifyEmail(token: $token) {
+    success
+    message
+    error
+  }
+}
+
+mutation RequestPasswordReset($email: String!) {
+  requestPasswordReset(email: $email) {
+    success
+    message
+    error
+  }
+}
+
+mutation ResetPasswordWithToken($token: String!, $newPassword: String!) {
+  resetPasswordWithToken(token: $token, newPassword: $newPassword) {
+    success
+    message
+    error
+  }
+}

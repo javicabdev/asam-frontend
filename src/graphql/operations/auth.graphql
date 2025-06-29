@@ -87,3 +87,12 @@ mutation ResetPasswordWithToken($token: String!, $newPassword: String!) {
     error
   }
 }
+
+# Resend verification email - was missing
+mutation ResendVerificationEmail($email: String!) {
+  resendVerificationEmail(email: $email) {
+    success
+    message
+    error
+  }
+}

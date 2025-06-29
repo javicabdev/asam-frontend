@@ -46,6 +46,12 @@ query ListFamilies($filter: FamilyFilter) {
   }
 }
 
+query GetFamilyMembers($familyId: ID!) {
+  getFamilyMembers(familyId: $familyId) {
+    ...FamiliarFields
+  }
+}
+
 # Mutations
 mutation CreateFamily($input: CreateFamilyInput!) {
   createFamily(input: $input) {

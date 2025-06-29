@@ -63,6 +63,13 @@ export type ResetPasswordWithTokenMutationVariables = Exact<{
 
 export type ResetPasswordWithTokenMutation = { __typename?: 'Mutation', resetPasswordWithToken: { __typename?: 'MutationResponse', success: boolean, message?: string | null, error?: string | null } };
 
+export type ResendVerificationEmailMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+}>;
+
+
+export type ResendVerificationEmailMutation = { __typename?: 'Mutation', resendVerificationEmail: { __typename?: 'MutationResponse', success: boolean, message?: string | null, error?: string | null } };
+
 export type FamilyFieldsFragment = { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string };
 
 export type FamiliarFieldsFragment = { __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null };
@@ -80,6 +87,13 @@ export type ListFamiliesQueryVariables = Exact<{
 
 
 export type ListFamiliesQuery = { __typename?: 'Query', listFamilies: { __typename?: 'FamilyConnection', nodes: Array<{ __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
+
+export type GetFamilyMembersQueryVariables = Exact<{
+  familyId: Scalars['ID']['input'];
+}>;
+
+
+export type GetFamilyMembersQuery = { __typename?: 'Query', getFamilyMembers: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> };
 
 export type CreateFamilyMutationVariables = Exact<{
   input: CreateFamilyInput;
@@ -201,6 +215,20 @@ export type GetTransactionsQueryVariables = Exact<{
 
 export type GetTransactionsQuery = { __typename?: 'Query', getTransactions: { __typename?: 'TransactionConnection', nodes: Array<{ __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string } | null, payment?: { __typename?: 'Payment', id: string, amount: number, payment_method: string } | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
 
+export type GetPaymentStatusQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetPaymentStatusQuery = { __typename?: 'Query', getPaymentStatus: PaymentStatus };
+
+export type GetCashFlowQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetCashFlowQuery = { __typename?: 'Query', getCashFlow?: { __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string } | null, payment?: { __typename?: 'Payment', id: string, amount: number, payment_method: string, status: PaymentStatus } | null } | null };
+
 export type RegisterPaymentMutationVariables = Exact<{
   input: PaymentInput;
 }>;
@@ -239,6 +267,32 @@ export type RegisterTransactionMutationVariables = Exact<{
 
 
 export type RegisterTransactionMutation = { __typename?: 'Mutation', registerTransaction: { __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string } };
+
+export type UpdateTransactionMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  input: TransactionInput;
+}>;
+
+
+export type UpdateTransactionMutation = { __typename?: 'Mutation', updateTransaction: { __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string } };
+
+export type AdjustBalanceMutationVariables = Exact<{
+  amount: Scalars['Float']['input'];
+  reason: Scalars['String']['input'];
+}>;
+
+
+export type AdjustBalanceMutation = { __typename?: 'Mutation', adjustBalance: { __typename?: 'MutationResponse', success: boolean, message?: string | null, error?: string | null } };
+
+export type HealthCheckQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type HealthCheckQuery = { __typename?: 'Query', health: string };
+
+export type PingQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PingQuery = { __typename?: 'Query', ping: string };
 
 export type GetUserQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -689,6 +743,41 @@ export function useResetPasswordWithTokenMutation(baseOptions?: Apollo.MutationH
 export type ResetPasswordWithTokenMutationHookResult = ReturnType<typeof useResetPasswordWithTokenMutation>;
 export type ResetPasswordWithTokenMutationResult = Apollo.MutationResult<ResetPasswordWithTokenMutation>;
 export type ResetPasswordWithTokenMutationOptions = Apollo.BaseMutationOptions<ResetPasswordWithTokenMutation, ResetPasswordWithTokenMutationVariables>;
+export const ResendVerificationEmailDocument = gql`
+    mutation ResendVerificationEmail($email: String!) {
+  resendVerificationEmail(email: $email) {
+    success
+    message
+    error
+  }
+}
+    `;
+export type ResendVerificationEmailMutationFn = Apollo.MutationFunction<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>;
+
+/**
+ * __useResendVerificationEmailMutation__
+ *
+ * To run a mutation, you first call `useResendVerificationEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResendVerificationEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resendVerificationEmailMutation, { data, loading, error }] = useResendVerificationEmailMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useResendVerificationEmailMutation(baseOptions?: Apollo.MutationHookOptions<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>(ResendVerificationEmailDocument, options);
+      }
+export type ResendVerificationEmailMutationHookResult = ReturnType<typeof useResendVerificationEmailMutation>;
+export type ResendVerificationEmailMutationResult = Apollo.MutationResult<ResendVerificationEmailMutation>;
+export type ResendVerificationEmailMutationOptions = Apollo.BaseMutationOptions<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>;
 export const GetFamilyDocument = gql`
     query GetFamily($id: ID!) {
   getFamily(id: $id) {
@@ -786,6 +875,46 @@ export type ListFamiliesQueryHookResult = ReturnType<typeof useListFamiliesQuery
 export type ListFamiliesLazyQueryHookResult = ReturnType<typeof useListFamiliesLazyQuery>;
 export type ListFamiliesSuspenseQueryHookResult = ReturnType<typeof useListFamiliesSuspenseQuery>;
 export type ListFamiliesQueryResult = Apollo.QueryResult<ListFamiliesQuery, ListFamiliesQueryVariables>;
+export const GetFamilyMembersDocument = gql`
+    query GetFamilyMembers($familyId: ID!) {
+  getFamilyMembers(familyId: $familyId) {
+    ...FamiliarFields
+  }
+}
+    ${FamiliarFieldsFragmentDoc}`;
+
+/**
+ * __useGetFamilyMembersQuery__
+ *
+ * To run a query within a React component, call `useGetFamilyMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFamilyMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFamilyMembersQuery({
+ *   variables: {
+ *      familyId: // value for 'familyId'
+ *   },
+ * });
+ */
+export function useGetFamilyMembersQuery(baseOptions: Apollo.QueryHookOptions<GetFamilyMembersQuery, GetFamilyMembersQueryVariables> & ({ variables: GetFamilyMembersQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFamilyMembersQuery, GetFamilyMembersQueryVariables>(GetFamilyMembersDocument, options);
+      }
+export function useGetFamilyMembersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFamilyMembersQuery, GetFamilyMembersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFamilyMembersQuery, GetFamilyMembersQueryVariables>(GetFamilyMembersDocument, options);
+        }
+export function useGetFamilyMembersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetFamilyMembersQuery, GetFamilyMembersQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetFamilyMembersQuery, GetFamilyMembersQueryVariables>(GetFamilyMembersDocument, options);
+        }
+export type GetFamilyMembersQueryHookResult = ReturnType<typeof useGetFamilyMembersQuery>;
+export type GetFamilyMembersLazyQueryHookResult = ReturnType<typeof useGetFamilyMembersLazyQuery>;
+export type GetFamilyMembersSuspenseQueryHookResult = ReturnType<typeof useGetFamilyMembersSuspenseQuery>;
+export type GetFamilyMembersQueryResult = Apollo.QueryResult<GetFamilyMembersQuery, GetFamilyMembersQueryVariables>;
 export const CreateFamilyDocument = gql`
     mutation CreateFamily($input: CreateFamilyInput!) {
   createFamily(input: $input) {
@@ -1416,6 +1545,100 @@ export type GetTransactionsQueryHookResult = ReturnType<typeof useGetTransaction
 export type GetTransactionsLazyQueryHookResult = ReturnType<typeof useGetTransactionsLazyQuery>;
 export type GetTransactionsSuspenseQueryHookResult = ReturnType<typeof useGetTransactionsSuspenseQuery>;
 export type GetTransactionsQueryResult = Apollo.QueryResult<GetTransactionsQuery, GetTransactionsQueryVariables>;
+export const GetPaymentStatusDocument = gql`
+    query GetPaymentStatus($id: ID!) {
+  getPaymentStatus(id: $id)
+}
+    `;
+
+/**
+ * __useGetPaymentStatusQuery__
+ *
+ * To run a query within a React component, call `useGetPaymentStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPaymentStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPaymentStatusQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetPaymentStatusQuery(baseOptions: Apollo.QueryHookOptions<GetPaymentStatusQuery, GetPaymentStatusQueryVariables> & ({ variables: GetPaymentStatusQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetPaymentStatusQuery, GetPaymentStatusQueryVariables>(GetPaymentStatusDocument, options);
+      }
+export function useGetPaymentStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPaymentStatusQuery, GetPaymentStatusQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetPaymentStatusQuery, GetPaymentStatusQueryVariables>(GetPaymentStatusDocument, options);
+        }
+export function useGetPaymentStatusSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPaymentStatusQuery, GetPaymentStatusQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetPaymentStatusQuery, GetPaymentStatusQueryVariables>(GetPaymentStatusDocument, options);
+        }
+export type GetPaymentStatusQueryHookResult = ReturnType<typeof useGetPaymentStatusQuery>;
+export type GetPaymentStatusLazyQueryHookResult = ReturnType<typeof useGetPaymentStatusLazyQuery>;
+export type GetPaymentStatusSuspenseQueryHookResult = ReturnType<typeof useGetPaymentStatusSuspenseQuery>;
+export type GetPaymentStatusQueryResult = Apollo.QueryResult<GetPaymentStatusQuery, GetPaymentStatusQueryVariables>;
+export const GetCashFlowDocument = gql`
+    query GetCashFlow($id: ID!) {
+  getCashFlow(id: $id) {
+    ...CashFlowFields
+    member {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    family {
+      id
+      numero_socio
+    }
+    payment {
+      id
+      amount
+      payment_method
+      status
+    }
+  }
+}
+    ${CashFlowFieldsFragmentDoc}`;
+
+/**
+ * __useGetCashFlowQuery__
+ *
+ * To run a query within a React component, call `useGetCashFlowQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCashFlowQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCashFlowQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCashFlowQuery(baseOptions: Apollo.QueryHookOptions<GetCashFlowQuery, GetCashFlowQueryVariables> & ({ variables: GetCashFlowQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCashFlowQuery, GetCashFlowQueryVariables>(GetCashFlowDocument, options);
+      }
+export function useGetCashFlowLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCashFlowQuery, GetCashFlowQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCashFlowQuery, GetCashFlowQueryVariables>(GetCashFlowDocument, options);
+        }
+export function useGetCashFlowSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCashFlowQuery, GetCashFlowQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCashFlowQuery, GetCashFlowQueryVariables>(GetCashFlowDocument, options);
+        }
+export type GetCashFlowQueryHookResult = ReturnType<typeof useGetCashFlowQuery>;
+export type GetCashFlowLazyQueryHookResult = ReturnType<typeof useGetCashFlowLazyQuery>;
+export type GetCashFlowSuspenseQueryHookResult = ReturnType<typeof useGetCashFlowSuspenseQuery>;
+export type GetCashFlowQueryResult = Apollo.QueryResult<GetCashFlowQuery, GetCashFlowQueryVariables>;
 export const RegisterPaymentDocument = gql`
     mutation RegisterPayment($input: PaymentInput!) {
   registerPayment(input: $input) {
@@ -1589,6 +1812,150 @@ export function useRegisterTransactionMutation(baseOptions?: Apollo.MutationHook
 export type RegisterTransactionMutationHookResult = ReturnType<typeof useRegisterTransactionMutation>;
 export type RegisterTransactionMutationResult = Apollo.MutationResult<RegisterTransactionMutation>;
 export type RegisterTransactionMutationOptions = Apollo.BaseMutationOptions<RegisterTransactionMutation, RegisterTransactionMutationVariables>;
+export const UpdateTransactionDocument = gql`
+    mutation UpdateTransaction($id: ID!, $input: TransactionInput!) {
+  updateTransaction(id: $id, input: $input) {
+    ...CashFlowFields
+  }
+}
+    ${CashFlowFieldsFragmentDoc}`;
+export type UpdateTransactionMutationFn = Apollo.MutationFunction<UpdateTransactionMutation, UpdateTransactionMutationVariables>;
+
+/**
+ * __useUpdateTransactionMutation__
+ *
+ * To run a mutation, you first call `useUpdateTransactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTransactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTransactionMutation, { data, loading, error }] = useUpdateTransactionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateTransactionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTransactionMutation, UpdateTransactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateTransactionMutation, UpdateTransactionMutationVariables>(UpdateTransactionDocument, options);
+      }
+export type UpdateTransactionMutationHookResult = ReturnType<typeof useUpdateTransactionMutation>;
+export type UpdateTransactionMutationResult = Apollo.MutationResult<UpdateTransactionMutation>;
+export type UpdateTransactionMutationOptions = Apollo.BaseMutationOptions<UpdateTransactionMutation, UpdateTransactionMutationVariables>;
+export const AdjustBalanceDocument = gql`
+    mutation AdjustBalance($amount: Float!, $reason: String!) {
+  adjustBalance(amount: $amount, reason: $reason) {
+    success
+    message
+    error
+  }
+}
+    `;
+export type AdjustBalanceMutationFn = Apollo.MutationFunction<AdjustBalanceMutation, AdjustBalanceMutationVariables>;
+
+/**
+ * __useAdjustBalanceMutation__
+ *
+ * To run a mutation, you first call `useAdjustBalanceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdjustBalanceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [adjustBalanceMutation, { data, loading, error }] = useAdjustBalanceMutation({
+ *   variables: {
+ *      amount: // value for 'amount'
+ *      reason: // value for 'reason'
+ *   },
+ * });
+ */
+export function useAdjustBalanceMutation(baseOptions?: Apollo.MutationHookOptions<AdjustBalanceMutation, AdjustBalanceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdjustBalanceMutation, AdjustBalanceMutationVariables>(AdjustBalanceDocument, options);
+      }
+export type AdjustBalanceMutationHookResult = ReturnType<typeof useAdjustBalanceMutation>;
+export type AdjustBalanceMutationResult = Apollo.MutationResult<AdjustBalanceMutation>;
+export type AdjustBalanceMutationOptions = Apollo.BaseMutationOptions<AdjustBalanceMutation, AdjustBalanceMutationVariables>;
+export const HealthCheckDocument = gql`
+    query HealthCheck {
+  health
+}
+    `;
+
+/**
+ * __useHealthCheckQuery__
+ *
+ * To run a query within a React component, call `useHealthCheckQuery` and pass it any options that fit your needs.
+ * When your component renders, `useHealthCheckQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useHealthCheckQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useHealthCheckQuery(baseOptions?: Apollo.QueryHookOptions<HealthCheckQuery, HealthCheckQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<HealthCheckQuery, HealthCheckQueryVariables>(HealthCheckDocument, options);
+      }
+export function useHealthCheckLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<HealthCheckQuery, HealthCheckQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<HealthCheckQuery, HealthCheckQueryVariables>(HealthCheckDocument, options);
+        }
+export function useHealthCheckSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<HealthCheckQuery, HealthCheckQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<HealthCheckQuery, HealthCheckQueryVariables>(HealthCheckDocument, options);
+        }
+export type HealthCheckQueryHookResult = ReturnType<typeof useHealthCheckQuery>;
+export type HealthCheckLazyQueryHookResult = ReturnType<typeof useHealthCheckLazyQuery>;
+export type HealthCheckSuspenseQueryHookResult = ReturnType<typeof useHealthCheckSuspenseQuery>;
+export type HealthCheckQueryResult = Apollo.QueryResult<HealthCheckQuery, HealthCheckQueryVariables>;
+export const PingDocument = gql`
+    query Ping {
+  ping
+}
+    `;
+
+/**
+ * __usePingQuery__
+ *
+ * To run a query within a React component, call `usePingQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePingQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePingQuery(baseOptions?: Apollo.QueryHookOptions<PingQuery, PingQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PingQuery, PingQueryVariables>(PingDocument, options);
+      }
+export function usePingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PingQuery, PingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PingQuery, PingQueryVariables>(PingDocument, options);
+        }
+export function usePingSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PingQuery, PingQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PingQuery, PingQueryVariables>(PingDocument, options);
+        }
+export type PingQueryHookResult = ReturnType<typeof usePingQuery>;
+export type PingLazyQueryHookResult = ReturnType<typeof usePingLazyQuery>;
+export type PingSuspenseQueryHookResult = ReturnType<typeof usePingSuspenseQuery>;
+export type PingQueryResult = Apollo.QueryResult<PingQuery, PingQueryVariables>;
 export const GetUserDocument = gql`
     query GetUser($id: ID!) {
   getUser(id: $id) {

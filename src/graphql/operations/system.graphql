@@ -1,0 +1,9 @@
+# System Queries - Health checks and monitoring
+
+query HealthCheck {
+  health
+}
+
+query Ping {
+  ping
+}

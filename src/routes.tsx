@@ -5,6 +5,8 @@ import { CircularProgress, Box } from '@mui/material'
 // Lazy load pages for better performance
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage').then(module => ({ default: module.LoginPage })))
 const ForgotPasswordPage = lazy(() => import('@/pages/auth/ForgotPasswordPage').then(module => ({ default: module.ForgotPasswordPage })))
+const RequestPasswordResetPage = lazy(() => import('@/pages/auth/RequestPasswordResetPage').then(module => ({ default: module.RequestPasswordResetPage })))
+const ResetPasswordPage = lazy(() => import('@/pages/auth/ResetPasswordPage').then(module => ({ default: module.ResetPasswordPage })))
 const UnauthorizedPage = lazy(() => import('@/pages/error/UnauthorizedPage').then(module => ({ default: module.UnauthorizedPage })))
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'))
 const MembersPage = lazy(() => import('@/pages/MembersPage'))
@@ -40,6 +42,8 @@ export const AppRoutes = () => {
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/request-password-reset" element={<RequestPasswordResetPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
         </Route>
 
         {/* Private routes */}

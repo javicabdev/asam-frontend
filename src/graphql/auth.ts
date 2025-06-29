@@ -1,5 +1,5 @@
 // Re-export from generated files
-export * from '../generated/operations';
+export * from './generated/operations';
 
 // Mantener compatibilidad con imports antiguos
 export {
@@ -12,4 +12,4 @@ export {
   RequestPasswordResetDocument as REQUEST_PASSWORD_RESET_MUTATION,
   ResetPasswordWithTokenDocument as RESET_PASSWORD_WITH_TOKEN_MUTATION,
   GetCurrentUserDocument as GET_CURRENT_USER_QUERY
-} from '../generated/operations';
+} from './generated/operations';

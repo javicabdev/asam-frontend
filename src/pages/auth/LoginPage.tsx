@@ -21,13 +21,13 @@ import {
   VisibilityOff,
   LockOutlined as LockIcon,
 } from '@mui/icons-material';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuthPublic } from '@/hooks/useAuthPublic';
 import { loginSchema, LoginFormData } from './loginSchema';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, isAuthenticated, isLoading } = useAuth();
+  const { login, isAuthenticated, isLoading } = useAuthPublic();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,10 +50,10 @@ export const LoginPage: React.FC = () => {
 
   // Redirect if already authenticated
   useEffect(() => {
-    if (isAuthenticated && !isLoading) {
+    if (isAuthenticated) {
       navigate(from, { replace: true });
     }
-  }, [isAuthenticated, isLoading, navigate, from]);
+  }, [isAuthenticated, navigate, from]);
 
   // Focus on username field on mount
   useEffect(() => {

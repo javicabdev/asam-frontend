@@ -22,13 +22,13 @@ import {
   VisibilityOff,
   Error as ErrorIcon,
 } from '@mui/icons-material';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuthPublic } from '@/hooks/useAuthPublic';
 import { resetPasswordSchema, ResetPasswordFormData } from './passwordSchemas';
 
 export const ResetPasswordPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { resetPasswordWithToken } = useAuth();
+  const { resetPasswordWithToken } = useAuthPublic();
   
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState<string>('');

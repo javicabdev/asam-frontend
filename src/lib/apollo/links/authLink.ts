@@ -16,6 +16,12 @@ export const createAuthLink = (): ApolloLink => {
     try {
       // Get a valid access token (will refresh if expired)
       const token = await tokenManager.getValidAccessToken();
+      
+      console.log('AuthLink - Adding token to request:', {
+        hasToken: !!token,
+        operation: _.operationName,
+        tokenPreview: token ? token.substring(0, 20) + '...' : 'null',
+      });
 
       return {
         headers: {

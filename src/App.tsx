@@ -8,6 +8,7 @@ import es from 'date-fns/locale/es'
 import { apolloClient } from '@/lib/apollo-client'
 import { theme } from '@/lib/theme'
 import { AppRoutes } from './routes'
+// import { AuthDebugPanel } from '@/components/auth/AuthDebugPanel' // Comentado - usar solo cuando se necesite debug
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <CssBaseline />
           <BrowserRouter>
             <AppRoutes />
+            {/* {isDev && <AuthDebugPanel />} */}
           </BrowserRouter>
         </LocalizationProvider>
       </ThemeProvider>

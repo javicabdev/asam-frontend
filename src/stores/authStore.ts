@@ -40,6 +40,8 @@ interface AuthState {
   isTokenExpired: () => boolean;
 }
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -95,6 +97,12 @@ export const useAuthStore = create<AuthState>()(
         const state = get();
         if (!state.expiresAt) return true;
 
+        // TEMPORARY: For development, always return false to prevent token expiration issues
+        if (isDevelopment) {
+          console.log('DEV MODE: Token expiration check disabled');
+          return false;
+        }
+
         const expirationTime = new Date(state.expiresAt).getTime();
         const currentTime = new Date().getTime();
         
@@ -116,8 +124,19 @@ export const useAuthStore = create<AuthState>()(
         if (state) {
           state.setLoading(false);
           
+          // Log token info for debugging
+          if (state.expiresAt) {
+            console.log('Token expiration check:', {
+              expiresAt: state.expiresAt,
+              expirationTime: new Date(state.expiresAt).toISOString(),
+              currentTime: new Date().toISOString(),
+              isExpired: state.isTokenExpired(),
+            });
+          }
+          
           // Check if tokens are expired on rehydration
           if (state.isTokenExpired()) {
+            console.warn('Token expired on rehydration, clearing auth state');
             // Clear expired tokens
             state.logout();
           }

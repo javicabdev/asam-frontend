@@ -16,13 +16,13 @@ import {
   Home as HomeIcon,
   Login as LoginIcon,
 } from '@mui/icons-material';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuthPublic } from '@/hooks/useAuthPublic';
 import { useAuthStore } from '@/stores/authStore';
 
 export const VerifyEmailPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { verifyEmail } = useAuth();
+  const { verifyEmail } = useAuthPublic();
   const { isAuthenticated } = useAuthStore();
   
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');

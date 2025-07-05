@@ -19,11 +19,11 @@ import {
   Email as EmailIcon,
   CheckCircle as CheckCircleIcon,
 } from '@mui/icons-material';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuthPublic } from '@/hooks/useAuthPublic';
 import { requestPasswordResetSchema, RequestPasswordResetFormData } from './passwordSchemas';
 
 export const RequestPasswordResetPage: React.FC = () => {
-  const { requestPasswordReset } = useAuth();
+  const { requestPasswordReset } = useAuthPublic();
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState<string>('');
 

@@ -1,11 +1,10 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import { apolloClient } from '@/lib/apollo-client';
 import {
   useLoginMutation,
   useLogoutMutation,
-  useGetCurrentUserQuery,
   useSendVerificationEmailMutation,
   useVerifyEmailMutation,
   useRequestPasswordResetMutation,
@@ -13,17 +12,18 @@ import {
   useChangePasswordMutation,
 } from '@/graphql/generated/operations';
 
-export const useAuth = () => {
+/**
+ * A lightweight version of useAuth for public pages (login, register, etc.)
+ * that doesn't attempt to fetch the current user
+ */
+export const useAuthPublic = () => {
   const navigate = useNavigate();
   const {
     user,
     isAuthenticated,
     isLoading,
-    accessToken,
     login: setAuthData,
     logout: clearAuthData,
-    setUser,
-    setLoading,
   } = useAuthStore();
 
   // GraphQL mutations
@@ -33,28 +33,6 @@ export const useAuth = () => {
   const [verifyEmail] = useVerifyEmailMutation();
   const [requestPasswordReset] = useRequestPasswordResetMutation();
   const [resetPasswordWithToken] = useResetPasswordWithTokenMutation();
-  const [changePassword] = useChangePasswordMutation();
-
-  // Get current user query (skip if not authenticated)
-  const { refetch: refetchUser, loading: userLoading } = useGetCurrentUserQuery({
-    skip: !isAuthenticated || !accessToken,
-    fetchPolicy: 'cache-first',
-    onCompleted: (data) => {
-      console.log('GetCurrentUser completed:', data);
-      if (data.getCurrentUser) {
-        setUser(data.getCurrentUser);
-        setLoading(false);
-      }
-    },
-    onError: (error) => {
-      console.error('GetCurrentUser error:', error);
-      // Only logout if it's truly an auth error, not a network error
-      if (error.graphQLErrors?.some(e => e.extensions?.code === 'UNAUTHENTICATED')) {
-        clearAuthData();
-      }
-      setLoading(false);
-    },
-  });
 
   // Login function
   const login = useCallback(
@@ -150,11 +128,6 @@ export const useAuth = () => {
           variables: { token },
         });
         
-        if (data?.verifyEmail?.success) {
-          // Refetch user to update email verification status
-          await refetchUser();
-        }
-        
         return {
           success: data?.verifyEmail?.success || false,
           message: data?.verifyEmail?.message,
@@ -166,7 +139,7 @@ export const useAuth = () => {
         };
       }
     },
-    [verifyEmail, refetchUser]
+    [verifyEmail]
   );
 
   // Request password reset
@@ -213,52 +186,6 @@ export const useAuth = () => {
     [resetPasswordWithToken]
   );
 
-  // Change password (for authenticated users)
-  const changePasswordHandler = useCallback(
-    async (currentPassword: string, newPassword: string) => {
-      try {
-        const { data } = await changePassword({
-          variables: {
-            input: { currentPassword, newPassword },
-          },
-        });
-        
-        return {
-          success: data?.changePassword?.success || false,
-          message: data?.changePassword?.message,
-        };
-      } catch (error: any) {
-        return {
-          success: false,
-          message: error.message || 'Failed to change password',
-        };
-      }
-    },
-    [changePassword]
-  );
-
-  // Check authentication on mount
-  useEffect(() => {
-    console.log('useAuth - Auth check:', {
-      isAuthenticated,
-      isLoading,
-      hasUser: !!user,
-      userEmail: user?.username,
-      hasAccessToken: !!accessToken,
-      tokenPreview: accessToken ? accessToken.substring(0, 20) + '...' : 'null',
-    });
-    
-    if (isAuthenticated && !user && accessToken && !userLoading) {
-      console.log('Authenticated but no user, refetching...');
-      // Add a small delay to ensure the token is properly set
-      setTimeout(() => {
-        refetchUser();
-      }, 100);
-    } else if (!isAuthenticated || !accessToken) {
-      setLoading(false);
-    }
-  }, [isAuthenticated, user, accessToken, refetchUser, setLoading, userLoading]);
-
   return {
     // State
     user,
@@ -272,7 +199,5 @@ export const useAuth = () => {
     verifyEmail: verifyEmailHandler,
     requestPasswordReset: requestPasswordResetHandler,
     resetPasswordWithToken: resetPasswordWithTokenHandler,
-    changePassword: changePasswordHandler,
-    refetchUser,
   };
 };

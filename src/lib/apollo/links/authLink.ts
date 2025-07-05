@@ -21,7 +21,18 @@ export const createAuthLink = (): ApolloLink => {
         hasToken: !!token,
         operation: _.operationName,
         tokenPreview: token ? token.substring(0, 20) + '...' : 'null',
+        headers: previousContext.headers,
       });
+      
+      // Log específico para operaciones problemáticas
+      if (_.operationName === 'SendVerificationEmail' || _.operationName === 'Logout') {
+        console.warn('Special operation token check:', {
+          operation: _.operationName,
+          token: token ? 'present' : 'missing',
+          tokenLength: token?.length || 0,
+          previousHeaders: previousContext.headers,
+        });
+      }
 
       return {
         headers: {

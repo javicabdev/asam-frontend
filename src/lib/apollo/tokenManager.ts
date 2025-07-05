@@ -135,12 +135,27 @@ class TokenManager {
    */
   async getValidAccessToken(): Promise<string | null> {
     const currentToken = this.getAccessToken();
+    const state = useAuthStore.getState();
+    
+    console.log('TokenManager.getValidAccessToken:', {
+      hasCurrentToken: !!currentToken,
+      tokenPreview: currentToken ? currentToken.substring(0, 20) + '...' : 'null',
+      isExpired: this.isTokenExpired(),
+      expiresAt: state.expiresAt,
+      storeState: {
+        isAuthenticated: state.isAuthenticated,
+        hasAccessToken: !!state.accessToken,
+        hasRefreshToken: !!state.refreshToken,
+      }
+    });
     
     if (!currentToken) {
+      console.warn('No current token available');
       return null;
     }
 
     if (this.isTokenExpired()) {
+      console.log('Token expired, attempting refresh...');
       try {
         return await this.refreshAccessToken();
       } catch (error) {

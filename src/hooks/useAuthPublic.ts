@@ -64,8 +64,12 @@ export const useAuthPublic = () => {
             expiresAt,
           });
 
-          // Navigate to dashboard
-          navigate('/dashboard');
+          // Check if email is verified before navigating
+          if (!user.emailVerified) {
+            navigate('/email-verification-pending');
+          } else {
+            navigate('/dashboard');
+          }
           
           return { success: true };
         }

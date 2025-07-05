@@ -1,11 +1,11 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import { apolloClient } from '@/lib/apollo-client';
 import {
   useLoginMutation,
   useLogoutMutation,
-  useGetCurrentUserQuery,
+  useGetCurrentUserLazyQuery,
   useSendVerificationEmailMutation,
   useVerifyEmailMutation,
   useRequestPasswordResetMutation,
@@ -26,6 +26,9 @@ export const useAuth = () => {
     setLoading,
   } = useAuthStore();
 
+  // Ref para evitar llamadas múltiples
+  const fetchingUserRef = useRef(false);
+
   // GraphQL mutations
   const [loginMutation, { loading: loginLoading }] = useLoginMutation();
   const [logoutMutation, { loading: logoutLoading }] = useLogoutMutation();
@@ -35,26 +38,58 @@ export const useAuth = () => {
   const [resetPasswordWithToken] = useResetPasswordWithTokenMutation();
   const [changePassword] = useChangePasswordMutation();
 
-  // Get current user query (skip if not authenticated)
-  const { refetch: refetchUser, loading: userLoading } = useGetCurrentUserQuery({
-    skip: !isAuthenticated || !accessToken,
-    fetchPolicy: 'cache-first',
+  // Lazy query para control manual
+  const [getCurrentUser, { loading: userLoading }] = useGetCurrentUserLazyQuery({
+    fetchPolicy: 'network-only', // Siempre obtener datos frescos
     onCompleted: (data) => {
       console.log('GetCurrentUser completed:', data);
       if (data.getCurrentUser) {
         setUser(data.getCurrentUser);
-        setLoading(false);
       }
+      setLoading(false);
+      fetchingUserRef.current = false;
     },
     onError: (error) => {
       console.error('GetCurrentUser error:', error);
-      // Only logout if it's truly an auth error, not a network error
-      if (error.graphQLErrors?.some(e => e.extensions?.code === 'UNAUTHENTICATED')) {
+      
+      // Verificar si es un error de autenticación real
+      const isAuthError = error.graphQLErrors?.some(e => 
+        e.extensions?.code === 'UNAUTHENTICATED' || 
+        e.message.includes('UNAUTHORIZED')
+      );
+      
+      if (isAuthError) {
+        console.log('Authentication error detected, clearing auth state');
         clearAuthData();
       }
+      
       setLoading(false);
+      fetchingUserRef.current = false;
     },
   });
+
+  // Función para obtener el usuario actual de forma segura
+  const fetchCurrentUser = useCallback(async () => {
+    if (!isAuthenticated || !accessToken || fetchingUserRef.current) {
+      console.log('Skipping fetchCurrentUser:', {
+        isAuthenticated,
+        hasToken: !!accessToken,
+        isFetching: fetchingUserRef.current
+      });
+      return;
+    }
+
+    fetchingUserRef.current = true;
+    
+    // Pequeño delay para asegurar que el token esté en Apollo Client
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    console.log('Fetching current user with token:', {
+      tokenPreview: accessToken.substring(0, 20) + '...'
+    });
+    
+    getCurrentUser();
+  }, [isAuthenticated, accessToken, getCurrentUser]);
 
   // Login function
   const login = useCallback(
@@ -86,8 +121,15 @@ export const useAuth = () => {
             expiresAt,
           });
 
-          // Navigate to dashboard
-          navigate('/dashboard');
+          // Esperar un poco más para asegurar que el store se actualice
+          await new Promise(resolve => setTimeout(resolve, 200));
+
+          // Check if email is verified before navigating
+          if (!user.emailVerified) {
+            navigate('/email-verification-pending');
+          } else {
+            navigate('/dashboard');
+          }
           
           return { success: true };
         }
@@ -129,12 +171,31 @@ export const useAuth = () => {
   // Send verification email
   const sendVerificationEmailHandler = useCallback(async () => {
     try {
-      const { data } = await sendVerificationEmail();
+      const currentState = useAuthStore.getState();
+      console.log('sendVerificationEmail - Current auth state:', {
+        isAuthenticated: currentState.isAuthenticated,
+        hasAccessToken: !!currentState.accessToken,
+        accessTokenPreview: currentState.accessToken ? currentState.accessToken.substring(0, 20) + '...' : 'null',
+        hasUser: !!currentState.user,
+        expiresAt: currentState.expiresAt,
+        isExpired: currentState.isTokenExpired(),
+      });
+      
+      const { data, errors } = await sendVerificationEmail();
+      
+      console.log('sendVerificationEmail response:', {
+        data,
+        errors,
+        success: data?.sendVerificationEmail?.success,
+        message: data?.sendVerificationEmail?.message,
+      });
+      
       return {
         success: data?.sendVerificationEmail?.success || false,
-        message: data?.sendVerificationEmail?.message,
+        message: data?.sendVerificationEmail?.message || data?.sendVerificationEmail?.error,
       };
     } catch (error: any) {
+      console.error('sendVerificationEmail error:', error);
       return {
         success: false,
         message: error.message || 'Failed to send verification email',
@@ -152,7 +213,7 @@ export const useAuth = () => {
         
         if (data?.verifyEmail?.success) {
           // Refetch user to update email verification status
-          await refetchUser();
+          await fetchCurrentUser();
         }
         
         return {
@@ -166,7 +227,7 @@ export const useAuth = () => {
         };
       }
     },
-    [verifyEmail, refetchUser]
+    [verifyEmail, fetchCurrentUser]
   );
 
   // Request password reset
@@ -239,31 +300,32 @@ export const useAuth = () => {
 
   // Check authentication on mount
   useEffect(() => {
-    console.log('useAuth - Auth check:', {
+    console.log('useAuth - Auth state change:', {
       isAuthenticated,
       isLoading,
       hasUser: !!user,
       userEmail: user?.username,
       hasAccessToken: !!accessToken,
-      tokenPreview: accessToken ? accessToken.substring(0, 20) + '...' : 'null',
     });
     
-    if (isAuthenticated && !user && accessToken && !userLoading) {
-      console.log('Authenticated but no user, refetching...');
-      // Add a small delay to ensure the token is properly set
-      setTimeout(() => {
-        refetchUser();
-      }, 100);
+    // Solo intentar obtener el usuario si:
+    // 1. Está autenticado
+    // 2. No tiene usuario cargado
+    // 3. Tiene un token de acceso
+    // 4. No está cargando actualmente
+    if (isAuthenticated && !user && accessToken && !userLoading && !fetchingUserRef.current) {
+      console.log('Need to fetch user data');
+      fetchCurrentUser();
     } else if (!isAuthenticated || !accessToken) {
       setLoading(false);
     }
-  }, [isAuthenticated, user, accessToken, refetchUser, setLoading, userLoading]);
+  }, [isAuthenticated, user, accessToken, userLoading, fetchCurrentUser, setLoading]);
 
   return {
     // State
     user,
     isAuthenticated,
-    isLoading: isLoading || loginLoading || logoutLoading,
+    isLoading: isLoading || loginLoading || logoutLoading || userLoading,
     
     // Actions
     login,
@@ -273,6 +335,6 @@ export const useAuth = () => {
     requestPasswordReset: requestPasswordResetHandler,
     resetPasswordWithToken: resetPasswordWithTokenHandler,
     changePassword: changePasswordHandler,
-    refetchUser,
+    refetchUser: fetchCurrentUser,
   };
 };

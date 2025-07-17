@@ -9,6 +9,7 @@ const RequestPasswordResetPage = lazy(() => import('@/pages/auth/RequestPassword
 const ResetPasswordPage = lazy(() => import('@/pages/auth/ResetPasswordPage').then(module => ({ default: module.ResetPasswordPage })))
 const EmailVerificationPendingPage = lazy(() => import('@/pages/auth/EmailVerificationPendingPage').then(module => ({ default: module.EmailVerificationPendingPage })))
 const VerifyEmailPage = lazy(() => import('@/pages/auth/VerifyEmailPage').then(module => ({ default: module.VerifyEmailPage })))
+const EmailVerificationCheck = lazy(() => import('@/components/auth/EmailVerificationCheck').then(module => ({ default: module.EmailVerificationCheck })))
 const UnauthorizedPage = lazy(() => import('@/pages/error/UnauthorizedPage').then(module => ({ default: module.UnauthorizedPage })))
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'))
 const MembersPage = lazy(() => import('@/pages/MembersPage'))
@@ -51,6 +52,7 @@ export const AppRoutes = () => {
 
         {/* Semi-protected route - authenticated but email not verified */}
         <Route element={<AuthLayout />}>
+          <Route path="/email-verification-check" element={<EmailVerificationCheck />} />
           <Route path="/email-verification-pending" element={<EmailVerificationPendingPage />} />
         </Route>
 

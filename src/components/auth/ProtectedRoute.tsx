@@ -36,12 +36,13 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // Check email verification
   if (user && !user.emailVerified) {
-    // Allow access to email verification pending page
-    if (location.pathname === '/email-verification-pending') {
+    // Allow access to email verification pages
+    const allowedPaths = ['/email-verification-pending', '/email-verification-check'];
+    if (allowedPaths.includes(location.pathname)) {
       return <Outlet />;
     }
-    // Redirect to email verification pending page
-    return <Navigate to="/email-verification-pending" replace />;
+    // Redirect to email verification check page
+    return <Navigate to="/email-verification-check" replace />;
   }
 
   // Check admin requirement

@@ -1,25 +1,28 @@
-import { ApolloClient, InMemoryCache, createHttpLink, ApolloLink, from } from '@apollo/client';
-import { createAuthLink } from './links/authLink';
-import { createErrorLink } from './links/errorLink';
+import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
+import { createCustomHttpLink } from './links/customHttpLink';
+import { createDebugLink } from './links/debugLink';
+
+// Get GraphQL endpoint
+const GRAPHQL_URL = import.meta.env.VITE_GRAPHQL_URL || 'http://localhost:8080/graphql';
 
 /**
- * Create the HTTP link for GraphQL requests
- */
-const httpLink = createHttpLink({
-  uri: import.meta.env.VITE_GRAPHQL_URL || 'http://localhost:8080/graphql',
-  credentials: 'include', // Include cookies if needed
-});
-
-/**
- * Create the Apollo Client instance with automatic token refresh
+ * Create the Apollo Client instance
+ * Using customHttpLink that handles auth internally
+ * 
+ * NOTE: This is a working solution that replaces the problematic
+ * auth link chain. The customHttpLink handles authentication
+ * directly in the fetch request, which we've verified works.
  */
 export const createApolloClient = () => {
-  // Create links
-  const authLink = createAuthLink();
-  const errorLink = createErrorLink();
-
-  // Combine links in the correct order: error handling -> auth -> http
-  const link = from([errorLink, authLink, httpLink]);
+  console.log('🏭 Creating Apollo Client with customHttpLink that handles auth internally');
+  
+  // Create the custom HTTP link that handles auth
+  const customHttpLink = createCustomHttpLink(GRAPHQL_URL);
+  
+  // Add debug link in development
+  const link = import.meta.env.DEV 
+    ? ApolloLink.from([createDebugLink(), customHttpLink])
+    : customHttpLink;
 
   return new ApolloClient({
     link,
@@ -105,4 +108,8 @@ export const createApolloClient = () => {
 };
 
 // Create and export the Apollo Client instance
+// This is created once at module load time
 export const apolloClient = createApolloClient();
+
+// Export a function to get the current client (for future use if needed)
+export const getApolloClient = () => apolloClient;

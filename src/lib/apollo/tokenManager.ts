@@ -131,35 +131,43 @@ class TokenManager {
   }
 
   /**
+   * Validate token format
+   */
+  private isValidTokenFormat(token: string): boolean {
+    // JWT tokens have 3 parts separated by dots
+    const parts = token.split('.');
+    const isValid = parts.length === 3 && parts.every(part => part.length > 0);
+    
+    // Additional validation: check for common issues
+    if (token.includes(' ') || token.includes('\n') || token.includes('\r') || token.includes('\t')) {
+      return false;
+    }
+    
+    return isValid;
+  }
+
+  /**
    * Get a valid access token, refreshing if necessary
    */
   async getValidAccessToken(): Promise<string | null> {
     const currentToken = this.getAccessToken();
     const state = useAuthStore.getState();
     
-    console.log('TokenManager.getValidAccessToken:', {
-      hasCurrentToken: !!currentToken,
-      tokenPreview: currentToken ? currentToken.substring(0, 20) + '...' : 'null',
-      isExpired: this.isTokenExpired(),
-      expiresAt: state.expiresAt,
-      storeState: {
-        isAuthenticated: state.isAuthenticated,
-        hasAccessToken: !!state.accessToken,
-        hasRefreshToken: !!state.refreshToken,
-      }
-    });
-    
     if (!currentToken) {
-      console.warn('No current token available');
+      return null;
+    }
+
+    // Validate token format
+    if (!this.isValidTokenFormat(currentToken)) {
+      this.clearTokens();
       return null;
     }
 
     if (this.isTokenExpired()) {
-      console.log('Token expired, attempting refresh...');
       try {
-        return await this.refreshAccessToken();
+        const newToken = await this.refreshAccessToken();
+        return newToken;
       } catch (error) {
-        console.error('Failed to refresh token:', error);
         return null;
       }
     }

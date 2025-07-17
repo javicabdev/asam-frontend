@@ -65,6 +65,15 @@ export const EmailVerificationPendingPage: React.FC = () => {
             '• Error de configuración del servidor\n' +
             '• Problema temporal del sistema'
           );
+        } else if (result.message?.includes('UNAUTHORIZED') || result.message?.includes('Unauthorized')) {
+          setMessage('Error de autorización. Por favor, contacta con soporte técnico.');
+          setErrorDetails(
+            'El servidor rechazó la solicitud a pesar de estar autenticado.\n' +
+            'Este es un problema conocido del backend que está siendo investigado.\n\n' +
+            'Solución temporal:\n' +
+            '1. Cierra sesión y vuelve a iniciar sesión\n' +
+            '2. Si el problema persiste, contacta a soporte con el código de error'
+          );
         } else if (result.message?.includes('rate limit')) {
           setMessage('Has enviado demasiados emails. Intenta de nuevo más tarde.');
         } else if (result.message?.includes('invalid email')) {
@@ -72,12 +81,14 @@ export const EmailVerificationPendingPage: React.FC = () => {
         } else {
           setMessage(result.message || 'Error al enviar el email de verificación');
         }
+        
+        console.error('Failed to send verification email:', result.message);
       }
     } catch (error: any) {
       setStatus('error');
       setMessage('Error inesperado. Por favor, intenta de nuevo.');
       setErrorDetails(error.message || 'Error desconocido');
-      console.error('Error sending verification email:', error);
+      console.error('Exception in handleResendEmail:', error.message);
     }
   };
 
@@ -242,7 +253,7 @@ export const EmailVerificationPendingPage: React.FC = () => {
             
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 1 }}>
               <Link href="mailto:javierfernandezc@gmail.com" underline="hover">
-                📧 soporte@mutuaasam.org
+                📧 javierfernandezc@gmail.com
               </Link>
               
               {status === 'error' && (
@@ -252,6 +263,7 @@ export const EmailVerificationPendingPage: React.FC = () => {
                   <code>ERR_SEND_VERIFICATION_{new Date().getTime()}</code>
                 </Typography>
               )}
+
             </Box>
           </Box>
         </Paper>

@@ -42,7 +42,6 @@ export const useAuth = () => {
   const [getCurrentUser, { loading: userLoading }] = useGetCurrentUserLazyQuery({
     fetchPolicy: 'network-only', // Siempre obtener datos frescos
     onCompleted: (data) => {
-      console.log('GetCurrentUser completed:', data);
       if (data.getCurrentUser) {
         setUser(data.getCurrentUser);
       }
@@ -59,7 +58,6 @@ export const useAuth = () => {
       );
       
       if (isAuthError) {
-        console.log('Authentication error detected, clearing auth state');
         clearAuthData();
       }
       
@@ -71,11 +69,6 @@ export const useAuth = () => {
   // Función para obtener el usuario actual de forma segura
   const fetchCurrentUser = useCallback(async () => {
     if (!isAuthenticated || !accessToken || fetchingUserRef.current) {
-      console.log('Skipping fetchCurrentUser:', {
-        isAuthenticated,
-        hasToken: !!accessToken,
-        isFetching: fetchingUserRef.current
-      });
       return;
     }
 
@@ -84,10 +77,6 @@ export const useAuth = () => {
     // Pequeño delay para asegurar que el token esté en Apollo Client
     await new Promise(resolve => setTimeout(resolve, 100));
     
-    console.log('Fetching current user with token:', {
-      tokenPreview: accessToken.substring(0, 20) + '...'
-    });
-    
     getCurrentUser();
   }, [isAuthenticated, accessToken, getCurrentUser]);
 
@@ -95,8 +84,6 @@ export const useAuth = () => {
   const login = useCallback(
     async (username: string, password: string) => {
       try {
-        console.log('Starting login for:', username);
-        
         const { data } = await loginMutation({
           variables: {
             input: { username, password },
@@ -105,13 +92,6 @@ export const useAuth = () => {
 
         if (data?.login) {
           const { user, accessToken, refreshToken, expiresAt } = data.login;
-          
-          console.log('Login successful:', {
-            user: user.username,
-            expiresAt,
-            expiresAtDate: new Date(expiresAt).toISOString(),
-            currentTime: new Date().toISOString(),
-          });
           
           // Store auth data
           setAuthData({
@@ -123,10 +103,13 @@ export const useAuth = () => {
 
           // Esperar un poco más para asegurar que el store se actualice
           await new Promise(resolve => setTimeout(resolve, 200));
+          
+          // Force Apollo Client to update its auth link with the new token
+          await apolloClient.resetStore();
 
           // Check if email is verified before navigating
           if (!user.emailVerified) {
-            navigate('/email-verification-pending');
+            navigate('/email-verification-check');
           } else {
             navigate('/dashboard');
           }
@@ -168,39 +151,77 @@ export const useAuth = () => {
     }
   }, [logoutMutation, clearAuthData, navigate]);
 
-  // Send verification email
+  // Send verification email with retry logic
   const sendVerificationEmailHandler = useCallback(async () => {
-    try {
-      const currentState = useAuthStore.getState();
-      console.log('sendVerificationEmail - Current auth state:', {
-        isAuthenticated: currentState.isAuthenticated,
-        hasAccessToken: !!currentState.accessToken,
-        accessTokenPreview: currentState.accessToken ? currentState.accessToken.substring(0, 20) + '...' : 'null',
-        hasUser: !!currentState.user,
-        expiresAt: currentState.expiresAt,
-        isExpired: currentState.isTokenExpired(),
-      });
-      
-      const { data, errors } = await sendVerificationEmail();
-      
-      console.log('sendVerificationEmail response:', {
-        data,
-        errors,
-        success: data?.sendVerificationEmail?.success,
-        message: data?.sendVerificationEmail?.message,
-      });
-      
-      return {
-        success: data?.sendVerificationEmail?.success || false,
-        message: data?.sendVerificationEmail?.message || data?.sendVerificationEmail?.error,
-      };
-    } catch (error: any) {
-      console.error('sendVerificationEmail error:', error);
-      return {
-        success: false,
-        message: error.message || 'Failed to send verification email',
-      };
+    const maxRetries = 2;
+    let lastError: any = null;
+    
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const currentState = useAuthStore.getState();
+        
+        // Validate prerequisites
+        if (!currentState.isAuthenticated || !currentState.accessToken) {
+          return {
+            success: false,
+            message: 'Debes iniciar sesión para verificar tu email',
+          };
+        }
+        
+        // If user email is already verified, no need to send
+        if (currentState.user?.emailVerified) {
+          return {
+            success: false,
+            message: 'Tu email ya está verificado',
+          };
+        }
+        
+        // Add a small delay on retries to allow token to propagate
+        if (attempt > 0) {
+          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+        }
+        
+        const { data, errors } = await sendVerificationEmail();
+        
+        // If successful, return immediately
+        if (data?.sendVerificationEmail?.success) {
+          return {
+            success: true,
+            message: data.sendVerificationEmail.message || 'Email de verificación enviado',
+          };
+        }
+        
+        // If not successful but not an auth error, return the error
+        const errorMessage = data?.sendVerificationEmail?.message || data?.sendVerificationEmail?.error;
+        if (errorMessage && !errorMessage.includes('UNAUTHORIZED') && !errorMessage.includes('401')) {
+          return {
+            success: false,
+            message: errorMessage,
+          };
+        }
+        
+        // If it's an auth error and we have retries left, continue
+        lastError = new Error(errorMessage || 'Failed to send verification email');
+        
+      } catch (error: any) {
+        lastError = error;
+        
+        // If it's not an auth error or we're out of retries, return the error
+        if (attempt === maxRetries || 
+            (!error.message?.includes('UNAUTHORIZED') && !error.message?.includes('401'))) {
+          return {
+            success: false,
+            message: error.message || 'Error al enviar el email de verificación',
+          };
+        }
+      }
     }
+    
+    // If we get here, all retries failed
+    return {
+      success: false,
+      message: lastError?.message || 'Error al enviar el email de verificación después de varios intentos',
+    };
   }, [sendVerificationEmail]);
 
   // Verify email with token
@@ -300,21 +321,12 @@ export const useAuth = () => {
 
   // Check authentication on mount
   useEffect(() => {
-    console.log('useAuth - Auth state change:', {
-      isAuthenticated,
-      isLoading,
-      hasUser: !!user,
-      userEmail: user?.username,
-      hasAccessToken: !!accessToken,
-    });
-    
     // Solo intentar obtener el usuario si:
     // 1. Está autenticado
     // 2. No tiene usuario cargado
     // 3. Tiene un token de acceso
     // 4. No está cargando actualmente
     if (isAuthenticated && !user && accessToken && !userLoading && !fetchingUserRef.current) {
-      console.log('Need to fetch user data');
       fetchCurrentUser();
     } else if (!isAuthenticated || !accessToken) {
       setLoading(false);

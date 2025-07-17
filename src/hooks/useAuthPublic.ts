@@ -9,7 +9,6 @@ import {
   useVerifyEmailMutation,
   useRequestPasswordResetMutation,
   useResetPasswordWithTokenMutation,
-  useChangePasswordMutation,
 } from '@/graphql/generated/operations';
 
 /**
@@ -57,17 +56,32 @@ export const useAuthPublic = () => {
           });
           
           // Store auth data
+          console.log('Storing auth data in Zustand store...');
           setAuthData({
             user,
             accessToken,
             refreshToken,
             expiresAt,
           });
-
+          
+          // Verify token was stored (for debugging)
+          if (import.meta.env.DEV) {
+            const storedToken = useAuthStore.getState().accessToken;
+            console.log('Token stored verification:', {
+              tokenStored: !!storedToken,
+              tokenMatches: storedToken === accessToken,
+              storeState: useAuthStore.getState().isAuthenticated,
+            });
+          }
+          
+          // No need for resetStore or delays - the customHttpLink reads the token dynamically
+          
           // Check if email is verified before navigating
           if (!user.emailVerified) {
-            navigate('/email-verification-pending');
+            console.log('User email not verified, navigating to verification check');
+            navigate('/email-verification-check');
           } else {
+            console.log('User email verified, navigating to dashboard');
             navigate('/dashboard');
           }
           
@@ -128,22 +142,39 @@ export const useAuthPublic = () => {
   const verifyEmailHandler = useCallback(
     async (token: string) => {
       try {
+        console.log('🔐 Verifying email with token:', token.substring(0, 20) + '...');
+        
         const { data } = await verifyEmail({
           variables: { token },
         });
         
-        return {
-          success: data?.verifyEmail?.success || false,
+        console.log('✅ Verification response:', {
+          success: data?.verifyEmail?.success,
           message: data?.verifyEmail?.message,
+        });
+        
+        // Check if email is already verified
+        const isAlreadyVerified = data?.verifyEmail?.message?.toLowerCase().includes('already verified');
+        
+        // If verification was successful and user is authenticated, reset Apollo store
+        // to ensure the current user's emailVerified status is updated
+        if ((data?.verifyEmail?.success || isAlreadyVerified) && useAuthStore.getState().isAuthenticated) {
+          await apolloClient.resetStore();
+        }
+        
+        return {
+          success: data?.verifyEmail?.success || isAlreadyVerified || false,
+          message: data?.verifyEmail?.message || data?.verifyEmail?.error || 'Email verification completed',
         };
       } catch (error: any) {
+        console.error('❌ Verify email error:', error);
         return {
           success: false,
           message: error.message || 'Failed to verify email',
         };
       }
     },
-    [verifyEmail]
+    [verifyEmail] // Remove isAuthenticated from dependencies, use getState() instead
   );
 
   // Request password reset

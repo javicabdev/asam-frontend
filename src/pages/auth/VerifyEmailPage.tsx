@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Box,
@@ -16,17 +16,20 @@ import {
   Home as HomeIcon,
   Login as LoginIcon,
 } from '@mui/icons-material';
-import { useAuthPublic } from '@/hooks/useAuthPublic';
+import { useAuth } from '@/hooks/useAuth';
 import { useAuthStore } from '@/stores/authStore';
 
 export const VerifyEmailPage: React.FC = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const { verifyEmail } = useAuthPublic();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { verifyEmail, refetchUser } = useAuth();
   const { isAuthenticated } = useAuthStore();
   
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState<string>('');
+  
+  // Use ref to track if verification has been attempted
+  const hasVerified = useRef(false);
   
   // Get token from URL
   const token = searchParams.get('token');
@@ -34,25 +37,62 @@ export const VerifyEmailPage: React.FC = () => {
   // Verify email on mount
   useEffect(() => {
     const performVerification = async () => {
+      // Prevent multiple verification attempts
+      if (hasVerified.current) {
+        console.log('🚫 Verification already attempted, skipping...');
+        return;
+      }
+
       if (!token) {
+        console.log('❌ No token provided');
         setStatus('error');
         setMessage('Token de verificación no proporcionado');
         return;
       }
 
-      const result = await verifyEmail(token);
-      
-      if (result.success) {
-        setStatus('success');
-        setMessage(result.message || 'Email verificado exitosamente');
-      } else {
+      // Mark as attempted immediately
+      hasVerified.current = true;
+      console.log('🔄 Attempting email verification...');
+
+      try {
+        const result = await verifyEmail(token);
+        
+        console.log('📧 Verification result:', result);
+        
+        // Handle already verified case as success
+        if (result.success || result.message?.includes('already verified')) {
+          setStatus('success');
+          setMessage(result.message || 'Email verificado exitosamente');
+          
+          // Clean up URL by removing the token parameter
+          const newSearchParams = new URLSearchParams(searchParams);
+          newSearchParams.delete('token');
+          setSearchParams(newSearchParams, { replace: true });
+          
+          // If user is authenticated, refresh user data to update emailVerified status
+          if (isAuthenticated) {
+            console.log('📧 User is authenticated, refreshing user data...');
+            try {
+              await refetchUser();
+              console.log('✅ User data refreshed successfully');
+            } catch (refetchError) {
+              console.error('⚠️ Failed to refresh user data:', refetchError);
+              // Don't fail the verification process, user can still login again
+            }
+          }
+        } else {
+          setStatus('error');
+          setMessage(result.message || 'Error al verificar el email');
+        }
+      } catch (error) {
+        console.error('💥 Unexpected error during verification:', error);
         setStatus('error');
-        setMessage(result.message || 'Error al verificar el email');
+        setMessage('Error inesperado al verificar el email');
       }
     };
 
     performVerification();
-  }, [token, verifyEmail]);
+  }, [token, isAuthenticated]); // Include isAuthenticated to handle auth state changes
 
   // Handle navigation based on auth status
   const handleContinue = () => {
@@ -120,7 +160,10 @@ export const VerifyEmailPage: React.FC = () => {
               </Alert>
 
               <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-                Tu cuenta ha sido verificada exitosamente. Ya puedes acceder a todas las funcionalidades del sistema.
+                {message?.includes('already verified') 
+                  ? 'Tu email ya estaba verificado. Puedes continuar usando el sistema normalmente.'
+                  : 'Tu cuenta ha sido verificada exitosamente. Ya puedes acceder a todas las funcionalidades del sistema.'
+                }
               </Typography>
 
               <Button

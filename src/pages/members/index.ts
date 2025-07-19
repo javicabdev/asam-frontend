@@ -1,0 +1,1 @@
+export { NewMemberPage } from './NewMemberPage';

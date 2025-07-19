@@ -5,12 +5,14 @@ import {
   Refresh as RefreshIcon,
 } from '@mui/icons-material';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { MembersTable } from '@/features/members/components/MembersTable';
 import { MembersFilters } from '@/features/members/components/MembersFilters';
 import { useMembersTable } from '@/features/members/hooks/useMembersTable';
 
 export default function MembersPage() {
+  const navigate = useNavigate();
   const {
     members,
     totalCount,
@@ -79,10 +81,7 @@ export default function MembersPage() {
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={() => {
-              // TODO: Navigate to create member page
-              console.log('Add new member');
-            }}
+            onClick={() => navigate('/members/new')}
           >
             Nuevo Socio
           </Button>

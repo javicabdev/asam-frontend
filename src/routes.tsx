@@ -13,6 +13,7 @@ const EmailVerificationCheck = lazy(() => import('@/components/auth/EmailVerific
 const UnauthorizedPage = lazy(() => import('@/pages/error/UnauthorizedPage').then(module => ({ default: module.UnauthorizedPage })))
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'))
 const MembersPage = lazy(() => import('@/pages/MembersPage'))
+const NewMemberPage = lazy(() => import('@/pages/members/NewMemberPage').then(module => ({ default: module.NewMemberPage })))
 const FamiliesPage = lazy(() => import('@/pages/FamiliesPage'))
 const PaymentsPage = lazy(() => import('@/pages/PaymentsPage'))
 const CashFlowPage = lazy(() => import('@/pages/CashFlowPage'))
@@ -62,6 +63,7 @@ export const AppRoutes = () => {
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/members" element={<MembersPage />} />
+            <Route path="/members/new" element={<NewMemberPage />} />
             <Route path="/members/:id" element={<MembersPage />} />
             <Route path="/families" element={<FamiliesPage />} />
             <Route path="/families/:id" element={<FamiliesPage />} />

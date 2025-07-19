@@ -134,13 +134,19 @@ export function MemberDetailsPage() {
             Imprimir
           </Button>
           {isAdmin && (
-            <Button
-              variant="contained"
-              startIcon={<EditIcon />}
-              onClick={() => navigate(`/members/${member.miembro_id}/edit`)}
-            >
-              Editar
-            </Button>
+            <Tooltip title="Funcionalidad pendiente de implementación">
+              <span>
+                <Button
+                  variant="contained"
+                  startIcon={<EditIcon />}
+                  disabled
+                  // TODO: Implementar página de edición
+                  // onClick={() => navigate(`/members/${member.miembro_id}/edit`)}
+                >
+                  Editar
+                </Button>
+              </span>
+            </Tooltip>
           )}
         </Stack>
       </Box>

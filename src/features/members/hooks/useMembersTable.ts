@@ -35,20 +35,22 @@ export function useMembersTable(): UseMembersTableResult {
   });
 
   // Convert internal filter to GraphQL input format
+  // Only include fields that are actually in the GraphQL schema
   const graphqlFilter: MemberFilterInput = {
     estado: filter.estado,
     tipo_membresia: filter.tipo_membresia,
     search_term: filter.search_term,
-    poblacion: filter.poblacion,
-    provincia: filter.provincia,
-    fecha_alta_desde: filter.fecha_alta_desde,
-    fecha_alta_hasta: filter.fecha_alta_hasta,
-    fecha_baja_desde: filter.fecha_baja_desde,
-    fecha_baja_hasta: filter.fecha_baja_hasta,
-    correo_electronico: filter.correo_electronico,
-    documento_identidad: filter.documento_identidad,
     pagination: filter.pagination,
     sort: filter.sort,
+    // TODO: The following fields are not supported by the backend yet
+    // poblacion: filter.poblacion,
+    // provincia: filter.provincia,
+    // fecha_alta_desde: filter.fecha_alta_desde,
+    // fecha_alta_hasta: filter.fecha_alta_hasta,
+    // fecha_baja_desde: filter.fecha_baja_desde,
+    // fecha_baja_hasta: filter.fecha_baja_hasta,
+    // correo_electronico: filter.correo_electronico,
+    // documento_identidad: filter.documento_identidad,
   };
 
   const { data, loading, error, refetch, fetchMore } = useQuery<ListMembersQueryResponse>(

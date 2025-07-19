@@ -15,7 +15,6 @@ import {
   Typography,
   IconButton,
   Tooltip,
-  Badge,
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -23,14 +22,15 @@ import {
   ExpandMore as ExpandMoreIcon,
   FilterList as FilterListIcon,
 } from '@mui/icons-material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { es } from 'date-fns/locale';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+// import { es } from 'date-fns/locale';
 
 import { MemberStatus, MembershipType, MemberFilter } from '../types';
 
-// Spanish provinces
+// Spanish provinces - TODO: Uncomment when backend supports province filtering
+/*
 const PROVINCES = [
   'Álava', 'Albacete', 'Alicante', 'Almería', 'Asturias', 'Ávila', 'Badajoz', 'Barcelona',
   'Burgos', 'Cáceres', 'Cádiz', 'Cantabria', 'Castellón', 'Ciudad Real', 'Córdoba', 'Cuenca',
@@ -40,6 +40,7 @@ const PROVINCES = [
   'Santa Cruz de Tenerife', 'Segovia', 'Sevilla', 'Soria', 'Tarragona', 'Teruel',
   'Toledo', 'Valencia', 'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza',
 ];
+*/
 
 interface MembersFiltersProps {
   onFilterChange: (filter: Partial<MemberFilter>) => void;
@@ -49,11 +50,6 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
   const [localFilter, setLocalFilter] = useState<Partial<MemberFilter>>({});
   const [expanded, setExpanded] = useState(false);
 
-  // Count active filters
-  const activeFilterCount = Object.values(localFilter).filter(v => 
-    v !== undefined && v !== '' && v !== null
-  ).length;
-
   const handleChange = (field: keyof MemberFilter, value: any) => {
     setLocalFilter((prev) => ({
       ...prev,
@@ -62,15 +58,22 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
   };
 
   const handleApplyFilters = () => {
-    // Clean up empty values
-    const cleanedFilter = Object.entries(localFilter).reduce((acc, [key, value]) => {
-      if (value !== undefined && value !== '' && value !== null) {
+    // Clean up empty values and only include supported fields
+    const cleanedFilter = {
+      estado: localFilter.estado || undefined,
+      tipo_membresia: localFilter.tipo_membresia || undefined,
+      search_term: localFilter.search_term || undefined,
+    };
+    
+    // Remove undefined values
+    const finalFilter = Object.entries(cleanedFilter).reduce((acc, [key, value]) => {
+      if (value !== undefined) {
         acc[key as keyof MemberFilter] = value;
       }
       return acc;
     }, {} as Partial<MemberFilter>);
     
-    onFilterChange(cleanedFilter);
+    onFilterChange(finalFilter);
   };
 
   const handleClearFilters = () => {
@@ -157,14 +160,12 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
               >
                 Limpiar
               </Button>
-              <Tooltip title="Filtros avanzados">
+              <Tooltip title="Filtros avanzados (temporalmente no disponibles)">
                 <IconButton
                   onClick={() => setExpanded(!expanded)}
-                  color={activeFilterCount > 0 ? 'primary' : 'default'}
+                  color="default"
                 >
-                  <Badge badgeContent={activeFilterCount} color="primary">
-                    <FilterListIcon />
-                  </Badge>
+                  <FilterListIcon />
                 </IconButton>
               </Tooltip>
             </Box>
@@ -176,13 +177,20 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
       <Accordion expanded={expanded} onChange={(_, isExpanded) => setExpanded(isExpanded)}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography>Filtros Avanzados</Typography>
-          {activeFilterCount > 0 && (
-            <Typography sx={{ ml: 2, color: 'text.secondary' }}>
-              ({activeFilterCount} activos)
-            </Typography>
-          )}
+          <Typography sx={{ ml: 2, color: 'text.secondary' }}>
+            (Temporalmente no disponibles)
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
+          <Box sx={{ p: 2, textAlign: 'center' }}>
+            <Typography color="text.secondary">
+              Los filtros avanzados están temporalmente deshabilitados mientras se implementan en el backend.
+            </Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
+              Por ahora, puede usar la búsqueda general para filtrar por nombre, apellidos o número de socio.
+            </Typography>
+          </Box>
+          {/* TODO: Uncomment when backend supports these filters
           <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
             <Grid container spacing={2}>
               <Grid item xs={12} md={3}>
@@ -286,6 +294,7 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
               </Grid>
             </Grid>
           </LocalizationProvider>
+          */}
         </AccordionDetails>
       </Accordion>
     </Paper>

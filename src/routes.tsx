@@ -14,6 +14,7 @@ const UnauthorizedPage = lazy(() => import('@/pages/error/UnauthorizedPage').the
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'))
 const MembersPage = lazy(() => import('@/pages/MembersPage'))
 const NewMemberPage = lazy(() => import('@/pages/members/NewMemberPage').then(module => ({ default: module.NewMemberPage })))
+const MemberDetailsPage = lazy(() => import('@/pages/members/MemberDetailsPage').then(module => ({ default: module.MemberDetailsPage })))
 const FamiliesPage = lazy(() => import('@/pages/FamiliesPage'))
 const PaymentsPage = lazy(() => import('@/pages/PaymentsPage'))
 const CashFlowPage = lazy(() => import('@/pages/CashFlowPage'))
@@ -64,7 +65,7 @@ export const AppRoutes = () => {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/members" element={<MembersPage />} />
             <Route path="/members/new" element={<NewMemberPage />} />
-            <Route path="/members/:id" element={<MembersPage />} />
+            <Route path="/members/:id" element={<MemberDetailsPage />} />
             <Route path="/families" element={<FamiliesPage />} />
             <Route path="/families/:id" element={<FamiliesPage />} />
             <Route path="/payments" element={<PaymentsPage />} />

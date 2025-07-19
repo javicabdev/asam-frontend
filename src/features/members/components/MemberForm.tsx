@@ -154,8 +154,12 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                 control={control}
                 render={({ field }) => (
                   <FormControl fullWidth required error={!!errors.tipo_membresia}>
-                    <InputLabel>Tipo de Membresía</InputLabel>
-                    <Select {...field}>
+                    <InputLabel id="tipo-membresia-label">Tipo de Membresía</InputLabel>
+                    <Select 
+                      {...field} 
+                      labelId="tipo-membresia-label"
+                      label="Tipo de Membresía"
+                    >
                       <MenuItem value={MembershipType.INDIVIDUAL}>Individual</MenuItem>
                       <MenuItem value={MembershipType.FAMILY}>Familiar</MenuItem>
                     </Select>

@@ -70,59 +70,27 @@ export type ResendVerificationEmailMutationVariables = Exact<{
 
 export type ResendVerificationEmailMutation = { __typename?: 'Mutation', resendVerificationEmail: { __typename?: 'MutationResponse', success: boolean, message?: string | null, error?: string | null } };
 
-export type FamilyFieldsFragment = { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string };
+export type CreateFamilyMutationVariables = Exact<{
+  input: CreateFamilyInput;
+}>;
 
-export type FamiliarFieldsFragment = { __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null };
+
+export type CreateFamilyMutation = { __typename?: 'Mutation', createFamily: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, nombre: string, apellidos: string } | null } };
+
+export type AddFamilyMemberMutationVariables = Exact<{
+  family_id: Scalars['ID']['input'];
+  familiar: FamiliarInput;
+}>;
+
+
+export type AddFamilyMemberMutation = { __typename?: 'Mutation', addFamilyMember: { __typename?: 'Family', id: string, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> | null } };
 
 export type GetFamilyQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetFamilyQuery = { __typename?: 'Query', getFamily?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> | null } | null };
-
-export type ListFamiliesQueryVariables = Exact<{
-  filter?: InputMaybe<FamilyFilter>;
-}>;
-
-
-export type ListFamiliesQuery = { __typename?: 'Query', listFamilies: { __typename?: 'FamilyConnection', nodes: Array<{ __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
-
-export type GetFamilyMembersQueryVariables = Exact<{
-  familyId: Scalars['ID']['input'];
-}>;
-
-
-export type GetFamilyMembersQuery = { __typename?: 'Query', getFamilyMembers: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> };
-
-export type CreateFamilyMutationVariables = Exact<{
-  input: CreateFamilyInput;
-}>;
-
-
-export type CreateFamilyMutation = { __typename?: 'Mutation', createFamily: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string } };
-
-export type UpdateFamilyMutationVariables = Exact<{
-  input: UpdateFamilyInput;
-}>;
-
-
-export type UpdateFamilyMutation = { __typename?: 'Mutation', updateFamily: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string } };
-
-export type AddFamilyMemberMutationVariables = Exact<{
-  familyId: Scalars['ID']['input'];
-  familiar: FamiliarInput;
-}>;
-
-
-export type AddFamilyMemberMutation = { __typename?: 'Mutation', addFamilyMember: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> | null } };
-
-export type RemoveFamilyMemberMutationVariables = Exact<{
-  familiarId: Scalars['ID']['input'];
-}>;
-
-
-export type RemoveFamilyMemberMutation = { __typename?: 'Mutation', removeFamilyMember: { __typename?: 'MutationResponse', success: boolean, message?: string | null, error?: string | null } };
+export type GetFamilyQuery = { __typename?: 'Query', getFamily?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, nombre: string, apellidos: string } | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> | null } | null };
 
 export type MemberBasicFieldsFragment = { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, correo_electronico?: string | null, poblacion: string, provincia: string, documento_identidad?: string | null };
 
@@ -354,26 +322,6 @@ export const AuthTokensFragmentDoc = gql`
   accessToken
   refreshToken
   expiresAt
-}
-    `;
-export const FamilyFieldsFragmentDoc = gql`
-    fragment FamilyFields on Family {
-  id
-  numero_socio
-  esposo_nombre
-  esposo_apellidos
-  esposa_nombre
-  esposa_apellidos
-}
-    `;
-export const FamiliarFieldsFragmentDoc = gql`
-    fragment FamiliarFields on Familiar {
-  id
-  nombre
-  apellidos
-  fecha_nacimiento
-  dni_nie
-  correo_electronico
 }
     `;
 export const MemberBasicFieldsFragmentDoc = gql`
@@ -778,23 +726,116 @@ export function useResendVerificationEmailMutation(baseOptions?: Apollo.Mutation
 export type ResendVerificationEmailMutationHookResult = ReturnType<typeof useResendVerificationEmailMutation>;
 export type ResendVerificationEmailMutationResult = Apollo.MutationResult<ResendVerificationEmailMutation>;
 export type ResendVerificationEmailMutationOptions = Apollo.BaseMutationOptions<ResendVerificationEmailMutation, ResendVerificationEmailMutationVariables>;
+export const CreateFamilyDocument = gql`
+    mutation CreateFamily($input: CreateFamilyInput!) {
+  createFamily(input: $input) {
+    id
+    numero_socio
+    esposo_nombre
+    esposo_apellidos
+    esposa_nombre
+    esposa_apellidos
+    miembro_origen {
+      miembro_id
+      nombre
+      apellidos
+    }
+  }
+}
+    `;
+export type CreateFamilyMutationFn = Apollo.MutationFunction<CreateFamilyMutation, CreateFamilyMutationVariables>;
+
+/**
+ * __useCreateFamilyMutation__
+ *
+ * To run a mutation, you first call `useCreateFamilyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateFamilyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createFamilyMutation, { data, loading, error }] = useCreateFamilyMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateFamilyMutation(baseOptions?: Apollo.MutationHookOptions<CreateFamilyMutation, CreateFamilyMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateFamilyMutation, CreateFamilyMutationVariables>(CreateFamilyDocument, options);
+      }
+export type CreateFamilyMutationHookResult = ReturnType<typeof useCreateFamilyMutation>;
+export type CreateFamilyMutationResult = Apollo.MutationResult<CreateFamilyMutation>;
+export type CreateFamilyMutationOptions = Apollo.BaseMutationOptions<CreateFamilyMutation, CreateFamilyMutationVariables>;
+export const AddFamilyMemberDocument = gql`
+    mutation AddFamilyMember($family_id: ID!, $familiar: FamiliarInput!) {
+  addFamilyMember(family_id: $family_id, familiar: $familiar) {
+    id
+    familiares {
+      id
+      nombre
+      apellidos
+      fecha_nacimiento
+      dni_nie
+      correo_electronico
+    }
+  }
+}
+    `;
+export type AddFamilyMemberMutationFn = Apollo.MutationFunction<AddFamilyMemberMutation, AddFamilyMemberMutationVariables>;
+
+/**
+ * __useAddFamilyMemberMutation__
+ *
+ * To run a mutation, you first call `useAddFamilyMemberMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddFamilyMemberMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addFamilyMemberMutation, { data, loading, error }] = useAddFamilyMemberMutation({
+ *   variables: {
+ *      family_id: // value for 'family_id'
+ *      familiar: // value for 'familiar'
+ *   },
+ * });
+ */
+export function useAddFamilyMemberMutation(baseOptions?: Apollo.MutationHookOptions<AddFamilyMemberMutation, AddFamilyMemberMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddFamilyMemberMutation, AddFamilyMemberMutationVariables>(AddFamilyMemberDocument, options);
+      }
+export type AddFamilyMemberMutationHookResult = ReturnType<typeof useAddFamilyMemberMutation>;
+export type AddFamilyMemberMutationResult = Apollo.MutationResult<AddFamilyMemberMutation>;
+export type AddFamilyMemberMutationOptions = Apollo.BaseMutationOptions<AddFamilyMemberMutation, AddFamilyMemberMutationVariables>;
 export const GetFamilyDocument = gql`
     query GetFamily($id: ID!) {
   getFamily(id: $id) {
-    ...FamilyFields
+    id
+    numero_socio
+    esposo_nombre
+    esposo_apellidos
+    esposa_nombre
+    esposa_apellidos
     miembro_origen {
       miembro_id
-      numero_socio
       nombre
       apellidos
     }
     familiares {
-      ...FamiliarFields
+      id
+      nombre
+      apellidos
+      fecha_nacimiento
+      dni_nie
+      correo_electronico
     }
   }
 }
-    ${FamilyFieldsFragmentDoc}
-${FamiliarFieldsFragmentDoc}`;
+    `;
 
 /**
  * __useGetFamilyQuery__
@@ -828,232 +869,6 @@ export type GetFamilyQueryHookResult = ReturnType<typeof useGetFamilyQuery>;
 export type GetFamilyLazyQueryHookResult = ReturnType<typeof useGetFamilyLazyQuery>;
 export type GetFamilySuspenseQueryHookResult = ReturnType<typeof useGetFamilySuspenseQuery>;
 export type GetFamilyQueryResult = Apollo.QueryResult<GetFamilyQuery, GetFamilyQueryVariables>;
-export const ListFamiliesDocument = gql`
-    query ListFamilies($filter: FamilyFilter) {
-  listFamilies(filter: $filter) {
-    nodes {
-      ...FamilyFields
-    }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      totalCount
-    }
-  }
-}
-    ${FamilyFieldsFragmentDoc}`;
-
-/**
- * __useListFamiliesQuery__
- *
- * To run a query within a React component, call `useListFamiliesQuery` and pass it any options that fit your needs.
- * When your component renders, `useListFamiliesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListFamiliesQuery({
- *   variables: {
- *      filter: // value for 'filter'
- *   },
- * });
- */
-export function useListFamiliesQuery(baseOptions?: Apollo.QueryHookOptions<ListFamiliesQuery, ListFamiliesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ListFamiliesQuery, ListFamiliesQueryVariables>(ListFamiliesDocument, options);
-      }
-export function useListFamiliesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListFamiliesQuery, ListFamiliesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ListFamiliesQuery, ListFamiliesQueryVariables>(ListFamiliesDocument, options);
-        }
-export function useListFamiliesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ListFamiliesQuery, ListFamiliesQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ListFamiliesQuery, ListFamiliesQueryVariables>(ListFamiliesDocument, options);
-        }
-export type ListFamiliesQueryHookResult = ReturnType<typeof useListFamiliesQuery>;
-export type ListFamiliesLazyQueryHookResult = ReturnType<typeof useListFamiliesLazyQuery>;
-export type ListFamiliesSuspenseQueryHookResult = ReturnType<typeof useListFamiliesSuspenseQuery>;
-export type ListFamiliesQueryResult = Apollo.QueryResult<ListFamiliesQuery, ListFamiliesQueryVariables>;
-export const GetFamilyMembersDocument = gql`
-    query GetFamilyMembers($familyId: ID!) {
-  getFamilyMembers(familyId: $familyId) {
-    ...FamiliarFields
-  }
-}
-    ${FamiliarFieldsFragmentDoc}`;
-
-/**
- * __useGetFamilyMembersQuery__
- *
- * To run a query within a React component, call `useGetFamilyMembersQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetFamilyMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetFamilyMembersQuery({
- *   variables: {
- *      familyId: // value for 'familyId'
- *   },
- * });
- */
-export function useGetFamilyMembersQuery(baseOptions: Apollo.QueryHookOptions<GetFamilyMembersQuery, GetFamilyMembersQueryVariables> & ({ variables: GetFamilyMembersQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetFamilyMembersQuery, GetFamilyMembersQueryVariables>(GetFamilyMembersDocument, options);
-      }
-export function useGetFamilyMembersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFamilyMembersQuery, GetFamilyMembersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetFamilyMembersQuery, GetFamilyMembersQueryVariables>(GetFamilyMembersDocument, options);
-        }
-export function useGetFamilyMembersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetFamilyMembersQuery, GetFamilyMembersQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetFamilyMembersQuery, GetFamilyMembersQueryVariables>(GetFamilyMembersDocument, options);
-        }
-export type GetFamilyMembersQueryHookResult = ReturnType<typeof useGetFamilyMembersQuery>;
-export type GetFamilyMembersLazyQueryHookResult = ReturnType<typeof useGetFamilyMembersLazyQuery>;
-export type GetFamilyMembersSuspenseQueryHookResult = ReturnType<typeof useGetFamilyMembersSuspenseQuery>;
-export type GetFamilyMembersQueryResult = Apollo.QueryResult<GetFamilyMembersQuery, GetFamilyMembersQueryVariables>;
-export const CreateFamilyDocument = gql`
-    mutation CreateFamily($input: CreateFamilyInput!) {
-  createFamily(input: $input) {
-    ...FamilyFields
-  }
-}
-    ${FamilyFieldsFragmentDoc}`;
-export type CreateFamilyMutationFn = Apollo.MutationFunction<CreateFamilyMutation, CreateFamilyMutationVariables>;
-
-/**
- * __useCreateFamilyMutation__
- *
- * To run a mutation, you first call `useCreateFamilyMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateFamilyMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createFamilyMutation, { data, loading, error }] = useCreateFamilyMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateFamilyMutation(baseOptions?: Apollo.MutationHookOptions<CreateFamilyMutation, CreateFamilyMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateFamilyMutation, CreateFamilyMutationVariables>(CreateFamilyDocument, options);
-      }
-export type CreateFamilyMutationHookResult = ReturnType<typeof useCreateFamilyMutation>;
-export type CreateFamilyMutationResult = Apollo.MutationResult<CreateFamilyMutation>;
-export type CreateFamilyMutationOptions = Apollo.BaseMutationOptions<CreateFamilyMutation, CreateFamilyMutationVariables>;
-export const UpdateFamilyDocument = gql`
-    mutation UpdateFamily($input: UpdateFamilyInput!) {
-  updateFamily(input: $input) {
-    ...FamilyFields
-  }
-}
-    ${FamilyFieldsFragmentDoc}`;
-export type UpdateFamilyMutationFn = Apollo.MutationFunction<UpdateFamilyMutation, UpdateFamilyMutationVariables>;
-
-/**
- * __useUpdateFamilyMutation__
- *
- * To run a mutation, you first call `useUpdateFamilyMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateFamilyMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateFamilyMutation, { data, loading, error }] = useUpdateFamilyMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateFamilyMutation(baseOptions?: Apollo.MutationHookOptions<UpdateFamilyMutation, UpdateFamilyMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateFamilyMutation, UpdateFamilyMutationVariables>(UpdateFamilyDocument, options);
-      }
-export type UpdateFamilyMutationHookResult = ReturnType<typeof useUpdateFamilyMutation>;
-export type UpdateFamilyMutationResult = Apollo.MutationResult<UpdateFamilyMutation>;
-export type UpdateFamilyMutationOptions = Apollo.BaseMutationOptions<UpdateFamilyMutation, UpdateFamilyMutationVariables>;
-export const AddFamilyMemberDocument = gql`
-    mutation AddFamilyMember($familyId: ID!, $familiar: FamiliarInput!) {
-  addFamilyMember(family_id: $familyId, familiar: $familiar) {
-    ...FamilyFields
-    familiares {
-      ...FamiliarFields
-    }
-  }
-}
-    ${FamilyFieldsFragmentDoc}
-${FamiliarFieldsFragmentDoc}`;
-export type AddFamilyMemberMutationFn = Apollo.MutationFunction<AddFamilyMemberMutation, AddFamilyMemberMutationVariables>;
-
-/**
- * __useAddFamilyMemberMutation__
- *
- * To run a mutation, you first call `useAddFamilyMemberMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddFamilyMemberMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [addFamilyMemberMutation, { data, loading, error }] = useAddFamilyMemberMutation({
- *   variables: {
- *      familyId: // value for 'familyId'
- *      familiar: // value for 'familiar'
- *   },
- * });
- */
-export function useAddFamilyMemberMutation(baseOptions?: Apollo.MutationHookOptions<AddFamilyMemberMutation, AddFamilyMemberMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<AddFamilyMemberMutation, AddFamilyMemberMutationVariables>(AddFamilyMemberDocument, options);
-      }
-export type AddFamilyMemberMutationHookResult = ReturnType<typeof useAddFamilyMemberMutation>;
-export type AddFamilyMemberMutationResult = Apollo.MutationResult<AddFamilyMemberMutation>;
-export type AddFamilyMemberMutationOptions = Apollo.BaseMutationOptions<AddFamilyMemberMutation, AddFamilyMemberMutationVariables>;
-export const RemoveFamilyMemberDocument = gql`
-    mutation RemoveFamilyMember($familiarId: ID!) {
-  removeFamilyMember(familiar_id: $familiarId) {
-    success
-    message
-    error
-  }
-}
-    `;
-export type RemoveFamilyMemberMutationFn = Apollo.MutationFunction<RemoveFamilyMemberMutation, RemoveFamilyMemberMutationVariables>;
-
-/**
- * __useRemoveFamilyMemberMutation__
- *
- * To run a mutation, you first call `useRemoveFamilyMemberMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveFamilyMemberMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeFamilyMemberMutation, { data, loading, error }] = useRemoveFamilyMemberMutation({
- *   variables: {
- *      familiarId: // value for 'familiarId'
- *   },
- * });
- */
-export function useRemoveFamilyMemberMutation(baseOptions?: Apollo.MutationHookOptions<RemoveFamilyMemberMutation, RemoveFamilyMemberMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RemoveFamilyMemberMutation, RemoveFamilyMemberMutationVariables>(RemoveFamilyMemberDocument, options);
-      }
-export type RemoveFamilyMemberMutationHookResult = ReturnType<typeof useRemoveFamilyMemberMutation>;
-export type RemoveFamilyMemberMutationResult = Apollo.MutationResult<RemoveFamilyMemberMutation>;
-export type RemoveFamilyMemberMutationOptions = Apollo.BaseMutationOptions<RemoveFamilyMemberMutation, RemoveFamilyMemberMutationVariables>;
 export const GetMemberDocument = gql`
     query GetMember($id: ID!) {
   getMember(id: $id) {

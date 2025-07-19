@@ -1,4 +1,4 @@
-import { Box, Typography, Button, Alert, Chip, Stack } from '@mui/material';
+import { Box, Typography, Button, Alert, Chip, Stack, Tooltip } from '@mui/material';
 import { 
   Add as AddIcon,
   DeleteOutline as DeleteIcon,
@@ -6,6 +6,7 @@ import {
 } from '@mui/icons-material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '@/stores/authStore';
 
 import { MembersTable } from '@/features/members/components/MembersTable';
 import { MembersFilters } from '@/features/members/components/MembersFilters';
@@ -13,6 +14,8 @@ import { useMembersTable } from '@/features/members/hooks/useMembersTable';
 
 export default function MembersPage() {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
+  const isAdmin = user?.role === 'admin';
   const {
     members,
     totalCount,
@@ -46,6 +49,11 @@ export default function MembersPage() {
           <Typography variant="h4" component="h1" gutterBottom>
             Gestión de Socios
           </Typography>
+          {import.meta.env.DEV && (
+            <Typography variant="caption" color="text.secondary">
+              Debug: Usuario: {user?.username || 'N/A'}, Rol: '{user?.role || 'N/A'}', Es admin: {isAdmin ? 'SÍ' : 'NO'}
+            </Typography>
+          )}
           <Stack direction="row" spacing={2} alignItems="center">
             <Typography variant="body2" color="text.secondary">
               Total: {totalCount} socios
@@ -78,13 +86,21 @@ export default function MembersPage() {
           >
             Actualizar
           </Button>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => navigate('/members/new')}
+          <Tooltip 
+            title={!isAdmin ? "Solo los administradores pueden crear nuevos socios" : ""}
+            arrow
           >
-            Nuevo Socio
-          </Button>
+            <span>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => navigate('/members/new')}
+                disabled={!isAdmin}
+              >
+                Nuevo Socio
+              </Button>
+            </span>
+          </Tooltip>
         </Stack>
       </Box>
 

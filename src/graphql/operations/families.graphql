@@ -1,83 +1,55 @@
-# Fragments
-fragment FamilyFields on Family {
-  id
-  numero_socio
-  esposo_nombre
-  esposo_apellidos
-  esposa_nombre
-  esposa_apellidos
-}
+# Family Operations
 
-fragment FamiliarFields on Familiar {
-  id
-  nombre
-  apellidos
-  fecha_nacimiento
-  dni_nie
-  correo_electronico
-}
-
-# Queries
-query GetFamily($id: ID!) {
-  getFamily(id: $id) {
-    ...FamilyFields
+mutation CreateFamily($input: CreateFamilyInput!) {
+  createFamily(input: $input) {
+    id
+    numero_socio
+    esposo_nombre
+    esposo_apellidos
+    esposa_nombre
+    esposa_apellidos
     miembro_origen {
       miembro_id
-      numero_socio
+      nombre
+      apellidos
+    }
+  }
+}
+
+mutation AddFamilyMember($family_id: ID!, $familiar: FamiliarInput!) {
+  addFamilyMember(family_id: $family_id, familiar: $familiar) {
+    id
+    familiares {
+      id
+      nombre
+      apellidos
+      fecha_nacimiento
+      dni_nie
+      correo_electronico
+    }
+  }
+}
+
+query GetFamily($id: ID!) {
+  getFamily(id: $id) {
+    id
+    numero_socio
+    esposo_nombre
+    esposo_apellidos
+    esposa_nombre
+    esposa_apellidos
+    miembro_origen {
+      miembro_id
       nombre
       apellidos
     }
     familiares {
-      ...FamiliarFields
+      id
+      nombre
+      apellidos
+      fecha_nacimiento
+      dni_nie
+      correo_electronico
     }
-  }
-}
-
-query ListFamilies($filter: FamilyFilter) {
-  listFamilies(filter: $filter) {
-    nodes {
-      ...FamilyFields
-    }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      totalCount
-    }
-  }
-}
-
-query GetFamilyMembers($familyId: ID!) {
-  getFamilyMembers(familyId: $familyId) {
-    ...FamiliarFields
-  }
-}
-
-# Mutations
-mutation CreateFamily($input: CreateFamilyInput!) {
-  createFamily(input: $input) {
-    ...FamilyFields
-  }
-}
-
-mutation UpdateFamily($input: UpdateFamilyInput!) {
-  updateFamily(input: $input) {
-    ...FamilyFields
-  }
-}
-
-mutation AddFamilyMember($familyId: ID!, $familiar: FamiliarInput!) {
-  addFamilyMember(family_id: $familyId, familiar: $familiar) {
-    ...FamilyFields
-    familiares {
-      ...FamiliarFields
-    }
-  }
-}
-
-mutation RemoveFamilyMember($familiarId: ID!) {
-  removeFamilyMember(familiar_id: $familiarId) {
-    success
-    message
-    error
   }
 }

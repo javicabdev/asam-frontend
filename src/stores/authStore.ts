@@ -1,10 +1,11 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { UserRole } from '@/graphql/generated/schema';
 
 interface User {
   id: string;
   username: string;
-  role: 'admin' | 'user';
+  role: UserRole;
   isActive: boolean;
   lastLogin?: string;
   emailVerified: boolean;

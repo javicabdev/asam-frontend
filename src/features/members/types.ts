@@ -76,3 +76,53 @@ export interface MemberConnection {
   nodes: Member[];
   pageInfo: PageInfo;
 }
+
+// Family types
+export interface FamilyMember {
+  id?: string;
+  nombre: string;
+  apellidos: string;
+  fecha_nacimiento?: string;
+  dni_nie?: string;
+  correo_electronico?: string;
+  parentesco?: string;
+}
+
+export interface Family {
+  id: string;
+  numero_socio: string;
+  miembro_origen?: {
+    miembro_id: string;
+    nombre: string;
+    apellidos: string;
+  };
+  esposo_nombre: string;
+  esposo_apellidos: string;
+  esposa_nombre: string;
+  esposa_apellidos: string;
+  familiares?: FamilyMember[];
+}
+
+export interface CreateFamilyInput {
+  numero_socio: string;
+  miembro_origen_id: string;
+  esposo_nombre?: string;
+  esposo_apellidos?: string;
+  esposo_fecha_nacimiento?: string;
+  esposo_documento_identidad?: string;
+  esposo_correo_electronico?: string;
+  esposa_nombre?: string;
+  esposa_apellidos?: string;
+  esposa_fecha_nacimiento?: string;
+  esposa_documento_identidad?: string;
+  esposa_correo_electronico?: string;
+}
+
+export interface FamiliarInput {
+  nombre: string;
+  apellidos: string;
+  fecha_nacimiento?: string;
+  dni_nie?: string;
+  correo_electronico?: string;
+  parentesco: string;
+}

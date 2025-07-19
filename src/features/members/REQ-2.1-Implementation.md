@@ -1,4 +1,4 @@
-# REQ-2.1: Vista de Lista Avanzada de Miembros
+# REQ-2.1: Vista de Lista Avanzada de Miembros - COMPLETADO
 
 ## Mejoras Implementadas
 
@@ -28,7 +28,7 @@
   - Paginación del lado del servidor
   - Ordenamiento por múltiples columnas
   - Selección múltiple de filas
-  - Exportación a CSV
+  - ✅ **NUEVO: Exportación a CSV funcional**
   - Búsqueda rápida integrada
   - Densidad ajustable
   - Localización completa en español
@@ -39,6 +39,7 @@
   - Debouncing para búsquedas
   - Cache optimizado con Apollo
   - Fetch policy `cache-and-network`
+  - ✅ **NUEVO: Exposición de filters para exportación**
 
 ### 4. **Interfaz de Usuario**
 - **Header mejorado**:
@@ -46,7 +47,15 @@
   - Indicador de selección
   - Botones de acciones masivas
   - Botón de actualizar
-  - Botón de exportar
+
+- **Toolbar personalizado**:
+  - ✅ **NUEVO: Botón de exportación con menú desplegable**
+  - ✅ **NUEVO: Opciones de exportación:**
+    - Exportar todos los socios
+    - Exportar socios filtrados
+    - Exportar socios seleccionados
+  - ✅ **NUEVO: Indicador de progreso durante exportación**
+  - ✅ **NUEVO: Feedback visual con Snackbar**
 
 - **Accesibilidad**:
   - Estilos diferenciados para filas inactivas
@@ -57,10 +66,27 @@
 - Queries actualizadas con todos los campos necesarios
 - Tipos TypeScript sincronizados
 - Manejo robusto de errores
+- ✅ **NUEVO: Query lazy para exportación con paginación**
+
+### 6. **Funcionalidad de Exportación CSV**
+- ✅ **Hook useExportMembers**:
+  - Manejo de exportación con progreso
+  - Soporte para exportar todos, filtrados o seleccionados
+  - Paginación automática para grandes volúmenes
+  - Callbacks de éxito y error
+
+- ✅ **Utilidad csvExport**:
+  - Generación de CSV con formato español
+  - BOM UTF-8 para compatibilidad con Excel
+  - Escape correcto de valores especiales
+  - Formato de fechas dd/mm/yyyy
+  - Preparado para futura exportación Excel
+
+## Estado Actual
+✅ **REQ-2.1 COMPLETADO**: La vista de lista avanzada está totalmente funcional con capacidad de exportación a CSV.
 
 ## Próximos Pasos
-Para completar la funcionalidad:
-1. Implementar la exportación real a CSV/Excel
-2. Implementar eliminación masiva
-3. Añadir permisos según rol de usuario
-4. Implementar caché persistente para filtros
+1. ❌ Implementar eliminación masiva (pendiente)
+2. ❌ Añadir permisos según rol de usuario (pendiente)
+3. ❌ Implementar caché persistente para filtros (pendiente)
+4. ❌ Añadir exportación a Excel nativo (preparado, pendiente implementación)

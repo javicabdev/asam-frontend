@@ -1,7 +1,6 @@
 import { Box, Typography, Button, Alert, Chip, Stack } from '@mui/material';
 import { 
   Add as AddIcon,
-  Download as DownloadIcon,
   DeleteOutline as DeleteIcon,
   Refresh as RefreshIcon,
 } from '@mui/icons-material';
@@ -19,6 +18,7 @@ export default function MembersPage() {
     error,
     page,
     pageSize,
+    filter,
     handlePageChange,
     handlePageSizeChange,
     handleSortChange,
@@ -34,11 +34,6 @@ export default function MembersPage() {
   const handleBulkDelete = () => {
     // TODO: Implement bulk delete
     console.log('Bulk delete:', selectedMembers);
-  };
-
-  const handleExport = () => {
-    // TODO: Implement export functionality
-    console.log('Export members');
   };
 
   return (
@@ -82,13 +77,6 @@ export default function MembersPage() {
             Actualizar
           </Button>
           <Button
-            variant="outlined"
-            startIcon={<DownloadIcon />}
-            onClick={handleExport}
-          >
-            Exportar
-          </Button>
-          <Button
             variant="contained"
             startIcon={<AddIcon />}
             onClick={() => {
@@ -118,6 +106,7 @@ export default function MembersPage() {
         loading={loading}
         page={page}
         pageSize={pageSize}
+        filters={filter}
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
         onSortChange={handleSortChange}

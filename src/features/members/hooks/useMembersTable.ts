@@ -14,6 +14,7 @@ interface UseMembersTableResult {
   error: any;
   page: number;
   pageSize: number;
+  filter: MemberFilter;
   handlePageChange: (page: number) => void;
   handlePageSizeChange: (pageSize: number) => void;
   handleSortChange: (field: string, direction: 'ASC' | 'DESC' | null) => void;
@@ -136,6 +137,7 @@ export function useMembersTable(): UseMembersTableResult {
     error,
     page,
     pageSize,
+    filter,
     handlePageChange,
     handlePageSizeChange,
     handleSortChange,

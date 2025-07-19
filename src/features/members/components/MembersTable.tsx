@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import {
   DataGrid,
   GridColDef,
@@ -12,6 +12,11 @@ import {
   GridColumnHeaderParams,
   GridFilterModel,
   GridRowSelectionModel,
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarDensitySelector,
+  GridToolbarQuickFilter,
   esES,
 } from '@mui/x-data-grid';
 import { 
@@ -21,16 +26,29 @@ import {
   IconButton,
   LinearProgress,
   Typography,
+  Button,
+  Menu,
+  MenuItem,
+  Divider,
+  CircularProgress,
+  Alert,
+  Snackbar,
 } from '@mui/material';
 import { 
   Visibility as VisibilityIcon,
   Email as EmailIcon,
   Phone as PhoneIcon,
+  FileDownload as FileDownloadIcon,
+  ExpandMore as ExpandMoreIcon,
+  TableChart as TableChartIcon,
+  Description as DescriptionIcon,
 } from '@mui/icons-material';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 import { Member, MemberStatus, MembershipType } from '../types';
+import { useExportMembers } from '../hooks/useExportMembers';
+import { MemberFilter } from '@/graphql/generated/operations';
 
 interface MembersTableProps {
   members: Member[];
@@ -38,6 +56,7 @@ interface MembersTableProps {
   loading: boolean;
   page: number;
   pageSize: number;
+  filters?: MemberFilter; // Current filters applied
   onPageChange: (page: number) => void;
   onPageSizeChange: (pageSize: number) => void;
   onSortChange: (field: string, direction: 'ASC' | 'DESC' | null) => void;
@@ -46,12 +65,128 @@ interface MembersTableProps {
   selectable?: boolean;
 }
 
+// Custom toolbar component
+interface CustomToolbarProps {
+  selectedCount: number;
+  filters?: MemberFilter;
+  onExportAll: () => void;
+  onExportFiltered: () => void;
+  onExportSelected: () => void;
+  isExporting: boolean;
+  exportProgress: number;
+}
+
+function CustomToolbar({
+  selectedCount,
+  filters,
+  onExportAll,
+  onExportFiltered,
+  onExportSelected,
+  isExporting,
+  exportProgress,
+}: CustomToolbarProps) {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleExportAll = () => {
+    handleClose();
+    onExportAll();
+  };
+
+  const handleExportFiltered = () => {
+    handleClose();
+    onExportFiltered();
+  };
+
+  const handleExportSelected = () => {
+    handleClose();
+    onExportSelected();
+  };
+
+  return (
+    <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
+      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarDensitySelector />
+        <Divider orientation="vertical" flexItem />
+        
+        {/* Export button */}
+        <Button
+          variant="outlined"
+          size="small"
+          startIcon={isExporting ? <CircularProgress size={16} /> : <FileDownloadIcon />}
+          endIcon={<ExpandMoreIcon />}
+          onClick={handleClick}
+          disabled={isExporting}
+        >
+          {isExporting ? `Exportando... ${Math.round(exportProgress)}%` : 'Exportar'}
+        </Button>
+        
+        {selectedCount > 0 && (
+          <Typography variant="body2" color="text.secondary">
+            {selectedCount} seleccionado{selectedCount > 1 ? 's' : ''}
+          </Typography>
+        )}
+      </Box>
+      
+      <GridToolbarQuickFilter debounceMs={500} />
+      
+      {/* Export menu */}
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <MenuItem onClick={handleExportAll}>
+          <TableChartIcon sx={{ mr: 1, fontSize: 20 }} />
+          Exportar todos los socios
+        </MenuItem>
+        
+        {filters && (
+          <MenuItem onClick={handleExportFiltered}>
+            <TableChartIcon sx={{ mr: 1, fontSize: 20 }} />
+            Exportar socios filtrados
+          </MenuItem>
+        )}
+        
+        {selectedCount > 0 && (
+          <MenuItem onClick={handleExportSelected}>
+            <TableChartIcon sx={{ mr: 1, fontSize: 20 }} />
+            Exportar {selectedCount} seleccionado{selectedCount > 1 ? 's' : ''}
+          </MenuItem>
+        )}
+        
+        <Divider />
+        
+        <MenuItem disabled>
+          <DescriptionIcon sx={{ mr: 1, fontSize: 20 }} />
+          Exportar a Excel (próximamente)
+        </MenuItem>
+      </Menu>
+    </GridToolbarContainer>
+  );
+}
+
 export function MembersTable({
   members,
   totalCount,
   loading,
   page,
   pageSize,
+  filters,
   onPageChange,
   onPageSizeChange,
   onSortChange,
@@ -60,6 +195,61 @@ export function MembersTable({
   selectable = false,
 }: MembersTableProps) {
   const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+  const [snackbar, setSnackbar] = useState<{
+    open: boolean;
+    message: string;
+    severity: 'success' | 'error';
+  }>({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
+
+  // Export hook
+  const {
+    exportAllMembers,
+    exportFilteredMembers,
+    exportSelectedMembers,
+    isExporting,
+    exportProgress,
+  } = useExportMembers({
+    format: 'csv',
+    onSuccess: () => {
+      setSnackbar({
+        open: true,
+        message: 'Exportación completada exitosamente',
+        severity: 'success',
+      });
+    },
+    onError: (error) => {
+      setSnackbar({
+        open: true,
+        message: `Error al exportar: ${error.message}`,
+        severity: 'error',
+      });
+    },
+    csvOptions: {
+      filename: `socios_${format(new Date(), 'yyyy-MM-dd')}`,
+      dateFormat: 'ES',
+    },
+  });
+
+  const handleExportAll = useCallback(() => {
+    exportAllMembers();
+  }, [exportAllMembers]);
+
+  const handleExportFiltered = useCallback(() => {
+    if (filters) {
+      exportFilteredMembers(filters);
+    }
+  }, [exportFilteredMembers, filters]);
+
+  const handleExportSelected = useCallback(() => {
+    const selectedIds = rowSelectionModel as string[];
+    if (selectedIds.length > 0) {
+      exportSelectedMembers(selectedIds, filters);
+    }
+  }, [exportSelectedMembers, rowSelectionModel, filters]);
 
   const columns: GridColDef[] = useMemo(
     () => [
@@ -258,6 +448,10 @@ export function MembersTable({
     return '';
   };
 
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
       <DataGrid
@@ -284,22 +478,19 @@ export function MembersTable({
         autoHeight
         density="comfortable"
         slots={{
-          toolbar: GridToolbar,
+          toolbar: CustomToolbar,
           loadingOverlay: LinearProgress,
         }}
         slotProps={{
           toolbar: {
-            showQuickFilter: true,
-            quickFilterProps: { debounceMs: 500 },
-            csvOptions: {
-              fileName: `socios_${format(new Date(), 'yyyy-MM-dd')}`,
-              utf8WithBom: true,
-            },
-            printOptions: {
-              hideFooter: true,
-              hideToolbar: true,
-            },
-          },
+            selectedCount: rowSelectionModel.length,
+            filters,
+            onExportAll: handleExportAll,
+            onExportFiltered: handleExportFiltered,
+            onExportSelected: handleExportSelected,
+            isExporting,
+            exportProgress,
+          } as CustomToolbarProps,
         }}
         localeText={esES.components.MuiDataGrid.defaultProps.localeText}
         sx={{
@@ -325,6 +516,22 @@ export function MembersTable({
           },
         }}
       />
+      
+      {/* Snackbar for export feedback */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

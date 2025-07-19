@@ -1,7 +1,6 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { debounce } from 'lodash';
 
 import { LIST_MEMBERS_QUERY } from '../api/queries';
 import { Member, MemberFilter, SortDirection } from '../types';
@@ -37,45 +36,21 @@ export function useMembersTable(): UseMembersTableResult {
   // Convert internal filter to GraphQL input format
   // Only include fields that are actually in the GraphQL schema
   const graphqlFilter: MemberFilterInput = {
-    estado: filter.estado,
-    tipo_membresia: filter.tipo_membresia,
-    search_term: filter.search_term,
     pagination: filter.pagination,
-    sort: filter.sort,
-    // TODO: The following fields are not supported by the backend yet
-    // poblacion: filter.poblacion,
-    // provincia: filter.provincia,
-    // fecha_alta_desde: filter.fecha_alta_desde,
-    // fecha_alta_hasta: filter.fecha_alta_hasta,
-    // fecha_baja_desde: filter.fecha_baja_desde,
-    // fecha_baja_hasta: filter.fecha_baja_hasta,
-    // correo_electronico: filter.correo_electronico,
-    // documento_identidad: filter.documento_identidad,
+    ...(filter.estado && { estado: filter.estado }),
+    ...(filter.tipo_membresia && { tipo_membresia: filter.tipo_membresia }),
+    ...(filter.search_term && { search_term: filter.search_term }),
+    ...(filter.sort && { sort: filter.sort }),
   };
 
-  const { data, loading, error, refetch, fetchMore } = useQuery<ListMembersQueryResponse>(
+  const { data, loading, error, refetch } = useQuery<ListMembersQueryResponse>(
     LIST_MEMBERS_QUERY,
     {
       variables: { filter: graphqlFilter },
       notifyOnNetworkStatusChange: true,
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy: 'network-only', // Always fetch fresh data
     }
   );
-
-  // Debounced refetch for search term changes
-  const debouncedRefetch = useCallback(
-    debounce(() => {
-      refetch();
-    }, 300),
-    [refetch]
-  );
-
-  // Effect to trigger refetch when filter changes
-  useEffect(() => {
-    if (filter.search_term !== undefined) {
-      debouncedRefetch();
-    }
-  }, [filter.search_term, debouncedRefetch]);
 
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
@@ -120,13 +95,33 @@ export function useMembersTable(): UseMembersTableResult {
 
   const handleFilterChange = useCallback((newFilter: Partial<MemberFilter>) => {
     setPage(1);
-    setFilter((prev) => ({
-      ...prev,
-      ...newFilter,
-      pagination: { ...prev.pagination!, page: 1 },
-    }));
     setSelectedMembers([]); // Clear selection on filter change
-  }, []);
+    
+    // Always reset filter with only the provided values
+    setFilter((prev) => {
+      const baseFilter: MemberFilter = {
+        pagination: { page: 1, pageSize },
+      };
+      
+      // Only add fields that are explicitly provided
+      if (newFilter.estado !== undefined) {
+        baseFilter.estado = newFilter.estado;
+      }
+      if (newFilter.tipo_membresia !== undefined) {
+        baseFilter.tipo_membresia = newFilter.tipo_membresia;
+      }
+      if (newFilter.search_term !== undefined) {
+        baseFilter.search_term = newFilter.search_term;
+      }
+      
+      // Preserve sort if it exists
+      if (prev.sort) {
+        baseFilter.sort = prev.sort;
+      }
+      
+      return baseFilter;
+    });
+  }, [pageSize]);
 
   const handleSelectionChange = useCallback((selectedIds: string[]) => {
     setSelectedMembers(selectedIds);

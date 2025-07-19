@@ -51,33 +51,60 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
   const [expanded, setExpanded] = useState(false);
 
   const handleChange = (field: keyof MemberFilter, value: any) => {
-    setLocalFilter((prev) => ({
-      ...prev,
-      [field]: value || undefined,
-    }));
+    const newValue = value === '' ? undefined : value;
+    const updatedFilter = {
+      ...localFilter,
+      [field]: newValue,
+    };
+    
+    // Remove undefined values
+    Object.keys(updatedFilter).forEach(key => {
+      if (updatedFilter[key as keyof MemberFilter] === undefined) {
+        delete updatedFilter[key as keyof MemberFilter];
+      }
+    });
+    
+    setLocalFilter(updatedFilter);
+    
+    // Apply filters immediately for estado and tipo_membresia
+    if (field === 'estado' || field === 'tipo_membresia') {
+      const cleanedFilter: Partial<MemberFilter> = {};
+      
+      if (updatedFilter.estado) {
+        cleanedFilter.estado = updatedFilter.estado;
+      }
+      if (updatedFilter.tipo_membresia) {
+        cleanedFilter.tipo_membresia = updatedFilter.tipo_membresia;
+      }
+      if (updatedFilter.search_term) {
+        cleanedFilter.search_term = updatedFilter.search_term;
+      }
+      
+      onFilterChange(cleanedFilter);
+    }
   };
 
   const handleApplyFilters = () => {
     // Clean up empty values and only include supported fields
-    const cleanedFilter = {
-      estado: localFilter.estado || undefined,
-      tipo_membresia: localFilter.tipo_membresia || undefined,
-      search_term: localFilter.search_term || undefined,
-    };
+    const cleanedFilter: Partial<MemberFilter> = {};
     
-    // Remove undefined values
-    const finalFilter = Object.entries(cleanedFilter).reduce((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[key as keyof MemberFilter] = value;
-      }
-      return acc;
-    }, {} as Partial<MemberFilter>);
+    if (localFilter.estado) {
+      cleanedFilter.estado = localFilter.estado;
+    }
+    if (localFilter.tipo_membresia) {
+      cleanedFilter.tipo_membresia = localFilter.tipo_membresia;
+    }
+    if (localFilter.search_term) {
+      cleanedFilter.search_term = localFilter.search_term;
+    }
     
-    onFilterChange(finalFilter);
+    onFilterChange(cleanedFilter);
   };
 
   const handleClearFilters = () => {
+    // Clear local state
     setLocalFilter({});
+    // Notify parent to clear all filters
     onFilterChange({});
   };
 
@@ -102,11 +129,9 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
               placeholder="Buscar..."
               InputProps={{
                 endAdornment: (
-                  <Tooltip title="Buscar">
-                    <IconButton onClick={handleApplyFilters} edge="end">
-                      <SearchIcon />
-                    </IconButton>
-                  </Tooltip>
+                  <IconButton onClick={handleApplyFilters} edge="end">
+                    <SearchIcon />
+                  </IconButton>
                 ),
               }}
             />
@@ -150,7 +175,7 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
                 onClick={handleApplyFilters}
                 startIcon={<SearchIcon />}
               >
-                Aplicar Filtros
+                Buscar
               </Button>
               <Button
                 fullWidth

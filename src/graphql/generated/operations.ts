@@ -117,6 +117,27 @@ export type SearchMembersQueryVariables = Exact<{
 
 export type SearchMembersQuery = { __typename?: 'Query', searchMembers: Array<{ __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, correo_electronico?: string | null, poblacion: string, provincia: string, documento_identidad?: string | null }> };
 
+export type GetNextMemberNumberQueryVariables = Exact<{
+  isFamily: Scalars['Boolean']['input'];
+}>;
+
+
+export type GetNextMemberNumberQuery = { __typename?: 'Query', getNextMemberNumber: string };
+
+export type CheckMemberNumberExistsQueryVariables = Exact<{
+  memberNumber: Scalars['String']['input'];
+}>;
+
+
+export type CheckMemberNumberExistsQuery = { __typename?: 'Query', checkMemberNumberExists: boolean };
+
+export type ValidateDocumentQueryVariables = Exact<{
+  documentNumber: Scalars['String']['input'];
+}>;
+
+
+export type ValidateDocumentQuery = { __typename?: 'Query', checkDocumentValidity: { __typename?: 'DocumentValidationResult', isValid: boolean, normalizedValue?: string | null, errorMessage?: string | null } };
+
 export type CreateMemberMutationVariables = Exact<{
   input: CreateMemberInput;
 }>;
@@ -996,6 +1017,124 @@ export type SearchMembersQueryHookResult = ReturnType<typeof useSearchMembersQue
 export type SearchMembersLazyQueryHookResult = ReturnType<typeof useSearchMembersLazyQuery>;
 export type SearchMembersSuspenseQueryHookResult = ReturnType<typeof useSearchMembersSuspenseQuery>;
 export type SearchMembersQueryResult = Apollo.QueryResult<SearchMembersQuery, SearchMembersQueryVariables>;
+export const GetNextMemberNumberDocument = gql`
+    query GetNextMemberNumber($isFamily: Boolean!) {
+  getNextMemberNumber(isFamily: $isFamily)
+}
+    `;
+
+/**
+ * __useGetNextMemberNumberQuery__
+ *
+ * To run a query within a React component, call `useGetNextMemberNumberQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNextMemberNumberQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNextMemberNumberQuery({
+ *   variables: {
+ *      isFamily: // value for 'isFamily'
+ *   },
+ * });
+ */
+export function useGetNextMemberNumberQuery(baseOptions: Apollo.QueryHookOptions<GetNextMemberNumberQuery, GetNextMemberNumberQueryVariables> & ({ variables: GetNextMemberNumberQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetNextMemberNumberQuery, GetNextMemberNumberQueryVariables>(GetNextMemberNumberDocument, options);
+      }
+export function useGetNextMemberNumberLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNextMemberNumberQuery, GetNextMemberNumberQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetNextMemberNumberQuery, GetNextMemberNumberQueryVariables>(GetNextMemberNumberDocument, options);
+        }
+export function useGetNextMemberNumberSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetNextMemberNumberQuery, GetNextMemberNumberQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetNextMemberNumberQuery, GetNextMemberNumberQueryVariables>(GetNextMemberNumberDocument, options);
+        }
+export type GetNextMemberNumberQueryHookResult = ReturnType<typeof useGetNextMemberNumberQuery>;
+export type GetNextMemberNumberLazyQueryHookResult = ReturnType<typeof useGetNextMemberNumberLazyQuery>;
+export type GetNextMemberNumberSuspenseQueryHookResult = ReturnType<typeof useGetNextMemberNumberSuspenseQuery>;
+export type GetNextMemberNumberQueryResult = Apollo.QueryResult<GetNextMemberNumberQuery, GetNextMemberNumberQueryVariables>;
+export const CheckMemberNumberExistsDocument = gql`
+    query CheckMemberNumberExists($memberNumber: String!) {
+  checkMemberNumberExists(memberNumber: $memberNumber)
+}
+    `;
+
+/**
+ * __useCheckMemberNumberExistsQuery__
+ *
+ * To run a query within a React component, call `useCheckMemberNumberExistsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckMemberNumberExistsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckMemberNumberExistsQuery({
+ *   variables: {
+ *      memberNumber: // value for 'memberNumber'
+ *   },
+ * });
+ */
+export function useCheckMemberNumberExistsQuery(baseOptions: Apollo.QueryHookOptions<CheckMemberNumberExistsQuery, CheckMemberNumberExistsQueryVariables> & ({ variables: CheckMemberNumberExistsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckMemberNumberExistsQuery, CheckMemberNumberExistsQueryVariables>(CheckMemberNumberExistsDocument, options);
+      }
+export function useCheckMemberNumberExistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckMemberNumberExistsQuery, CheckMemberNumberExistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckMemberNumberExistsQuery, CheckMemberNumberExistsQueryVariables>(CheckMemberNumberExistsDocument, options);
+        }
+export function useCheckMemberNumberExistsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<CheckMemberNumberExistsQuery, CheckMemberNumberExistsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CheckMemberNumberExistsQuery, CheckMemberNumberExistsQueryVariables>(CheckMemberNumberExistsDocument, options);
+        }
+export type CheckMemberNumberExistsQueryHookResult = ReturnType<typeof useCheckMemberNumberExistsQuery>;
+export type CheckMemberNumberExistsLazyQueryHookResult = ReturnType<typeof useCheckMemberNumberExistsLazyQuery>;
+export type CheckMemberNumberExistsSuspenseQueryHookResult = ReturnType<typeof useCheckMemberNumberExistsSuspenseQuery>;
+export type CheckMemberNumberExistsQueryResult = Apollo.QueryResult<CheckMemberNumberExistsQuery, CheckMemberNumberExistsQueryVariables>;
+export const ValidateDocumentDocument = gql`
+    query ValidateDocument($documentNumber: String!) {
+  checkDocumentValidity(documentNumber: $documentNumber) {
+    isValid
+    normalizedValue
+    errorMessage
+  }
+}
+    `;
+
+/**
+ * __useValidateDocumentQuery__
+ *
+ * To run a query within a React component, call `useValidateDocumentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useValidateDocumentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useValidateDocumentQuery({
+ *   variables: {
+ *      documentNumber: // value for 'documentNumber'
+ *   },
+ * });
+ */
+export function useValidateDocumentQuery(baseOptions: Apollo.QueryHookOptions<ValidateDocumentQuery, ValidateDocumentQueryVariables> & ({ variables: ValidateDocumentQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ValidateDocumentQuery, ValidateDocumentQueryVariables>(ValidateDocumentDocument, options);
+      }
+export function useValidateDocumentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ValidateDocumentQuery, ValidateDocumentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ValidateDocumentQuery, ValidateDocumentQueryVariables>(ValidateDocumentDocument, options);
+        }
+export function useValidateDocumentSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ValidateDocumentQuery, ValidateDocumentQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ValidateDocumentQuery, ValidateDocumentQueryVariables>(ValidateDocumentDocument, options);
+        }
+export type ValidateDocumentQueryHookResult = ReturnType<typeof useValidateDocumentQuery>;
+export type ValidateDocumentLazyQueryHookResult = ReturnType<typeof useValidateDocumentLazyQuery>;
+export type ValidateDocumentSuspenseQueryHookResult = ReturnType<typeof useValidateDocumentSuspenseQuery>;
+export type ValidateDocumentQueryResult = Apollo.QueryResult<ValidateDocumentQuery, ValidateDocumentQueryVariables>;
 export const CreateMemberDocument = gql`
     mutation CreateMember($input: CreateMemberInput!) {
   createMember(input: $input) {

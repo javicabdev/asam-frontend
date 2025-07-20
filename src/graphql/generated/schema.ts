@@ -80,6 +80,13 @@ export type CreateUserInput = {
   username: Scalars['String']['input'];
 };
 
+export type DocumentValidationResult = {
+  __typename?: 'DocumentValidationResult';
+  errorMessage?: Maybe<Scalars['String']['output']>;
+  isValid: Scalars['Boolean']['output'];
+  normalizedValue?: Maybe<Scalars['String']['output']>;
+};
+
 export type Familiar = {
   __typename?: 'Familiar';
   apellidos: Scalars['String']['output'];
@@ -409,6 +416,8 @@ export type PaymentStatus =
 
 export type Query = {
   __typename?: 'Query';
+  checkDocumentValidity: DocumentValidationResult;
+  checkMemberNumberExists: Scalars['Boolean']['output'];
   getBalance: Scalars['Float']['output'];
   getCashFlow?: Maybe<CashFlow>;
   getCurrentUser: User;
@@ -417,6 +426,7 @@ export type Query = {
   getFamilyPayments: Array<Payment>;
   getMember?: Maybe<Member>;
   getMemberPayments: Array<Payment>;
+  getNextMemberNumber: Scalars['String']['output'];
   getPayment?: Maybe<Payment>;
   getPaymentStatus: PaymentStatus;
   getTransactions: TransactionConnection;
@@ -427,6 +437,16 @@ export type Query = {
   listUsers: Array<User>;
   ping: Scalars['String']['output'];
   searchMembers: Array<Member>;
+};
+
+
+export type QueryCheckDocumentValidityArgs = {
+  documentNumber: Scalars['String']['input'];
+};
+
+
+export type QueryCheckMemberNumberExistsArgs = {
+  memberNumber: Scalars['String']['input'];
 };
 
 
@@ -457,6 +477,11 @@ export type QueryGetMemberArgs = {
 
 export type QueryGetMemberPaymentsArgs = {
   memberId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetNextMemberNumberArgs = {
+  isFamily: Scalars['Boolean']['input'];
 };
 
 

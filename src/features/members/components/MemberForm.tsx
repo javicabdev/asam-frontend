@@ -23,7 +23,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { MembershipType, FamilyMember } from '../types';
 import { FamilyMembersList } from './FamilyMembersList';
-import { useFamilyForm } from '../hooks/useFamilyForm';
+import { useFamilyForm, useNextMemberNumber, useMemberNumberValidation, useDocumentValidation } from '../hooks';
+import { formatMemberNumber } from '../utils';
 
 interface MemberFormProps {
   onCancel?: () => void;
@@ -31,6 +32,9 @@ interface MemberFormProps {
 }
 
 const validationSchema = Yup.object({
+  numero_socio: Yup.string()
+    .required('El número de socio es obligatorio')
+    .matches(/^[AB]\d{5}$/, 'El formato debe ser A00000 para familias o B00000 para individuales'),
   tipo_membresia: Yup.string().required('El tipo de membresía es obligatorio'),
   nombre: Yup.string().required('El nombre es obligatorio'),
   apellidos: Yup.string().required('Los apellidos son obligatorios'),
@@ -66,21 +70,35 @@ const familyValidationSchema = validationSchema.shape({
   }),
 });
 
+
+
 export const MemberForm: React.FC<MemberFormProps> = ({
   onCancel,
   onSubmit,
 }) => {
   const { familyMembers, addFamilyMember, editFamilyMember, removeFamilyMember } = useFamilyForm();
   const [familyMembersError, setFamilyMembersError] = React.useState<string | null>(null);
+  const [memberNumberManuallyEdited, setMemberNumberManuallyEdited] = React.useState(false);
+  const { isValidating, isDuplicate, validateMemberNumber, clearValidation } = useMemberNumberValidation();
+  const { 
+    isValidating: isValidatingDocument, 
+    validationResult: documentValidation, 
+    validateDocument, 
+    clearValidation: clearDocumentValidation 
+  } = useDocumentValidation();
   
   const {
     control,
     handleSubmit,
     watch,
+    setValue,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(familyValidationSchema),
     defaultValues: {
+      numero_socio: '', // Will be set by useNextMemberNumber hook
       tipo_membresia: MembershipType.INDIVIDUAL,
       nombre: '',
       apellidos: '',
@@ -111,6 +129,44 @@ export const MemberForm: React.FC<MemberFormProps> = ({
 
   const tipoMembresia = watch('tipo_membresia');
   const isFamily = tipoMembresia === MembershipType.FAMILY;
+  const numeroSocio = watch('numero_socio');
+
+  // Use the hook to get the next member number
+  const { memberNumber, loading: loadingMemberNumber, error: memberNumberError } = useNextMemberNumber({
+    isFamily,
+  });
+
+  // Set initial member number when it's loaded
+  React.useEffect(() => {
+    if (memberNumber && !numeroSocio && !memberNumberManuallyEdited) {
+      setValue('numero_socio', memberNumber);
+    }
+  }, [memberNumber, numeroSocio, setValue, memberNumberManuallyEdited]);
+
+  // Update member number when membership type changes
+  React.useEffect(() => {
+    // Check if the current number matches the expected pattern
+    const currentPrefix = numeroSocio?.charAt(0);
+    const expectedPrefix = isFamily ? 'A' : 'B';
+    const oppositePrefix = isFamily ? 'B' : 'A';
+    
+    // If the number has the opposite prefix, reset the manual edit flag
+    // This allows automatic update when switching membership types
+    if (currentPrefix === oppositePrefix && numeroSocio?.match(/^[AB]\d{5}$/)) {
+      setMemberNumberManuallyEdited(false);
+    }
+    
+    // Only update if the user hasn't manually edited the field
+    if (!memberNumberManuallyEdited && memberNumber) {
+      setValue('numero_socio', memberNumber);
+    }
+  }, [isFamily, memberNumber, numeroSocio, setValue, memberNumberManuallyEdited]);
+
+  // Clear validation when membership type changes
+  React.useEffect(() => {
+    clearValidation();
+    clearErrors('numero_socio');
+  }, [isFamily, clearValidation, clearErrors]);
 
   const onSubmitForm = (data: any) => {
     // Validación adicional para familias
@@ -119,10 +175,30 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       return;
     }
     
+    // Don't submit if member number is duplicate
+    if (isDuplicate === true) {
+      setError('numero_socio', {
+        type: 'manual',
+        message: 'Este número de socio ya existe',
+      });
+      return;
+    }
+    
+    // Don't submit if document is invalid
+    if (documentValidation && !documentValidation.isValid) {
+      setError('documento_identidad', {
+        type: 'manual',
+        message: documentValidation.errorMessage || 'Documento inválido',
+      });
+      return;
+    }
+    
     setFamilyMembersError(null);
     
     const formattedData = {
       ...data,
+      // Use normalized document if available
+      documento_identidad: documentValidation?.normalizedValue || data.documento_identidad,
       fecha_nacimiento: data.fecha_nacimiento ? format(data.fecha_nacimiento, 'yyyy-MM-dd') : null,
       esposo_fecha_nacimiento: data.esposo_fecha_nacimiento ? format(data.esposo_fecha_nacimiento, 'yyyy-MM-dd') : null,
       esposa_fecha_nacimiento: data.esposa_fecha_nacimiento ? format(data.esposa_fecha_nacimiento, 'yyyy-MM-dd') : null,
@@ -146,9 +222,9 @@ export const MemberForm: React.FC<MemberFormProps> = ({
             Complete el formulario para registrar un nuevo socio. Los campos marcados con * son obligatorios.
           </Typography>
           
-          {/* Tipo de Membresía */}
+          {/* Tipo de Membresía y Número de Socio */}
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <Controller
                 name="tipo_membresia"
                 control={control}
@@ -167,6 +243,56 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                       <FormHelperText>{errors.tipo_membresia.message}</FormHelperText>
                     )}
                   </FormControl>
+                )}
+              />
+            </Grid>
+            
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="numero_socio"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    label="Número de Socio"
+                    error={!!errors.numero_socio || (isDuplicate === true)}
+                    helperText={
+                      errors.numero_socio?.message || 
+                      (isDuplicate && 'Este número de socio ya existe') ||
+                      (isValidating && 'Verificando...') ||
+                      (memberNumberError 
+                        ? 'Error al obtener el número. Puede introducirlo manualmente.' 
+                        : 'Puede escribir solo el número (ej: 2) y se formateará automáticamente')
+                    }
+                    required
+                    disabled={loadingMemberNumber}
+                    onChange={(e) => {
+                      // Mark as manually edited when user types
+                      setMemberNumberManuallyEdited(true);
+                      field.onChange(e);
+                    }}
+                    onBlur={(e) => {
+                      // Format the number on blur
+                      const formatted = formatMemberNumber(e.target.value, isFamily);
+                      if (formatted !== e.target.value) {
+                        setValue('numero_socio', formatted);
+                        // Trigger validation after formatting
+                        validateMemberNumber(formatted).then((isValid) => {
+                          if (!isValid) {
+                            setError('numero_socio', {
+                              type: 'manual',
+                              message: 'Este número de socio ya existe',
+                            });
+                          }
+                        });
+                      }
+                      field.onBlur();
+                    }}
+                    InputProps={{
+                      placeholder: isFamily ? 'ej: 2 → A00002' : 'ej: 2 → B00002',
+                    }}
+                  />
                 )}
               />
             </Grid>
@@ -242,10 +368,41 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   <TextField
                     {...field}
                     fullWidth
-                    label="Documento de Identidad"
-                    error={!!errors.documento_identidad}
-                    helperText={errors.documento_identidad?.message}
+                    label="DNI/NIE"
+                    error={!!errors.documento_identidad || (documentValidation && !documentValidation.isValid)}
+                    helperText={
+                      errors.documento_identidad?.message || 
+                      (documentValidation && !documentValidation.isValid && documentValidation.errorMessage) ||
+                      (isValidatingDocument && 'Validando...') ||
+                      'Introduzca el DNI o NIE'
+                    }
                     required
+                    onChange={(e) => {
+                      field.onChange(e);
+                      // Validate document when user types
+                      if (e.target.value.length >= 8) {
+                        validateDocument(e.target.value);
+                      }
+                    }}
+                    onBlur={(e) => {
+                      field.onBlur();
+                      // Validate on blur if not already validated
+                      if (e.target.value && !documentValidation) {
+                        validateDocument(e.target.value).then((result) => {
+                          if (result && result.normalizedValue && result.normalizedValue !== e.target.value) {
+                            setValue('documento_identidad', result.normalizedValue);
+                          }
+                          if (result && !result.isValid) {
+                            setError('documento_identidad', {
+                              type: 'manual',
+                              message: result.errorMessage || 'Documento inválido',
+                            });
+                          } else {
+                            clearErrors('documento_identidad');
+                          }
+                        });
+                      }
+                    }}
                   />
                 )}
               />

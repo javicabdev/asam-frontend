@@ -64,7 +64,7 @@ export const NewMemberPage: React.FC = () => {
 
       // Step 1: Create the main member
       const memberInput = {
-        numero_socio: `${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`, // Generate temporary number
+        numero_socio: data.numero_socio, // Use the number from the form
         tipo_membresia: data.tipo_membresia,
         nombre: data.nombre,
         apellidos: data.apellidos,
@@ -99,7 +99,7 @@ export const NewMemberPage: React.FC = () => {
       // Step 2: If it's a family membership, create the family
       if (data.tipo_membresia === MembershipType.FAMILY) {
         const familyInput = {
-          numero_socio: `${new Date().getFullYear()}-F${String(Date.now()).slice(-6)}`, // Generate family number
+          numero_socio: data.numero_socio, // Use the same number as the main member
           miembro_origen_id: newMemberId,
           esposo_nombre: data.esposo_nombre || '',
           esposo_apellidos: data.esposo_apellidos || '',

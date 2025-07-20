@@ -51,6 +51,22 @@ query SearchMembers($criteria: String!) {
   }
 }
 
+query GetNextMemberNumber($isFamily: Boolean!) {
+  getNextMemberNumber(isFamily: $isFamily)
+}
+
+query CheckMemberNumberExists($memberNumber: String!) {
+  checkMemberNumberExists(memberNumber: $memberNumber)
+}
+
+query ValidateDocument($documentNumber: String!) {
+  checkDocumentValidity(documentNumber: $documentNumber) {
+    isValid
+    normalizedValue
+    errorMessage
+  }
+}
+
 # Mutations
 mutation CreateMember($input: CreateMemberInput!) {
   createMember(input: $input) {

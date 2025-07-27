@@ -8,6 +8,7 @@ import es from 'date-fns/locale/es'
 import { apolloClient } from '@/lib/apollo-client'
 import { theme } from '@/lib/theme'
 import { AppRoutes } from './routes'
+import { InstallPrompt } from '@/components/pwa'
 
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
           <CssBaseline />
           <BrowserRouter>
             <AppRoutes />
-
+            <InstallPrompt />
           </BrowserRouter>
         </LocalizationProvider>
       </ThemeProvider>

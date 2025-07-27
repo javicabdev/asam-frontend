@@ -12,7 +12,15 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\"",
     "codegen": "graphql-codegen --config codegen.yml",
     "codegen:watch": "graphql-codegen --config codegen.yml --watch",
-    "prebuild": "npm run codegen"
+    "prebuild": "npm run codegen",
+    "generate-icons": "node scripts/generate-icons.js",
+    "clean-icons": "node scripts/clean-icons.js",
+    "regenerate-icons": "npm run clean-icons && npm run generate-icons",
+    "optimize-favicon": "node scripts/optimize-favicon.js",
+    "generate-text-favicon": "node scripts/generate-text-favicon.js",
+    "generate-asam-favicon": "node scripts/generate-asam-favicon.js",
+    "check-icons": "node scripts/check-icons-setup.js",
+    "cleanup-favicon-tests": "node scripts/cleanup-favicon-tests.js"
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",
@@ -53,6 +61,7 @@
     "prettier": "^3.1.1",
     "typescript": "^5.3.3",
     "vite": "^5.0.10",
-    "vite-plugin-pwa": "^0.17.4"
+    "vite-plugin-pwa": "^0.17.4",
+    "sharp": "^0.33.0"
   }
 }

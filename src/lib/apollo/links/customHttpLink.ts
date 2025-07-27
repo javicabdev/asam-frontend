@@ -155,8 +155,11 @@ export const createCustomHttpLink = (uri: string): ApolloLink => {
           
           const result = await response.json();
           
-          if (result.errors && import.meta.env.DEV) {
-            console.error('CustomHttpLink - GraphQL errors:', result.errors);
+          if (result.errors) {
+            if (import.meta.env.DEV) {
+              console.error('CustomHttpLink - GraphQL errors:', result.errors);
+            }
+            // Don't handle auth errors here - let authRefreshLink handle them
           }
           
           observer.next(result);

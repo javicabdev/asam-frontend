@@ -75,6 +75,8 @@ export type CreateMemberInput = {
 };
 
 export type CreateUserInput = {
+  email: Scalars['String']['input'];
+  memberId?: InputMaybe<Scalars['ID']['input']>;
   password: Scalars['String']['input'];
   role: UserRole;
   username: Scalars['String']['input'];
@@ -599,8 +601,10 @@ export type UpdateMemberInput = {
 };
 
 export type UpdateUserInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   isActive?: InputMaybe<Scalars['Boolean']['input']>;
+  memberId?: InputMaybe<Scalars['ID']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
   role?: InputMaybe<UserRole>;
   username?: InputMaybe<Scalars['String']['input']>;
@@ -608,11 +612,13 @@ export type UpdateUserInput = {
 
 export type User = {
   __typename?: 'User';
+  email: Scalars['String']['output'];
   emailVerified: Scalars['Boolean']['output'];
   emailVerifiedAt?: Maybe<Scalars['Time']['output']>;
   id: Scalars['ID']['output'];
   isActive: Scalars['Boolean']['output'];
   lastLogin?: Maybe<Scalars['Time']['output']>;
+  member?: Maybe<Member>;
   role: UserRole;
   username: Scalars['String']['output'];
 };

@@ -5,6 +5,7 @@ import type { UserRole } from '@/graphql/generated/schema';
 interface User {
   id: string;
   username: string;
+  email?: string;
   role: UserRole;
   isActive: boolean;
   lastLogin?: string;

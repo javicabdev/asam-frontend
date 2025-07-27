@@ -1,8 +1,10 @@
-import { useState } from 'react'
-import { Outlet, useNavigate, useLocation } from 'react-router-dom'
+import React, { useState } from 'react';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
   AppBar,
   Box,
+  CssBaseline,
+  Divider,
   Drawer,
   IconButton,
   List,
@@ -12,13 +14,14 @@ import {
   ListItemText,
   Toolbar,
   Typography,
-  Divider,
   useTheme,
   useMediaQuery,
   Avatar,
   Menu,
   MenuItem,
-} from '@mui/material'
+  Badge,
+  Tooltip,
+} from '@mui/material';
 import {
   Menu as MenuIcon,
   Dashboard as DashboardIcon,
@@ -27,48 +30,94 @@ import {
   Payment as PaymentIcon,
   AccountBalance as AccountBalanceIcon,
   Assessment as AssessmentIcon,
-  ExitToApp as LogoutIcon,
-  Person as PersonIcon,
-} from '@mui/icons-material'
-import { useAuthStore } from '@/stores/authStore'
-import { useAuth } from '@/hooks/useAuth'
+  AccountCircle as AccountCircleIcon,
+  Logout as LogoutIcon,
+  Settings as SettingsIcon,
+  EmailOutlined as EmailIcon,
+  VerifiedUser as VerifiedIcon,
+} from '@mui/icons-material';
+import { useAuth } from '@/hooks/useAuth';
 
-const DRAWER_WIDTH = 240
+const drawerWidth = 240;
 
-const menuItems = [
-  { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
-  { text: 'Miembros', icon: <PeopleIcon />, path: '/members' },
-  { text: 'Familias', icon: <FamilyIcon />, path: '/families' },
-  { text: 'Pagos', icon: <PaymentIcon />, path: '/payments' },
-  { text: 'Flujo de Caja', icon: <AccountBalanceIcon />, path: '/cash-flow' },
-  { text: 'Informes', icon: <AssessmentIcon />, path: '/reports' },
-]
+interface NavItem {
+  text: string;
+  icon: React.ReactNode;
+  path: string;
+  roles?: string[];
+}
 
-export function MainLayout() {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  const navigate = useNavigate()
-  const location = useLocation()
-  const { user } = useAuthStore()
-  const { logout } = useAuth()
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+const navigationItems: NavItem[] = [
+  {
+    text: 'Dashboard',
+    icon: <DashboardIcon />,
+    path: '/dashboard',
+  },
+  {
+    text: 'Miembros',
+    icon: <PeopleIcon />,
+    path: '/members',
+  },
+  {
+    text: 'Familias',
+    icon: <FamilyIcon />,
+    path: '/families',
+  },
+  {
+    text: 'Pagos',
+    icon: <PaymentIcon />,
+    path: '/payments',
+  },
+  {
+    text: 'Flujo de Caja',
+    icon: <AccountBalanceIcon />,
+    path: '/cash-flow',
+  },
+  {
+    text: 'Informes',
+    icon: <AssessmentIcon />,
+    path: '/reports',
+  },
+];
+
+export const MainLayout: React.FC = () => {
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { user, logout } = useAuth();
+
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
-  }
+    setMobileOpen(!mobileOpen);
+  };
 
-  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleMenuClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
 
   const handleLogout = async () => {
-    await logout()
-  }
+    handleMenuClose();
+    await logout();
+  };
+
+  const handleNavigate = (path: string) => {
+    navigate(path);
+    if (isMobile) {
+      setMobileOpen(false);
+    }
+  };
+
+  const getUserInitials = () => {
+    if (!user?.username) return '?';
+    return user.username.substring(0, 2).toUpperCase();
+  };
 
   const drawer = (
     <Box>
@@ -79,33 +128,48 @@ export function MainLayout() {
       </Toolbar>
       <Divider />
       <List>
-        {menuItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
+        {navigationItems.map((item) => (
+          <ListItem key={item.path} disablePadding>
             <ListItemButton
               selected={location.pathname === item.path}
-              onClick={() => {
-                navigate(item.path)
-                if (isMobile) {
-                  setMobileOpen(false)
-                }
-              }}
+              onClick={() => handleNavigate(item.path)}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
+              <ListItemIcon
+                sx={{
+                  color:
+                    location.pathname === item.path
+                      ? 'primary.main'
+                      : 'inherit',
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText
+                primary={item.text}
+                sx={{
+                  '& .MuiListItemText-primary': {
+                    color:
+                      location.pathname === item.path
+                        ? 'primary.main'
+                        : 'inherit',
+                  },
+                }}
+              />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
     </Box>
-  )
+  );
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+      <CssBaseline />
       <AppBar
         position="fixed"
         sx={{
-          width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
-          ml: { sm: `${DRAWER_WIDTH}px` },
+          width: { md: `calc(100% - ${drawerWidth}px)` },
+          ml: { md: `${drawerWidth}px` },
         }}
       >
         <Toolbar>
@@ -114,59 +178,107 @@ export function MainLayout() {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ mr: 2, display: { md: 'none' } }}
           >
             <MenuIcon />
           </IconButton>
+          
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Sistema de Gestión ASAM
           </Typography>
+
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' } }}>
-              {user?.username}
-            </Typography>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenuClick}
-              color="inherit"
+            {/* Email verification badge */}
+            {user && !user.emailVerified && (
+              <Tooltip title="Email no verificado">
+                <Badge badgeContent="!" color="warning">
+                  <EmailIcon />
+                </Badge>
+              </Tooltip>
+            )}
+
+            {/* User info */}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                cursor: 'pointer',
+              }}
+              onClick={handleMenuOpen}
             >
-              <Avatar sx={{ width: 32, height: 32 }}>
-                <PersonIcon />
+              <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}>
+                {getUserInitials()}
               </Avatar>
-            </IconButton>
+              <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                <Typography variant="body2">{user?.username}</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {user?.role}
+                </Typography>
+              </Box>
+            </Box>
+
             <Menu
-              id="menu-appbar"
               anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
               anchorOrigin={{
-                vertical: 'top',
+                vertical: 'bottom',
                 horizontal: 'right',
               }}
-              keepMounted
               transformOrigin={{
                 vertical: 'top',
                 horizontal: 'right',
               }}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
             >
+              <MenuItem disabled>
+                <ListItemIcon>
+                  <AccountCircleIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText
+                  primary={user?.username}
+                  secondary={user?.role}
+                />
+              </MenuItem>
+              
+              {user && !user.emailVerified && (
+                <MenuItem onClick={() => {
+                  handleMenuClose();
+                  navigate('/email-verification-check');
+                }}>
+                  <ListItemIcon>
+                    <VerifiedIcon fontSize="small" color="warning" />
+                  </ListItemIcon>
+                  <ListItemText primary="Verificar Email" />
+                </MenuItem>
+              )}
+              
+              <Divider />
+              
+              <MenuItem onClick={() => {
+                handleMenuClose();
+                navigate('/profile');
+              }}>
+                <ListItemIcon>
+                  <SettingsIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Mi Perfil" />
+              </MenuItem>
+              
               <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
                   <LogoutIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Cerrar Sesión</ListItemText>
+                <ListItemText primary="Cerrar Sesión" />
               </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
       </AppBar>
+
       <Box
         component="nav"
-        sx={{ width: { sm: DRAWER_WIDTH }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
+        sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
       >
         {/* Mobile drawer */}
         <Drawer
@@ -174,26 +286,27 @@ export function MainLayout() {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile
+            keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
+            display: { xs: 'block', md: 'none' },
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
-              width: DRAWER_WIDTH,
+              width: drawerWidth,
             },
           }}
         >
           {drawer}
         </Drawer>
+
         {/* Desktop drawer */}
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: 'none', sm: 'block' },
+            display: { xs: 'none', md: 'block' },
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
-              width: DRAWER_WIDTH,
+              width: drawerWidth,
             },
           }}
           open
@@ -201,17 +314,23 @@ export function MainLayout() {
           {drawer}
         </Drawer>
       </Box>
+
+      {/* Main content */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${DRAWER_WIDTH}px)` },
+          width: { md: `calc(100% - ${drawerWidth}px)` },
+          minHeight: '100vh',
+          bgcolor: 'background.default',
         }}
       >
         <Toolbar />
         <Outlet />
       </Box>
     </Box>
-  )
-}
+  );
+};
+
+export default MainLayout;

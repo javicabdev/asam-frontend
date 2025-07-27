@@ -18,6 +18,7 @@ const MemberDetailsPage = lazy(() => import('@/pages/members/MemberDetailsPage')
 const FamiliesPage = lazy(() => import('@/pages/FamiliesPage'))
 const PaymentsPage = lazy(() => import('@/pages/PaymentsPage'))
 const CashFlowPage = lazy(() => import('@/pages/CashFlowPage'))
+const ProfilePage = lazy(() => import('@/pages/profile/ProfilePage').then(module => ({ default: module.ProfilePage })))
 const ReportsPage = lazy(() => import('@/pages/ReportsPage'))
 
 // Layout components
@@ -71,6 +72,7 @@ export const AppRoutes = () => {
             <Route path="/payments" element={<PaymentsPage />} />
             <Route path="/cash-flow" element={<CashFlowPage />} />
             <Route path="/reports" element={<ReportsPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
           </Route>
         </Route>

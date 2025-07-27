@@ -1,21 +1,30 @@
 import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { CircularProgress, Box } from '@mui/material';
-import { useAuthStore } from '@/stores/authStore';
+import { Box, CircularProgress } from '@mui/material';
+import { useAuth } from '@/hooks/useAuth';
 
 interface ProtectedRouteProps {
-  requireAdmin?: boolean;
+  children?: React.ReactNode;
   redirectTo?: string;
+  requireEmailVerification?: boolean;
 }
 
+/**
+ * ProtectedRoute component that guards routes requiring authentication
+ * 
+ * @param children - Optional children to render instead of Outlet
+ * @param redirectTo - Path to redirect when not authenticated (default: /login)
+ * @param requireEmailVerification - Whether to require email verification
+ */
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-  requireAdmin = false,
+  children,
   redirectTo = '/login',
+  requireEmailVerification = false,
 }) => {
+  const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation();
-  const { isAuthenticated, isLoading, user } = useAuthStore();
 
-  // Show loading spinner while checking auth status
+  // Show loading spinner while checking authentication
   if (isLoading) {
     return (
       <Box
@@ -29,27 +38,19 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
 
-  // Not authenticated - redirect to login
+  // Redirect to login if not authenticated
   if (!isAuthenticated) {
+    // Save the attempted location for redirecting after login
     return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 
-  // Check email verification
-  if (user && !user.emailVerified) {
-    // Allow access to email verification pages
-    const allowedPaths = ['/email-verification-pending', '/email-verification-check'];
-    if (allowedPaths.includes(location.pathname)) {
-      return <Outlet />;
-    }
-    // Redirect to email verification check page
+  // Check email verification if required
+  if (requireEmailVerification && user && !user.emailVerified) {
     return <Navigate to="/email-verification-check" replace />;
   }
 
-  // Check admin requirement
-  if (requireAdmin && user?.role !== 'admin') {
-    return <Navigate to="/unauthorized" replace />;
-  }
-
-  // Authenticated and authorized - render the protected content
-  return <Outlet />;
+  // Render children or Outlet for nested routes
+  return <>{children || <Outlet />}</>;
 };
+
+export default ProtectedRoute;

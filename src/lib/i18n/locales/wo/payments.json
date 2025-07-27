@@ -1,0 +1,114 @@
+{
+  "title": "Saytu Fay",
+  "list": {
+    "title": "Limu Fay",
+    "search": "Seet fay...",
+    "filters": {
+      "all": "Bépp",
+      "pending": "Mungi xaar",
+      "completed": "Jeex na",
+      "failed": "Antuwul",
+      "refunded": "Delloo nañu ko"
+    },
+    "columns": {
+      "id": "ID",
+      "member": "Mbooloo",
+      "amount": "Dayoo",
+      "date": "Bis",
+      "method": "Anam",
+      "status": "Tekki",
+      "reference": "Tënkki",
+      "actions": "Jëf"
+    },
+    "actions": {
+      "view": "Gis faramfacce",
+      "receipt": "Gis kàddu",
+      "refund": "Delloo xaalis",
+      "cancel": "Neenal",
+      "resend": "Yónneewaat kàddu"
+    },
+    "empty": "Gisuwul benn fay",
+    "loading": "Mungi yab fay yi..."
+  },
+  "form": {
+    "new": {
+      "title": "Fay Bu Bees",
+      "subtitle": "Bindu fay bu bees bu njëkk"
+    },
+    "fields": {
+      "member": "Mbooloo",
+      "amount": "Dayoo",
+      "method": "Anamu fay",
+      "reference": "Nimero tënkki",
+      "date": "Bisu fay",
+      "notes": "Karmat",
+      "sendReceipt": "Yónnee kàddu ci email"
+    },
+    "methods": {
+      "cash": "Xaalis",
+      "bank_transfer": "Yóbbale bank",
+      "card": "Kaar",
+      "mobile_money": "Xaalisu telefon",
+      "check": "Sekk"
+    },
+    "validation": {
+      "required": "Lii dafa laaj",
+      "invalidAmount": "Dayoo bi baaxul",
+      "duplicateReference": "Tënkki bii am na"
+    },
+    "success": {
+      "created": "Fay bi bindu na bu baax",
+      "refunded": "Delloo nañu xaalis bi bu baax",
+      "cancelled": "Neenal nañu fay bi bu baax"
+    },
+    "error": {
+      "create": "Njuumte ci bindu fay bi",
+      "refund": "Njuumte ci delloo xaalis bi",
+      "cancel": "Njuumte ci neenal fay bi"
+    }
+  },
+  "details": {
+    "title": "Faramfaccey Fay",
+    "info": {
+      "member": "Mbooloo",
+      "amount": "Dayoo",
+      "method": "Anamu fay",
+      "date": "Bis",
+      "reference": "Tënkki",
+      "status": "Tekki",
+      "processedBy": "Ki ko def",
+      "notes": "Karmat"
+    },
+    "status": {
+      "pending": "Mungi xaar",
+      "completed": "Jeex na",
+      "failed": "Antuwul",
+      "refunded": "Delloo nañu ko",
+      "cancelled": "Neenal nañu ko"
+    },
+    "actions": {
+      "print": "Móol kàddu",
+      "download": "Yeb kàddu",
+      "email": "Yónnee ci email",
+      "refund": "Delloo xaalis",
+      "cancel": "Neenal"
+    }
+  },
+  "receipt": {
+    "title": "Kàddu Fay",
+    "number": "Nimero kàddu",
+    "date": "Bis",
+    "member": "Mbooloo",
+    "concept": "Lu muy",
+    "amount": "Dayoo",
+    "method": "Anamu fay",
+    "footer": "Jërëjëf ci sa fay"
+  },
+  "stats": {
+    "total": "Bépp bu ñu dajale",
+    "pending": "Fay yu xaar",
+    "thisMonth": "Weer wii",
+    "lastMonth": "Weer wi weesu",
+    "average": "Diggante weer"
+  }
+}

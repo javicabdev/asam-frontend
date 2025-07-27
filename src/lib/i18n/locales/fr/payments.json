@@ -1,0 +1,114 @@
+{
+  "title": "Gestion des Paiements",
+  "list": {
+    "title": "Liste des Paiements",
+    "search": "Rechercher des paiements...",
+    "filters": {
+      "all": "Tous",
+      "pending": "En attente",
+      "completed": "Complétés",
+      "failed": "Échoués",
+      "refunded": "Remboursés"
+    },
+    "columns": {
+      "id": "ID",
+      "member": "Membre",
+      "amount": "Montant",
+      "date": "Date",
+      "method": "Méthode",
+      "status": "Statut",
+      "reference": "Référence",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "Voir détails",
+      "receipt": "Voir reçu",
+      "refund": "Rembourser",
+      "cancel": "Annuler",
+      "resend": "Renvoyer reçu"
+    },
+    "empty": "Aucun paiement trouvé",
+    "loading": "Chargement des paiements..."
+  },
+  "form": {
+    "new": {
+      "title": "Nouveau Paiement",
+      "subtitle": "Enregistrer un nouveau paiement de cotisation"
+    },
+    "fields": {
+      "member": "Membre",
+      "amount": "Montant",
+      "method": "Méthode de paiement",
+      "reference": "Numéro de référence",
+      "date": "Date de paiement",
+      "notes": "Notes",
+      "sendReceipt": "Envoyer reçu par email"
+    },
+    "methods": {
+      "cash": "Espèces",
+      "bank_transfer": "Virement bancaire",
+      "card": "Carte",
+      "mobile_money": "Mobile money",
+      "check": "Chèque"
+    },
+    "validation": {
+      "required": "Ce champ est obligatoire",
+      "invalidAmount": "Montant invalide",
+      "duplicateReference": "Cette référence existe déjà"
+    },
+    "success": {
+      "created": "Paiement enregistré avec succès",
+      "refunded": "Paiement remboursé avec succès",
+      "cancelled": "Paiement annulé avec succès"
+    },
+    "error": {
+      "create": "Erreur lors de l'enregistrement du paiement",
+      "refund": "Erreur lors du remboursement",
+      "cancel": "Erreur lors de l'annulation"
+    }
+  },
+  "details": {
+    "title": "Détails du Paiement",
+    "info": {
+      "member": "Membre",
+      "amount": "Montant",
+      "method": "Méthode de paiement",
+      "date": "Date",
+      "reference": "Référence",
+      "status": "Statut",
+      "processedBy": "Traité par",
+      "notes": "Notes"
+    },
+    "status": {
+      "pending": "En attente",
+      "completed": "Complété",
+      "failed": "Échoué",
+      "refunded": "Remboursé",
+      "cancelled": "Annulé"
+    },
+    "actions": {
+      "print": "Imprimer reçu",
+      "download": "Télécharger reçu",
+      "email": "Envoyer par email",
+      "refund": "Rembourser",
+      "cancel": "Annuler"
+    }
+  },
+  "receipt": {
+    "title": "Reçu de Paiement",
+    "number": "Numéro de reçu",
+    "date": "Date",
+    "member": "Membre",
+    "concept": "Concept",
+    "amount": "Montant",
+    "method": "Méthode de paiement",
+    "footer": "Merci pour votre paiement"
+  },
+  "stats": {
+    "total": "Total collecté",
+    "pending": "Paiements en attente",
+    "thisMonth": "Ce mois",
+    "lastMonth": "Mois dernier",
+    "average": "Moyenne mensuelle"
+  }
+}

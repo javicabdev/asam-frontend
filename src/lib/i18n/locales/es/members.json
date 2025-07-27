@@ -1,0 +1,118 @@
+{
+  "title": "Gestión de Miembros",
+  "list": {
+    "title": "Lista de Miembros",
+    "search": "Buscar miembros...",
+    "filters": {
+      "all": "Todos",
+      "active": "Activos",
+      "inactive": "Inactivos",
+      "pending": "Pendientes"
+    },
+    "columns": {
+      "id": "ID",
+      "name": "Nombre",
+      "familyName": "Apellidos",
+      "email": "Email",
+      "phone": "Teléfono",
+      "status": "Estado",
+      "membershipDate": "Fecha de Alta",
+      "lastPayment": "Último Pago",
+      "actions": "Acciones"
+    },
+    "actions": {
+      "view": "Ver detalles",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "activate": "Activar",
+      "deactivate": "Desactivar",
+      "sendEmail": "Enviar email"
+    },
+    "empty": "No se encontraron miembros",
+    "loading": "Cargando miembros..."
+  },
+  "form": {
+    "new": {
+      "title": "Nuevo Miembro",
+      "subtitle": "Registrar un nuevo miembro en la asociación"
+    },
+    "edit": {
+      "title": "Editar Miembro",
+      "subtitle": "Actualizar información del miembro"
+    },
+    "sections": {
+      "personal": "Información Personal",
+      "contact": "Información de Contacto",
+      "membership": "Información de Membresía",
+      "family": "Información Familiar",
+      "beneficiaries": "Beneficiarios"
+    },
+    "fields": {
+      "firstName": "Nombre",
+      "lastName": "Apellidos",
+      "dateOfBirth": "Fecha de Nacimiento",
+      "gender": "Género",
+      "documentType": "Tipo de Documento",
+      "documentNumber": "Número de Documento",
+      "email": "Email",
+      "phone": "Teléfono",
+      "address": "Dirección",
+      "city": "Ciudad",
+      "country": "País",
+      "membershipType": "Tipo de Membresía",
+      "membershipDate": "Fecha de Alta",
+      "familyId": "Familia",
+      "notes": "Notas"
+    },
+    "gender": {
+      "male": "Masculino",
+      "female": "Femenino",
+      "other": "Otro"
+    },
+    "membershipType": {
+      "individual": "Individual",
+      "family": "Familiar"
+    },
+    "validation": {
+      "required": "Este campo es obligatorio",
+      "invalidEmail": "Email inválido",
+      "invalidPhone": "Teléfono inválido",
+      "documentExists": "Ya existe un miembro con este documento"
+    },
+    "success": {
+      "created": "Miembro creado exitosamente",
+      "updated": "Miembro actualizado exitosamente",
+      "deleted": "Miembro eliminado exitosamente"
+    },
+    "error": {
+      "create": "Error al crear el miembro",
+      "update": "Error al actualizar el miembro",
+      "delete": "Error al eliminar el miembro",
+      "load": "Error al cargar el miembro"
+    }
+  },
+  "details": {
+    "title": "Detalles del Miembro",
+    "tabs": {
+      "info": "Información",
+      "payments": "Pagos",
+      "family": "Familia",
+      "documents": "Documentos",
+      "activity": "Actividad"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "pending": "Pendiente",
+      "suspended": "Suspendido"
+    },
+    "actions": {
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "suspend": "Suspender",
+      "activate": "Activar",
+      "exportData": "Exportar datos",
+      "printCard": "Imprimir carnet"
+    }
+  }
+}

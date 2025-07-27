@@ -1,0 +1,77 @@
+{
+  "app": {
+    "name": "ASAM",
+    "title": "Système de Gestion ASAM",
+    "description": "Association pour le rapatriement des membres décédés"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "actions": "Actions",
+    "yes": "Oui",
+    "no": "Non",
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "close": "Fermer",
+    "refresh": "Actualiser",
+    "download": "Télécharger",
+    "upload": "Téléverser",
+    "select": "Sélectionner",
+    "selectAll": "Tout sélectionner",
+    "clear": "Effacer",
+    "reset": "Réinitialiser",
+    "submit": "Soumettre",
+    "view": "Voir",
+    "details": "Détails",
+    "noData": "Aucune donnée",
+    "noResults": "Aucun résultat",
+    "required": "Requis",
+    "optional": "Optionnel"
+  },
+  "errors": {
+    "generic": "Une erreur s'est produite",
+    "network": "Erreur de connexion",
+    "unauthorized": "Non autorisé",
+    "forbidden": "Accès refusé",
+    "notFound": "Non trouvé",
+    "validation": "Erreur de validation",
+    "tryAgain": "Réessayer"
+  },
+  "date": {
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "tomorrow": "Demain",
+    "days": "jours",
+    "months": "mois",
+    "years": "années",
+    "format": {
+      "short": "DD/MM/YYYY",
+      "long": "DD MMMM YYYY",
+      "time": "HH:mm",
+      "datetime": "DD/MM/YYYY HH:mm"
+    }
+  },
+  "currency": {
+    "symbol": "€",
+    "format": "{{amount}} €"
+  },
+  "language": {
+    "select": "Sélectionner la langue",
+    "current": "Langue actuelle"
+  },
+  "theme": {
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système"
+  }
+}

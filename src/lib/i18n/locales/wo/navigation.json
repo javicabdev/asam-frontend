@@ -1,0 +1,39 @@
+{
+  "menu": {
+    "dashboard": "Tablo Saytu",
+    "members": "Mbooloo",
+    "families": "Njaboot",
+    "payments": "Fay",
+    "cashFlow": "Yeenekaay Xaalis",
+    "reports": "Tënkki",
+    "settings": "Jekkal",
+    "profile": "Sama Xibaar",
+    "help": "Ndimbal"
+  },
+  "breadcrumb": {
+    "home": "Kër",
+    "members": {
+      "list": "Limu Mbooloo",
+      "new": "Mbooloo Bu Bees",
+      "edit": "Soppi Mbooloo",
+      "details": "Faramfaccey Mbooloo"
+    },
+    "families": {
+      "list": "Limu Njaboot",
+      "new": "Njaboot Bu Bees",
+      "edit": "Soppi Njaboot",
+      "details": "Faramfaccey Njaboot"
+    },
+    "payments": {
+      "list": "Limu Fay",
+      "new": "Fay Bu Bees",
+      "details": "Faramfaccey Fay"
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} ASAM. Sañ-sañ yépp.",
+    "privacy": "Sutura",
+    "terms": "Sàrt",
+    "contact": "Jokkoo"
+  }
+}

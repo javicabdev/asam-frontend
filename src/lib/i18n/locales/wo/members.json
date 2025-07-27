@@ -1,0 +1,118 @@
+{
+  "title": "Saytu Mbooloo",
+  "list": {
+    "title": "Limu Mbooloo",
+    "search": "Seet mbooloo...",
+    "filters": {
+      "all": "Bépp",
+      "active": "Yëngu",
+      "inactive": "Neexul",
+      "pending": "Mungi xaar"
+    },
+    "columns": {
+      "id": "ID",
+      "name": "Tur",
+      "familyName": "Sant",
+      "email": "Email",
+      "phone": "Telefon",
+      "status": "Tekki",
+      "membershipDate": "Bisu dugg",
+      "lastPayment": "Fay bi mujj",
+      "actions": "Jëf"
+    },
+    "actions": {
+      "view": "Gis faramfacce",
+      "edit": "Soppi",
+      "delete": "Far",
+      "activate": "Taal",
+      "deactivate": "Fay",
+      "sendEmail": "Yónnee email"
+    },
+    "empty": "Gisuwul benn mbooloo",
+    "loading": "Mungi yab mbooloo yi..."
+  },
+  "form": {
+    "new": {
+      "title": "Mbooloo Bu Bees",
+      "subtitle": "Bindu mbooloo bu bees ci kurel gi"
+    },
+    "edit": {
+      "title": "Soppi Mbooloo",
+      "subtitle": "Yeesal xibaari mbooloo bi"
+    },
+    "sections": {
+      "personal": "Xibaari Bopp",
+      "contact": "Xibaari Jokkoo",
+      "membership": "Xibaari Bokk",
+      "family": "Xibaari Njaboot",
+      "beneficiaries": "Ñi ko mën a am"
+    },
+    "fields": {
+      "firstName": "Tur",
+      "lastName": "Sant",
+      "dateOfBirth": "Bisu juddu",
+      "gender": "Goor walla jigéen",
+      "documentType": "Ginnaaw kayit",
+      "documentNumber": "Nimero kayit",
+      "email": "Email",
+      "phone": "Telefon",
+      "address": "Màkkaan",
+      "city": "Dëkk",
+      "country": "Réew",
+      "membershipType": "Ginnaaw bokk",
+      "membershipDate": "Bisu bokk",
+      "familyId": "Njaboot",
+      "notes": "Karmat"
+    },
+    "gender": {
+      "male": "Goor",
+      "female": "Jigéen",
+      "other": "Leneen"
+    },
+    "membershipType": {
+      "individual": "Kenn kenn",
+      "family": "Njaboot"
+    },
+    "validation": {
+      "required": "Lii dafa laaj",
+      "invalidEmail": "Email bi baaxul",
+      "invalidPhone": "Telefon bi baaxul",
+      "documentExists": "Am na ku am kayit bii"
+    },
+    "success": {
+      "created": "Mbooloo bi sos na bu baax",
+      "updated": "Mbooloo bi yeesal na bu baax",
+      "deleted": "Mbooloo bi far na bu baax"
+    },
+    "error": {
+      "create": "Njuumte ci sos mbooloo bi",
+      "update": "Njuumte ci yeesal mbooloo bi",
+      "delete": "Njuumte ci far mbooloo bi",
+      "load": "Njuumte ci yab mbooloo bi"
+    }
+  },
+  "details": {
+    "title": "Faramfaccey Mbooloo",
+    "tabs": {
+      "info": "Xibaar",
+      "payments": "Fay",
+      "family": "Njaboot",
+      "documents": "Kayit",
+      "activity": "Ligéey"
+    },
+    "status": {
+      "active": "Yëngu",
+      "inactive": "Neexul",
+      "pending": "Mungi xaar",
+      "suspended": "Dañu ko dakkal"
+    },
+    "actions": {
+      "edit": "Soppi",
+      "delete": "Far",
+      "suspend": "Dakkal",
+      "activate": "Taal",
+      "exportData": "Génne xibaar",
+      "printCard": "Móol kaar"
+    }
+  }
+}

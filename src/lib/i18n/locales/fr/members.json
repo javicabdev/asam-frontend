@@ -1,0 +1,118 @@
+{
+  "title": "Gestion des Membres",
+  "list": {
+    "title": "Liste des Membres",
+    "search": "Rechercher des membres...",
+    "filters": {
+      "all": "Tous",
+      "active": "Actifs",
+      "inactive": "Inactifs",
+      "pending": "En attente"
+    },
+    "columns": {
+      "id": "ID",
+      "name": "Prénom",
+      "familyName": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "status": "Statut",
+      "membershipDate": "Date d'adhésion",
+      "lastPayment": "Dernier paiement",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "Voir détails",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "activate": "Activer",
+      "deactivate": "Désactiver",
+      "sendEmail": "Envoyer email"
+    },
+    "empty": "Aucun membre trouvé",
+    "loading": "Chargement des membres..."
+  },
+  "form": {
+    "new": {
+      "title": "Nouveau Membre",
+      "subtitle": "Enregistrer un nouveau membre dans l'association"
+    },
+    "edit": {
+      "title": "Modifier Membre",
+      "subtitle": "Mettre à jour les informations du membre"
+    },
+    "sections": {
+      "personal": "Informations Personnelles",
+      "contact": "Informations de Contact",
+      "membership": "Informations d'Adhésion",
+      "family": "Informations Familiales",
+      "beneficiaries": "Bénéficiaires"
+    },
+    "fields": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "dateOfBirth": "Date de naissance",
+      "gender": "Genre",
+      "documentType": "Type de document",
+      "documentNumber": "Numéro de document",
+      "email": "Email",
+      "phone": "Téléphone",
+      "address": "Adresse",
+      "city": "Ville",
+      "country": "Pays",
+      "membershipType": "Type d'adhésion",
+      "membershipDate": "Date d'adhésion",
+      "familyId": "Famille",
+      "notes": "Notes"
+    },
+    "gender": {
+      "male": "Masculin",
+      "female": "Féminin",
+      "other": "Autre"
+    },
+    "membershipType": {
+      "individual": "Individuel",
+      "family": "Familial"
+    },
+    "validation": {
+      "required": "Ce champ est obligatoire",
+      "invalidEmail": "Email invalide",
+      "invalidPhone": "Téléphone invalide",
+      "documentExists": "Un membre avec ce document existe déjà"
+    },
+    "success": {
+      "created": "Membre créé avec succès",
+      "updated": "Membre mis à jour avec succès",
+      "deleted": "Membre supprimé avec succès"
+    },
+    "error": {
+      "create": "Erreur lors de la création du membre",
+      "update": "Erreur lors de la mise à jour du membre",
+      "delete": "Erreur lors de la suppression du membre",
+      "load": "Erreur lors du chargement du membre"
+    }
+  },
+  "details": {
+    "title": "Détails du Membre",
+    "tabs": {
+      "info": "Informations",
+      "payments": "Paiements",
+      "family": "Famille",
+      "documents": "Documents",
+      "activity": "Activité"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif",
+      "pending": "En attente",
+      "suspended": "Suspendu"
+    },
+    "actions": {
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "suspend": "Suspendre",
+      "activate": "Activer",
+      "exportData": "Exporter données",
+      "printCard": "Imprimer carte"
+    }
+  }
+}

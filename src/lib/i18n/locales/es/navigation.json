@@ -1,0 +1,39 @@
+{
+  "menu": {
+    "dashboard": "Panel de Control",
+    "members": "Miembros",
+    "families": "Familias",
+    "payments": "Pagos",
+    "cashFlow": "Flujo de Caja",
+    "reports": "Informes",
+    "settings": "Configuración",
+    "profile": "Mi Perfil",
+    "help": "Ayuda"
+  },
+  "breadcrumb": {
+    "home": "Inicio",
+    "members": {
+      "list": "Lista de Miembros",
+      "new": "Nuevo Miembro",
+      "edit": "Editar Miembro",
+      "details": "Detalles del Miembro"
+    },
+    "families": {
+      "list": "Lista de Familias",
+      "new": "Nueva Familia",
+      "edit": "Editar Familia",
+      "details": "Detalles de la Familia"
+    },
+    "payments": {
+      "list": "Lista de Pagos",
+      "new": "Nuevo Pago",
+      "details": "Detalles del Pago"
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} ASAM. Todos los derechos reservados.",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "contact": "Contacto"
+  }
+}

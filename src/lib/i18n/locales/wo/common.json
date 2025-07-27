@@ -1,0 +1,77 @@
+{
+  "app": {
+    "name": "ASAM",
+    "title": "Sistemu Saytu ASAM",
+    "description": "Mbooloo ngir delloo nit ñi dee"
+  },
+  "common": {
+    "loading": "Mungi yab...",
+    "error": "Njuumte",
+    "success": "Jàmm",
+    "save": "Denc",
+    "cancel": "Neenal",
+    "delete": "Far",
+    "edit": "Soppi",
+    "create": "Sos",
+    "search": "Seet",
+    "filter": "Saytu",
+    "actions": "Jëf",
+    "yes": "Waaw",
+    "no": "Déedéet",
+    "confirm": "Dëggal",
+    "back": "Dellu",
+    "next": "Li topp",
+    "previous": "Li jiitu",
+    "close": "Tëj",
+    "refresh": "Yeesalu",
+    "download": "Yeb",
+    "upload": "Yóbbale",
+    "select": "Tànn",
+    "selectAll": "Tànn lépp",
+    "clear": "Fomp",
+    "reset": "Defaraat",
+    "submit": "Yónnee",
+    "view": "Gis",
+    "details": "Faramfacce",
+    "noData": "Amul dara",
+    "noResults": "Amul njëriñ",
+    "required": "Laaj na",
+    "optional": "Du laaj"
+  },
+  "errors": {
+    "generic": "Am na njuumte",
+    "network": "Njuumte ci jokkoo bi",
+    "unauthorized": "Amoo sañ-sañ",
+    "forbidden": "Tere nañu la",
+    "notFound": "Gisuwul",
+    "validation": "Njuumte ci saytu",
+    "tryAgain": "Jéemaat"
+  },
+  "date": {
+    "today": "Tey",
+    "yesterday": "Démb",
+    "tomorrow": "Suba",
+    "days": "fan",
+    "months": "weer",
+    "years": "at",
+    "format": {
+      "short": "DD/MM/YYYY",
+      "long": "DD MMMM YYYY",
+      "time": "HH:mm",
+      "datetime": "DD/MM/YYYY HH:mm"
+    }
+  },
+  "currency": {
+    "symbol": "€",
+    "format": "{{amount}} €"
+  },
+  "language": {
+    "select": "Tànn làkk",
+    "current": "Làkk bi"
+  },
+  "theme": {
+    "light": "Leer",
+    "dark": "Lëndëm",
+    "system": "Sistemu"
+  }
+}

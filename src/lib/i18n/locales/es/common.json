@@ -1,0 +1,77 @@
+{
+  "app": {
+    "name": "ASAM",
+    "title": "Sistema de Gestión ASAM",
+    "description": "Asociación para la repatriación de socios fallecidos"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "actions": "Acciones",
+    "yes": "Sí",
+    "no": "No",
+    "confirm": "Confirmar",
+    "back": "Volver",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "close": "Cerrar",
+    "refresh": "Actualizar",
+    "download": "Descargar",
+    "upload": "Subir",
+    "select": "Seleccionar",
+    "selectAll": "Seleccionar todo",
+    "clear": "Limpiar",
+    "reset": "Restablecer",
+    "submit": "Enviar",
+    "view": "Ver",
+    "details": "Detalles",
+    "noData": "Sin datos",
+    "noResults": "Sin resultados",
+    "required": "Requerido",
+    "optional": "Opcional"
+  },
+  "errors": {
+    "generic": "Ha ocurrido un error",
+    "network": "Error de conexión",
+    "unauthorized": "No autorizado",
+    "forbidden": "Acceso denegado",
+    "notFound": "No encontrado",
+    "validation": "Error de validación",
+    "tryAgain": "Intentar de nuevo"
+  },
+  "date": {
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "tomorrow": "Mañana",
+    "days": "días",
+    "months": "meses",
+    "years": "años",
+    "format": {
+      "short": "DD/MM/YYYY",
+      "long": "DD de MMMM de YYYY",
+      "time": "HH:mm",
+      "datetime": "DD/MM/YYYY HH:mm"
+    }
+  },
+  "currency": {
+    "symbol": "€",
+    "format": "{{amount}} €"
+  },
+  "language": {
+    "select": "Seleccionar idioma",
+    "current": "Idioma actual"
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema"
+  }
+}

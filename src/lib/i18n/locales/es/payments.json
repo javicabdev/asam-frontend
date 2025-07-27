@@ -1,0 +1,114 @@
+{
+  "title": "Gestión de Pagos",
+  "list": {
+    "title": "Lista de Pagos",
+    "search": "Buscar pagos...",
+    "filters": {
+      "all": "Todos",
+      "pending": "Pendientes",
+      "completed": "Completados",
+      "failed": "Fallidos",
+      "refunded": "Reembolsados"
+    },
+    "columns": {
+      "id": "ID",
+      "member": "Miembro",
+      "amount": "Monto",
+      "date": "Fecha",
+      "method": "Método",
+      "status": "Estado",
+      "reference": "Referencia",
+      "actions": "Acciones"
+    },
+    "actions": {
+      "view": "Ver detalles",
+      "receipt": "Ver recibo",
+      "refund": "Reembolsar",
+      "cancel": "Cancelar",
+      "resend": "Reenviar recibo"
+    },
+    "empty": "No se encontraron pagos",
+    "loading": "Cargando pagos..."
+  },
+  "form": {
+    "new": {
+      "title": "Nuevo Pago",
+      "subtitle": "Registrar un nuevo pago de cuota"
+    },
+    "fields": {
+      "member": "Miembro",
+      "amount": "Monto",
+      "method": "Método de pago",
+      "reference": "Número de referencia",
+      "date": "Fecha de pago",
+      "notes": "Notas",
+      "sendReceipt": "Enviar recibo por email"
+    },
+    "methods": {
+      "cash": "Efectivo",
+      "bank_transfer": "Transferencia bancaria",
+      "card": "Tarjeta",
+      "mobile_money": "Dinero móvil",
+      "check": "Cheque"
+    },
+    "validation": {
+      "required": "Este campo es obligatorio",
+      "invalidAmount": "Monto inválido",
+      "duplicateReference": "Esta referencia ya existe"
+    },
+    "success": {
+      "created": "Pago registrado exitosamente",
+      "refunded": "Pago reembolsado exitosamente",
+      "cancelled": "Pago cancelado exitosamente"
+    },
+    "error": {
+      "create": "Error al registrar el pago",
+      "refund": "Error al reembolsar el pago",
+      "cancel": "Error al cancelar el pago"
+    }
+  },
+  "details": {
+    "title": "Detalles del Pago",
+    "info": {
+      "member": "Miembro",
+      "amount": "Monto",
+      "method": "Método de pago",
+      "date": "Fecha",
+      "reference": "Referencia",
+      "status": "Estado",
+      "processedBy": "Procesado por",
+      "notes": "Notas"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "completed": "Completado",
+      "failed": "Fallido",
+      "refunded": "Reembolsado",
+      "cancelled": "Cancelado"
+    },
+    "actions": {
+      "print": "Imprimir recibo",
+      "download": "Descargar recibo",
+      "email": "Enviar por email",
+      "refund": "Reembolsar",
+      "cancel": "Cancelar"
+    }
+  },
+  "receipt": {
+    "title": "Recibo de Pago",
+    "number": "Número de recibo",
+    "date": "Fecha",
+    "member": "Miembro",
+    "concept": "Concepto",
+    "amount": "Monto",
+    "method": "Método de pago",
+    "footer": "Gracias por su pago"
+  },
+  "stats": {
+    "total": "Total recaudado",
+    "pending": "Pagos pendientes",
+    "thisMonth": "Este mes",
+    "lastMonth": "Mes anterior",
+    "average": "Promedio mensual"
+  }
+}

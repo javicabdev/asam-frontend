@@ -37,7 +37,8 @@ import {
   VerifiedUser as VerifiedIcon,
 } from '@mui/icons-material';
 import { useAuth } from '@/hooks/useAuth';
-import { PageTransition } from '@/components/common';
+import { PageTransition, LanguageSelector, ThemeToggle } from '@/components/common';
+import { useTranslation } from 'react-i18next';
 
 const drawerWidth = 240;
 
@@ -50,43 +51,49 @@ interface NavItem {
 
 const navigationItems: NavItem[] = [
   {
-    text: 'Dashboard',
+    text: 'menu.dashboard',
     icon: <DashboardIcon />,
     path: '/dashboard',
   },
   {
-    text: 'Miembros',
+    text: 'menu.members',
     icon: <PeopleIcon />,
     path: '/members',
   },
   {
-    text: 'Familias',
+    text: 'menu.families',
     icon: <FamilyIcon />,
     path: '/families',
   },
   {
-    text: 'Pagos',
+    text: 'menu.payments',
     icon: <PaymentIcon />,
     path: '/payments',
   },
   {
-    text: 'Flujo de Caja',
+    text: 'menu.cashFlow',
     icon: <AccountBalanceIcon />,
     path: '/cash-flow',
   },
   {
-    text: 'Informes',
+    text: 'menu.reports',
     icon: <AssessmentIcon />,
     path: '/reports',
   },
 ];
 
-export const MainLayout: React.FC = () => {
+interface MainLayoutProps {
+  onThemeToggle?: () => void;
+  currentTheme?: 'light' | 'dark';
+}
+
+export const MainLayout: React.FC<MainLayoutProps> = ({ onThemeToggle, currentTheme = 'light' }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const { user, logout } = useAuth();
+  const { t } = useTranslation('navigation');
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -146,7 +153,7 @@ export const MainLayout: React.FC = () => {
                 {item.icon}
               </ListItemIcon>
               <ListItemText
-                primary={item.text}
+                primary={t(item.text)}
                 sx={{
                   '& .MuiListItemText-primary': {
                     color:
@@ -185,10 +192,17 @@ export const MainLayout: React.FC = () => {
           </IconButton>
           
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            Sistema de Gestión ASAM
+            {t('app.title', { ns: 'common' })}
           </Typography>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {/* Language Selector */}
+            <LanguageSelector />
+            
+            {/* Theme Toggle */}
+            {onThemeToggle && (
+              <ThemeToggle currentMode={currentTheme} onToggle={onThemeToggle} />
+            )}
             {/* Email verification badge */}
             {user && !user.emailVerified && (
               <Tooltip title="Email no verificado">
@@ -250,7 +264,7 @@ export const MainLayout: React.FC = () => {
                   <ListItemIcon>
                     <VerifiedIcon fontSize="small" color="warning" />
                   </ListItemIcon>
-                  <ListItemText primary="Verificar Email" />
+                  <ListItemText primary={t('auth:emailVerification.pending.title')} />
                 </MenuItem>
               )}
               
@@ -263,14 +277,14 @@ export const MainLayout: React.FC = () => {
                 <ListItemIcon>
                   <SettingsIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText primary="Mi Perfil" />
+                <ListItemText primary={t('menu.profile')} />
               </MenuItem>
               
               <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
                   <LogoutIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText primary="Cerrar Sesión" />
+                <ListItemText primary={t('auth:logout.title')} />
               </MenuItem>
             </Menu>
           </Box>

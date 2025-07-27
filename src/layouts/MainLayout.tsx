@@ -37,6 +37,7 @@ import {
   VerifiedUser as VerifiedIcon,
 } from '@mui/icons-material';
 import { useAuth } from '@/hooks/useAuth';
+import { PageTransition } from '@/components/common';
 
 const drawerWidth = 240;
 
@@ -327,7 +328,11 @@ export const MainLayout: React.FC = () => {
         }}
       >
         <Toolbar />
-        <Outlet />
+        <PageTransition type="fade" duration={300}>
+          <Box key={location.pathname}>
+            <Outlet />
+          </Box>
+        </PageTransition>
       </Box>
     </Box>
   );

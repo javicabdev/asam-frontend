@@ -9,6 +9,7 @@ import { apolloClient } from '@/lib/apollo-client'
 import { theme } from '@/lib/theme'
 import { AppRoutes } from './routes'
 import { InstallPrompt } from '@/components/pwa'
+import { ErrorBoundary } from '@/components/common'
 
 
 function App() {
@@ -17,10 +18,12 @@ function App() {
       <ThemeProvider theme={theme}>
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
           <CssBaseline />
-          <BrowserRouter>
-            <AppRoutes />
-            <InstallPrompt />
-          </BrowserRouter>
+          <ErrorBoundary>
+            <BrowserRouter>
+              <AppRoutes />
+              <InstallPrompt />
+            </BrowserRouter>
+          </ErrorBoundary>
         </LocalizationProvider>
       </ThemeProvider>
     </ApolloProvider>

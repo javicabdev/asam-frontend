@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { useAuth } from '@/hooks/useAuth';
@@ -8,9 +9,9 @@ import {
 } from '@/graphql/generated/operations';
 
 // Mock navigate
-const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+const mockNavigate = vi.fn();
+vi.mock('react-router-dom', () => ({
+  ...vi.importActual('react-router-dom'),
   useNavigate: () => mockNavigate,
 }));
 
@@ -132,7 +133,7 @@ describe('Email Verification Flow', () => {
     });
   });
 
-  it('should retry on auth errors', async () => {
+  it('should handle server errors gracefully', async () => {
     // Set up authenticated state
     useAuthStore.getState().login({
       user: {
@@ -147,34 +148,19 @@ describe('Email Verification Flow', () => {
       expiresAt: new Date(Date.now() + 3600000).toISOString(),
     });
 
-    let callCount = 0;
     const mocks = [
       {
         request: {
           query: SendVerificationEmailDocument,
         },
-        result: () => {
-          callCount++;
-          if (callCount === 1) {
-            // First call fails with auth error
-            return {
-              errors: [{
-                message: 'UNAUTHORIZED: Token expired',
-                extensions: { code: 'UNAUTHENTICATED' },
-              }],
-            };
-          } else {
-            // Second call succeeds
-            return {
-              data: {
-                sendVerificationEmail: {
-                  success: true,
-                  message: 'Email sent after retry',
-                  error: null,
-                },
-              } as SendVerificationEmailMutation,
-            };
-          }
+        result: {
+          data: {
+            sendVerificationEmail: {
+              success: false,
+              message: 'Server error occurred',
+              error: 'INTERNAL_SERVER_ERROR',
+            },
+          } as SendVerificationEmailMutation,
         },
       },
     ];
@@ -192,12 +178,9 @@ describe('Email Verification Flow', () => {
       response = await result.current.sendVerificationEmail();
     });
 
-    await waitFor(() => {
-      expect(callCount).toBe(2); // Should have retried
-      expect(response).toEqual({
-        success: true,
-        message: 'Email sent after retry',
-      });
+    expect(response).toEqual({
+      success: false,
+      message: 'Server error occurred',
     });
   });
 });

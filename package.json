@@ -20,7 +20,10 @@
     "generate-text-favicon": "node scripts/generate-text-favicon.js",
     "generate-asam-favicon": "node scripts/generate-asam-favicon.js",
     "check-icons": "node scripts/check-icons-setup.js",
-    "cleanup-favicon-tests": "node scripts/cleanup-favicon-tests.js"
+    "cleanup-favicon-tests": "node scripts/cleanup-favicon-tests.js",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",
@@ -62,6 +65,14 @@
     "typescript": "^5.3.3",
     "vite": "^5.0.10",
     "vite-plugin-pwa": "^0.17.4",
-    "sharp": "^0.33.0"
+    "sharp": "^0.33.0",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/user-event": "^14.5.1",
+    "@types/jest": "^29.5.11",
+    "@vitest/ui": "^1.1.0",
+    "jsdom": "^23.0.1",
+    "vitest": "^1.1.0",
+    "@vitest/coverage-v8": "^1.1.0"
   }
 }

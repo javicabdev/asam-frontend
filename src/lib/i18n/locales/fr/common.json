@@ -30,13 +30,18 @@
     "selectAll": "Tout sélectionner",
     "clear": "Effacer",
     "reset": "Réinitialiser",
-    "submit": "Soumettre",
+    "submit": "Envoyer",
     "view": "Voir",
     "details": "Détails",
     "noData": "Aucune donnée",
     "noResults": "Aucun résultat",
     "required": "Requis",
     "optional": "Optionnel"
+  },
+  "or": "Ou",
+  "footer": {
+    "rights": "Tous droits réservés",
+    "copyright": "© {{year}} Mutua ASAM"
   },
   "errors": {
     "generic": "Une erreur s'est produite",
@@ -72,6 +77,7 @@
   "theme": {
     "light": "Clair",
     "dark": "Sombre",
-    "system": "Système"
+    "system": "Système",
+    "select": "Sélectionner le thème"
   }
 }

@@ -89,20 +89,20 @@ export const exportMembersToCSV = (
   // Add data rows
   members.forEach((member) => {
     const row = [
-      member.memberNumber || '',
-      member.firstName || '',
-      member.lastName1 || '',
-      member.lastName2 || '',
-      member.documentId || '',
-      member.email || '',
-      member.phone || '',
-      member.city || '',
-      member.province || '',
-      member.postalCode || '',
-      member.membershipType === 'INDIVIDUAL' ? 'Individual' : 'Familiar',
-      member.isActive ? 'Activo' : 'Inactivo',
-      formatDate(member.joinDate, opts.dateFormat),
-      formatDate(member.leaveDate, opts.dateFormat),
+      member.numero_socio || '',
+      member.nombre || '',
+      member.apellidos || '',
+      '', // apellido2 no existe en el modelo
+      member.documento_identidad || '',
+      member.correo_electronico || '',
+      '', // telefono no existe en el modelo
+      member.poblacion || '',
+      member.provincia || '',
+      member.codigo_postal || '',
+      member.tipo_membresia === 'INDIVIDUAL' ? 'Individual' : 'Familiar',
+      member.estado === 'ACTIVE' ? 'Activo' : 'Inactivo',
+      formatDate(member.fecha_alta, opts.dateFormat),
+      formatDate(member.fecha_baja, opts.dateFormat),
     ];
     
     rows.push(row.map(escapeCSVValue).join(opts.delimiter));

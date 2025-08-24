@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { UserRole } from '@/graphql/generated/schema';
+import type { UserRole } from '@/graphql/generated/operations';
 
 interface User {
   id: string;
@@ -8,9 +8,9 @@ interface User {
   email?: string;
   role: UserRole;
   isActive: boolean;
-  lastLogin?: string;
+  lastLogin?: string | null;
   emailVerified: boolean;
-  emailVerifiedAt?: string;
+  emailVerifiedAt?: string | null;
 }
 
 interface AuthState {
@@ -40,9 +40,10 @@ interface AuthState {
   
   // Computed
   isTokenExpired: () => boolean;
+  hasValidToken: () => boolean;
 }
 
-const isDevelopment = process.env.NODE_ENV === 'development';
+// Removed development hack - tokens should expire properly in all environments
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -99,16 +100,27 @@ export const useAuthStore = create<AuthState>()(
         const state = get();
         if (!state.expiresAt) return true;
 
-        // TEMPORARY: For development, always return false to prevent token expiration issues
-        if (isDevelopment) {
-          console.log('DEV MODE: Token expiration check disabled');
-          return false;
-        }
-
         const expirationTime = new Date(state.expiresAt).getTime();
         const currentTime = new Date().getTime();
+        const bufferTime = 60 * 1000; // 1 minute buffer before actual expiration
         
-        return currentTime >= expirationTime;
+        // Consider token expired if within 1 minute of expiration
+        const isExpired = currentTime >= expirationTime - bufferTime;
+        
+        if (isExpired) {
+          console.log('[AuthStore] Token expired or about to expire:', {
+            expiresAt: new Date(expirationTime).toISOString(),
+            currentTime: new Date(currentTime).toISOString(),
+            bufferApplied: true,
+          });
+        }
+        
+        return isExpired;
+      },
+
+      hasValidToken: () => {
+        const state = get();
+        return !!state.accessToken && !state.isTokenExpired();
       },
     }),
     {
@@ -128,19 +140,22 @@ export const useAuthStore = create<AuthState>()(
           
           // Log token info for debugging
           if (state.expiresAt) {
-            console.log('Token expiration check:', {
-              expiresAt: state.expiresAt,
-              expirationTime: new Date(state.expiresAt).toISOString(),
+            const isExpired = state.isTokenExpired();
+            console.log('[AuthStore] Token status on rehydration:', {
+              expiresAt: new Date(state.expiresAt).toISOString(),
               currentTime: new Date().toISOString(),
-              isExpired: state.isTokenExpired(),
+              isExpired,
+              hasValidToken: !isExpired && !!state.accessToken,
             });
-          }
-          
-          // Check if tokens are expired on rehydration
-          if (state.isTokenExpired()) {
-            console.warn('Token expired on rehydration, clearing auth state');
-            // Clear expired tokens
-            state.logout();
+            
+            // Check if tokens are expired on rehydration
+            if (isExpired) {
+              console.warn('[AuthStore] Token expired on rehydration, clearing auth state');
+              // Clear expired tokens
+              state.logout();
+            }
+          } else {
+            console.log('[AuthStore] No token found on rehydration');
           }
         }
       },

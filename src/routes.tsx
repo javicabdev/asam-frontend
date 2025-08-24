@@ -40,7 +40,7 @@ const LoadingScreen = () => (
   </Box>
 )
 
-export const AppRoutes = ({ onThemeToggle, currentTheme }: { onThemeToggle?: () => void; currentTheme?: 'light' | 'dark' }) => {
+export const AppRoutes = () => {
   return (
     <Suspense fallback={<LoadingScreen />}>
       <Routes>
@@ -61,7 +61,7 @@ export const AppRoutes = ({ onThemeToggle, currentTheme }: { onThemeToggle?: () 
 
         {/* Private routes */}
         <Route element={<ProtectedRoute />}>
-          <Route element={<MainLayout onThemeToggle={onThemeToggle} currentTheme={currentTheme} />}>
+          <Route element={<MainLayout />}>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/members" element={<MembersPage />} />

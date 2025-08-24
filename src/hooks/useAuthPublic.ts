@@ -12,6 +12,7 @@ import {
 } from '@/graphql/generated/operations';
 
 /**
+ * @deprecated Use useAuth instead
  * A lightweight version of useAuth for public pages (login, register, etc.)
  * that doesn't attempt to fetch the current user
  */
@@ -37,7 +38,7 @@ export const useAuthPublic = () => {
   const login = useCallback(
     async (username: string, password: string) => {
       try {
-        console.log('Starting login for:', username);
+        console.log('[DEPRECATED useAuthPublic] Starting login for:', username);
         
         const { data } = await loginMutation({
           variables: {
@@ -48,7 +49,7 @@ export const useAuthPublic = () => {
         if (data?.login) {
           const { user, accessToken, refreshToken, expiresAt } = data.login;
           
-          console.log('Login successful:', {
+          console.log('[DEPRECATED useAuthPublic] Login successful:', {
             user: user.username,
             expiresAt,
             expiresAtDate: new Date(expiresAt).toISOString(),
@@ -56,7 +57,7 @@ export const useAuthPublic = () => {
           });
           
           // Store auth data
-          console.log('Storing auth data in Zustand store...');
+          console.log('[DEPRECATED useAuthPublic] Storing auth data in Zustand store...');
           setAuthData({
             user,
             accessToken,
@@ -67,7 +68,7 @@ export const useAuthPublic = () => {
           // Verify token was stored (for debugging)
           if (import.meta.env.DEV) {
             const storedToken = useAuthStore.getState().accessToken;
-            console.log('Token stored verification:', {
+            console.log('[DEPRECATED useAuthPublic] Token stored verification:', {
               tokenStored: !!storedToken,
               tokenMatches: storedToken === accessToken,
               storeState: useAuthStore.getState().isAuthenticated,
@@ -78,10 +79,10 @@ export const useAuthPublic = () => {
           
           // Check if email is verified before navigating
           if (!user.emailVerified) {
-            console.log('User email not verified, navigating to verification check');
+            console.log('[DEPRECATED useAuthPublic] User email not verified, navigating to verification check');
             navigate('/email-verification-check');
           } else {
-            console.log('User email verified, navigating to dashboard');
+            console.log('[DEPRECATED useAuthPublic] User email verified, navigating to dashboard');
             navigate('/dashboard');
           }
           

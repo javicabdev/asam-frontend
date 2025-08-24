@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -31,6 +31,48 @@ export const EmailVerificationPendingPage: React.FC = () => {
   const [errorDetails, setErrorDetails] = useState<string>('');
   const [cooldown, setCooldown] = useState(false);
   const [showErrorDetails, setShowErrorDetails] = useState(false);
+  const [hasTriedSending, setHasTriedSending] = useState(false);
+
+  // Auto-send verification email on mount (only once)
+  useEffect(() => {
+    const sendInitialEmail = async () => {
+      if (!user || !user.username || hasTriedSending) {
+        return;
+      }
+
+      // Don't auto-send if email is already verified
+      if (user.emailVerified) {
+        return;
+      }
+
+      console.log('[EmailVerificationPending] Auto-sending verification email...');
+      setHasTriedSending(true);
+      
+      // Wait a bit to ensure token is properly set in Apollo Client
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      try {
+        const result = await sendVerificationEmail();
+        if (result.success) {
+          setStatus('success');
+          setMessage(result.message || 'Email de verificación enviado automáticamente');
+          setCooldown(true);
+          setTimeout(() => {
+            setCooldown(false);
+            setStatus('idle');
+          }, 60000);
+        } else {
+          console.error('[EmailVerificationPending] Auto-send failed:', result.message);
+          setStatus('error');
+          setMessage('No se pudo enviar el email automáticamente. Por favor, intenta manualmente.');
+        }
+      } catch (error) {
+        console.error('[EmailVerificationPending] Auto-send error:', error);
+      }
+    };
+
+    sendInitialEmail();
+  }, [user, sendVerificationEmail, hasTriedSending]);
 
   // Handle resend verification email
   const handleResendEmail = async () => {

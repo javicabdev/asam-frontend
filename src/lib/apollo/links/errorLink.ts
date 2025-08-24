@@ -16,7 +16,7 @@ interface AuthError extends GraphQLError {
 /**
  * Check if an error is an authentication error
  */
-const isAuthError = (error: GraphQLError): error is AuthError => {
+const isAuthError = (error: any): error is AuthError => {
   return error.extensions?.code === 'UNAUTHENTICATED' || 
          error.extensions?.code === 'UNAUTHORIZED';
 };

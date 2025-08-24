@@ -15,10 +15,12 @@ export const EmailVerificationCheck: React.FC = () => {
 
   useEffect(() => {
     const checkEmailVerification = async () => {
-      console.log('EmailVerificationCheck - Starting check:', {
+      console.log('[EmailVerificationCheck] Starting check:', {
         isAuthenticated,
         user: user?.username,
+        email: user?.email,
         emailVerified: user?.emailVerified,
+        fullUser: user,
       });
 
       // If not authenticated, redirect to login
@@ -29,13 +31,14 @@ export const EmailVerificationCheck: React.FC = () => {
 
       // If email is already verified, go to dashboard
       if (user.emailVerified) {
+        console.log('[EmailVerificationCheck] Email already verified, going to dashboard');
         navigate('/dashboard');
         return;
       }
 
       // Email not verified - navigate to pending page
       // The pending page will handle sending the verification email
-      console.log('Email not verified, navigating to pending page');
+      console.log('[EmailVerificationCheck] Email NOT verified, navigating to pending page');
       navigate('/email-verification-pending');
     };
 

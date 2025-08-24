@@ -38,6 +38,11 @@
     "required": "Requerido",
     "optional": "Opcional"
   },
+  "or": "O",
+  "footer": {
+    "rights": "Todos los derechos reservados",
+    "copyright": "© {{year}} Mutua ASAM"
+  },
   "errors": {
     "generic": "Ha ocurrido un error",
     "network": "Error de conexión",
@@ -72,6 +77,7 @@
   "theme": {
     "light": "Claro",
     "dark": "Oscuro",
-    "system": "Sistema"
+    "system": "Sistema",
+    "select": "Seleccionar tema"
   }
 }

@@ -28,7 +28,7 @@ export function useNextMemberNumber({
     // Don't cache this query as we always want fresh data
     fetchPolicy: 'no-cache',
     // Disable automatic error reporting to console
-    errorPolicy: 'silent',
+    errorPolicy: 'ignore',
   });
 
   // If query fails, generate a fallback value

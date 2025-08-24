@@ -7,14 +7,14 @@
   "common": {
     "loading": "Mungi yab...",
     "error": "Njuumte",
-    "success": "Jàmm",
+    "success": "Jaar na",
     "save": "Denc",
     "cancel": "Neenal",
     "delete": "Far",
     "edit": "Soppi",
     "create": "Sos",
     "search": "Seet",
-    "filter": "Saytu",
+    "filter": "Fàcc",
     "actions": "Jëf",
     "yes": "Waaw",
     "no": "Déedéet",
@@ -23,29 +23,34 @@
     "next": "Li topp",
     "previous": "Li jiitu",
     "close": "Tëj",
-    "refresh": "Yeesalu",
+    "refresh": "Yeesal",
     "download": "Yeb",
-    "upload": "Yóbbale",
+    "upload": "Yàq",
     "select": "Tànn",
     "selectAll": "Tànn lépp",
-    "clear": "Fomp",
+    "clear": "Setal",
     "reset": "Defaraat",
     "submit": "Yónnee",
-    "view": "Gis",
+    "view": "Xool",
     "details": "Faramfacce",
-    "noData": "Amul dara",
+    "noData": "Amul xibaar",
     "noResults": "Amul njëriñ",
     "required": "Laaj na",
-    "optional": "Du laaj"
+    "optional": "Du lu laaj"
+  },
+  "or": "Walla",
+  "footer": {
+    "rights": "Bépp sañ-sañ dañu aar",
+    "copyright": "© {{year}} Mutua ASAM"
   },
   "errors": {
-    "generic": "Am na njuumte",
-    "network": "Njuumte ci jokkoo bi",
-    "unauthorized": "Amoo sañ-sañ",
-    "forbidden": "Tere nañu la",
+    "generic": "Njuumte amna",
+    "network": "Njuumte ci jokkoo",
+    "unauthorized": "Kenn saalaloo",
+    "forbidden": "Dugg bu tere",
     "notFound": "Gisuwul",
     "validation": "Njuumte ci saytu",
-    "tryAgain": "Jéemaat"
+    "tryAgain": "Jéemaatal"
   },
   "date": {
     "today": "Tey",
@@ -72,6 +77,7 @@
   "theme": {
     "light": "Leer",
     "dark": "Lëndëm",
-    "system": "Sistemu"
+    "system": "Sisteem",
+    "select": "Tànn melokaan"
   }
 }

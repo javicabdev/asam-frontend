@@ -47,7 +47,8 @@
     "i18next": "^23.7.16",
     "i18next-browser-languagedetector": "^7.2.0",
     "i18next-http-backend": "^2.4.2",
-    "react-i18next": "^14.0.0"
+    "react-i18next": "^14.0.0",
+    "notistack": "^3.0.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.7",

@@ -82,12 +82,7 @@ const navigationItems: NavItem[] = [
   },
 ];
 
-interface MainLayoutProps {
-  onThemeToggle?: () => void;
-  currentTheme?: 'light' | 'dark';
-}
-
-export const MainLayout: React.FC<MainLayoutProps> = ({ onThemeToggle, currentTheme = 'light' }) => {
+export const MainLayout: React.FC = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
@@ -199,10 +194,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ onThemeToggle, currentTh
             {/* Language Selector */}
             <LanguageSelector />
             
-            {/* Theme Toggle */}
-            {onThemeToggle && (
-              <ThemeToggle currentMode={currentTheme} onToggle={onThemeToggle} />
-            )}
+            {/* Theme Toggle - Ahora sin props */}
+            <ThemeToggle />
             {/* Email verification badge */}
             {user && !user.emailVerified && (
               <Tooltip title="Email no verificado">

@@ -7,13 +7,14 @@ import es from 'date-fns/locale/es'
 import fr from 'date-fns/locale/fr'
 import { I18nextProvider } from 'react-i18next'
 import { useState, useEffect, useMemo } from 'react'
+import { SnackbarProvider } from 'notistack'
 
 import { apolloClient } from '@/lib/apollo-client'
 import { createAppTheme } from '@/lib/theme'
 import i18n from '@/lib/i18n'
 import { AppRoutes } from './routes'
 import { InstallPrompt } from '@/components/pwa'
-import { ErrorBoundary } from '@/components/common'
+import { ErrorBoundary, LoadingOverlay } from '@/components/common'
 import { useSettingsStore } from '@/stores/settingsStore'
 
 
@@ -23,20 +24,35 @@ function App() {
 
   // Determine actual theme based on system preference if set to 'system'
   useEffect(() => {
+    const determineTheme = () => {
+      if (themeMode === 'system') {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        setCurrentTheme(mediaQuery.matches ? 'dark' : 'light');
+      } else {
+        setCurrentTheme(themeMode === 'dark' ? 'dark' : 'light');
+      }
+    };
+
+    determineTheme();
+
+    // Listen for system theme changes when in system mode
     if (themeMode === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      setCurrentTheme(mediaQuery.matches ? 'dark' : 'light');
-      
       const handler = (e: MediaQueryListEvent) => {
         setCurrentTheme(e.matches ? 'dark' : 'light');
       };
       
       mediaQuery.addEventListener('change', handler);
       return () => mediaQuery.removeEventListener('change', handler);
-    } else {
-      setCurrentTheme(themeMode === 'dark' ? 'dark' : 'light');
     }
   }, [themeMode]);
+
+  // Sync i18n with language from store
+  useEffect(() => {
+    if (i18n.language !== language) {
+      i18n.changeLanguage(language);
+    }
+  }, [language]);
 
   // Create theme based on current settings
   const theme = useMemo(
@@ -50,16 +66,13 @@ function App() {
       case 'fr':
         return fr;
       case 'wo':
+        // Wolof uses Spanish locale as fallback since date-fns doesn't have Wolof
+        return es;
       case 'es':
       default:
         return es;
     }
   }, [language]);
-
-  const handleThemeToggle = () => {
-    const newMode = currentTheme === 'light' ? 'dark' : 'light';
-    useSettingsStore.getState().setThemeMode(newMode);
-  };
 
   return (
     <ApolloProvider client={apolloClient}>
@@ -67,12 +80,23 @@ function App() {
         <ThemeProvider theme={theme}>
           <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={dateLocale}>
             <CssBaseline />
-            <ErrorBoundary>
-              <BrowserRouter>
-                <AppRoutes onThemeToggle={handleThemeToggle} currentTheme={currentTheme} />
-                <InstallPrompt />
-              </BrowserRouter>
-            </ErrorBoundary>
+            <SnackbarProvider
+              maxSnack={3}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              autoHideDuration={5000}
+              preventDuplicate
+            >
+              <ErrorBoundary>
+                <BrowserRouter>
+                  <AppRoutes />
+                  <InstallPrompt />
+                  <LoadingOverlay />
+                </BrowserRouter>
+              </ErrorBoundary>
+            </SnackbarProvider>
           </LocalizationProvider>
         </ThemeProvider>
       </I18nextProvider>

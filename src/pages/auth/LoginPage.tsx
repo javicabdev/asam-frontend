@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -21,18 +22,23 @@ import {
   VisibilityOff,
   LockOutlined as LockIcon,
 } from '@mui/icons-material';
-import { useAuthPublic } from '@/hooks/useAuthPublic';
-import { loginSchema, LoginFormData } from './loginSchema';
+import { useAuth } from '@/hooks/useAuth';
+import { createLoginSchema, LoginFormData } from './loginSchema';
+import { LanguageSelector } from '@/components/LanguageSelector';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, isAuthenticated, isLoading } = useAuthPublic();
+  const { t, i18n } = useTranslation('auth');
+  const { login, isAuthenticated, isLoading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Get the redirect location from state
   const from = location.state?.from?.pathname || '/dashboard';
+
+  // Create the validation schema with current translations
+  const validationSchema = useMemo(() => createLoginSchema(t), [t, i18n.language]);
 
   // Form configuration
   const {
@@ -41,7 +47,7 @@ export const LoginPage: React.FC = () => {
     formState: { errors, isSubmitting },
     setFocus,
   } = useForm<LoginFormData>({
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(validationSchema),
     defaultValues: {
       username: '',
       password: '',
@@ -67,7 +73,18 @@ export const LoginPage: React.FC = () => {
     const result = await login(data.username, data.password);
 
     if (!result.success) {
-      setError(result.error || 'Error al iniciar sesión');
+      // Try to use a specific error translation if available
+      const errorKey = result.error?.replace(/\s+/g, '').toLowerCase();
+      const translationKey = `login.errors.${errorKey}`;
+      const translatedError = t(translationKey);
+      
+      // If translation exists, use it, otherwise use the original error or generic
+      setError(
+        translatedError !== translationKey 
+          ? translatedError 
+          : result.error || t('login.errors.generic')
+      );
+      
       // Focus on username field after error
       setFocus('username');
     }
@@ -110,8 +127,14 @@ export const LoginPage: React.FC = () => {
             flexDirection: 'column',
             alignItems: 'center',
             width: '100%',
+            position: 'relative',
           }}
         >
+          {/* Language Selector */}
+          <Box sx={{ position: 'absolute', top: 16, right: 16 }}>
+            <LanguageSelector variant="chip" size="small" />
+          </Box>
+
           {/* Logo/Icon */}
           <Box
             sx={{
@@ -125,8 +148,13 @@ export const LoginPage: React.FC = () => {
           </Box>
 
           {/* Title */}
-          <Typography component="h1" variant="h5" sx={{ mb: 3 }}>
-            Iniciar Sesión
+          <Typography component="h1" variant="h5" sx={{ mb: 1 }}>
+            {t('login.title')}
+          </Typography>
+          
+          {/* Subtitle */}
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+            {t('login.subtitle')}
           </Typography>
 
           {/* Error Alert */}
@@ -148,7 +176,7 @@ export const LoginPage: React.FC = () => {
               required
               fullWidth
               id="username"
-              label="Nombre de usuario"
+              label={t('login.username')}
               autoComplete="username"
               autoFocus
               error={!!errors.username}
@@ -161,7 +189,7 @@ export const LoginPage: React.FC = () => {
               margin="normal"
               required
               fullWidth
-              label="Contraseña"
+              label={t('login.password')}
               type={showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
@@ -194,11 +222,11 @@ export const LoginPage: React.FC = () => {
               {isSubmitting ? (
                 <CircularProgress size={24} color="inherit" />
               ) : (
-                'Iniciar Sesión'
+                t('login.submit')
               )}
             </Button>
 
-            <Divider sx={{ my: 2 }}>O</Divider>
+            <Divider sx={{ my: 2 }}>{t('common:or', { defaultValue: 'O' })}</Divider>
 
             {/* Links */}
             <Box sx={{ textAlign: 'center' }}>
@@ -208,13 +236,13 @@ export const LoginPage: React.FC = () => {
                 variant="body2"
                 sx={{ display: 'block', mb: 1 }}
               >
-                ¿Olvidaste tu contraseña?
+                {t('login.forgotPassword')}
               </Link>
               
               <Typography variant="body2" color="text.secondary">
-                ¿No tienes una cuenta?{' '}
+                {t('login.noAccount')}{' '}
                 <Link component={RouterLink} to="/contact" variant="body2">
-                  Contacta con nosotros
+                  {t('login.contactUs')}
                 </Link>
               </Typography>
             </Box>
@@ -223,7 +251,7 @@ export const LoginPage: React.FC = () => {
 
         {/* Footer */}
         <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 4 }}>
-          © {new Date().getFullYear()} Mutua ASAM. Todos los derechos reservados.
+          © {new Date().getFullYear()} Mutua ASAM. {t('common:footer.rights', { defaultValue: 'Todos los derechos reservados.' })}
         </Typography>
       </Box>
     </Container>

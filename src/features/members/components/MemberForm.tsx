@@ -45,6 +45,11 @@ const validationSchema = Yup.object({
   pais: Yup.string().required('El país es obligatorio'),
   documento_identidad: Yup.string().required('El documento de identidad es obligatorio'),
   correo_electronico: Yup.string().email('Email inválido').required('El email es obligatorio'),
+  // Campos opcionales
+  fecha_nacimiento: Yup.date().nullable(),
+  profesion: Yup.string().nullable(),
+  nacionalidad: Yup.string().nullable(),
+  observaciones: Yup.string().nullable(),
 });
 
 const familyValidationSchema = validationSchema.shape({
@@ -58,6 +63,9 @@ const familyValidationSchema = validationSchema.shape({
     then: (schema) => schema.required('Los apellidos del esposo son obligatorios'),
     otherwise: (schema) => schema.nullable(),
   }),
+  esposo_fecha_nacimiento: Yup.date().nullable(),
+  esposo_documento_identidad: Yup.string().nullable(),
+  esposo_correo_electronico: Yup.string().email('Email inválido').nullable(),
   esposa_nombre: Yup.string().when('tipo_membresia', {
     is: MembershipType.FAMILY,
     then: (schema) => schema.required('El nombre de la esposa es obligatorio'),
@@ -68,6 +76,9 @@ const familyValidationSchema = validationSchema.shape({
     then: (schema) => schema.required('Los apellidos de la esposa son obligatorios'),
     otherwise: (schema) => schema.nullable(),
   }),
+  esposa_fecha_nacimiento: Yup.date().nullable(),
+  esposa_documento_identidad: Yup.string().nullable(),
+  esposa_correo_electronico: Yup.string().email('Email inválido').nullable(),
 });
 
 
@@ -369,7 +380,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                     {...field}
                     fullWidth
                     label="DNI/NIE"
-                    error={!!errors.documento_identidad || (documentValidation && !documentValidation.isValid)}
+                    error={!!errors.documento_identidad || (documentValidation ? !documentValidation.isValid : false)}
                     helperText={
                       errors.documento_identidad?.message || 
                       (documentValidation && !documentValidation.isValid && documentValidation.errorMessage) ||

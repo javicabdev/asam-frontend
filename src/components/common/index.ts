@@ -3,3 +3,4 @@ export { PageTransition, usePageTransition, withPageTransition } from './PageTra
 export type { TransitionType } from './PageTransition';
 export { LanguageSelector } from './LanguageSelector';
 export { ThemeToggle } from './ThemeToggle';
+export { LoadingOverlay, useLoadingOverlay } from './LoadingOverlay';

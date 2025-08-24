@@ -63,6 +63,7 @@ export const useExportMembers = (options: UseExportMembersOptions = {}) => {
               variables: {
                 filter: {
                   ...filters,
+                  // @ts-ignore - ids field not in type but needed for batch export
                   ids: chunk,
                   pagination: {
                     page: 1,

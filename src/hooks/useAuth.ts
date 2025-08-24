@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
+import { useUIStore } from '@/stores/uiStore';
 import { apolloClient } from '@/lib/apollo-client';
+import { tokenManager } from '@/lib/apollo/tokenManager';
 import {
   useLoginMutation,
   useLogoutMutation,
@@ -107,10 +109,20 @@ export const useAuth = () => {
           // Force Apollo Client to update its auth link with the new token
           await apolloClient.resetStore();
 
+          // Debug: Log user data
+          console.log('[Login Debug] User data:', {
+            username: user.username,
+            emailVerified: user.emailVerified,
+            email: user.email,
+            fullUser: user
+          });
+
           // Check if email is verified before navigating
           if (!user.emailVerified) {
+            console.log('[Login Debug] Email NOT verified, redirecting to verification check');
             navigate('/email-verification-check');
           } else {
+            console.log('[Login Debug] Email verified, redirecting to dashboard');
             navigate('/dashboard');
           }
           
@@ -151,17 +163,20 @@ export const useAuth = () => {
     }
   }, [logoutMutation, clearAuthData, navigate]);
 
-  // Send verification email with retry logic
+  // Send verification email with improved error handling
   const sendVerificationEmailHandler = useCallback(async () => {
-    const maxRetries = 2;
+    const maxRetries = 3;
     let lastError: any = null;
     
-    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    console.log('[useAuth] Starting email verification send process');
+    
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         const currentState = useAuthStore.getState();
         
         // Validate prerequisites
         if (!currentState.isAuthenticated || !currentState.accessToken) {
+          console.error('[useAuth] Not authenticated for email verification');
           return {
             success: false,
             message: 'Debes iniciar sesión para verificar tu email',
@@ -170,21 +185,68 @@ export const useAuth = () => {
         
         // If user email is already verified, no need to send
         if (currentState.user?.emailVerified) {
+          console.log('[useAuth] Email already verified');
           return {
             success: false,
             message: 'Tu email ya está verificado',
           };
         }
         
-        // Add a small delay on retries to allow token to propagate
-        if (attempt > 0) {
-          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+        console.log(`[useAuth] Email verification attempt ${attempt}/${maxRetries}`);
+        
+        // For retry attempts, wait and ensure token is fresh
+        if (attempt > 1) {
+          const delay = 1000 * Math.pow(2, attempt - 2); // Exponential backoff
+          console.log(`[useAuth] Waiting ${delay}ms before retry...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          
+          // Ensure we have a valid token before retrying
+          const validToken = await tokenManager.getValidAccessToken();
+          if (!validToken) {
+            console.error('[useAuth] Failed to get valid token for retry');
+            return {
+              success: false,
+              message: 'Error de autenticación. Por favor, vuelve a iniciar sesión.',
+            };
+          }
+          
+          // Force Apollo Client to use the new token
+          await apolloClient.resetStore();
+        } else {
+          // On first attempt, just ensure store is synced
+          await apolloClient.resetStore();
+          // Small delay to ensure token propagation
+          await new Promise(resolve => setTimeout(resolve, 500));
         }
         
-        const { data, errors } = await sendVerificationEmail();
+        const { data, errors } = await sendVerificationEmail({
+          context: {
+            // Add a timestamp to prevent caching
+            fetchOptions: {
+              headers: {
+                'X-Request-ID': `verify-email-${Date.now()}`,
+              },
+            },
+          },
+        });
+        
+        // Check for GraphQL errors
+        if (errors && errors.length > 0) {
+          const authError = errors.find(e => 
+            e.extensions?.code === 'UNAUTHENTICATED' ||
+            e.message.includes('UNAUTHORIZED')
+          );
+          
+          if (authError && attempt < maxRetries) {
+            console.log('[useAuth] Auth error detected, will retry');
+            lastError = authError;
+            continue;
+          }
+        }
         
         // If successful, return immediately
         if (data?.sendVerificationEmail?.success) {
+          console.log('[useAuth] Email verification sent successfully');
           return {
             success: true,
             message: data.sendVerificationEmail.message || 'Email de verificación enviado',
@@ -194,6 +256,7 @@ export const useAuth = () => {
         // If not successful but not an auth error, return the error
         const errorMessage = data?.sendVerificationEmail?.message || data?.sendVerificationEmail?.error;
         if (errorMessage && !errorMessage.includes('UNAUTHORIZED') && !errorMessage.includes('401')) {
+          console.log('[useAuth] Non-auth error:', errorMessage);
           return {
             success: false,
             message: errorMessage,
@@ -202,13 +265,22 @@ export const useAuth = () => {
         
         // If it's an auth error and we have retries left, continue
         lastError = new Error(errorMessage || 'Failed to send verification email');
+        console.log('[useAuth] Auth error, will retry if attempts remain');
         
       } catch (error: any) {
+        console.error(`[useAuth] Exception on attempt ${attempt}:`, error);
         lastError = error;
         
+        // Check if it's an auth error
+        const isAuthError = 
+          error.message?.includes('UNAUTHORIZED') || 
+          error.message?.includes('401') ||
+          error.graphQLErrors?.some((e: any) => 
+            e.extensions?.code === 'UNAUTHENTICATED'
+          );
+        
         // If it's not an auth error or we're out of retries, return the error
-        if (attempt === maxRetries || 
-            (!error.message?.includes('UNAUTHORIZED') && !error.message?.includes('401'))) {
+        if (!isAuthError || attempt === maxRetries) {
           return {
             success: false,
             message: error.message || 'Error al enviar el email de verificación',
@@ -218,9 +290,10 @@ export const useAuth = () => {
     }
     
     // If we get here, all retries failed
+    console.error('[useAuth] All email verification attempts failed');
     return {
       success: false,
-      message: lastError?.message || 'Error al enviar el email de verificación después de varios intentos',
+      message: 'Error al enviar el email de verificación. Por favor, contacta con soporte.',
     };
   }, [sendVerificationEmail]);
 

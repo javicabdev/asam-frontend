@@ -93,8 +93,11 @@ const executeTokenRefresh = async (operation: Operation): Promise<boolean> => {
  */
 export const createAuthRefreshLink = (): ApolloLink => {
   return new ApolloLink((operation: Operation, forward: NextLink) => {
-    // Skip refresh for certain operations
-    if (SKIP_REFRESH_OPERATIONS.includes(operation.operationName)) {
+    // Skip refresh for certain operations or when explicitly requested
+    if (
+      SKIP_REFRESH_OPERATIONS.includes(operation.operationName) ||
+      operation.getContext().skipAuthRefreshLink
+    ) {
       return forward(operation);
     }
 

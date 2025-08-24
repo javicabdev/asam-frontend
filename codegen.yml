@@ -20,6 +20,7 @@ generates:
   # Generar tipos de operaciones y hooks
   src/graphql/generated/operations.ts:
     plugins:
+      - typescript
       - typescript-operations
       - typescript-react-apollo
     config:
@@ -27,6 +28,7 @@ generates:
       withComponent: false
       withHOC: false
       enumsAsTypes: true
+      skipTypename: false
       scalars:
         Time: string
         JWT: string

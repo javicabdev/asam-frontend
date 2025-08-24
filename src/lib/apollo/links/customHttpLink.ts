@@ -158,6 +158,16 @@ export const createCustomHttpLink = (uri: string): ApolloLink => {
           if (result.errors) {
             if (import.meta.env.DEV) {
               console.error('CustomHttpLink - GraphQL errors:', result.errors);
+              
+              // Log detailed error for SendVerificationEmail
+              if (operationName === 'SendVerificationEmail') {
+                console.error('❌ SendVerificationEmail - Server Error Details:', {
+                  errors: result.errors,
+                  errorMessages: result.errors.map((e: any) => e.message),
+                  errorExtensions: result.errors.map((e: any) => e.extensions),
+                  fullResult: result,
+                });
+              }
             }
             // Don't handle auth errors here - let authRefreshLink handle them
           }

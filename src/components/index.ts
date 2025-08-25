@@ -1,2 +1,2 @@
-// Export all shared components
-export { LanguageSelector } from './LanguageSelector';
+// Export all shared components from common subdirectory
+export * from './common';

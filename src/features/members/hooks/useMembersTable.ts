@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, ApolloQueryResult } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 
 import { LIST_MEMBERS_QUERY } from '../api/queries';
@@ -21,7 +21,7 @@ interface UseMembersTableResult {
   handleFilterChange: (filter: Partial<MemberFilter>) => void;
   handleSelectionChange: (selectedIds: string[]) => void;
   selectedMembers: string[];
-  refetch: () => void;
+  refetch: () => Promise<ApolloQueryResult<ListMembersQueryResponse>>;
 }
 
 export function useMembersTable(): UseMembersTableResult {
@@ -142,6 +142,6 @@ export function useMembersTable(): UseMembersTableResult {
     handleFilterChange,
     handleSelectionChange,
     selectedMembers,
-    refetch,
+    refetch: refetch || (() => Promise.resolve({} as ApolloQueryResult<ListMembersQueryResponse>)),
   };
 }

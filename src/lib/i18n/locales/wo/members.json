@@ -1,83 +1,96 @@
 {
   "title": "Saytu Mbooloo",
+  "total": "Lépp",
+  "members": "mbooloo",
+  "selected": "tànn",
+  "delete": "Far",
+  "refresh": "Yeesal",
+  "adminOnly": "Kilifa yi rekk munu sos mbooloo yu bees",
+  "newMember": "Mbooloo Bu Bees",
+  "loadError": "Njuumte ci yab mbooloo yi",
   "list": {
     "title": "Limu Mbooloo",
     "search": "Seet mbooloo...",
     "filters": {
       "all": "Bépp",
-      "active": "Yëngu",
-      "inactive": "Neexul",
-      "pending": "Mungi xaar"
+      "active": "Yoo xool",
+      "inactive": "Yoo xoolul",
+      "pending": "Yoo xaar"
     },
     "columns": {
       "id": "ID",
+      "memberNumber": "Limub Mbooloo",
       "name": "Tur",
+      "fullName": "Tur bu mat sëkk",
       "familyName": "Sant",
       "email": "Email",
       "phone": "Telefon",
-      "status": "Tekki",
-      "membershipDate": "Bisu dugg",
-      "lastPayment": "Fay bi mujj",
+      "status": "Jamono",
+      "membershipType": "Xeetu",
+      "membershipDate": "Bésu dugg",
+      "lastPayment": "Fay bu mujj",
+      "population": "Dëkk",
+      "province": "Diwaan",
       "actions": "Jëf"
     },
     "actions": {
-      "view": "Gis faramfacce",
+      "view": "Xool faramfacce",
       "edit": "Soppi",
       "delete": "Far",
       "activate": "Taal",
       "deactivate": "Fay",
       "sendEmail": "Yónnee email"
     },
-    "empty": "Gisuwul benn mbooloo",
+    "empty": "Amul mbooloo bu ñu gis",
     "loading": "Mungi yab mbooloo yi..."
   },
   "form": {
     "new": {
       "title": "Mbooloo Bu Bees",
-      "subtitle": "Bindu mbooloo bu bees ci kurel gi"
+      "subtitle": "Bindu mbooloo bu bees ci kureel bi"
     },
     "edit": {
       "title": "Soppi Mbooloo",
-      "subtitle": "Yeesal xibaari mbooloo bi"
+      "subtitle": "Yeesal xibaaru mbooloo mi"
     },
     "sections": {
       "personal": "Xibaari Bopp",
       "contact": "Xibaari Jokkoo",
       "membership": "Xibaari Bokk",
       "family": "Xibaari Njaboot",
-      "beneficiaries": "Ñi ko mën a am"
+      "beneficiaries": "Ñi koy am njeex"
     },
     "fields": {
       "firstName": "Tur",
       "lastName": "Sant",
-      "dateOfBirth": "Bisu juddu",
-      "gender": "Goor walla jigéen",
-      "documentType": "Ginnaaw kayit",
-      "documentNumber": "Nimero kayit",
+      "dateOfBirth": "Bésu juddu",
+      "gender": "Góor walla jigéen",
+      "documentType": "Xeetu kàddu",
+      "documentNumber": "Limub kàddu",
       "email": "Email",
       "phone": "Telefon",
-      "address": "Màkkaan",
+      "address": "Màkkaanu kër",
       "city": "Dëkk",
       "country": "Réew",
-      "membershipType": "Ginnaaw bokk",
-      "membershipDate": "Bisu bokk",
+      "membershipType": "Xeetu bokk",
+      "membershipDate": "Bésu dugg",
       "familyId": "Njaboot",
       "notes": "Karmat"
     },
     "gender": {
-      "male": "Goor",
+      "male": "Góor",
       "female": "Jigéen",
-      "other": "Leneen"
+      "other": "Beneen"
     },
     "membershipType": {
-      "individual": "Kenn kenn",
+      "individual": "Kenn",
       "family": "Njaboot"
     },
     "validation": {
-      "required": "Lii dafa laaj",
-      "invalidEmail": "Email bi baaxul",
-      "invalidPhone": "Telefon bi baaxul",
-      "documentExists": "Am na ku am kayit bii"
+      "required": "Li dafa war am",
+      "invalidEmail": "Email baaxul",
+      "invalidPhone": "Telefon baaxul",
+      "documentExists": "Am na mbooloo bu am benn kàddu"
     },
     "success": {
       "created": "Mbooloo bi sos na bu baax",
@@ -92,27 +105,27 @@
     }
   },
   "details": {
-    "title": "Faramfaccey Mbooloo",
+    "title": "Faramfacce Mbooloo",
     "tabs": {
       "info": "Xibaar",
       "payments": "Fay",
       "family": "Njaboot",
-      "documents": "Kayit",
-      "activity": "Ligéey"
+      "documents": "Kàddu",
+      "activity": "Jëf"
     },
     "status": {
-      "active": "Yëngu",
-      "inactive": "Neexul",
-      "pending": "Mungi xaar",
-      "suspended": "Dañu ko dakkal"
+      "active": "Yoo xool",
+      "inactive": "Yoo xoolul",
+      "pending": "Yoo xaar",
+      "suspended": "Dakk"
     },
     "actions": {
       "edit": "Soppi",
       "delete": "Far",
-      "suspend": "Dakkal",
+      "suspend": "Dakk",
       "activate": "Taal",
-      "exportData": "Génne xibaar",
-      "printCard": "Móol kaar"
+      "exportData": "Génne xibaar yi",
+      "printCard": "Móol kàrt bi"
     }
   }
 }

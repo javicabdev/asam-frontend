@@ -181,26 +181,45 @@ export const MainLayout: React.FC = () => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: 'none' } }}
+            sx={{ 
+              mr: 2, 
+              display: { md: 'none' },
+              ...(theme.palette.mode === 'light' && {
+                color: theme.palette.primary.main,
+              }),
+            }}
           >
             <MenuIcon />
           </IconButton>
           
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" noWrap component="div" sx={{ 
+            flexGrow: 1,
+            color: theme.palette.mode === 'light' ? theme.palette.primary.main : 'inherit',
+          }}>
             {t('app.title', { ns: 'common' })}
           </Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            {/* Language Selector */}
-            <LanguageSelector />
+            {/* Language Selector - with inAppBar prop */}
+            <LanguageSelector inAppBar={true} />
             
-            {/* Theme Toggle - Ahora sin props */}
-            <ThemeToggle />
+            {/* Theme Toggle - with inAppBar prop */}
+            <ThemeToggle inAppBar={true} />
+            
             {/* Email verification badge */}
             {user && !user.emailVerified && (
               <Tooltip title="Email no verificado">
                 <Badge badgeContent="!" color="warning">
-                  <EmailIcon />
+                  <IconButton
+                    size="small"
+                    sx={{
+                      color: theme.palette.mode === 'light' 
+                        ? theme.palette.warning.main 
+                        : 'inherit',
+                    }}
+                  >
+                    <EmailIcon />
+                  </IconButton>
                 </Badge>
               </Tooltip>
             )}
@@ -215,12 +234,27 @@ export const MainLayout: React.FC = () => {
               }}
               onClick={handleMenuOpen}
             >
-              <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}>
+              <Avatar sx={{ 
+                width: 32, 
+                height: 32, 
+                bgcolor: theme.palette.mode === 'light' 
+                  ? theme.palette.primary.main 
+                  : theme.palette.primary.dark,
+              }}>
                 {getUserInitials()}
               </Avatar>
-              <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+              <Box sx={{ 
+                display: { xs: 'none', sm: 'block' },
+                color: theme.palette.mode === 'light' 
+                  ? theme.palette.primary.main 
+                  : 'inherit',
+              }}>
                 <Typography variant="body2">{user?.username}</Typography>
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="caption" sx={{
+                  color: theme.palette.mode === 'light' 
+                    ? theme.palette.text.secondary 
+                    : 'text.secondary',
+                }}>
                   {user?.role}
                 </Typography>
               </Box>

@@ -1,5 +1,13 @@
 {
-  "title": "Gestión de Miembros",
+  "title": "Gestión de Socios",
+  "total": "Total",
+  "members": "socios",
+  "selected": "seleccionados",
+  "delete": "Eliminar",
+  "refresh": "Actualizar",
+  "adminOnly": "Solo los administradores pueden crear nuevos socios",
+  "newMember": "Nuevo Socio",
+  "loadError": "Error al cargar los socios",
   "list": {
     "title": "Lista de Miembros",
     "search": "Buscar miembros...",
@@ -11,13 +19,18 @@
     },
     "columns": {
       "id": "ID",
+      "memberNumber": "Nº Socio",
       "name": "Nombre",
+      "fullName": "Nombre Completo",
       "familyName": "Apellidos",
       "email": "Email",
       "phone": "Teléfono",
       "status": "Estado",
+      "membershipType": "Tipo",
       "membershipDate": "Fecha de Alta",
       "lastPayment": "Último Pago",
+      "population": "Población",
+      "province": "Provincia",
       "actions": "Acciones"
     },
     "actions": {

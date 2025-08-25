@@ -1,5 +1,13 @@
 {
   "title": "Gestion des Membres",
+  "total": "Total",
+  "members": "membres",
+  "selected": "sélectionnés",
+  "delete": "Supprimer",
+  "refresh": "Actualiser",
+  "adminOnly": "Seuls les administrateurs peuvent créer de nouveaux membres",
+  "newMember": "Nouveau Membre",
+  "loadError": "Erreur lors du chargement des membres",
   "list": {
     "title": "Liste des Membres",
     "search": "Rechercher des membres...",
@@ -11,22 +19,27 @@
     },
     "columns": {
       "id": "ID",
-      "name": "Prénom",
-      "familyName": "Nom",
+      "memberNumber": "Nº Membre",
+      "name": "Nom",
+      "fullName": "Nom Complet",
+      "familyName": "Nom de famille",
       "email": "Email",
       "phone": "Téléphone",
       "status": "Statut",
+      "membershipType": "Type",
       "membershipDate": "Date d'adhésion",
       "lastPayment": "Dernier paiement",
+      "population": "Ville",
+      "province": "Province",
       "actions": "Actions"
     },
     "actions": {
-      "view": "Voir détails",
+      "view": "Voir les détails",
       "edit": "Modifier",
       "delete": "Supprimer",
       "activate": "Activer",
       "deactivate": "Désactiver",
-      "sendEmail": "Envoyer email"
+      "sendEmail": "Envoyer un email"
     },
     "empty": "Aucun membre trouvé",
     "loading": "Chargement des membres..."
@@ -37,7 +50,7 @@
       "subtitle": "Enregistrer un nouveau membre dans l'association"
     },
     "edit": {
-      "title": "Modifier Membre",
+      "title": "Modifier le Membre",
       "subtitle": "Mettre à jour les informations du membre"
     },
     "sections": {
@@ -50,17 +63,17 @@
     "fields": {
       "firstName": "Prénom",
       "lastName": "Nom",
-      "dateOfBirth": "Date de naissance",
+      "dateOfBirth": "Date de Naissance",
       "gender": "Genre",
-      "documentType": "Type de document",
-      "documentNumber": "Numéro de document",
+      "documentType": "Type de Document",
+      "documentNumber": "Numéro de Document",
       "email": "Email",
       "phone": "Téléphone",
       "address": "Adresse",
       "city": "Ville",
       "country": "Pays",
-      "membershipType": "Type d'adhésion",
-      "membershipDate": "Date d'adhésion",
+      "membershipType": "Type d'Adhésion",
+      "membershipDate": "Date d'Adhésion",
       "familyId": "Famille",
       "notes": "Notes"
     },
@@ -111,8 +124,8 @@
       "delete": "Supprimer",
       "suspend": "Suspendre",
       "activate": "Activer",
-      "exportData": "Exporter données",
-      "printCard": "Imprimer carte"
+      "exportData": "Exporter les données",
+      "printCard": "Imprimer la carte"
     }
   }
 }

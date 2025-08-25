@@ -1,12 +1,12 @@
-import { Box, Typography, Button, Alert, Chip, Stack, Tooltip } from '@mui/material';
+import { Box, Typography, Button, Alert, Chip, Stack, Tooltip, useTheme } from '@mui/material';
 import { 
   Add as AddIcon,
   DeleteOutline as DeleteIcon,
   Refresh as RefreshIcon,
 } from '@mui/icons-material';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
+import { useTranslation } from 'react-i18next';
 
 import { MembersTable } from '@/features/members/components/MembersTable';
 import { MembersFilters } from '@/features/members/components/MembersFilters';
@@ -14,6 +14,8 @@ import { useMembersTable } from '@/features/members/hooks/useMembersTable';
 
 export default function MembersPage() {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const { t } = useTranslation('members');
   const { user } = useAuthStore();
   const isAdmin = user?.role === 'admin';
   const {
@@ -31,10 +33,9 @@ export default function MembersPage() {
     handleFilterChange,
     handleSelectionChange,
     selectedMembers,
-    refetch,
+    refetch, // Added refetch here
   } = useMembersTable();
 
-  const [showBulkActions, setShowBulkActions] = useState(false);
 
   const handleBulkDelete = () => {
     // TODO: Implement bulk delete
@@ -46,8 +47,16 @@ export default function MembersPage() {
       {/* Header */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Box>
-          <Typography variant="h4" component="h1" gutterBottom>
-            Gestión de Socios
+          <Typography 
+            variant="h4" 
+            component="h1" 
+            gutterBottom
+            sx={{ 
+              color: theme.palette.text.primary,
+              fontWeight: 600,
+            }}
+          >
+            {t('title', 'Gestión de Socios')}
           </Typography>
           {import.meta.env.DEV && (
             <Typography variant="caption" color="text.secondary">
@@ -56,11 +65,11 @@ export default function MembersPage() {
           )}
           <Stack direction="row" spacing={2} alignItems="center">
             <Typography variant="body2" color="text.secondary">
-              Total: {totalCount} socios
+              {t('total', 'Total')}: {totalCount} {t('members', 'socios')}
             </Typography>
             {selectedMembers.length > 0 && (
               <Chip
-                label={`${selectedMembers.length} seleccionados`}
+                label={`${selectedMembers.length} ${t('selected', 'seleccionados')}`}
                 color="primary"
                 size="small"
               />
@@ -75,7 +84,7 @@ export default function MembersPage() {
               startIcon={<DeleteIcon />}
               onClick={handleBulkDelete}
             >
-              Eliminar ({selectedMembers.length})
+              {t('delete', 'Eliminar')} ({selectedMembers.length})
             </Button>
           )}
           <Button
@@ -84,10 +93,10 @@ export default function MembersPage() {
             onClick={() => refetch()}
             disabled={loading}
           >
-            Actualizar
+            {t('refresh', 'Actualizar')}
           </Button>
           <Tooltip 
-            title={!isAdmin ? "Solo los administradores pueden crear nuevos socios" : ""}
+            title={!isAdmin ? t('adminOnly', 'Solo los administradores pueden crear nuevos socios') : ''}
             arrow
           >
             <span>
@@ -97,7 +106,7 @@ export default function MembersPage() {
                 onClick={() => navigate('/members/new')}
                 disabled={!isAdmin}
               >
-                Nuevo Socio
+                {t('newMember', 'Nuevo Socio')}
               </Button>
             </span>
           </Tooltip>
@@ -110,7 +119,7 @@ export default function MembersPage() {
       {/* Error Alert */}
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Error al cargar los socios: {error.message}
+          {t('loadError', 'Error al cargar los socios')}: {error.message}
         </Alert>
       )}
 

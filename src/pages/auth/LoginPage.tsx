@@ -24,7 +24,7 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '@/hooks/useAuth';
 import { createLoginSchema, LoginFormData } from './loginSchema';
-import { LanguageSelector } from '@/components/LanguageSelector';
+import { LanguageSelector } from '@/components/common';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();

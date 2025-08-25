@@ -8,6 +8,7 @@ import {
   Tooltip,
   Divider,
   Typography,
+  useTheme,
 } from '@mui/material';
 import {
   Brightness4 as DarkModeIcon,
@@ -17,8 +18,13 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useSettingsStore, ThemeMode } from '@/stores/settingsStore';
 
-export const ThemeToggle: React.FC = () => {
+interface ThemeToggleProps {
+  inAppBar?: boolean; // New prop to indicate if it's in an AppBar
+}
+
+export const ThemeToggle: React.FC<ThemeToggleProps> = ({ inAppBar = false }) => {
   const { t } = useTranslation('common');
+  const theme = useTheme();
   const { themeMode, setThemeMode } = useSettingsStore();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -59,6 +65,14 @@ export const ThemeToggle: React.FC = () => {
     }
   };
 
+  // Determine icon color based on theme mode and context
+  const getIconColor = () => {
+    if (inAppBar && theme.palette.mode === 'light') {
+      return 'primary';
+    }
+    return 'inherit';
+  };
+
   const menuItems: { mode: ThemeMode; icon: React.ReactNode; label: string }[] = [
     { mode: 'light', icon: <LightModeIcon />, label: t('theme.light') },
     { mode: 'dark', icon: <DarkModeIcon />, label: t('theme.dark') },
@@ -69,11 +83,19 @@ export const ThemeToggle: React.FC = () => {
     <>
       <Tooltip title={getTooltipText()}>
         <IconButton
-          color="inherit"
+          color={getIconColor() as any}
           onClick={handleClick}
           aria-label="select theme mode"
           aria-controls="theme-menu"
           aria-haspopup="true"
+          sx={{
+            ...(inAppBar && theme.palette.mode === 'light' && {
+              color: theme.palette.primary.main,
+              '&:hover': {
+                backgroundColor: theme.palette.primary.light + '20',
+              },
+            }),
+          }}
         >
           {getIcon()}
         </IconButton>

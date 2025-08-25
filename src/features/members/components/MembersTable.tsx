@@ -1,16 +1,12 @@
-import { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import {
   DataGrid,
   GridColDef,
   GridPaginationModel,
   GridSortModel,
-  GridToolbar,
   GridValueGetterParams,
   GridRenderCellParams,
   GridRowParams,
-  GridCellParams,
-  GridColumnHeaderParams,
-  GridFilterModel,
   GridRowSelectionModel,
   GridToolbarContainer,
   GridToolbarColumnsButton,
@@ -33,11 +29,11 @@ import {
   CircularProgress,
   Alert,
   Snackbar,
+  useTheme,
 } from '@mui/material';
 import { 
   Visibility as VisibilityIcon,
   Email as EmailIcon,
-  Phone as PhoneIcon,
   FileDownload as FileDownloadIcon,
   ExpandMore as ExpandMoreIcon,
   TableChart as TableChartIcon,
@@ -47,7 +43,7 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 import { Member, MemberStatus, MembershipType } from '../types';
-import { useExportMembers } from '../hooks/useExportMembers';
+import { useExportMembers } from '@/features/members/hooks';
 import { MemberFilter } from '@/graphql/generated/operations';
 
 interface MembersTableProps {
@@ -56,7 +52,7 @@ interface MembersTableProps {
   loading: boolean;
   page: number;
   pageSize: number;
-  filters?: MemberFilter; // Current filters applied
+  filters?: MemberFilter;
   onPageChange: (page: number) => void;
   onPageSizeChange: (pageSize: number) => void;
   onSortChange: (field: string, direction: 'ASC' | 'DESC' | null) => void;
@@ -194,6 +190,7 @@ export function MembersTable({
   onSelectionChange,
   selectable = false,
 }: MembersTableProps) {
+  const theme = useTheme();
   const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
@@ -501,18 +498,80 @@ export function MembersTable({
             },
           },
           '& .inactive-row': {
-            backgroundColor: 'action.disabledBackground',
+            backgroundColor: theme.palette.mode === 'light' 
+              ? 'rgba(0, 0, 0, 0.04)' 
+              : 'rgba(255, 255, 255, 0.04)',
             '&:hover': {
-              backgroundColor: 'action.disabled',
+              backgroundColor: theme.palette.mode === 'light'
+                ? 'rgba(0, 0, 0, 0.08)'
+                : 'rgba(255, 255, 255, 0.08)',
             },
           },
+          // Encabezados de columna con colores adaptativos
           '& .MuiDataGrid-columnHeader': {
-            backgroundColor: 'grey.100',
+            backgroundColor: theme.palette.mode === 'light'
+              ? theme.palette.grey[100]
+              : theme.palette.grey[900],
+            color: theme.palette.mode === 'light'
+              ? theme.palette.text.primary
+              : theme.palette.text.primary,
             fontWeight: 'bold',
+            borderBottom: `1px solid ${theme.palette.divider}`,
           },
+          '& .MuiDataGrid-columnHeaderTitle': {
+            fontWeight: 600,
+            color: theme.palette.mode === 'light'
+              ? theme.palette.text.primary
+              : theme.palette.text.primary,
+          },
+          // Separador de columna
+          '& .MuiDataGrid-columnSeparator': {
+            color: theme.palette.divider,
+          },
+          // Celdas
           '& .MuiDataGrid-cell': {
-            borderBottom: '1px solid',
-            borderBottomColor: 'divider',
+            borderBottom: `1px solid ${theme.palette.divider}`,
+            color: theme.palette.text.primary,
+          },
+          // Toolbar
+          '& .MuiDataGrid-toolbar': {
+            backgroundColor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
+          },
+          // Footer/Pagination
+          '& .MuiDataGrid-footerContainer': {
+            backgroundColor: theme.palette.mode === 'light'
+              ? theme.palette.grey[50]
+              : theme.palette.grey[900],
+            borderTop: `1px solid ${theme.palette.divider}`,
+          },
+          // Iconos de ordenamiento
+          '& .MuiDataGrid-sortIcon': {
+            color: theme.palette.mode === 'light'
+              ? theme.palette.text.secondary
+              : theme.palette.text.secondary,
+          },
+          '& .MuiDataGrid-menuIconButton': {
+            color: theme.palette.mode === 'light'
+              ? theme.palette.text.secondary
+              : theme.palette.text.secondary,
+          },
+          // Checkboxes
+          '& .MuiDataGrid-checkboxInput': {
+            color: theme.palette.mode === 'light'
+              ? theme.palette.primary.main
+              : theme.palette.primary.light,
+          },
+          // Panel de filtros
+          '& .MuiDataGrid-panel': {
+            backgroundColor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
+          },
+          // Overlay cuando no hay datos
+          '& .MuiDataGrid-overlay': {
+            backgroundColor: theme.palette.mode === 'light'
+              ? 'rgba(255, 255, 255, 0.9)'
+              : 'rgba(0, 0, 0, 0.9)',
           },
         }}
       />

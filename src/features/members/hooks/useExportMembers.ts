@@ -44,7 +44,7 @@ export const useExportMembers = (options: UseExportMembersOptions = {}) => {
       setExportProgress(0);
       
       try {
-        let membersToExport: Partial<Member>[] = [];
+        const membersToExport: Partial<Member>[] = [];
         
         if (selectedIds && selectedIds.length > 0) {
           // Export only selected members
@@ -63,7 +63,7 @@ export const useExportMembers = (options: UseExportMembersOptions = {}) => {
               variables: {
                 filter: {
                   ...filters,
-                  // @ts-ignore - ids field not in type but needed for batch export
+                  // @ts-expect-error - ids field not in type but needed for batch export
                   ids: chunk,
                   pagination: {
                     page: 1,

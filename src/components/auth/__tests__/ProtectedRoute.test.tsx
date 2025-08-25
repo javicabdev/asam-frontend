@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { screen, waitFor } from '@testing-library/react'
-import { Navigate, Outlet } from 'react-router-dom'
+// Import types needed for mocking
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { Navigate, Outlet } from 'react-router-dom'
 import { render } from '@/test/test-utils'
 import { ProtectedRoute } from '../ProtectedRoute'
 import * as useAuthModule from '@/hooks/useAuth'
@@ -13,7 +15,7 @@ vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom')
   return {
     ...actual,
-    Navigate: vi.fn(({ to, state }) => <div data-testid="navigate">Navigate to {to}</div>),
+    Navigate: vi.fn(({ to }) => <div data-testid="navigate">Navigate to {to}</div>),
     Outlet: vi.fn(() => <div data-testid="outlet">Outlet Component</div>),
     useLocation: vi.fn(() => ({ pathname: '/test-path' })),
   }

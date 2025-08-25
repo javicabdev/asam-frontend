@@ -73,6 +73,7 @@ export function useMembersTable(): UseMembersTableResult {
     (field: string, direction: 'ASC' | 'DESC' | null) => {
       if (!direction) {
         setFilter((prev) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { sort, ...rest } = prev;
           return rest;
         });

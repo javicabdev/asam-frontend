@@ -5,8 +5,8 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
-  const isAnalyze = mode === 'analyze'
+  // Unused variables removed - env and isAnalyze were not being used
+  loadEnv(mode, process.cwd(), '')
 
   return {
     build: {
@@ -132,8 +132,7 @@ export default defineConfig(({ mode }) => {
           },
           
           // Configuración de nombres de archivo más limpios
-          chunkFileNames: (chunkInfo) => {
-            const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId.split('/').pop() : 'chunk';
+          chunkFileNames: () => {
             return `js/[name].[hash:8].js`;
           },
           assetFileNames: (assetInfo) => {

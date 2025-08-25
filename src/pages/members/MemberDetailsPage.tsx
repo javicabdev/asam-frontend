@@ -11,14 +11,12 @@ import {
   Divider,
   Paper,
   Tooltip,
-  IconButton,
   Avatar,
 } from '@mui/material';
 import { 
   ArrowBack as ArrowBackIcon,
   Edit as EditIcon,
   Email as EmailIcon,
-  Phone as PhoneIcon,
   Home as HomeIcon,
   Event as EventIcon,
   Cake as CakeIcon,
@@ -42,7 +40,7 @@ export function MemberDetailsPage() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const isAdmin = user?.role === 'admin';
-  const { member, loading, error, refetch } = useMemberDetails();
+  const { member, loading, error } = useMemberDetails();
 
   if (loading) {
     return <MemberDetailsSkeleton />;

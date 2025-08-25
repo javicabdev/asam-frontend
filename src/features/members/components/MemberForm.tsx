@@ -21,7 +21,7 @@ import { es } from 'date-fns/locale';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { MembershipType, FamilyMember } from '../types';
+import { MembershipType } from '../types';
 import { FamilyMembersList } from './FamilyMembersList';
 import { useFamilyForm, useNextMemberNumber, useMemberNumberValidation, useDocumentValidation } from '../hooks';
 import { formatMemberNumber } from '../utils';
@@ -94,8 +94,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
   const { 
     isValidating: isValidatingDocument, 
     validationResult: documentValidation, 
-    validateDocument, 
-    clearValidation: clearDocumentValidation 
+    validateDocument
   } = useDocumentValidation();
   
   const {
@@ -158,7 +157,6 @@ export const MemberForm: React.FC<MemberFormProps> = ({
   React.useEffect(() => {
     // Check if the current number matches the expected pattern
     const currentPrefix = numeroSocio?.charAt(0);
-    const expectedPrefix = isFamily ? 'A' : 'B';
     const oppositePrefix = isFamily ? 'B' : 'A';
     
     // If the number has the opposite prefix, reset the manual edit flag

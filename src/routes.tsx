@@ -1,25 +1,87 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { Suspense, lazy } from 'react'
+import { Suspense, useEffect } from 'react'
 import { CircularProgress, Box } from '@mui/material'
+import { lazyWithPreload, preloadOnIdle } from '@/utils/lazyWithPreload'
 
-// Lazy load pages for better performance
-const LoginPage = lazy(() => import('@/pages/auth/LoginPage').then(module => ({ default: module.LoginPage })))
-const ForgotPasswordPage = lazy(() => import('@/pages/auth/ForgotPasswordPage').then(module => ({ default: module.ForgotPasswordPage })))
-const RequestPasswordResetPage = lazy(() => import('@/pages/auth/RequestPasswordResetPage').then(module => ({ default: module.RequestPasswordResetPage })))
-const ResetPasswordPage = lazy(() => import('@/pages/auth/ResetPasswordPage').then(module => ({ default: module.ResetPasswordPage })))
-const EmailVerificationPendingPage = lazy(() => import('@/pages/auth/EmailVerificationPendingPage').then(module => ({ default: module.EmailVerificationPendingPage })))
-const VerifyEmailPage = lazy(() => import('@/pages/auth/VerifyEmailPage').then(module => ({ default: module.VerifyEmailPage })))
-const EmailVerificationCheck = lazy(() => import('@/components/auth/EmailVerificationCheck').then(module => ({ default: module.EmailVerificationCheck })))
-const UnauthorizedPage = lazy(() => import('@/pages/error/UnauthorizedPage').then(module => ({ default: module.UnauthorizedPage })))
-const DashboardPage = lazy(() => import('@/pages/DashboardPage'))
-const MembersPage = lazy(() => import('@/pages/MembersPage'))
-const NewMemberPage = lazy(() => import('@/pages/members/NewMemberPage').then(module => ({ default: module.NewMemberPage })))
-const MemberDetailsPage = lazy(() => import('@/pages/members/MemberDetailsPage').then(module => ({ default: module.MemberDetailsPage })))
-const FamiliesPage = lazy(() => import('@/pages/FamiliesPage'))
-const PaymentsPage = lazy(() => import('@/pages/PaymentsPage'))
-const CashFlowPage = lazy(() => import('@/pages/CashFlowPage'))
-const ProfilePage = lazy(() => import('@/pages/profile/ProfilePage').then(module => ({ default: module.ProfilePage })))
-const ReportsPage = lazy(() => import('@/pages/ReportsPage'))
+// Lazy load pages with preload capability
+const LoginPage = lazyWithPreload(
+  () => import('@/pages/auth/LoginPage'),
+  'LoginPage'
+)
+
+const ForgotPasswordPage = lazyWithPreload(
+  () => import('@/pages/auth/ForgotPasswordPage'),
+  'ForgotPasswordPage'
+)
+
+const RequestPasswordResetPage = lazyWithPreload(
+  () => import('@/pages/auth/RequestPasswordResetPage'),
+  'RequestPasswordResetPage'
+)
+
+const ResetPasswordPage = lazyWithPreload(
+  () => import('@/pages/auth/ResetPasswordPage'),
+  'ResetPasswordPage'
+)
+
+const EmailVerificationPendingPage = lazyWithPreload(
+  () => import('@/pages/auth/EmailVerificationPendingPage'),
+  'EmailVerificationPendingPage'
+)
+
+const VerifyEmailPage = lazyWithPreload(
+  () => import('@/pages/auth/VerifyEmailPage'),
+  'VerifyEmailPage'
+)
+
+const EmailVerificationCheck = lazyWithPreload(
+  () => import('@/components/auth/EmailVerificationCheck'),
+  'EmailVerificationCheck'
+)
+
+const UnauthorizedPage = lazyWithPreload(
+  () => import('@/pages/error/UnauthorizedPage'),
+  'UnauthorizedPage'
+)
+
+const DashboardPage = lazyWithPreload(
+  () => import('@/pages/DashboardPage')
+)
+
+const MembersPage = lazyWithPreload(
+  () => import('@/pages/MembersPage')
+)
+
+const NewMemberPage = lazyWithPreload(
+  () => import('@/pages/members/NewMemberPage'),
+  'NewMemberPage'
+)
+
+const MemberDetailsPage = lazyWithPreload(
+  () => import('@/pages/members/MemberDetailsPage'),
+  'MemberDetailsPage'
+)
+
+const FamiliesPage = lazyWithPreload(
+  () => import('@/pages/FamiliesPage')
+)
+
+const PaymentsPage = lazyWithPreload(
+  () => import('@/pages/PaymentsPage')
+)
+
+const CashFlowPage = lazyWithPreload(
+  () => import('@/pages/CashFlowPage')
+)
+
+const ProfilePage = lazyWithPreload(
+  () => import('@/pages/profile/ProfilePage'),
+  'ProfilePage'
+)
+
+const ReportsPage = lazyWithPreload(
+  () => import('@/pages/ReportsPage')
+)
 
 // Layout components
 import { AuthLayout } from '@/layouts/AuthLayout'
@@ -40,7 +102,48 @@ const LoadingScreen = () => (
   </Box>
 )
 
+// Preload strategy hook
+const usePreloadStrategy = () => {
+  useEffect(() => {
+    // Preload critical pages when browser is idle
+    const criticalPages = [
+      DashboardPage,
+      MembersPage,
+    ];
+
+    // Preload after initial render
+    const timer = setTimeout(() => {
+      criticalPages.forEach(page => preloadOnIdle(page));
+    }, 1000);
+
+    // Also preload based on current route
+    const currentPath = window.location.pathname;
+    
+    // If on login page, preload dashboard
+    if (currentPath === '/login') {
+      preloadOnIdle(DashboardPage);
+    }
+    
+    // If on dashboard, preload commonly accessed pages
+    if (currentPath === '/dashboard') {
+      preloadOnIdle(MembersPage);
+      preloadOnIdle(PaymentsPage);
+    }
+    
+    // If on members page, preload detail and new member pages
+    if (currentPath === '/members') {
+      preloadOnIdle(MemberDetailsPage);
+      preloadOnIdle(NewMemberPage);
+    }
+
+    return () => clearTimeout(timer);
+  }, []);
+};
+
 export const AppRoutes = () => {
+  // Apply preload strategy
+  usePreloadStrategy();
+
   return (
     <Suspense fallback={<LoadingScreen />}>
       <Routes>

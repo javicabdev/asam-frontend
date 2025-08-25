@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode } from 'react';
+import { ReactElement } from 'react';
 import { Fade, Grow, Slide, Zoom } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
 

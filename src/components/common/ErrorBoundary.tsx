@@ -25,7 +25,7 @@ export class ErrorBoundary extends Component<Props, State> {
     };
   }
 
-  static getDerivedStateFromError(error: Error): Partial<State> {
+  static getDerivedStateFromError(_error: Error): Partial<State> {
     // Generate a unique error ID for tracking
     const errorId = `ERR_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     

@@ -102,8 +102,9 @@ export const useExportMembers = (options: UseExportMembersOptions = {}) => {
             if (data?.listMembers?.nodes && data.listMembers.nodes.length > 0) {
               membersToExport.push(...data.listMembers.nodes);
               
-              const totalPages = data.listMembers.pageInfo?.totalPages || 1;
-              hasMore = page < totalPages;
+              const totalCount = data.listMembers.pageInfo?.totalCount || 0;
+              const totalPages = Math.ceil(totalCount / pageSize);
+              hasMore = data.listMembers.pageInfo?.hasNextPage || false;
               page++;
               
               setExportProgress((page / totalPages) * 100);

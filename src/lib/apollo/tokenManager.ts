@@ -6,7 +6,6 @@ import { RefreshTokenDocument, RefreshTokenMutation, RefreshTokenMutationVariabl
 class TokenManager {
   private refreshPromise: Promise<string> | null = null;
   private refreshSubscribers: Array<(token: string) => void> = [];
-  private refreshAttempts = 0;
   private readonly MAX_REFRESH_ATTEMPTS = 3;
   private readonly REFRESH_RETRY_DELAY = 1000; // 1 second
 
@@ -112,7 +111,6 @@ class TokenManager {
     try {
       const newToken = await this.refreshPromise;
       this.notifyRefreshSubscribers(newToken);
-      this.refreshAttempts = 0; // Reset attempts on success
       return newToken;
     } catch (error) {
       console.error('[TokenManager] Refresh failed after retries:', error);
@@ -281,9 +279,10 @@ class TokenManager {
 
   /**
    * Reset refresh attempts counter
+   * @deprecated This method is no longer used as attempts are tracked locally
    */
   resetRefreshAttempts(): void {
-    this.refreshAttempts = 0;
+    // No-op: attempts are now tracked locally in performTokenRefreshWithRetry
   }
 }
 

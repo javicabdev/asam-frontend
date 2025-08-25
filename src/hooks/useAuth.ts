@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
-import { useUIStore } from '@/stores/uiStore';
 import { apolloClient } from '@/lib/apollo-client';
 import { tokenManager } from '@/lib/apollo/tokenManager';
 import {
@@ -166,7 +165,6 @@ export const useAuth = () => {
   // Send verification email with improved error handling
   const sendVerificationEmailHandler = useCallback(async () => {
     const maxRetries = 3;
-    let lastError: any = null;
     
     console.log('[useAuth] Starting email verification send process');
     
@@ -239,7 +237,6 @@ export const useAuth = () => {
           
           if (authError && attempt < maxRetries) {
             console.log('[useAuth] Auth error detected, will retry');
-            lastError = authError;
             continue;
           }
         }
@@ -264,12 +261,10 @@ export const useAuth = () => {
         }
         
         // If it's an auth error and we have retries left, continue
-        lastError = new Error(errorMessage || 'Failed to send verification email');
         console.log('[useAuth] Auth error, will retry if attempts remain');
         
       } catch (error: any) {
         console.error(`[useAuth] Exception on attempt ${attempt}:`, error);
-        lastError = error;
         
         // Check if it's an auth error
         const isAuthError = 

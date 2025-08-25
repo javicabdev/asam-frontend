@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, CircularProgress } from '@mui/material';
 import { useAuthStore } from '@/stores/authStore';
-import { useAuth } from '@/hooks/useAuth';
 
 /**
  * Component that checks email verification status and handles automatic
@@ -11,7 +10,6 @@ import { useAuth } from '@/hooks/useAuth';
 export const EmailVerificationCheck: React.FC = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuthStore();
-  const [isChecking, setIsChecking] = React.useState(true);
 
   useEffect(() => {
     const checkEmailVerification = async () => {

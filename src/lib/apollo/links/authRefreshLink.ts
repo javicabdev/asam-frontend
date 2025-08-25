@@ -38,7 +38,7 @@ const isAuthenticationError = (error: GraphQLError): boolean => {
 /**
  * Execute the refresh token mutation
  */
-const executeTokenRefresh = async (operation: Operation): Promise<boolean> => {
+const executeTokenRefresh = async (): Promise<boolean> => {
   const { refreshToken, updateTokens, logout } = useAuthStore.getState();
   
   if (!refreshToken) {
@@ -135,7 +135,7 @@ export const createAuthRefreshLink = (): ApolloLink => {
                 } else {
                   // Start a new refresh
                   isRefreshing = true;
-                  refreshPromise = executeTokenRefresh(operation);
+                  refreshPromise = executeTokenRefresh();
                   refreshSuccess = await refreshPromise;
                   isRefreshing = false;
                   refreshPromise = null;

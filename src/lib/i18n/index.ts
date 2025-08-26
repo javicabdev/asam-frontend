@@ -11,6 +11,10 @@ import authEs from './locales/es/auth.json'
 import authFr from './locales/fr/auth.json'
 import authWo from './locales/wo/auth.json'
 
+import dashboardEs from './locales/es/dashboard.json'
+import dashboardFr from './locales/fr/dashboard.json'
+import dashboardWo from './locales/wo/dashboard.json'
+
 import membersEs from './locales/es/members.json'
 import membersFr from './locales/fr/members.json'
 import membersWo from './locales/wo/members.json'
@@ -28,6 +32,7 @@ export const resources = {
   es: {
     common: commonEs,
     auth: authEs,
+    dashboard: dashboardEs,
     members: membersEs,
     payments: paymentsEs,
     navigation: navigationEs,
@@ -35,6 +40,7 @@ export const resources = {
   fr: {
     common: commonFr,
     auth: authFr,
+    dashboard: dashboardFr,
     members: membersFr,
     payments: paymentsFr,
     navigation: navigationFr,
@@ -42,6 +48,7 @@ export const resources = {
   wo: {
     common: commonWo,
     auth: authWo,
+    dashboard: dashboardWo,
     members: membersWo,
     payments: paymentsWo,
     navigation: navigationWo,
@@ -78,7 +85,7 @@ i18n
     defaultNS,
     lng: 'es', // Default language
     fallbackLng: 'es',
-    ns: ['common', 'auth', 'members', 'payments', 'navigation'],
+    ns: ['common', 'auth', 'dashboard', 'members', 'payments', 'navigation'],
 
     interpolation: {
       escapeValue: false, // React already escapes values

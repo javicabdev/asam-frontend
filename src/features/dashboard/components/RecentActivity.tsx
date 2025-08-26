@@ -23,9 +23,10 @@ import {
   RemoveCircle,
   Receipt,
 } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
 import { RecentActivity as RecentActivityType, ActivityType } from '../types'
 import { formatDistanceToNow } from 'date-fns'
-import { es } from 'date-fns/locale'
+import { es, fr, enUS } from 'date-fns/locale'
 
 interface RecentActivityProps {
   activities: RecentActivityType[]
@@ -41,6 +42,7 @@ export default function RecentActivity({
   onViewAll,
 }: RecentActivityProps) {
   const theme = useTheme()
+  const { t, i18n } = useTranslation('dashboard')
 
   const getActivityIcon = (type: ActivityType) => {
     const iconMap: Record<ActivityType, JSX.Element> = {
@@ -66,20 +68,28 @@ export default function RecentActivity({
 
   const getActivityLabel = (type: ActivityType) => {
     const labelMap: Record<ActivityType, string> = {
-      MEMBER_REGISTERED: 'Nuevo Miembro',
-      PAYMENT_RECEIVED: 'Pago Recibido',
-      FAMILY_CREATED: 'Nueva Familia',
-      MEMBER_DEACTIVATED: 'Baja',
-      TRANSACTION_RECORDED: 'Transacción',
+      MEMBER_REGISTERED: t('recentActivity.newMember'),
+      PAYMENT_RECEIVED: t('recentActivity.paymentReceived'),
+      FAMILY_CREATED: t('recentActivity.familyAdded'),
+      MEMBER_DEACTIVATED: t('recentActivity.memberUpdated'),
+      TRANSACTION_RECORDED: t('recentActivity.paymentReceived'),
     }
-    return labelMap[type] || 'Actividad'
+    return labelMap[type] || t('recentActivity.title')
   }
 
   const formatTime = (timestamp: string) => {
     try {
+      // Mapear idioma a locale de date-fns
+      const localeMap = {
+        es: es,
+        fr: fr,
+        wo: fr, // Usar francés para wolof
+      }
+      const locale = localeMap[i18n.language as keyof typeof localeMap] || enUS
+      
       return formatDistanceToNow(new Date(timestamp), {
         addSuffix: true,
-        locale: es,
+        locale,
       })
     } catch {
       return timestamp
@@ -154,7 +164,7 @@ export default function RecentActivity({
               color: 'text.primary',
             }}
           >
-            Actividad Reciente
+            {t('recentActivity.title')}
           </Typography>
           <Box>
             {onRefresh && (
@@ -181,7 +191,7 @@ export default function RecentActivity({
               color: 'text.secondary',
             }}
           >
-            <Typography variant="body2">No hay actividad reciente</Typography>
+            <Typography variant="body2">{t('recentActivity.viewAll')}</Typography>
           </Box>
         ) : (
           <List sx={{ flex: 1, overflow: 'auto' }}>
@@ -216,7 +226,7 @@ export default function RecentActivity({
                       </Typography>
                       {activity.amount && (
                         <Chip
-                          label={`€${activity.amount.toLocaleString('es-ES')}`}
+                          label={`€${activity.amount.toLocaleString(i18n.language === 'fr' ? 'fr-FR' : i18n.language === 'wo' ? 'fr-SN' : 'es-ES')}`}
                           size="small"
                           color="primary"
                           variant="outlined"

@@ -1,4 +1,5 @@
 import { Card, CardContent, Typography, Box, Skeleton, Chip, useTheme, alpha } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import { TrendingUp, TrendingDown } from '@mui/icons-material'
 import type { StatsCardProps } from '../types'
 
@@ -10,8 +11,11 @@ export default function StatsCard({
   color = 'primary',
   subtitle,
   loading = false,
-}: StatsCardProps) {
+  isCurrency = false,
+  isPercentage = false,
+}: StatsCardProps & { isCurrency?: boolean; isPercentage?: boolean }) {
   const theme = useTheme()
+  const { i18n } = useTranslation()
 
   const getColorValue = () => {
     const colorMap = {
@@ -27,17 +31,51 @@ export default function StatsCard({
 
   const formatValue = (val: number | string) => {
     if (typeof val === 'number') {
-      return val.toLocaleString('es-ES')
+      // Mapear idioma a locale
+      const localeMap: { [key: string]: string } = {
+        es: 'es-ES',
+        fr: 'fr-FR',
+        wo: 'fr-SN', // Usar formato francés para wolof en Senegal
+      }
+      const locale = localeMap[i18n.language] || 'es-ES'
+      
+      if (isCurrency) {
+        return new Intl.NumberFormat(locale, {
+          style: 'currency',
+          currency: 'EUR',
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).format(val)
+      }
+      
+      if (isPercentage) {
+        return `${val.toFixed(1)}%`
+      }
+      
+      return val.toLocaleString(locale)
     }
     return val
   }
 
   const formatTrend = (trendValue: number) => {
     const isPositive = trendValue > 0
+    
+    // Formatear el número del trend según el locale
+    const localeMap: { [key: string]: string } = {
+      es: 'es-ES',
+      fr: 'fr-FR',
+      wo: 'fr-SN',
+    }
+    const locale = localeMap[i18n.language] || 'es-ES'
+    const formattedTrend = new Intl.NumberFormat(locale, {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    }).format(Math.abs(trendValue))
+    
     return (
       <Chip
         icon={isPositive ? <TrendingUp /> : <TrendingDown />}
-        label={`${isPositive ? '+' : ''}${trendValue.toFixed(1)}%`}
+        label={`${isPositive ? '+' : '-'}${formattedTrend}%`}
         size="small"
         color={isPositive ? 'success' : 'error'}
         variant="outlined"

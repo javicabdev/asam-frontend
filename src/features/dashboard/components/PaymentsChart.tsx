@@ -1,4 +1,5 @@
 import { Card, CardContent, Typography, Box, useTheme, Skeleton, Chip } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import {
   BarChart,
   Bar,
@@ -19,34 +20,47 @@ interface PaymentsChartProps {
 
 export default function PaymentsChart({ data, loading = false, height = 300 }: PaymentsChartProps) {
   const theme = useTheme()
+  const { t, i18n } = useTranslation('dashboard')
 
   // Transformar datos para el gráfico
   const chartData = data.map((item) => ({
     mes: item.month,
-    Ingresos: item.paymentAmount,
-    'Número de Pagos': item.totalPayments,
+    [t('charts.monthlyRevenue')]: item.paymentAmount,
+    [t('charts.numberOfPayments')]: item.totalPayments,
   }))
 
   const formatMonth = (month: string) => {
-    const months = {
-      '01': 'Ene',
-      '02': 'Feb',
-      '03': 'Mar',
-      '04': 'Abr',
-      '05': 'May',
-      '06': 'Jun',
-      '07': 'Jul',
-      '08': 'Ago',
-      '09': 'Sep',
-      '10': 'Oct',
-      '11': 'Nov',
-      '12': 'Dic',
+    const monthNumber = month.split('-')[1]
+    const monthNames = {
+      '01': t('months.january'),
+      '02': t('months.february'),
+      '03': t('months.march'),
+      '04': t('months.april'),
+      '05': t('months.may'),
+      '06': t('months.june'),
+      '07': t('months.july'),
+      '08': t('months.august'),
+      '09': t('months.september'),
+      '10': t('months.october'),
+      '11': t('months.november'),
+      '12': t('months.december'),
     }
-    return months[month.split('-')[1] as keyof typeof months] || month
+    
+    // Para abreviaciones, tomar las primeras 3 letras
+    const fullName = monthNames[monthNumber as keyof typeof monthNames] || month
+    return i18n.language === 'wo' ? fullName : fullName.substring(0, 3)
   }
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('es-ES', {
+    // Mapear idioma i18n a locale
+    const localeMap: { [key: string]: string } = {
+      es: 'es-ES',
+      fr: 'fr-FR',
+      wo: 'fr-SN', // Usar formato francés para wolof en Senegal
+    }
+    const locale = localeMap[i18n.language] || 'es-ES'
+    
+    return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: 'EUR',
       minimumFractionDigits: 0,
@@ -77,7 +91,7 @@ export default function PaymentsChart({ data, loading = false, height = 300 }: P
               fontWeight: 500,
             }}
           >
-            Ingresos: {formatCurrency(payload[0]?.value || 0)}
+            {t('charts.monthlyRevenue')}: {formatCurrency(payload[0]?.value || 0)}
           </Typography>
           <Typography
             variant="caption"
@@ -87,7 +101,7 @@ export default function PaymentsChart({ data, loading = false, height = 300 }: P
               fontWeight: 400,
             }}
           >
-            Total Pagos: {payload[0]?.payload['Número de Pagos'] || 0}
+            {t('charts.numberOfPayments')}: {payload[0]?.payload[t('charts.numberOfPayments')] || 0}
           </Typography>
         </Box>
       )
@@ -140,16 +154,20 @@ export default function PaymentsChart({ data, loading = false, height = 300 }: P
               color: 'text.primary',
             }}
           >
-            Ingresos por Mes
+            {t('charts.monthlyPayments')}
           </Typography>
           <Box display="flex" gap={1}>
             <Chip
-              label={`Total: ${formatCurrency(totalIngresos)}`}
+              label={`${t('charts.amount')}: ${formatCurrency(totalIngresos)}`}
               size="small"
               color="primary"
               variant="outlined"
             />
-            <Chip label={`${totalPagos} pagos`} size="small" variant="outlined" />
+            <Chip 
+              label={`${totalPagos} ${t('charts.numberOfPayments').toLowerCase()}`} 
+              size="small" 
+              variant="outlined" 
+            />
           </Box>
         </Box>
 
@@ -172,10 +190,12 @@ export default function PaymentsChart({ data, loading = false, height = 300 }: P
 
             <Tooltip content={<CustomTooltip />} />
 
-            <Bar dataKey="Ingresos" radius={[8, 8, 0, 0]} maxBarSize={50}>
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={getBarColor(entry.Ingresos, maxValue)} />
-              ))}
+            <Bar dataKey={t('charts.monthlyRevenue')} radius={[8, 8, 0, 0]} maxBarSize={50}>
+              {chartData.map((entry, index) => {
+                const value = entry[t('charts.monthlyRevenue')]
+                const numValue = typeof value === 'number' ? value : 0
+                return <Cell key={`cell-${index}`} fill={getBarColor(numValue, maxValue)} />
+              })}
             </Bar>
           </BarChart>
         </ResponsiveContainer>

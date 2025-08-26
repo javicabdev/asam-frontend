@@ -1,4 +1,5 @@
 import { Card, CardContent, Typography, Box, useTheme, Skeleton } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import {
   Line,
   XAxis,
@@ -20,32 +21,37 @@ interface MembersChartProps {
 
 export default function MembersChart({ data, loading = false, height = 300 }: MembersChartProps) {
   const theme = useTheme()
+  const { t, i18n } = useTranslation('dashboard')
 
   // Transformar datos para el gráfico
   const chartData = data.map((item) => ({
     mes: item.month,
-    'Nuevos Miembros': item.newMembers,
-    'Total Acumulado': data
+    [t('charts.newMembers')]: item.newMembers,
+    [t('charts.totalAccumulated')]: data
       .filter((_, index) => index <= data.indexOf(item))
       .reduce((sum, d) => sum + d.newMembers, 0),
   }))
 
   const formatMonth = (month: string) => {
-    const months = {
-      '01': 'Ene',
-      '02': 'Feb',
-      '03': 'Mar',
-      '04': 'Abr',
-      '05': 'May',
-      '06': 'Jun',
-      '07': 'Jul',
-      '08': 'Ago',
-      '09': 'Sep',
-      '10': 'Oct',
-      '11': 'Nov',
-      '12': 'Dic',
+    const monthNumber = month.split('-')[1]
+    const monthNames = {
+      '01': t('months.january'),
+      '02': t('months.february'),
+      '03': t('months.march'),
+      '04': t('months.april'),
+      '05': t('months.may'),
+      '06': t('months.june'),
+      '07': t('months.july'),
+      '08': t('months.august'),
+      '09': t('months.september'),
+      '10': t('months.october'),
+      '11': t('months.november'),
+      '12': t('months.december'),
     }
-    return months[month.split('-')[1] as keyof typeof months] || month
+    
+    // Para abreviaciones, tomar las primeras 3 letras
+    const fullName = monthNames[monthNumber as keyof typeof monthNames] || month
+    return i18n.language === 'wo' ? fullName : fullName.substring(0, 3)
   }
 
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -114,7 +120,7 @@ export default function MembersChart({ data, loading = false, height = 300 }: Me
             mb: 3,
           }}
         >
-          Evolución de Miembros
+          {t('charts.memberGrowth')}
         </Typography>
 
         <ResponsiveContainer width="100%" height={height}>
@@ -153,7 +159,7 @@ export default function MembersChart({ data, loading = false, height = 300 }: Me
 
             <Area
               type="monotone"
-              dataKey="Nuevos Miembros"
+              dataKey={t('charts.newMembers')}
               stroke={theme.palette.primary.main}
               strokeWidth={2}
               fillOpacity={1}
@@ -162,7 +168,7 @@ export default function MembersChart({ data, loading = false, height = 300 }: Me
 
             <Line
               type="monotone"
-              dataKey="Total Acumulado"
+              dataKey={t('charts.totalAccumulated')}
               stroke={theme.palette.success.main}
               strokeWidth={2}
               dot={{ fill: theme.palette.success.main, strokeWidth: 2, r: 4 }}

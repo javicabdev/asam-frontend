@@ -1,5 +1,6 @@
 import React from 'react'
 import { Card, CardContent, Typography, Box, Button, Grid, useTheme, alpha } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import {
   PersonAdd,
   Payment,
@@ -22,46 +23,47 @@ interface QuickAction {
 export default function QuickActions() {
   const navigate = useNavigate()
   const theme = useTheme()
+  const { t } = useTranslation('dashboard')
 
   const actions: QuickAction[] = [
     {
-      title: 'Nuevo Miembro',
-      description: 'Registrar un nuevo socio',
+      title: t('quickActions.newMember'),
+      description: t('recentActivity.newMember'),
       icon: <PersonAdd />,
       path: '/members/new',
       color: 'success',
     },
     {
-      title: 'Registrar Pago',
-      description: 'Procesar pago de cuota',
+      title: t('quickActions.registerPayment'),
+      description: t('recentActivity.paymentReceived'),
       icon: <Payment />,
       path: '/payments/new',
       color: 'primary',
     },
     {
-      title: 'Ver Reportes',
-      description: 'Estadísticas y análisis',
+      title: t('quickActions.viewReports'),
+      description: t('charts.memberGrowth'),
       icon: <Assessment />,
       path: '/reports',
       color: 'info',
     },
     {
-      title: 'Gestionar Familias',
-      description: 'Administrar grupos familiares',
+      title: t('quickActions.manageFamily'),
+      description: t('recentActivity.familyAdded'),
       icon: <Group />,
       path: '/families',
       color: 'secondary',
     },
     {
-      title: 'Generar Recibo',
-      description: 'Crear recibo de pago',
+      title: t('quickActions.registerPayment'),
+      description: t('recentActivity.paymentReceived'),
       icon: <Receipt />,
       path: '/receipts/new',
       color: 'warning',
     },
     {
-      title: 'Documentos',
-      description: 'Gestión documental',
+      title: t('quickActions.viewReports'),
+      description: t('charts.monthlyPayments'),
       icon: <Description />,
       path: '/documents',
       color: 'primary',
@@ -99,7 +101,7 @@ export default function QuickActions() {
             mb: 3,
           }}
         >
-          Acciones Rápidas
+          {t('quickActions.title')}
         </Typography>
 
         <Grid container spacing={2}>

@@ -1,0 +1,67 @@
+{
+  "title": "Tableau de Bord",
+  "stats": {
+    "totalMembers": "Total des Membres",
+    "activeMembers": "Membres Actifs",
+    "totalRevenue": "Revenus Totaux",
+    "pendingPayments": "Paiements en Attente",
+    "familiesRegistered": "Familles Enregistrées",
+    "averageContribution": "Contribution Moyenne",
+    "monthlyGrowth": "Croissance Mensuelle",
+    "paymentRate": "Taux de Paiement"
+  },
+  "charts": {
+    "memberGrowth": "Croissance des Membres",
+    "newMembers": "Nouveaux Membres",
+    "totalAccumulated": "Total Cumulé",
+    "monthlyPayments": "Paiements Mensuels",
+    "monthlyRevenue": "Revenus Mensuels",
+    "numberOfPayments": "Nombre de Paiements",
+    "amount": "Montant"
+  },
+  "recentActivity": {
+    "title": "Activité Récente",
+    "newMember": "Nouveau membre enregistré",
+    "paymentReceived": "Paiement reçu",
+    "memberUpdated": "Informations mises à jour",
+    "familyAdded": "Famille ajoutée",
+    "viewAll": "Voir toute l'activité"
+  },
+  "quickActions": {
+    "title": "Actions Rapides",
+    "newMember": "Nouveau Membre",
+    "registerPayment": "Enregistrer un Paiement",
+    "viewReports": "Voir les Rapports",
+    "manageFamily": "Gérer les Familles"
+  },
+  "loading": "Chargement du tableau de bord...",
+  "error": {
+    "title": "Erreur lors du chargement du tableau de bord",
+    "useMockData": "Utiliser des données de test",
+    "retry": "Réessayer"
+  },
+  "header": {
+    "welcome": "Bienvenue au Tableau de Bord",
+    "lastUpdate": "Dernière mise à jour",
+    "refresh": "Actualiser",
+    "toggleMockData": "Utiliser des données de test"
+  },
+  "devMode": {
+    "title": "Mode développement",
+    "message": "Vous consultez des données de test. Les modifications ne seront pas enregistrées."
+  },
+  "months": {
+    "january": "Janvier",
+    "february": "Février",
+    "march": "Mars",
+    "april": "Avril",
+    "may": "Mai",
+    "june": "Juin",
+    "july": "Juillet",
+    "august": "Août",
+    "september": "Septembre",
+    "october": "Octobre",
+    "november": "Novembre",
+    "december": "Décembre"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "title": "Tablo Kontrole",
+  "stats": {
+    "totalMembers": "Mbooloo Yépp",
+    "activeMembers": "Mbooloo Yu Dox",
+    "totalRevenue": "Xaalis Bu Jot Yépp",
+    "pendingPayments": "Fey Yu Xaar",
+    "familiesRegistered": "Njaboot Yu Bindu",
+    "averageContribution": "Ndajje Bu Jaar",
+    "monthlyGrowth": "Yokkute Weer",
+    "paymentRate": "Taux Fey"
+  },
+  "charts": {
+    "memberGrowth": "Yokkute Mbooloo",
+    "newMembers": "Mbooloo Yu Bees",
+    "totalAccumulated": "Total Bu Dajale",
+    "monthlyPayments": "Fey Yu Weer",
+    "monthlyRevenue": "Xaalis Weer",
+    "numberOfPayments": "Limu Fey",
+    "amount": "Xaalis"
+  },
+  "recentActivity": {
+    "title": "Jëf Yu Bees",
+    "newMember": "Mbooloo bu bees bindu",
+    "paymentReceived": "Fey jot na",
+    "memberUpdated": "Xibaar yeesal nañu ko",
+    "familyAdded": "Njaboot yokku nañu ko",
+    "viewAll": "Xool lépp"
+  },
+  "quickActions": {
+    "title": "Jëf Yu Gaaw",
+    "newMember": "Mbooloo Bu Bees",
+    "registerPayment": "Bindu Fey",
+    "viewReports": "Xool Rapport Yi",
+    "manageFamily": "Saytu Njaboot Yi"
+  },
+  "loading": "Di yeb tablo...",
+  "error": {
+    "title": "Njuumte ci yeb tablo bi",
+    "useMockData": "Jëfandikoo ay done test",
+    "retry": "Jéemaat"
+  },
+  "header": {
+    "welcome": "Dalal jamm ci Tablo Kontrole",
+    "lastUpdate": "Yeesal bu mujj",
+    "refresh": "Yeesal",
+    "toggleMockData": "Jëfandikoo ay done test"
+  },
+  "devMode": {
+    "title": "Anu developpment",
+    "message": "Yaa ngi xool ay done test. Coppite yi duñu aar."
+  },
+  "months": {
+    "january": "Janwiye",
+    "february": "Fewriye",
+    "march": "Mars",
+    "april": "Awril",
+    "may": "Me",
+    "june": "Suwe",
+    "july": "Sulye",
+    "august": "Ut",
+    "september": "Satumbar",
+    "october": "Oktoobar",
+    "november": "Nowambar",
+    "december": "Desembar"
+  }
+}

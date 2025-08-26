@@ -1,0 +1,67 @@
+{
+  "title": "Panel de Control",
+  "stats": {
+    "totalMembers": "Total Miembros",
+    "activeMembers": "Miembros Activos",
+    "totalRevenue": "Ingresos Totales",
+    "pendingPayments": "Pagos Pendientes",
+    "familiesRegistered": "Familias Registradas",
+    "averageContribution": "Contribución Promedio",
+    "monthlyGrowth": "Crecimiento Mensual",
+    "paymentRate": "Tasa de Pago"
+  },
+  "charts": {
+    "memberGrowth": "Crecimiento de Miembros",
+    "newMembers": "Nuevos Miembros",
+    "totalAccumulated": "Total Acumulado",
+    "monthlyPayments": "Pagos Mensuales",
+    "monthlyRevenue": "Ingresos Mensuales",
+    "numberOfPayments": "Número de Pagos",
+    "amount": "Monto"
+  },
+  "recentActivity": {
+    "title": "Actividad Reciente",
+    "newMember": "Nuevo miembro registrado",
+    "paymentReceived": "Pago recibido",
+    "memberUpdated": "Información actualizada",
+    "familyAdded": "Familia agregada",
+    "viewAll": "Ver toda la actividad"
+  },
+  "quickActions": {
+    "title": "Acciones Rápidas",
+    "newMember": "Nuevo Miembro",
+    "registerPayment": "Registrar Pago",
+    "viewReports": "Ver Reportes",
+    "manageFamily": "Gestionar Familias"
+  },
+  "loading": "Cargando dashboard...",
+  "error": {
+    "title": "Error al cargar el dashboard",
+    "useMockData": "Usar datos de prueba",
+    "retry": "Reintentar"
+  },
+  "header": {
+    "welcome": "Bienvenido al Panel de Control",
+    "lastUpdate": "Última actualización",
+    "refresh": "Actualizar",
+    "toggleMockData": "Usar datos de prueba"
+  },
+  "devMode": {
+    "title": "Modo de desarrollo",
+    "message": "Estás viendo datos de prueba. Los cambios no se guardarán."
+  },
+  "months": {
+    "january": "Enero",
+    "february": "Febrero",
+    "march": "Marzo",
+    "april": "Abril",
+    "may": "Mayo",
+    "june": "Junio",
+    "july": "Julio",
+    "august": "Agosto",
+    "september": "Septiembre",
+    "october": "Octubre",
+    "november": "Noviembre",
+    "december": "Diciembre"
+  }
+}

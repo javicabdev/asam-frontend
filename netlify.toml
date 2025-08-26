@@ -24,10 +24,10 @@
   to = "/index.html"
   status = 200
 
-# API Proxy (si el backend está en otro dominio)
+# API Proxy para el backend en Google Cloud Run
 [[redirects]]
   from = "/graphql"
-  to = "https://asam-backend-67685084900.europe-west1.run.app/graphql"  # Backend en Google Cloud Run
+  to = "https://asam-backend-67685084900.europe-west1.run.app/graphql"
   status = 200
   force = true
   headers = {X-From = "Netlify"}
@@ -42,15 +42,21 @@
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
     
-    # Content Security Policy (ajustar según necesidades)
+    # Content Security Policy completa para Material-UI y Apollo
     Content-Security-Policy = """
       default-src 'self';
       script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net;
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-      font-src 'self' https://fonts.gstatic.com;
-      img-src 'self' data: https:;
+      style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      font-src 'self' data: https://fonts.gstatic.com;
+      img-src 'self' data: blob: https:;
+      media-src 'self';
       connect-src 'self' https://asam-backend-67685084900.europe-west1.run.app wss://asam-backend-67685084900.europe-west1.run.app;
+      worker-src 'self' blob:;
       frame-ancestors 'none';
+      form-action 'self';
+      base-uri 'self';
+      manifest-src 'self';
     """
     
     # Permisos de características
@@ -72,7 +78,7 @@
     Cache-Control = "public, max-age=0, must-revalidate"
     Service-Worker-Allowed = "/"
 
-# Headers para archivos estáticos
+# Headers para archivos estáticos con cache largo
 [[headers]]
   for = "/assets/*"
   [headers.values]
@@ -87,6 +93,19 @@
   for = "/workbox-*.js"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Headers para fuentes
+[[headers]]
+  for = "*.woff"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
 
 # Función para manejar el 404
 [[redirects]]

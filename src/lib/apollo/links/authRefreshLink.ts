@@ -1,6 +1,7 @@
 import { ApolloLink, Observable, Operation, FetchResult, NextLink } from '@apollo/client'
 import { GraphQLError } from 'graphql'
 import { useAuthStore } from '@/stores/authStore'
+import { getApolloClientInstance } from '../apolloClientInstance'
 
 // Track refresh attempts to prevent infinite loops
 const refreshAttempts = new Map<string, boolean>()
@@ -47,8 +48,8 @@ const executeTokenRefresh = async (): Promise<boolean> => {
   }
 
   try {
-    // Import dynamically to avoid circular dependencies
-    const { apolloClient } = await import('../client')
+    // Get the Apollo Client instance
+    const apolloClient = getApolloClientInstance()
     const { RefreshTokenDocument } = await import('@/graphql/generated/operations')
 
     console.log('AuthRefreshLink: Attempting to refresh token')

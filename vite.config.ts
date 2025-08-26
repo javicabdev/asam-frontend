@@ -5,299 +5,63 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  // Unused variables removed - env and isAnalyze were not being used
-  loadEnv(mode, process.cwd(), '')
+  const env = loadEnv(mode, process.cwd(), '')
+  const isProduction = mode === 'production'
 
   return {
     build: {
-      // Configuración para optimizar el tamaño de chunks
+      // Configuración optimizada para producción
       rollupOptions: {
         output: {
-          // División manual de chunks más granular
-          manualChunks: (id) => {
-            // Separar las dependencias grandes en chunks individuales
-            if (id.includes('node_modules')) {
-              // Material-UI - División más granular
-              if (id.includes('@mui/material/styles')) {
-                return 'mui-styles';
-              }
-              if (id.includes('@mui/material/Button') || 
-                  id.includes('@mui/material/TextField') ||
-                  id.includes('@mui/material/Box')) {
-                return 'mui-core';
-              }
-              if (id.includes('@mui/material')) {
-                return 'mui-components';
-              }
-              if (id.includes('@mui/icons-material')) {
-                return 'mui-icons';
-              }
-              
-              // DataGrid de MUI - Separar componentes pesados
-              if (id.includes('@mui/x-data-grid-pro')) {
-                return 'mui-data-grid-pro';
-              }
-              if (id.includes('@mui/x-data-grid')) {
-                return 'mui-data-grid';
-              }
-              
-              // Apollo Client - División más granular
-              if (id.includes('@apollo/client/core')) {
-                return 'apollo-core';
-              }
-              if (id.includes('@apollo/client/cache')) {
-                return 'apollo-cache';
-              }
-              if (id.includes('@apollo/client')) {
-                return 'apollo-client';
-              }
-              if (id.includes('graphql')) {
-                return 'graphql';
-              }
-              
-              // React ecosystem
-              if (id.includes('react-dom')) {
-                return 'react-dom';
-              }
-              if (id.includes('react-router')) {
-                return 'react-router';
-              }
-              if (id.includes('react/jsx-runtime')) {
-                return 'react-jsx';
-              }
-              if (id.includes('react')) {
-                return 'react';
-              }
-              
-              // Librerías de formularios
-              if (id.includes('react-hook-form')) {
-                return 'react-hook-form';
-              }
-              if (id.includes('yup')) {
-                return 'yup';
-              }
-              if (id.includes('@hookform')) {
-                return 'hookform-resolvers';
-              }
-              
-              // Date utilities
-              if (id.includes('date-fns')) {
-                return 'date-fns';
-              }
-              
-              // i18n
-              if (id.includes('i18next') || id.includes('react-i18next')) {
-                return 'i18n';
-              }
-              
-              // Utilidades pequeñas agrupadas
-              if (id.includes('clsx') || 
-                  id.includes('classnames') || 
-                  id.includes('tslib')) {
-                return 'utils-small';
-              }
-              
-              // Emotion (CSS-in-JS usado por MUI)
-              if (id.includes('@emotion')) {
-                return 'emotion';
-              }
-              
-              // Zustand state management
-              if (id.includes('zustand')) {
-                return 'zustand';
-              }
-              
-              // Resto de vendor code
-              return 'vendor-misc';
-            }
-            
-            // Separar features grandes
-            if (id.includes('src/features/members/components/MembersTable')) {
-              return 'members-table';
-            }
-            if (id.includes('src/features/members/components/MemberForm')) {
-              return 'members-form';
-            }
-            if (id.includes('src/features/members')) {
-              return 'members-feature';
-            }
-            
-            // Separar componentes compartidos pesados
-            if (id.includes('src/components/shared') && id.includes('Table')) {
-              return 'shared-tables';
-            }
-            if (id.includes('src/components/shared') && id.includes('Form')) {
-              return 'shared-forms';
-            }
-          },
-          
-          // Configuración de nombres de archivo más limpios
-          chunkFileNames: () => {
-            return `js/[name].[hash:8].js`;
-          },
-          assetFileNames: (assetInfo) => {
-            const info = assetInfo.name.split('.');
-            const ext = info[info.length - 1];
-            if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
-              return `images/[name].[hash:8][extname]`;
-            }
-            if (/woff|woff2|eot|ttf|otf/i.test(ext)) {
-              return `fonts/[name].[hash:8][extname]`;
-            }
-            return `assets/[name].[hash:8][extname]`;
-          },
-          entryFileNames: 'js/[name].[hash:8].js',
-        },
-        
-        // Optimización adicional: external para CDN (opcional)
-        // Si quieres cargar React desde CDN para reducir aún más el bundle:
-        // external: ['react', 'react-dom'],
+          // Desactivar code splitting temporal para depuración
+          manualChunks: undefined,
+          // Un solo archivo JS
+          inlineDynamicImports: true,
+          // Configuración de nombres de archivo
+          entryFileNames: 'js/[name]-[hash].js',
+          assetFileNames: 'assets/[name]-[hash].[ext]'
+        }
       },
-      
-      // Límite de advertencia para chunks grandes (150KB)
-      chunkSizeWarningLimit: 150,
-      
-      // Minificación con terser para mejor compresión
-      minify: 'terser',
-      terserOptions: {
+      // Configuración de compatibilidad
+      target: 'es2015',
+      // Usar terser para mejor minificación y compatibilidad
+      minify: isProduction ? 'terser' : 'esbuild',
+      terserOptions: isProduction ? {
         compress: {
-          drop_console: true,
+          drop_console: false, // Mantener console.logs para debug
           drop_debugger: true,
-          pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.trace'],
-          passes: 2, // Múltiples pasadas para mejor compresión
-        },
-        mangle: {
-          safari10: true, // Compatibilidad con Safari 10
+          pure_funcs: ['console.debug']
         },
         format: {
-          comments: false, // Eliminar todos los comentarios
-        },
-      },
-      
-      // Generar sourcemaps para debugging
-      sourcemap: true,
-      
-      // Mejorar tree-shaking
-      cssCodeSplit: true,
-      
-      // Configuración adicional de optimización
-      reportCompressedSize: false, // Más rápido sin reportar tamaño comprimido
-      
-      // Configuración de módulos
-      modulePreload: {
-        polyfill: true, // Polyfill para modulepreload en navegadores antiguos
-      },
-    },
-    
-    // Optimizaciones adicionales
-    optimizeDeps: {
-      include: [
-        'react',
-        'react-dom',
-        'react-router-dom',
-        '@mui/material',
-        '@apollo/client',
-      ],
-      exclude: ['@vite/client', '@vite/env'],
-    },
-    
-    // Configuración de CSS
-    css: {
-      modules: {
-        localsConvention: 'camelCase',
-      },
-      // preprocessorOptions: {
-      //   scss: {
-      //     additionalData: `@import "@/styles/variables.scss";`,
-      //   },
-      // },
+          comments: false
+        }
+      } : undefined,
+      // Prevenir warnings de chunks grandes
+      chunkSizeWarningLimit: 1000,
+      // Generar sourcemaps para debug en producción
+      sourcemap: true
     },
     
     plugins: [
       react(),
+      
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
-        manifest: false,
+        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
         workbox: {
-          globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
-          cleanupOutdatedCaches: true,
-          sourcemap: false, // No sourcemaps en SW para reducir tamaño
-          
-          // Excluir chunks muy grandes del precache
-          maximumFileSizeToCacheInBytes: 300 * 1024, // 300KB max para precache (aumentado para incluir chunks grandes)
-          
-          // Incluir la página offline en el precache
-          additionalManifestEntries: [
-            { url: '/offline.html', revision: null }
-          ],
-          
-          // Estrategias de caché avanzadas
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,gif,webp,woff,woff2}'],
+          maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
+          navigateFallback: '/index.html',
+          navigateFallbackDenylist: [/^\/api/, /^\/graphql/],
           runtimeCaching: [
             {
-              // App Shell - Cache First
-              urlPattern: /^\/$/,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'app-shell-cache',
-                expiration: {
-                  maxEntries: 1,
-                  maxAgeSeconds: 60 * 60 * 24 * 30 // 30 días
-                }
-              }
-            },
-            {
-              // Assets estáticos (JS, CSS) - Cache First con Network Fallback
-              urlPattern: /\.(?:js|css)$/,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'static-assets-cache',
-                expiration: {
-                  maxEntries: 100, // Más entradas para múltiples chunks
-                  maxAgeSeconds: 60 * 60 * 24 * 30 // 30 días
-                },
-                cacheableResponse: {
-                  statuses: [0, 200],
-                },
-              }
-            },
-            {
-              // Chunks grandes - Network First para actualizaciones
-              urlPattern: /\/js\/(mui|vendor|apollo).*\.js$/,
-              handler: 'NetworkFirst',
-              options: {
-                cacheName: 'large-chunks-cache',
-                networkTimeoutSeconds: 10,
-                expiration: {
-                  maxEntries: 20,
-                  maxAgeSeconds: 60 * 60 * 24 * 7 // 7 días
-                },
-                cacheableResponse: {
-                  statuses: [0, 200],
-                },
-              }
-            },
-            {
-              // Imágenes - Cache First
-              urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|ico)$/,
-              handler: 'CacheFirst',
-              options: {
-                cacheName: 'images-cache',
-                expiration: {
-                  maxEntries: 60,
-                  maxAgeSeconds: 60 * 60 * 24 * 30 // 30 días
-                }
-              }
-            },
-            {
-              // Google Fonts - Cache First
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
               handler: 'CacheFirst',
               options: {
                 cacheName: 'google-fonts-cache',
                 expiration: {
                   maxEntries: 10,
-                  maxAgeSeconds: 60 * 60 * 24 * 365 // 365 días
+                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
                 },
                 cacheableResponse: {
                   statuses: [0, 200]
@@ -305,61 +69,98 @@ export default defineConfig(({ mode }) => {
               }
             },
             {
-              // API GraphQL - Stale While Revalidate
-              urlPattern: /\/graphql/,
-              handler: 'StaleWhileRevalidate',
+              urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+              handler: 'CacheFirst',
               options: {
-                cacheName: 'api-cache',
+                cacheName: 'gstatic-fonts-cache',
                 expiration: {
-                  maxEntries: 50,
-                  maxAgeSeconds: 60 * 60 * 24 // 24 horas
+                  maxEntries: 10,
+                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
                 },
                 cacheableResponse: {
                   statuses: [0, 200]
-                },
-                backgroundSync: {
-                  name: 'api-sync-queue',
-                  options: {
-                    maxRetentionTime: 24 * 60 // Reintentar por 24 horas
-                  }
                 }
               }
             },
-          ],
-          navigateFallback: null,
-          navigateFallbackDenylist: [/^\/api/, /^\/graphql/],
-          navigationPreload: true
+            {
+              urlPattern: /\/graphql/,
+              handler: 'NetworkFirst',
+              options: {
+                cacheName: 'api-cache',
+                networkTimeoutSeconds: 10,
+                expiration: {
+                  maxEntries: 50,
+                  maxAgeSeconds: 60 * 5 // 5 minutes
+                },
+                cacheableResponse: {
+                  statuses: [0, 200]
+                }
+              }
+            }
+          ]
         },
-        devOptions: {
-          enabled: true,
-          type: 'module',
-          navigateFallback: 'index.html'
+        manifest: {
+          name: 'Mutua ASAM - Sistema de Gestión',
+          short_name: 'ASAM',
+          description: 'Sistema de Gestión de Mutua ASAM',
+          theme_color: '#1976d2',
+          background_color: '#ffffff',
+          display: 'standalone',
+          icons: [
+            {
+              src: '/icon-192x192.png',
+              sizes: '192x192',
+              type: 'image/png'
+            },
+            {
+              src: '/icon-512x512.png',
+              sizes: '512x512',
+              type: 'image/png'
+            }
+          ]
         }
       })
     ],
     
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, './src')
+        '@': path.resolve(__dirname, './src'),
+        '@components': path.resolve(__dirname, './src/components'),
+        '@features': path.resolve(__dirname, './src/features'),
+        '@hooks': path.resolve(__dirname, './src/hooks'),
+        '@utils': path.resolve(__dirname, './src/utils'),
+        '@lib': path.resolve(__dirname, './src/lib'),
+        '@graphql': path.resolve(__dirname, './src/graphql'),
+        '@pages': path.resolve(__dirname, './src/pages'),
+        '@types': path.resolve(__dirname, './src/types'),
+        '@stores': path.resolve(__dirname, './src/stores')
       }
     },
     
     server: {
       port: 5173,
-      host: true,
       proxy: {
         '/graphql': {
-          target: 'http://localhost:8080',
+          target: env.VITE_GRAPHQL_URI || 'http://localhost:8080',
           changeOrigin: true,
           secure: false
         }
       }
     },
     
-    // Preview server configuration
-    preview: {
-      port: 4173,
-      host: true,
+    // Optimización de dependencias
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        '@mui/material',
+        '@mui/icons-material',
+        '@emotion/react',
+        '@emotion/styled',
+        '@apollo/client',
+        'graphql'
+      ],
+      exclude: ['@vite/client', '@vite/env']
     }
   }
 })

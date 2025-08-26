@@ -27,7 +27,7 @@
 # API Proxy (si el backend está en otro dominio)
 [[redirects]]
   from = "/graphql"
-  to = "https://asam-backend-67685084900.europe-west1.run.app"  # URL del backend en Cloud Run
+  to = "https://asam-backend-67685084900.europe-west1.run.app/graphql"  # Backend en Google Cloud Run
   status = 200
   force = true
   headers = {X-From = "Netlify"}
@@ -49,7 +49,7 @@
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
       font-src 'self' https://fonts.gstatic.com;
       img-src 'self' data: https:;
-      connect-src 'self' https://asam-backend-xxxxx-ew.a.run.app wss://asam-backend-xxxxx-ew.a.run.app;
+      connect-src 'self' https://asam-backend-67685084900.europe-west1.run.app wss://asam-backend-67685084900.europe-west1.run.app;
       frame-ancestors 'none';
     """
     

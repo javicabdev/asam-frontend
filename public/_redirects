@@ -4,6 +4,6 @@
 # SPA - Todas las rutas van a index.html
 /*    /index.html   200
 
-# API Proxy (cambiar URL según tu backend)
-/graphql    https://api.asam.org/graphql    200
-/api/*      https://api.asam.org/api/:splat  200
+# API Proxy para Google Cloud Run
+/graphql    https://asam-backend-67685084900.europe-west1.run.app/graphql    200
+/api/*      https://asam-backend-67685084900.europe-west1.run.app/api/:splat  200

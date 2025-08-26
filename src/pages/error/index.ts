@@ -1,1 +1,1 @@
-export { UnauthorizedPage } from './UnauthorizedPage';
+export { UnauthorizedPage } from './UnauthorizedPage'

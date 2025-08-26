@@ -1,23 +1,23 @@
-import { Box, Typography, Button, Alert, Chip, Stack, Tooltip, useTheme } from '@mui/material';
-import { 
+import { Box, Typography, Button, Alert, Chip, Stack, Tooltip, useTheme } from '@mui/material'
+import {
   Add as AddIcon,
   DeleteOutline as DeleteIcon,
   Refresh as RefreshIcon,
-} from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '@/stores/authStore';
-import { useTranslation } from 'react-i18next';
+} from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom'
+import { useAuthStore } from '@/stores/authStore'
+import { useTranslation } from 'react-i18next'
 
-import { MembersTable } from '@/features/members/components/MembersTable';
-import { MembersFilters } from '@/features/members/components/MembersFilters';
-import { useMembersTable } from '@/features/members/hooks/useMembersTable';
+import { MembersTable } from '@/features/members/components/MembersTable'
+import { MembersFilters } from '@/features/members/components/MembersFilters'
+import { useMembersTable } from '@/features/members/hooks/useMembersTable'
 
 export default function MembersPage() {
-  const navigate = useNavigate();
-  const theme = useTheme();
-  const { t } = useTranslation('members');
-  const { user } = useAuthStore();
-  const isAdmin = user?.role === 'admin';
+  const navigate = useNavigate()
+  const theme = useTheme()
+  const { t } = useTranslation('members')
+  const { user } = useAuthStore()
+  const isAdmin = user?.role === 'admin'
   const {
     members,
     totalCount,
@@ -34,24 +34,23 @@ export default function MembersPage() {
     handleSelectionChange,
     selectedMembers,
     refetch, // Added refetch here
-  } = useMembersTable();
-
+  } = useMembersTable()
 
   const handleBulkDelete = () => {
     // TODO: Implement bulk delete
-    console.log('Bulk delete:', selectedMembers);
-  };
+    console.log('Bulk delete:', selectedMembers)
+  }
 
   return (
     <Box>
       {/* Header */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Box>
-          <Typography 
-            variant="h4" 
-            component="h1" 
+          <Typography
+            variant="h4"
+            component="h1"
             gutterBottom
-            sx={{ 
+            sx={{
               color: theme.palette.text.primary,
               fontWeight: 600,
             }}
@@ -60,7 +59,8 @@ export default function MembersPage() {
           </Typography>
           {import.meta.env.DEV && (
             <Typography variant="caption" color="text.secondary">
-              Debug: Usuario: {user?.username || 'N/A'}, Rol: '{user?.role || 'N/A'}', Es admin: {isAdmin ? 'SÍ' : 'NO'}
+              Debug: Usuario: {user?.username || 'N/A'}, Rol: '{user?.role || 'N/A'}', Es admin:{' '}
+              {isAdmin ? 'SÍ' : 'NO'}
             </Typography>
           )}
           <Stack direction="row" spacing={2} alignItems="center">
@@ -95,8 +95,10 @@ export default function MembersPage() {
           >
             {t('refresh', 'Actualizar')}
           </Button>
-          <Tooltip 
-            title={!isAdmin ? t('adminOnly', 'Solo los administradores pueden crear nuevos socios') : ''}
+          <Tooltip
+            title={
+              !isAdmin ? t('adminOnly', 'Solo los administradores pueden crear nuevos socios') : ''
+            }
             arrow
           >
             <span>
@@ -139,5 +141,5 @@ export default function MembersPage() {
         selectable={true}
       />
     </Box>
-  );
+  )
 }

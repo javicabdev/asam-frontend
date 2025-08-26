@@ -19,6 +19,13 @@ export type Scalars = {
   Time: { input: string; output: string; }
 };
 
+export type ActivityType =
+  | 'FAMILY_CREATED'
+  | 'MEMBER_DEACTIVATED'
+  | 'MEMBER_REGISTERED'
+  | 'PAYMENT_RECEIVED'
+  | 'TRANSACTION_RECORDED';
+
 export type AuthResponse = {
   __typename?: 'AuthResponse';
   accessToken: Scalars['JWT']['output'];
@@ -83,6 +90,30 @@ export type CreateUserInput = {
   password: Scalars['String']['input'];
   role: UserRole;
   username: Scalars['String']['input'];
+};
+
+export type DashboardStats = {
+  __typename?: 'DashboardStats';
+  activeMembers: Scalars['Int']['output'];
+  averagePayment: Scalars['Float']['output'];
+  currentBalance: Scalars['Float']['output'];
+  familyMembers: Scalars['Int']['output'];
+  inactiveMembers: Scalars['Int']['output'];
+  individualMembers: Scalars['Int']['output'];
+  memberGrowthPercentage: Scalars['Float']['output'];
+  membershipTrend: Array<MembershipTrendData>;
+  monthlyExpenses: Scalars['Float']['output'];
+  monthlyRevenue: Scalars['Float']['output'];
+  newMembersLastMonth: Scalars['Int']['output'];
+  newMembersThisMonth: Scalars['Int']['output'];
+  paymentCompletionRate: Scalars['Float']['output'];
+  pendingPayments: Scalars['Float']['output'];
+  recentPaymentsCount: Scalars['Int']['output'];
+  revenueGrowthPercentage: Scalars['Float']['output'];
+  revenueTrend: Array<RevenueTrendData>;
+  totalMembers: Scalars['Int']['output'];
+  totalRevenue: Scalars['Float']['output'];
+  totalTransactions: Scalars['Int']['output'];
 };
 
 export type DocumentValidationResult = {
@@ -192,6 +223,13 @@ export type MemberSortField =
 export type MemberStatus =
   | 'ACTIVE'
   | 'INACTIVE';
+
+export type MembershipTrendData = {
+  __typename?: 'MembershipTrendData';
+  month: Scalars['String']['output'];
+  newMembers: Scalars['Int']['output'];
+  totalMembers: Scalars['Int']['output'];
+};
 
 export type MembershipType =
   | 'FAMILY'
@@ -426,6 +464,7 @@ export type Query = {
   getBalance: Scalars['Float']['output'];
   getCashFlow?: Maybe<CashFlow>;
   getCurrentUser: User;
+  getDashboardStats: DashboardStats;
   getFamily?: Maybe<Family>;
   getFamilyMembers: Array<Familiar>;
   getFamilyPayments: Array<Payment>;
@@ -434,6 +473,7 @@ export type Query = {
   getNextMemberNumber: Scalars['String']['output'];
   getPayment?: Maybe<Payment>;
   getPaymentStatus: PaymentStatus;
+  getRecentActivity: Array<RecentActivity>;
   getTransactions: TransactionConnection;
   getUser?: Maybe<User>;
   health: Scalars['String']['output'];
@@ -500,6 +540,11 @@ export type QueryGetPaymentStatusArgs = {
 };
 
 
+export type QueryGetRecentActivityArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
 export type QueryGetTransactionsArgs = {
   filter?: InputMaybe<TransactionFilter>;
 };
@@ -530,8 +575,26 @@ export type QuerySearchMembersArgs = {
   criteria: Scalars['String']['input'];
 };
 
+export type RecentActivity = {
+  __typename?: 'RecentActivity';
+  amount?: Maybe<Scalars['Float']['output']>;
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  relatedFamily?: Maybe<Family>;
+  relatedMember?: Maybe<Member>;
+  timestamp: Scalars['Time']['output'];
+  type: ActivityType;
+};
+
 export type RefreshTokenInput = {
   refreshToken: Scalars['JWT']['input'];
+};
+
+export type RevenueTrendData = {
+  __typename?: 'RevenueTrendData';
+  expenses: Scalars['Float']['output'];
+  month: Scalars['String']['output'];
+  revenue: Scalars['Float']['output'];
 };
 
 export type SortDirection =
@@ -911,6 +974,18 @@ export type PingQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type PingQuery = { __typename?: 'Query', ping: string };
+
+export type GetDashboardStatsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetDashboardStatsQuery = { __typename?: 'Query', getDashboardStats: { __typename?: 'DashboardStats', totalMembers: number, activeMembers: number, inactiveMembers: number, individualMembers: number, familyMembers: number, newMembersThisMonth: number, newMembersLastMonth: number, memberGrowthPercentage: number, totalRevenue: number, monthlyRevenue: number, pendingPayments: number, averagePayment: number, paymentCompletionRate: number, revenueGrowthPercentage: number, currentBalance: number, monthlyExpenses: number, totalTransactions: number, recentPaymentsCount: number, membershipTrend: Array<{ __typename?: 'MembershipTrendData', month: string, newMembers: number, totalMembers: number }>, revenueTrend: Array<{ __typename?: 'RevenueTrendData', month: string, revenue: number, expenses: number }> } };
+
+export type GetRecentActivityQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetRecentActivityQuery = { __typename?: 'Query', getRecentActivity: Array<{ __typename?: 'RecentActivity', id: string, type: ActivityType, description: string, timestamp: string, amount?: number | null, relatedMember?: { __typename?: 'Member', miembro_id: string, nombre: string, apellidos: string } | null, relatedFamily?: { __typename?: 'Family', id: string, esposo_nombre: string, esposa_nombre: string } | null }> };
 
 export type GetUserQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2540,6 +2615,126 @@ export type PingQueryHookResult = ReturnType<typeof usePingQuery>;
 export type PingLazyQueryHookResult = ReturnType<typeof usePingLazyQuery>;
 export type PingSuspenseQueryHookResult = ReturnType<typeof usePingSuspenseQuery>;
 export type PingQueryResult = Apollo.QueryResult<PingQuery, PingQueryVariables>;
+export const GetDashboardStatsDocument = gql`
+    query GetDashboardStats {
+  getDashboardStats {
+    totalMembers
+    activeMembers
+    inactiveMembers
+    individualMembers
+    familyMembers
+    newMembersThisMonth
+    newMembersLastMonth
+    memberGrowthPercentage
+    totalRevenue
+    monthlyRevenue
+    pendingPayments
+    averagePayment
+    paymentCompletionRate
+    revenueGrowthPercentage
+    currentBalance
+    monthlyExpenses
+    totalTransactions
+    recentPaymentsCount
+    membershipTrend {
+      month
+      newMembers
+      totalMembers
+    }
+    revenueTrend {
+      month
+      revenue
+      expenses
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetDashboardStatsQuery__
+ *
+ * To run a query within a React component, call `useGetDashboardStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDashboardStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDashboardStatsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetDashboardStatsQuery(baseOptions?: Apollo.QueryHookOptions<GetDashboardStatsQuery, GetDashboardStatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDashboardStatsQuery, GetDashboardStatsQueryVariables>(GetDashboardStatsDocument, options);
+      }
+export function useGetDashboardStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDashboardStatsQuery, GetDashboardStatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDashboardStatsQuery, GetDashboardStatsQueryVariables>(GetDashboardStatsDocument, options);
+        }
+export function useGetDashboardStatsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetDashboardStatsQuery, GetDashboardStatsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetDashboardStatsQuery, GetDashboardStatsQueryVariables>(GetDashboardStatsDocument, options);
+        }
+export type GetDashboardStatsQueryHookResult = ReturnType<typeof useGetDashboardStatsQuery>;
+export type GetDashboardStatsLazyQueryHookResult = ReturnType<typeof useGetDashboardStatsLazyQuery>;
+export type GetDashboardStatsSuspenseQueryHookResult = ReturnType<typeof useGetDashboardStatsSuspenseQuery>;
+export type GetDashboardStatsQueryResult = Apollo.QueryResult<GetDashboardStatsQuery, GetDashboardStatsQueryVariables>;
+export const GetRecentActivityDocument = gql`
+    query GetRecentActivity($limit: Int) {
+  getRecentActivity(limit: $limit) {
+    id
+    type
+    description
+    timestamp
+    amount
+    relatedMember {
+      miembro_id
+      nombre
+      apellidos
+    }
+    relatedFamily {
+      id
+      esposo_nombre
+      esposa_nombre
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetRecentActivityQuery__
+ *
+ * To run a query within a React component, call `useGetRecentActivityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRecentActivityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRecentActivityQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetRecentActivityQuery(baseOptions?: Apollo.QueryHookOptions<GetRecentActivityQuery, GetRecentActivityQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetRecentActivityQuery, GetRecentActivityQueryVariables>(GetRecentActivityDocument, options);
+      }
+export function useGetRecentActivityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetRecentActivityQuery, GetRecentActivityQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetRecentActivityQuery, GetRecentActivityQueryVariables>(GetRecentActivityDocument, options);
+        }
+export function useGetRecentActivitySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetRecentActivityQuery, GetRecentActivityQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetRecentActivityQuery, GetRecentActivityQueryVariables>(GetRecentActivityDocument, options);
+        }
+export type GetRecentActivityQueryHookResult = ReturnType<typeof useGetRecentActivityQuery>;
+export type GetRecentActivityLazyQueryHookResult = ReturnType<typeof useGetRecentActivityLazyQuery>;
+export type GetRecentActivitySuspenseQueryHookResult = ReturnType<typeof useGetRecentActivitySuspenseQuery>;
+export type GetRecentActivityQueryResult = Apollo.QueryResult<GetRecentActivityQuery, GetRecentActivityQueryVariables>;
 export const GetUserDocument = gql`
     query GetUser($id: ID!) {
   getUser(id: $id) {

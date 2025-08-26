@@ -1,12 +1,11 @@
-import { lazy, ComponentType, LazyExoticComponent } from 'react';
+import { lazy, ComponentType, LazyExoticComponent } from 'react'
 
 /**
  * Enhanced lazy loading with preload capability
  * Allows components to be preloaded before they're actually needed
  */
-export interface PreloadableComponent<T extends ComponentType<any>>
-  extends LazyExoticComponent<T> {
-  preload: () => Promise<void>;
+export interface PreloadableComponent<T extends ComponentType<any>> extends LazyExoticComponent<T> {
+  preload: () => Promise<void>
 }
 
 /**
@@ -18,54 +17,52 @@ export function lazyWithPreload<T extends ComponentType<any>>(
   importFunc: () => Promise<{ default: T } | { [key: string]: T }>,
   namedExport?: string
 ): PreloadableComponent<T> {
-  let preloadedModule: { default: T } | { [key: string]: T } | null = null;
-  let preloadPromise: Promise<void> | null = null;
+  let preloadedModule: { default: T } | { [key: string]: T } | null = null
+  let preloadPromise: Promise<void> | null = null
 
   const load = async () => {
     if (preloadedModule) {
-      return preloadedModule;
+      return preloadedModule
     }
 
     if (preloadPromise) {
-      await preloadPromise;
-      return preloadedModule!;
+      await preloadPromise
+      return preloadedModule!
     }
 
-    const module = await importFunc();
-    preloadedModule = module;
-    return module;
-  };
+    const module = await importFunc()
+    preloadedModule = module
+    return module
+  }
 
   const LazyComponent = lazy(async () => {
-    const module = await load();
-    
+    const module = await load()
+
     if (namedExport && typeof module === 'object' && namedExport in module) {
-      return { default: (module as any)[namedExport] };
+      return { default: (module as any)[namedExport] }
     }
-    
-    return module as { default: T };
-  }) as PreloadableComponent<T>;
+
+    return module as { default: T }
+  }) as PreloadableComponent<T>
 
   LazyComponent.preload = () => {
     if (!preloadPromise && !preloadedModule) {
       preloadPromise = load().then(() => {
-        preloadPromise = null;
-      });
+        preloadPromise = null
+      })
     }
-    return preloadPromise || Promise.resolve();
-  };
+    return preloadPromise || Promise.resolve()
+  }
 
-  return LazyComponent;
+  return LazyComponent
 }
 
 /**
  * Preload multiple components at once
  * @param components Array of preloadable components
  */
-export async function preloadComponents(
-  components: PreloadableComponent<any>[]
-): Promise<void> {
-  await Promise.all(components.map(component => component.preload()));
+export async function preloadComponents(components: PreloadableComponent<any>[]): Promise<void> {
+  await Promise.all(components.map((component) => component.preload()))
 }
 
 /**
@@ -77,13 +74,13 @@ export function preloadOnIdle<T extends ComponentType<any>>(
 ): void {
   if ('requestIdleCallback' in window) {
     window.requestIdleCallback(() => {
-      component.preload();
-    });
+      component.preload()
+    })
   } else {
     // Fallback for browsers that don't support requestIdleCallback
     setTimeout(() => {
-      component.preload();
-    }, 1);
+      component.preload()
+    }, 1)
   }
 }
 
@@ -96,15 +93,19 @@ export function preloadOnHover<T extends ComponentType<any>>(
   component: PreloadableComponent<T>,
   elementId: string
 ): void {
-  const element = document.getElementById(elementId);
+  const element = document.getElementById(elementId)
   if (element) {
-    let preloaded = false;
-    element.addEventListener('mouseenter', () => {
-      if (!preloaded) {
-        component.preload();
-        preloaded = true;
-      }
-    }, { once: true });
+    let preloaded = false
+    element.addEventListener(
+      'mouseenter',
+      () => {
+        if (!preloaded) {
+          component.preload()
+          preloaded = true
+        }
+      },
+      { once: true }
+    )
   }
 }
 
@@ -116,13 +117,13 @@ export function setupRoutePreloading(
   routePreloadMap: Record<string, PreloadableComponent<any>[]>
 ): void {
   // Listen to route changes and preload components for likely next routes
-  const currentPath = window.location.pathname;
-  const componentsToPreload = routePreloadMap[currentPath];
-  
+  const currentPath = window.location.pathname
+  const componentsToPreload = routePreloadMap[currentPath]
+
   if (componentsToPreload) {
     // Preload after a short delay to not interfere with current page load
     setTimeout(() => {
-      preloadComponents(componentsToPreload);
-    }, 2000);
+      preloadComponents(componentsToPreload)
+    }, 2000)
   }
 }

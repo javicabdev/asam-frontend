@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
   Dialog,
   DialogTitle,
@@ -8,18 +8,18 @@ import {
   Grid,
   TextField,
   MenuItem,
-} from '@mui/material';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { FamilyMember } from '../types';
+} from '@mui/material'
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
+import { FamilyMember } from '../types'
 
 interface FamilyMemberFormProps {
-  open: boolean;
-  member?: FamilyMember;
-  onClose: () => void;
-  onSave: (member: FamilyMember) => void;
+  open: boolean
+  member?: FamilyMember
+  onClose: () => void
+  onSave: (member: FamilyMember) => void
 }
 
 const PARENTESCO_OPTIONS = [
@@ -33,7 +33,7 @@ const PARENTESCO_OPTIONS = [
   'Sobrino/a',
   'Primo/a',
   'Otro',
-];
+]
 
 export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
   open,
@@ -48,15 +48,15 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
     dni_nie: '',
     correo_electronico: '',
     parentesco: 'Hijo/a',
-  });
+  })
 
-  const [fechaNacimiento, setFechaNacimiento] = React.useState<Date | null>(null);
+  const [fechaNacimiento, setFechaNacimiento] = React.useState<Date | null>(null)
 
   React.useEffect(() => {
     if (member) {
-      setFormData(member);
+      setFormData(member)
       if (member.fecha_nacimiento) {
-        setFechaNacimiento(new Date(member.fecha_nacimiento));
+        setFechaNacimiento(new Date(member.fecha_nacimiento))
       }
     } else {
       setFormData({
@@ -66,41 +66,38 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
         dni_nie: '',
         correo_electronico: '',
         parentesco: 'Hijo/a',
-      });
-      setFechaNacimiento(null);
+      })
+      setFechaNacimiento(null)
     }
-  }, [member, open]);
+  }, [member, open])
 
-  const handleChange = (field: keyof FamilyMember) => (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: event.target.value,
-    }));
-  };
+  const handleChange =
+    (field: keyof FamilyMember) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: event.target.value,
+      }))
+    }
 
   const handleDateChange = (newValue: Date | null) => {
-    setFechaNacimiento(newValue);
+    setFechaNacimiento(newValue)
     setFormData((prev) => ({
       ...prev,
       fecha_nacimiento: newValue ? format(newValue, 'yyyy-MM-dd') : '',
-    }));
-  };
+    }))
+  }
 
   const handleSubmit = () => {
     if (formData.nombre && formData.apellidos && formData.parentesco) {
-      onSave(formData);
-      onClose();
+      onSave(formData)
+      onClose()
     }
-  };
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
       <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          {member ? 'Editar Familiar' : 'Añadir Familiar'}
-        </DialogTitle>
+        <DialogTitle>{member ? 'Editar Familiar' : 'Añadir Familiar'}</DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
             <Grid item xs={12} sm={6}>
@@ -181,5 +178,5 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
         </DialogActions>
       </Dialog>
     </LocalizationProvider>
-  );
-};
+  )
+}

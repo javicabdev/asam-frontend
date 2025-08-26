@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import React, { useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import {
   Box,
   Button,
@@ -13,19 +13,19 @@ import {
   CircularProgress,
   Link,
   IconButton,
-} from '@mui/material';
+} from '@mui/material'
 import {
   ArrowBack as ArrowBackIcon,
   Email as EmailIcon,
   CheckCircle as CheckCircleIcon,
-} from '@mui/icons-material';
-import { useAuthPublic } from '@/hooks/useAuthPublic';
-import { requestPasswordResetSchema, RequestPasswordResetFormData } from './passwordSchemas';
+} from '@mui/icons-material'
+import { useAuthPublic } from '@/hooks/useAuthPublic'
+import { requestPasswordResetSchema, RequestPasswordResetFormData } from './passwordSchemas'
 
 export const RequestPasswordResetPage: React.FC = () => {
-  const { requestPasswordReset } = useAuthPublic();
-  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [message, setMessage] = useState<string>('');
+  const { requestPasswordReset } = useAuthPublic()
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [message, setMessage] = useState<string>('')
 
   // Form configuration
   const {
@@ -39,32 +39,32 @@ export const RequestPasswordResetPage: React.FC = () => {
     defaultValues: {
       email: '',
     },
-  });
+  })
 
   // Focus on email field on mount
   React.useEffect(() => {
-    setFocus('email');
-  }, [setFocus]);
+    setFocus('email')
+  }, [setFocus])
 
   // Handle form submission
   const onSubmit = async (data: RequestPasswordResetFormData) => {
-    setStatus('idle');
-    setMessage('');
+    setStatus('idle')
+    setMessage('')
 
-    const result = await requestPasswordReset(data.email);
+    const result = await requestPasswordReset(data.email)
 
     if (result.success) {
-      setStatus('success');
+      setStatus('success')
       setMessage(
-        result.message || 
-        'Si el correo electrónico existe en nuestro sistema, recibirás instrucciones para restablecer tu contraseña.'
-      );
-      reset();
+        result.message ||
+          'Si el correo electrónico existe en nuestro sistema, recibirás instrucciones para restablecer tu contraseña.'
+      )
+      reset()
     } else {
-      setStatus('error');
-      setMessage(result.message || 'Error al procesar la solicitud');
+      setStatus('error')
+      setMessage(result.message || 'Error al procesar la solicitud')
     }
-  };
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -88,12 +88,7 @@ export const RequestPasswordResetPage: React.FC = () => {
         >
           {/* Back button */}
           <Box sx={{ width: '100%', mb: 2 }}>
-            <IconButton
-              component={RouterLink}
-              to="/login"
-              size="small"
-              sx={{ ml: -1 }}
-            >
+            <IconButton component={RouterLink} to="/login" size="small" sx={{ ml: -1 }}>
               <ArrowBackIcon />
             </IconButton>
           </Box>
@@ -125,17 +120,12 @@ export const RequestPasswordResetPage: React.FC = () => {
               <Alert severity="success" sx={{ mb: 3 }}>
                 {message}
               </Alert>
-              
+
               <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
                 Revisa tu bandeja de entrada y sigue las instrucciones del correo electrónico.
               </Typography>
 
-              <Button
-                component={RouterLink}
-                to="/login"
-                variant="contained"
-                fullWidth
-              >
+              <Button component={RouterLink} to="/login" variant="contained" fullWidth>
                 Volver al inicio de sesión
               </Button>
             </Box>
@@ -143,7 +133,8 @@ export const RequestPasswordResetPage: React.FC = () => {
             <>
               {/* Instructions */}
               <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
-                Ingresa tu correo electrónico y te enviaremos instrucciones para restablecer tu contraseña.
+                Ingresa tu correo electrónico y te enviaremos instrucciones para restablecer tu
+                contraseña.
               </Typography>
 
               {/* Error Alert */}
@@ -154,11 +145,7 @@ export const RequestPasswordResetPage: React.FC = () => {
               )}
 
               {/* Form */}
-              <Box
-                component="form"
-                onSubmit={handleSubmit(onSubmit)}
-                sx={{ width: '100%' }}
-              >
+              <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ width: '100%' }}>
                 <TextField
                   {...register('email')}
                   margin="normal"
@@ -206,5 +193,5 @@ export const RequestPasswordResetPage: React.FC = () => {
         </Typography>
       </Box>
     </Container>
-  );
-};
+  )
+}

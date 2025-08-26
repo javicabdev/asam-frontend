@@ -256,7 +256,7 @@ describe('ProtectedRoute', () => {
       })
 
       rerender(<ProtectedRoute />)
-      
+
       await waitFor(() => {
         expect(screen.queryByTestId('navigate')).not.toBeInTheDocument()
         expect(screen.getByTestId('outlet')).toBeInTheDocument()

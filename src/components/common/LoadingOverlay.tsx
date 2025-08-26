@@ -1,18 +1,12 @@
-import React from 'react';
-import {
-  Backdrop,
-  Box,
-  CircularProgress,
-  Typography,
-  Fade,
-} from '@mui/material';
-import { RefreshOutlined } from '@mui/icons-material';
-import { useUIStore } from '@/stores/uiStore';
+import React from 'react'
+import { Backdrop, Box, CircularProgress, Typography, Fade } from '@mui/material'
+import { RefreshOutlined } from '@mui/icons-material'
+import { useUIStore } from '@/stores/uiStore'
 
 interface LoadingOverlayProps {
-  open?: boolean;
-  message?: string;
-  icon?: React.ReactNode;
+  open?: boolean
+  message?: string
+  icon?: React.ReactNode
 }
 
 /**
@@ -24,19 +18,15 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   message = 'Cargando...',
   icon,
 }) => {
-  const isRefreshingToken = useUIStore((state) => state.isRefreshingToken);
-  
+  const isRefreshingToken = useUIStore((state) => state.isRefreshingToken)
+
   // Show overlay if explicitly opened or if token is refreshing
-  const open = openProp ?? isRefreshingToken;
-  
+  const open = openProp ?? isRefreshingToken
+
   // Custom message for token refresh
-  const displayMessage = isRefreshingToken 
-    ? 'Actualizando sesión...' 
-    : message;
-    
-  const displayIcon = isRefreshingToken
-    ? <RefreshOutlined sx={{ fontSize: 40, mb: 2 }} />
-    : icon;
+  const displayMessage = isRefreshingToken ? 'Actualizando sesión...' : message
+
+  const displayIcon = isRefreshingToken ? <RefreshOutlined sx={{ fontSize: 40, mb: 2 }} /> : icon
 
   return (
     <Backdrop
@@ -84,21 +74,21 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
         </Box>
       </Fade>
     </Backdrop>
-  );
-};
+  )
+}
 
 /**
  * Hook to control the loading overlay
  */
 export const useLoadingOverlay = () => {
-  const { isRefreshingToken, setRefreshingToken } = useUIStore();
+  const { isRefreshingToken, setRefreshingToken } = useUIStore()
 
-  const showTokenRefresh = () => setRefreshingToken(true);
-  const hideTokenRefresh = () => setRefreshingToken(false);
+  const showTokenRefresh = () => setRefreshingToken(true)
+  const hideTokenRefresh = () => setRefreshingToken(false)
 
   return {
     isRefreshingToken,
     showTokenRefresh,
     hideTokenRefresh,
-  };
-};
+  }
+}

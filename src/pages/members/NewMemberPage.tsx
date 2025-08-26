@@ -1,6 +1,6 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useMutation } from '@apollo/client'
 import {
   Container,
   Typography,
@@ -14,53 +14,56 @@ import {
   CircularProgress,
   Backdrop,
   Chip,
-} from '@mui/material';
-import { NavigateNext } from '@mui/icons-material';
-import { useAuthStore } from '@/stores/authStore';
+} from '@mui/material'
+import { NavigateNext } from '@mui/icons-material'
+import { useAuthStore } from '@/stores/authStore'
 
-import { MemberForm } from '@/features/members/components/MemberForm';
-import { CREATE_MEMBER_MUTATION } from '@/features/members/api/queries';
-import { CREATE_FAMILY_MUTATION, ADD_FAMILY_MEMBER_MUTATION } from '@/features/members/api/mutations';
-import { MembershipType } from '@/features/members/types';
+import { MemberForm } from '@/features/members/components/MemberForm'
+import { CREATE_MEMBER_MUTATION } from '@/features/members/api/queries'
+import {
+  CREATE_FAMILY_MUTATION,
+  ADD_FAMILY_MEMBER_MUTATION,
+} from '@/features/members/api/mutations'
+import { MembershipType } from '@/features/members/types'
 
 export const NewMemberPage: React.FC = () => {
-  const navigate = useNavigate();
-  const [error, setError] = React.useState<string | null>(null);
-  const [loading, setLoading] = React.useState(false);
-  
-  // Get auth state for debugging
-  const { user, isAuthenticated, accessToken } = useAuthStore();
+  const navigate = useNavigate()
+  const [error, setError] = React.useState<string | null>(null)
+  const [loading, setLoading] = React.useState(false)
 
-  const [createMember] = useMutation(CREATE_MEMBER_MUTATION);
-  const [createFamily] = useMutation(CREATE_FAMILY_MUTATION);
-  const [addFamilyMember] = useMutation(ADD_FAMILY_MEMBER_MUTATION);
+  // Get auth state for debugging
+  const { user, isAuthenticated, accessToken } = useAuthStore()
+
+  const [createMember] = useMutation(CREATE_MEMBER_MUTATION)
+  const [createFamily] = useMutation(CREATE_FAMILY_MUTATION)
+  const [addFamilyMember] = useMutation(ADD_FAMILY_MEMBER_MUTATION)
 
   const handleCancel = () => {
-    navigate('/members');
-  };
-  
+    navigate('/members')
+  }
+
   // Check if user has admin permissions
   React.useEffect(() => {
     if (!isAuthenticated) {
-      setError('Debes iniciar sesión para crear un socio');
+      setError('Debes iniciar sesión para crear un socio')
     } else if (user?.role !== 'admin') {
-      setError('No tienes permisos de administrador para crear socios');
+      setError('No tienes permisos de administrador para crear socios')
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user])
 
   const handleSubmit = async (data: any) => {
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
 
     try {
       // Helper function to format date to RFC3339
       const formatDateToRFC3339 = (dateString: string | null | undefined): string | null => {
-        if (!dateString) return null;
+        if (!dateString) return null
         // Assuming dateString is in format YYYY-MM-DD from the date picker
         // Convert to RFC3339 format with UTC timezone as expected by the backend
         // Example: "1970-10-10" -> "1970-10-10T00:00:00Z"
-        return `${dateString}T00:00:00Z`;
-      };
+        return `${dateString}T00:00:00Z`
+      }
 
       // Step 1: Create the main member
       const memberInput = {
@@ -79,22 +82,22 @@ export const NewMemberPage: React.FC = () => {
         profesion: data.profesion || null,
         nacionalidad: data.nacionalidad || null,
         observaciones: data.observaciones || null,
-      };
+      }
 
-      console.log('Creating member with input:', memberInput);
+      console.log('Creating member with input:', memberInput)
 
       const memberResult = await createMember({
         variables: { input: memberInput },
-      });
+      })
 
-      console.log('Member creation result:', memberResult);
+      console.log('Member creation result:', memberResult)
 
       // Validate response
       if (!memberResult.data || !memberResult.data.createMember) {
-        throw new Error('No se recibió una respuesta válida del servidor');
+        throw new Error('No se recibió una respuesta válida del servidor')
       }
 
-      const newMemberId = memberResult.data.createMember.miembro_id;
+      const newMemberId = memberResult.data.createMember.miembro_id
 
       // Step 2: If it's a family membership, create the family
       if (data.tipo_membresia === MembershipType.FAMILY) {
@@ -111,26 +114,26 @@ export const NewMemberPage: React.FC = () => {
           esposa_fecha_nacimiento: formatDateToRFC3339(data.esposa_fecha_nacimiento),
           esposa_documento_identidad: data.esposa_documento_identidad || null,
           esposa_correo_electronico: data.esposa_correo_electronico || null,
-        };
+        }
 
-        console.log('Creating family with input:', familyInput);
+        console.log('Creating family with input:', familyInput)
 
         const familyResult = await createFamily({
           variables: { input: familyInput },
-        });
+        })
 
-        console.log('Family creation result:', familyResult);
+        console.log('Family creation result:', familyResult)
 
         if (!familyResult.data || !familyResult.data.createFamily) {
-          throw new Error('No se pudo crear la familia');
+          throw new Error('No se pudo crear la familia')
         }
 
-        const familyId = familyResult.data.createFamily.id;
+        const familyId = familyResult.data.createFamily.id
 
         // Step 3: Add family members
         for (const familyMember of data.familyMembers || []) {
-          console.log('Adding family member:', familyMember);
-          
+          console.log('Adding family member:', familyMember)
+
           const addMemberResult = await addFamilyMember({
             variables: {
               family_id: familyId,
@@ -143,49 +146,46 @@ export const NewMemberPage: React.FC = () => {
                 parentesco: familyMember.parentesco || 'Otro',
               },
             },
-          });
-          
-          console.log('Add family member result:', addMemberResult);
+          })
+
+          console.log('Add family member result:', addMemberResult)
         }
       }
 
       // Navigate to payment page with member ID
-      console.log('Member created successfully, navigating to payment page');
-      navigate(`/payments/initial/${newMemberId}`);
+      console.log('Member created successfully, navigating to payment page')
+      navigate(`/payments/initial/${newMemberId}`)
     } catch (err: any) {
-      console.error('Error creating member:', err);
-      
+      console.error('Error creating member:', err)
+
       // Better error handling
-      let errorMessage = 'Ha ocurrido un error al crear el socio';
-      
+      let errorMessage = 'Ha ocurrido un error al crear el socio'
+
       if (err.graphQLErrors && err.graphQLErrors.length > 0) {
-        errorMessage = err.graphQLErrors[0].message;
+        errorMessage = err.graphQLErrors[0].message
       } else if (err.networkError) {
-        errorMessage = 'Error de conexión. Por favor verifica tu conexión a internet.';
+        errorMessage = 'Error de conexión. Por favor verifica tu conexión a internet.'
       } else if (err.message) {
-        errorMessage = err.message;
+        errorMessage = err.message
       }
-      
-      setError(errorMessage);
+
+      setError(errorMessage)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ mb: 3 }}>
-        <Breadcrumbs 
-          separator={<NavigateNext fontSize="small" />}
-          aria-label="breadcrumb"
-        >
+        <Breadcrumbs separator={<NavigateNext fontSize="small" />} aria-label="breadcrumb">
           <Link
             underline="hover"
             color="inherit"
             href="#"
             onClick={(e) => {
-              e.preventDefault();
-              navigate('/dashboard');
+              e.preventDefault()
+              navigate('/dashboard')
             }}
           >
             Dashboard
@@ -195,8 +195,8 @@ export const NewMemberPage: React.FC = () => {
             color="inherit"
             href="#"
             onClick={(e) => {
-              e.preventDefault();
-              navigate('/members');
+              e.preventDefault()
+              navigate('/members')
             }}
           >
             Socios
@@ -211,68 +211,54 @@ export const NewMemberPage: React.FC = () => {
         </Typography>
         {import.meta.env.DEV && (
           <Box sx={{ display: 'flex', gap: 1 }}>
-            <Chip 
-              label={isAuthenticated ? 'Autenticado' : 'No autenticado'} 
+            <Chip
+              label={isAuthenticated ? 'Autenticado' : 'No autenticado'}
               color={isAuthenticated ? 'success' : 'error'}
               size="small"
             />
-            <Chip 
-              label={`Usuario: ${user?.username || 'N/A'}`} 
-              color="info"
-              size="small"
-            />
-            <Chip 
-              label={`Rol: ${user?.role || 'N/A'}`} 
+            <Chip label={`Usuario: ${user?.username || 'N/A'}`} color="info" size="small" />
+            <Chip
+              label={`Rol: ${user?.role || 'N/A'}`}
               color={user?.role === 'admin' ? 'success' : 'warning'}
               size="small"
             />
-            <Chip 
-              label={accessToken ? 'Token presente' : 'Sin token'} 
+            <Chip
+              label={accessToken ? 'Token presente' : 'Sin token'}
               color={accessToken ? 'success' : 'error'}
               size="small"
             />
           </Box>
         )}
       </Box>
-      
+
       <Card sx={{ mb: 3, bgcolor: 'info.lighter' }}>
         <CardContent>
           <Typography variant="body1">
-            <strong>Importante:</strong> Después de completar el registro, 
-            deberá realizar el pago de la cuota inicial para activar la membresía.
+            <strong>Importante:</strong> Después de completar el registro, deberá realizar el pago
+            de la cuota inicial para activar la membresía.
           </Typography>
         </CardContent>
       </Card>
 
       {user?.role === 'admin' ? (
-        <MemberForm 
-          onCancel={handleCancel}
-          onSubmit={handleSubmit}
-        />
+        <MemberForm onCancel={handleCancel} onSubmit={handleSubmit} />
       ) : (
         <Alert severity="error" sx={{ mt: 2 }}>
-          {!isAuthenticated 
-            ? 'Debes iniciar sesión para acceder a esta página' 
+          {!isAuthenticated
+            ? 'Debes iniciar sesión para acceder a esta página'
             : 'No tienes permisos de administrador para crear socios. Contacta con un administrador si necesitas crear un nuevo socio.'}
         </Alert>
       )}
 
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loading}
-      >
+      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
         <CircularProgress color="inherit" />
       </Backdrop>
 
-      <Snackbar
-        open={!!error}
-        autoHideDuration={6000}
-        onClose={() => setError(null)}
-      >
+      <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
         <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>
           {error}
         </Alert>
       </Snackbar>
     </Container>
-  );
-};
+  )
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   IconButton,
   Menu,
@@ -9,75 +9,75 @@ import {
   Divider,
   Typography,
   useTheme,
-} from '@mui/material';
+} from '@mui/material'
 import {
   Brightness4 as DarkModeIcon,
   Brightness7 as LightModeIcon,
   BrightnessAuto as AutoModeIcon,
-} from '@mui/icons-material';
-import { useTranslation } from 'react-i18next';
-import { useSettingsStore, ThemeMode } from '@/stores/settingsStore';
+} from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
+import { useSettingsStore, ThemeMode } from '@/stores/settingsStore'
 
 interface ThemeToggleProps {
-  inAppBar?: boolean; // New prop to indicate if it's in an AppBar
+  inAppBar?: boolean // New prop to indicate if it's in an AppBar
 }
 
 export const ThemeToggle: React.FC<ThemeToggleProps> = ({ inAppBar = false }) => {
-  const { t } = useTranslation('common');
-  const theme = useTheme();
-  const { themeMode, setThemeMode } = useSettingsStore();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { t } = useTranslation('common')
+  const theme = useTheme()
+  const { themeMode, setThemeMode } = useSettingsStore()
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   const handleThemeChange = (mode: ThemeMode) => {
-    setThemeMode(mode);
-    handleClose();
-  };
+    setThemeMode(mode)
+    handleClose()
+  }
 
   const getIcon = () => {
     switch (themeMode) {
       case 'dark':
-        return <DarkModeIcon />;
+        return <DarkModeIcon />
       case 'light':
-        return <LightModeIcon />;
+        return <LightModeIcon />
       case 'system':
       default:
-        return <AutoModeIcon />;
+        return <AutoModeIcon />
     }
-  };
+  }
 
   const getTooltipText = () => {
     switch (themeMode) {
       case 'dark':
-        return t('theme.dark');
+        return t('theme.dark')
       case 'light':
-        return t('theme.light');
+        return t('theme.light')
       case 'system':
       default:
-        return t('theme.system');
+        return t('theme.system')
     }
-  };
+  }
 
   // Determine icon color based on theme mode and context
   const getIconColor = () => {
     if (inAppBar && theme.palette.mode === 'light') {
-      return 'primary';
+      return 'primary'
     }
-    return 'inherit';
-  };
+    return 'inherit'
+  }
 
   const menuItems: { mode: ThemeMode; icon: React.ReactNode; label: string }[] = [
     { mode: 'light', icon: <LightModeIcon />, label: t('theme.light') },
     { mode: 'dark', icon: <DarkModeIcon />, label: t('theme.dark') },
     { mode: 'system', icon: <AutoModeIcon />, label: t('theme.system') },
-  ];
+  ]
 
   return (
     <>
@@ -89,12 +89,13 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ inAppBar = false }) =>
           aria-controls="theme-menu"
           aria-haspopup="true"
           sx={{
-            ...(inAppBar && theme.palette.mode === 'light' && {
-              color: theme.palette.primary.main,
-              '&:hover': {
-                backgroundColor: theme.palette.primary.light + '20',
-              },
-            }),
+            ...(inAppBar &&
+              theme.palette.mode === 'light' && {
+                color: theme.palette.primary.main,
+                '&:hover': {
+                  backgroundColor: theme.palette.primary.light + '20',
+                },
+              }),
           }}
         >
           {getIcon()}
@@ -121,7 +122,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ inAppBar = false }) =>
           </Typography>
         </MenuItem>
         <Divider />
-        
+
         {menuItems.map((item) => (
           <MenuItem
             key={item.mode}
@@ -134,7 +135,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ inAppBar = false }) =>
         ))}
       </Menu>
     </>
-  );
-};
+  )
+}
 
-export default ThemeToggle;
+export default ThemeToggle

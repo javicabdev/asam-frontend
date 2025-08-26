@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'
 import {
   Paper,
   Grid,
@@ -15,19 +15,19 @@ import {
   Typography,
   IconButton,
   Tooltip,
-} from '@mui/material';
+} from '@mui/material'
 import {
   Search as SearchIcon,
   Clear as ClearIcon,
   ExpandMore as ExpandMoreIcon,
   FilterList as FilterListIcon,
-} from '@mui/icons-material';
+} from '@mui/icons-material'
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 // import { es } from 'date-fns/locale';
 
-import { MemberStatus, MembershipType, MemberFilter } from '../types';
+import { MemberStatus, MembershipType, MemberFilter } from '../types'
 
 // Spanish provinces - TODO: Uncomment when backend supports province filtering
 /*
@@ -43,76 +43,76 @@ const PROVINCES = [
 */
 
 interface MembersFiltersProps {
-  onFilterChange: (filter: Partial<MemberFilter>) => void;
+  onFilterChange: (filter: Partial<MemberFilter>) => void
 }
 
 export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
-  const [localFilter, setLocalFilter] = useState<Partial<MemberFilter>>({});
-  const [expanded, setExpanded] = useState(false);
+  const [localFilter, setLocalFilter] = useState<Partial<MemberFilter>>({})
+  const [expanded, setExpanded] = useState(false)
 
   const handleChange = (field: keyof MemberFilter, value: any) => {
-    const newValue = value === '' ? undefined : value;
+    const newValue = value === '' ? undefined : value
     const updatedFilter = {
       ...localFilter,
       [field]: newValue,
-    };
-    
+    }
+
     // Remove undefined values
-    Object.keys(updatedFilter).forEach(key => {
+    Object.keys(updatedFilter).forEach((key) => {
       if (updatedFilter[key as keyof MemberFilter] === undefined) {
-        delete updatedFilter[key as keyof MemberFilter];
+        delete updatedFilter[key as keyof MemberFilter]
       }
-    });
-    
-    setLocalFilter(updatedFilter);
-    
+    })
+
+    setLocalFilter(updatedFilter)
+
     // Apply filters immediately for estado and tipo_membresia
     if (field === 'estado' || field === 'tipo_membresia') {
-      const cleanedFilter: Partial<MemberFilter> = {};
-      
+      const cleanedFilter: Partial<MemberFilter> = {}
+
       if (updatedFilter.estado) {
-        cleanedFilter.estado = updatedFilter.estado;
+        cleanedFilter.estado = updatedFilter.estado
       }
       if (updatedFilter.tipo_membresia) {
-        cleanedFilter.tipo_membresia = updatedFilter.tipo_membresia;
+        cleanedFilter.tipo_membresia = updatedFilter.tipo_membresia
       }
       if (updatedFilter.search_term) {
-        cleanedFilter.search_term = updatedFilter.search_term;
+        cleanedFilter.search_term = updatedFilter.search_term
       }
-      
-      onFilterChange(cleanedFilter);
+
+      onFilterChange(cleanedFilter)
     }
-  };
+  }
 
   const handleApplyFilters = () => {
     // Clean up empty values and only include supported fields
-    const cleanedFilter: Partial<MemberFilter> = {};
-    
+    const cleanedFilter: Partial<MemberFilter> = {}
+
     if (localFilter.estado) {
-      cleanedFilter.estado = localFilter.estado;
+      cleanedFilter.estado = localFilter.estado
     }
     if (localFilter.tipo_membresia) {
-      cleanedFilter.tipo_membresia = localFilter.tipo_membresia;
+      cleanedFilter.tipo_membresia = localFilter.tipo_membresia
     }
     if (localFilter.search_term) {
-      cleanedFilter.search_term = localFilter.search_term;
+      cleanedFilter.search_term = localFilter.search_term
     }
-    
-    onFilterChange(cleanedFilter);
-  };
+
+    onFilterChange(cleanedFilter)
+  }
 
   const handleClearFilters = () => {
     // Clear local state
-    setLocalFilter({});
+    setLocalFilter({})
     // Notify parent to clear all filters
-    onFilterChange({});
-  };
+    onFilterChange({})
+  }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      handleApplyFilters();
+      handleApplyFilters()
     }
-  };
+  }
 
   return (
     <Paper sx={{ mb: 3 }}>
@@ -186,10 +186,7 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
                 Limpiar
               </Button>
               <Tooltip title="Filtros avanzados (temporalmente no disponibles)">
-                <IconButton
-                  onClick={() => setExpanded(!expanded)}
-                  color="default"
-                >
+                <IconButton onClick={() => setExpanded(!expanded)} color="default">
                   <FilterListIcon />
                 </IconButton>
               </Tooltip>
@@ -209,10 +206,12 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
         <AccordionDetails>
           <Box sx={{ p: 2, textAlign: 'center' }}>
             <Typography color="text.secondary">
-              Los filtros avanzados están temporalmente deshabilitados mientras se implementan en el backend.
+              Los filtros avanzados están temporalmente deshabilitados mientras se implementan en el
+              backend.
             </Typography>
             <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
-              Por ahora, puede usar la búsqueda general para filtrar por nombre, apellidos o número de socio.
+              Por ahora, puede usar la búsqueda general para filtrar por nombre, apellidos o número
+              de socio.
             </Typography>
           </Box>
           {/* TODO: Uncomment when backend supports these filters
@@ -323,5 +322,5 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
         </AccordionDetails>
       </Accordion>
     </Paper>
-  );
+  )
 }

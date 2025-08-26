@@ -28,6 +28,7 @@ The standard Apollo Client setup with separate auth, error, and HTTP links was c
 ### Public Operations
 
 The following operations do not require authentication:
+
 - VerifyEmail
 - ResendVerificationEmail
 - RequestPasswordReset

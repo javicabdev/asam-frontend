@@ -1,23 +1,14 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Container,
-  Typography,
-  Button,
-  Paper,
-} from '@mui/material';
-import {
-  Block as BlockIcon,
-  Home as HomeIcon,
-} from '@mui/icons-material';
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Box, Container, Typography, Button, Paper } from '@mui/material'
+import { Block as BlockIcon, Home as HomeIcon } from '@mui/icons-material'
 
 export const UnauthorizedPage: React.FC = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleGoHome = () => {
-    navigate('/dashboard');
-  };
+    navigate('/dashboard')
+  }
 
   return (
     <Container component="main" maxWidth="sm">
@@ -59,21 +50,16 @@ export const UnauthorizedPage: React.FC = () => {
 
           {/* Message */}
           <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-            No tienes permisos para acceder a esta página. Si crees que esto es un error, 
-            por favor contacta con el administrador del sistema.
+            No tienes permisos para acceder a esta página. Si crees que esto es un error, por favor
+            contacta con el administrador del sistema.
           </Typography>
 
           {/* Action Button */}
-          <Button
-            variant="contained"
-            startIcon={<HomeIcon />}
-            onClick={handleGoHome}
-            size="large"
-          >
+          <Button variant="contained" startIcon={<HomeIcon />} onClick={handleGoHome} size="large">
             Volver al Dashboard
           </Button>
         </Paper>
       </Box>
     </Container>
-  );
-};
+  )
+}

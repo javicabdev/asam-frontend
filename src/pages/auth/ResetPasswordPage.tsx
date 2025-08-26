@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams, Link as RouterLink } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams, Link as RouterLink } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import {
   Box,
   Button,
@@ -14,29 +14,29 @@ import {
   Link,
   IconButton,
   InputAdornment,
-} from '@mui/material';
+} from '@mui/material'
 import {
   Lock as LockIcon,
   CheckCircle as CheckCircleIcon,
   Visibility,
   VisibilityOff,
   Error as ErrorIcon,
-} from '@mui/icons-material';
-import { useAuthPublic } from '@/hooks/useAuthPublic';
-import { resetPasswordSchema, ResetPasswordFormData } from './passwordSchemas';
+} from '@mui/icons-material'
+import { useAuthPublic } from '@/hooks/useAuthPublic'
+import { resetPasswordSchema, ResetPasswordFormData } from './passwordSchemas'
 
 export const ResetPasswordPage: React.FC = () => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const { resetPasswordWithToken } = useAuthPublic();
-  
-  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [message, setMessage] = useState<string>('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const { resetPasswordWithToken } = useAuthPublic()
+
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [message, setMessage] = useState<string>('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
   // Get token from URL
-  const token = searchParams.get('token');
+  const token = searchParams.get('token')
 
   // Form configuration
   const {
@@ -50,49 +50,49 @@ export const ResetPasswordPage: React.FC = () => {
       newPassword: '',
       confirmPassword: '',
     },
-  });
+  })
 
   // Check if token exists
   useEffect(() => {
     if (!token) {
-      setStatus('error');
-      setMessage('Token inválido o no proporcionado');
+      setStatus('error')
+      setMessage('Token inválido o no proporcionado')
     } else {
-      setFocus('newPassword');
+      setFocus('newPassword')
     }
-  }, [token, setFocus]);
+  }, [token, setFocus])
 
   // Handle form submission
   const onSubmit = async (data: ResetPasswordFormData) => {
-    if (!token) return;
+    if (!token) return
 
-    setStatus('idle');
-    setMessage('');
+    setStatus('idle')
+    setMessage('')
 
-    const result = await resetPasswordWithToken(token, data.newPassword);
+    const result = await resetPasswordWithToken(token, data.newPassword)
 
     if (result.success) {
-      setStatus('success');
-      setMessage(result.message || 'Contraseña restablecida exitosamente');
-      
+      setStatus('success')
+      setMessage(result.message || 'Contraseña restablecida exitosamente')
+
       // Redirect to login after 3 seconds
       setTimeout(() => {
-        navigate('/login');
-      }, 3000);
+        navigate('/login')
+      }, 3000)
     } else {
-      setStatus('error');
-      setMessage(result.message || 'Error al restablecer la contraseña');
+      setStatus('error')
+      setMessage(result.message || 'Error al restablecer la contraseña')
     }
-  };
+  }
 
   // Toggle password visibility
   const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
-  };
+    setShowPassword(!showPassword)
+  }
 
   const handleToggleConfirmPassword = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
+    setShowConfirmPassword(!showConfirmPassword)
+  }
 
   // If no token, show error
   if (!token) {
@@ -136,18 +136,13 @@ export const ResetPasswordPage: React.FC = () => {
               El enlace de recuperación de contraseña es inválido o ha expirado.
             </Typography>
 
-            <Button
-              component={RouterLink}
-              to="/forgot-password"
-              variant="contained"
-              fullWidth
-            >
+            <Button component={RouterLink} to="/forgot-password" variant="contained" fullWidth>
               Solicitar nuevo enlace
             </Button>
           </Paper>
         </Box>
       </Container>
-    );
+    )
   }
 
   return (
@@ -197,7 +192,7 @@ export const ResetPasswordPage: React.FC = () => {
               <Alert severity="success" sx={{ mb: 3 }}>
                 {message}
               </Alert>
-              
+
               <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
                 Serás redirigido al inicio de sesión en unos segundos...
               </Typography>
@@ -208,7 +203,8 @@ export const ResetPasswordPage: React.FC = () => {
             <>
               {/* Instructions */}
               <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
-                Ingresa tu nueva contraseña. Debe tener al menos 6 caracteres e incluir mayúsculas, minúsculas y números.
+                Ingresa tu nueva contraseña. Debe tener al menos 6 caracteres e incluir mayúsculas,
+                minúsculas y números.
               </Typography>
 
               {/* Error Alert */}
@@ -219,11 +215,7 @@ export const ResetPasswordPage: React.FC = () => {
               )}
 
               {/* Form */}
-              <Box
-                component="form"
-                onSubmit={handleSubmit(onSubmit)}
-                sx={{ width: '100%' }}
-              >
+              <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ width: '100%' }}>
                 <TextField
                   {...register('newPassword')}
                   margin="normal"
@@ -314,5 +306,5 @@ export const ResetPasswordPage: React.FC = () => {
         </Typography>
       </Box>
     </Container>
-  );
-};
+  )
+}

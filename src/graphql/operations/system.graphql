@@ -7,3 +7,67 @@ query HealthCheck {
 query Ping {
   ping
 }
+
+# Dashboard Statistics - Estructura real del backend
+query GetDashboardStats {
+  getDashboardStats {
+    # Member stats
+    totalMembers
+    activeMembers
+    inactiveMembers
+    individualMembers
+    familyMembers
+    newMembersThisMonth
+    newMembersLastMonth
+    memberGrowthPercentage
+    
+    # Payment stats
+    totalRevenue
+    monthlyRevenue
+    pendingPayments
+    averagePayment
+    paymentCompletionRate
+    revenueGrowthPercentage
+    
+    # Financial stats
+    currentBalance
+    monthlyExpenses
+    
+    # Activity stats
+    totalTransactions
+    recentPaymentsCount
+    
+    # Time-based data for charts
+    membershipTrend {
+      month
+      newMembers
+      totalMembers
+    }
+    revenueTrend {
+      month
+      revenue
+      expenses
+    }
+  }
+}
+
+# Recent Activity - Query separada en el backend
+query GetRecentActivity($limit: Int) {
+  getRecentActivity(limit: $limit) {
+    id
+    type
+    description
+    timestamp
+    amount
+    relatedMember {
+      miembro_id
+      nombre
+      apellidos
+    }
+    relatedFamily {
+      id
+      esposo_nombre
+      esposa_nombre
+    }
+  }
+}

@@ -1,5 +1,5 @@
 // Auth pages
-export * from './auth';
+export * from './auth'
 
 // Error pages
-export * from './error';
+export * from './error'

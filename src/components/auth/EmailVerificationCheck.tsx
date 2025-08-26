@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Box, CircularProgress } from '@mui/material';
-import { useAuthStore } from '@/stores/authStore';
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Box, CircularProgress } from '@mui/material'
+import { useAuthStore } from '@/stores/authStore'
 
 /**
  * Component that checks email verification status and handles automatic
  * email sending for unverified users after login
  */
 export const EmailVerificationCheck: React.FC = () => {
-  const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuthStore();
+  const navigate = useNavigate()
+  const { user, isAuthenticated } = useAuthStore()
 
   useEffect(() => {
     const checkEmailVerification = async () => {
@@ -19,44 +19,39 @@ export const EmailVerificationCheck: React.FC = () => {
         email: user?.email,
         emailVerified: user?.emailVerified,
         fullUser: user,
-      });
+      })
 
       // If not authenticated, redirect to login
       if (!isAuthenticated || !user) {
-        navigate('/login');
-        return;
+        navigate('/login')
+        return
       }
 
       // If email is already verified, go to dashboard
       if (user.emailVerified) {
-        console.log('[EmailVerificationCheck] Email already verified, going to dashboard');
-        navigate('/dashboard');
-        return;
+        console.log('[EmailVerificationCheck] Email already verified, going to dashboard')
+        navigate('/dashboard')
+        return
       }
 
       // Email not verified - navigate to pending page
       // The pending page will handle sending the verification email
-      console.log('[EmailVerificationCheck] Email NOT verified, navigating to pending page');
-      navigate('/email-verification-pending');
-    };
+      console.log('[EmailVerificationCheck] Email NOT verified, navigating to pending page')
+      navigate('/email-verification-pending')
+    }
 
     // Small delay to ensure state is stable
     const timer = setTimeout(() => {
-      checkEmailVerification();
-    }, 100);
+      checkEmailVerification()
+    }, 100)
 
-    return () => clearTimeout(timer);
-  }, [isAuthenticated, user, navigate]);
+    return () => clearTimeout(timer)
+  }, [isAuthenticated, user, navigate])
 
   // Show loading while checking
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="100vh"
-    >
+    <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
       <CircularProgress />
     </Box>
-  );
-};
+  )
+}

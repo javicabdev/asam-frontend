@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react'
+import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import {
   AppBar,
   Box,
@@ -21,7 +21,7 @@ import {
   MenuItem,
   Badge,
   Tooltip,
-} from '@mui/material';
+} from '@mui/material'
 import {
   Menu as MenuIcon,
   Dashboard as DashboardIcon,
@@ -35,18 +35,18 @@ import {
   Settings as SettingsIcon,
   EmailOutlined as EmailIcon,
   VerifiedUser as VerifiedIcon,
-} from '@mui/icons-material';
-import { useAuth } from '@/hooks/useAuth';
-import { PageTransition, LanguageSelector, ThemeToggle } from '@/components/common';
-import { useTranslation } from 'react-i18next';
+} from '@mui/icons-material'
+import { useAuth } from '@/hooks/useAuth'
+import { PageTransition, LanguageSelector, ThemeToggle } from '@/components/common'
+import { useTranslation } from 'react-i18next'
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
 interface NavItem {
-  text: string;
-  icon: React.ReactNode;
-  path: string;
-  roles?: string[];
+  text: string
+  icon: React.ReactNode
+  path: string
+  roles?: string[]
 }
 
 const navigationItems: NavItem[] = [
@@ -80,47 +80,47 @@ const navigationItems: NavItem[] = [
     icon: <AssessmentIcon />,
     path: '/reports',
   },
-];
+]
 
 export const MainLayout: React.FC = () => {
-  const theme = useTheme();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const { user, logout } = useAuth();
-  const { t } = useTranslation('navigation');
+  const theme = useTheme()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const { user, logout } = useAuth()
+  const { t } = useTranslation('navigation')
 
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+    setMobileOpen(!mobileOpen)
+  }
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   const handleLogout = async () => {
-    handleMenuClose();
-    await logout();
-  };
+    handleMenuClose()
+    await logout()
+  }
 
   const handleNavigate = (path: string) => {
-    navigate(path);
+    navigate(path)
     if (isMobile) {
-      setMobileOpen(false);
+      setMobileOpen(false)
     }
-  };
+  }
 
   const getUserInitials = () => {
-    if (!user?.username) return '?';
-    return user.username.substring(0, 2).toUpperCase();
-  };
+    if (!user?.username) return '?'
+    return user.username.substring(0, 2).toUpperCase()
+  }
 
   const drawer = (
     <Box>
@@ -139,10 +139,7 @@ export const MainLayout: React.FC = () => {
             >
               <ListItemIcon
                 sx={{
-                  color:
-                    location.pathname === item.path
-                      ? 'primary.main'
-                      : 'inherit',
+                  color: location.pathname === item.path ? 'primary.main' : 'inherit',
                 }}
               >
                 {item.icon}
@@ -151,10 +148,7 @@ export const MainLayout: React.FC = () => {
                 primary={t(item.text)}
                 sx={{
                   '& .MuiListItemText-primary': {
-                    color:
-                      location.pathname === item.path
-                        ? 'primary.main'
-                        : 'inherit',
+                    color: location.pathname === item.path ? 'primary.main' : 'inherit',
                   },
                 }}
               />
@@ -163,7 +157,7 @@ export const MainLayout: React.FC = () => {
         ))}
       </List>
     </Box>
-  );
+  )
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
@@ -181,8 +175,8 @@ export const MainLayout: React.FC = () => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ 
-              mr: 2, 
+            sx={{
+              mr: 2,
               display: { md: 'none' },
               ...(theme.palette.mode === 'light' && {
                 color: theme.palette.primary.main,
@@ -191,21 +185,26 @@ export const MainLayout: React.FC = () => {
           >
             <MenuIcon />
           </IconButton>
-          
-          <Typography variant="h6" noWrap component="div" sx={{ 
-            flexGrow: 1,
-            color: theme.palette.mode === 'light' ? theme.palette.primary.main : 'inherit',
-          }}>
+
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{
+              flexGrow: 1,
+              color: theme.palette.mode === 'light' ? theme.palette.primary.main : 'inherit',
+            }}
+          >
             {t('app.title', { ns: 'common' })}
           </Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             {/* Language Selector - with inAppBar prop */}
             <LanguageSelector inAppBar={true} />
-            
+
             {/* Theme Toggle - with inAppBar prop */}
             <ThemeToggle inAppBar={true} />
-            
+
             {/* Email verification badge */}
             {user && !user.emailVerified && (
               <Tooltip title="Email no verificado">
@@ -213,9 +212,8 @@ export const MainLayout: React.FC = () => {
                   <IconButton
                     size="small"
                     sx={{
-                      color: theme.palette.mode === 'light' 
-                        ? theme.palette.warning.main 
-                        : 'inherit',
+                      color:
+                        theme.palette.mode === 'light' ? theme.palette.warning.main : 'inherit',
                     }}
                   >
                     <EmailIcon />
@@ -234,27 +232,34 @@ export const MainLayout: React.FC = () => {
               }}
               onClick={handleMenuOpen}
             >
-              <Avatar sx={{ 
-                width: 32, 
-                height: 32, 
-                bgcolor: theme.palette.mode === 'light' 
-                  ? theme.palette.primary.main 
-                  : theme.palette.primary.dark,
-              }}>
+              <Avatar
+                sx={{
+                  width: 32,
+                  height: 32,
+                  bgcolor:
+                    theme.palette.mode === 'light'
+                      ? theme.palette.primary.main
+                      : theme.palette.primary.dark,
+                }}
+              >
                 {getUserInitials()}
               </Avatar>
-              <Box sx={{ 
-                display: { xs: 'none', sm: 'block' },
-                color: theme.palette.mode === 'light' 
-                  ? theme.palette.primary.main 
-                  : 'inherit',
-              }}>
+              <Box
+                sx={{
+                  display: { xs: 'none', sm: 'block' },
+                  color: theme.palette.mode === 'light' ? theme.palette.primary.main : 'inherit',
+                }}
+              >
                 <Typography variant="body2">{user?.username}</Typography>
-                <Typography variant="caption" sx={{
-                  color: theme.palette.mode === 'light' 
-                    ? theme.palette.text.secondary 
-                    : 'text.secondary',
-                }}>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color:
+                      theme.palette.mode === 'light'
+                        ? theme.palette.text.secondary
+                        : 'text.secondary',
+                  }}
+                >
                   {user?.role}
                 </Typography>
               </Box>
@@ -277,36 +282,37 @@ export const MainLayout: React.FC = () => {
                 <ListItemIcon>
                   <AccountCircleIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText
-                  primary={user?.username}
-                  secondary={user?.role}
-                />
+                <ListItemText primary={user?.username} secondary={user?.role} />
               </MenuItem>
-              
+
               {user && !user.emailVerified && (
-                <MenuItem onClick={() => {
-                  handleMenuClose();
-                  navigate('/email-verification-check');
-                }}>
+                <MenuItem
+                  onClick={() => {
+                    handleMenuClose()
+                    navigate('/email-verification-check')
+                  }}
+                >
                   <ListItemIcon>
                     <VerifiedIcon fontSize="small" color="warning" />
                   </ListItemIcon>
                   <ListItemText primary={t('auth:emailVerification.pending.title')} />
                 </MenuItem>
               )}
-              
+
               <Divider />
-              
-              <MenuItem onClick={() => {
-                handleMenuClose();
-                navigate('/profile');
-              }}>
+
+              <MenuItem
+                onClick={() => {
+                  handleMenuClose()
+                  navigate('/profile')
+                }}
+              >
                 <ListItemIcon>
                   <SettingsIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText primary={t('menu.profile')} />
               </MenuItem>
-              
+
               <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
                   <LogoutIcon fontSize="small" />
@@ -318,10 +324,7 @@ export const MainLayout: React.FC = () => {
         </Toolbar>
       </AppBar>
 
-      <Box
-        component="nav"
-        sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
-      >
+      <Box component="nav" sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}>
         {/* Mobile drawer */}
         <Drawer
           variant="temporary"
@@ -376,7 +379,7 @@ export const MainLayout: React.FC = () => {
         </PageTransition>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default MainLayout;
+export default MainLayout

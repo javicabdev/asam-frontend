@@ -1,29 +1,29 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
+import i18n from 'i18next'
+import { initReactI18next } from 'react-i18next'
+import LanguageDetector from 'i18next-browser-languagedetector'
 
 // Import translations
-import commonEs from './locales/es/common.json';
-import commonFr from './locales/fr/common.json';
-import commonWo from './locales/wo/common.json';
+import commonEs from './locales/es/common.json'
+import commonFr from './locales/fr/common.json'
+import commonWo from './locales/wo/common.json'
 
-import authEs from './locales/es/auth.json';
-import authFr from './locales/fr/auth.json';
-import authWo from './locales/wo/auth.json';
+import authEs from './locales/es/auth.json'
+import authFr from './locales/fr/auth.json'
+import authWo from './locales/wo/auth.json'
 
-import membersEs from './locales/es/members.json';
-import membersFr from './locales/fr/members.json';
-import membersWo from './locales/wo/members.json';
+import membersEs from './locales/es/members.json'
+import membersFr from './locales/fr/members.json'
+import membersWo from './locales/wo/members.json'
 
-import paymentsEs from './locales/es/payments.json';
-import paymentsFr from './locales/fr/payments.json';
-import paymentsWo from './locales/wo/payments.json';
+import paymentsEs from './locales/es/payments.json'
+import paymentsFr from './locales/fr/payments.json'
+import paymentsWo from './locales/wo/payments.json'
 
-import navigationEs from './locales/es/navigation.json';
-import navigationFr from './locales/fr/navigation.json';
-import navigationWo from './locales/wo/navigation.json';
+import navigationEs from './locales/es/navigation.json'
+import navigationFr from './locales/fr/navigation.json'
+import navigationWo from './locales/wo/navigation.json'
 
-export const defaultNS = 'common';
+export const defaultNS = 'common'
 export const resources = {
   es: {
     common: commonEs,
@@ -46,7 +46,7 @@ export const resources = {
     payments: paymentsWo,
     navigation: navigationWo,
   },
-} as const;
+} as const
 
 // Language configuration
 export const languages = {
@@ -68,7 +68,7 @@ export const languages = {
     flag: '🇸🇳',
     dir: 'ltr',
   },
-} as const;
+} as const
 
 i18n
   .use(LanguageDetector)
@@ -79,22 +79,22 @@ i18n
     lng: 'es', // Default language
     fallbackLng: 'es',
     ns: ['common', 'auth', 'members', 'payments', 'navigation'],
-    
+
     interpolation: {
       escapeValue: false, // React already escapes values
     },
-    
+
     detection: {
       order: ['localStorage', 'navigator', 'htmlTag'],
       caches: ['localStorage'],
       lookupLocalStorage: 'asam-language',
     },
-    
+
     react: {
       useSuspense: false,
     },
-    
-    debug: process.env.NODE_ENV === 'development',
-  });
 
-export default i18n;
+    debug: process.env.NODE_ENV === 'development',
+  })
+
+export default i18n

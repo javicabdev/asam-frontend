@@ -16,6 +16,13 @@ export type Scalars = {
   Time: { input: string; output: string; }
 };
 
+export type ActivityType =
+  | 'FAMILY_CREATED'
+  | 'MEMBER_DEACTIVATED'
+  | 'MEMBER_REGISTERED'
+  | 'PAYMENT_RECEIVED'
+  | 'TRANSACTION_RECORDED';
+
 export type AuthResponse = {
   __typename?: 'AuthResponse';
   accessToken: Scalars['JWT']['output'];
@@ -80,6 +87,30 @@ export type CreateUserInput = {
   password: Scalars['String']['input'];
   role: UserRole;
   username: Scalars['String']['input'];
+};
+
+export type DashboardStats = {
+  __typename?: 'DashboardStats';
+  activeMembers: Scalars['Int']['output'];
+  averagePayment: Scalars['Float']['output'];
+  currentBalance: Scalars['Float']['output'];
+  familyMembers: Scalars['Int']['output'];
+  inactiveMembers: Scalars['Int']['output'];
+  individualMembers: Scalars['Int']['output'];
+  memberGrowthPercentage: Scalars['Float']['output'];
+  membershipTrend: Array<MembershipTrendData>;
+  monthlyExpenses: Scalars['Float']['output'];
+  monthlyRevenue: Scalars['Float']['output'];
+  newMembersLastMonth: Scalars['Int']['output'];
+  newMembersThisMonth: Scalars['Int']['output'];
+  paymentCompletionRate: Scalars['Float']['output'];
+  pendingPayments: Scalars['Float']['output'];
+  recentPaymentsCount: Scalars['Int']['output'];
+  revenueGrowthPercentage: Scalars['Float']['output'];
+  revenueTrend: Array<RevenueTrendData>;
+  totalMembers: Scalars['Int']['output'];
+  totalRevenue: Scalars['Float']['output'];
+  totalTransactions: Scalars['Int']['output'];
 };
 
 export type DocumentValidationResult = {
@@ -189,6 +220,13 @@ export type MemberSortField =
 export type MemberStatus =
   | 'ACTIVE'
   | 'INACTIVE';
+
+export type MembershipTrendData = {
+  __typename?: 'MembershipTrendData';
+  month: Scalars['String']['output'];
+  newMembers: Scalars['Int']['output'];
+  totalMembers: Scalars['Int']['output'];
+};
 
 export type MembershipType =
   | 'FAMILY'
@@ -423,6 +461,7 @@ export type Query = {
   getBalance: Scalars['Float']['output'];
   getCashFlow?: Maybe<CashFlow>;
   getCurrentUser: User;
+  getDashboardStats: DashboardStats;
   getFamily?: Maybe<Family>;
   getFamilyMembers: Array<Familiar>;
   getFamilyPayments: Array<Payment>;
@@ -431,6 +470,7 @@ export type Query = {
   getNextMemberNumber: Scalars['String']['output'];
   getPayment?: Maybe<Payment>;
   getPaymentStatus: PaymentStatus;
+  getRecentActivity: Array<RecentActivity>;
   getTransactions: TransactionConnection;
   getUser?: Maybe<User>;
   health: Scalars['String']['output'];
@@ -497,6 +537,11 @@ export type QueryGetPaymentStatusArgs = {
 };
 
 
+export type QueryGetRecentActivityArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
 export type QueryGetTransactionsArgs = {
   filter?: InputMaybe<TransactionFilter>;
 };
@@ -527,8 +572,26 @@ export type QuerySearchMembersArgs = {
   criteria: Scalars['String']['input'];
 };
 
+export type RecentActivity = {
+  __typename?: 'RecentActivity';
+  amount?: Maybe<Scalars['Float']['output']>;
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  relatedFamily?: Maybe<Family>;
+  relatedMember?: Maybe<Member>;
+  timestamp: Scalars['Time']['output'];
+  type: ActivityType;
+};
+
 export type RefreshTokenInput = {
   refreshToken: Scalars['JWT']['input'];
+};
+
+export type RevenueTrendData = {
+  __typename?: 'RevenueTrendData';
+  expenses: Scalars['Float']['output'];
+  month: Scalars['String']['output'];
+  revenue: Scalars['Float']['output'];
 };
 
 export type SortDirection =

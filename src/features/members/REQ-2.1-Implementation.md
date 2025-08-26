@@ -3,7 +3,9 @@
 ## Mejoras Implementadas
 
 ### 1. **Filtros Avanzados**
+
 - **Filtros básicos siempre visibles**:
+
   - Búsqueda por texto (nombre, apellidos, nº socio)
   - Estado (Activo/Inactivo)
   - Tipo de membresía (Individual/Familiar)
@@ -17,7 +19,9 @@
   - Documento de identidad
 
 ### 2. **DataGrid Mejorado**
+
 - **Columnas optimizadas**:
+
   - Información visual con chips de colores para estado y tipo
   - Tooltips informativos
   - Formato de fechas en español
@@ -34,6 +38,7 @@
   - Localización completa en español
 
 ### 3. **Gestión de Estado y Rendimiento**
+
 - **Hook useMembersTable mejorado**:
   - Manejo de selección múltiple
   - Debouncing para búsquedas
@@ -42,13 +47,16 @@
   - ✅ **NUEVO: Exposición de filters para exportación**
 
 ### 4. **Interfaz de Usuario**
+
 - **Header mejorado**:
+
   - Contador total de socios
   - Indicador de selección
   - Botones de acciones masivas
   - Botón de actualizar
 
 - **Toolbar personalizado**:
+
   - ✅ **NUEVO: Botón de exportación con menú desplegable**
   - ✅ **NUEVO: Opciones de exportación:**
     - Exportar todos los socios
@@ -63,13 +71,16 @@
   - Feedback visual de carga
 
 ### 5. **Integración con GraphQL**
+
 - Queries actualizadas con todos los campos necesarios
 - Tipos TypeScript sincronizados
 - Manejo robusto de errores
 - ✅ **NUEVO: Query lazy para exportación con paginación**
 
 ### 6. **Funcionalidad de Exportación CSV**
+
 - ✅ **Hook useExportMembers**:
+
   - Manejo de exportación con progreso
   - Soporte para exportar todos, filtrados o seleccionados
   - Paginación automática para grandes volúmenes
@@ -83,9 +94,11 @@
   - Preparado para futura exportación Excel
 
 ## Estado Actual
+
 ✅ **REQ-2.1 COMPLETADO**: La vista de lista avanzada está totalmente funcional con capacidad de exportación a CSV.
 
 ## Próximos Pasos
+
 1. ❌ Implementar eliminación masiva (pendiente)
 2. ❌ Añadir permisos según rol de usuario (pendiente)
 3. ❌ Implementar caché persistente para filtros (pendiente)

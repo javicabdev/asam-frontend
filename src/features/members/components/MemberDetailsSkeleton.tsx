@@ -1,12 +1,4 @@
-import {
-  Skeleton,
-  Card,
-  CardContent,
-  Grid,
-  Box,
-  Divider,
-  Paper,
-} from '@mui/material';
+import { Skeleton, Card, CardContent, Grid, Box, Divider, Paper } from '@mui/material'
 
 export function MemberDetailsSkeleton() {
   return (
@@ -29,7 +21,7 @@ export function MemberDetailsSkeleton() {
           <Card>
             <CardContent>
               <Skeleton variant="text" width={150} height={28} sx={{ mb: 2 }} />
-              
+
               <Box sx={{ '& > *': { mb: 2 } }}>
                 {[...Array(5)].map((_, index) => (
                   <Box key={index}>
@@ -47,7 +39,7 @@ export function MemberDetailsSkeleton() {
           <Card>
             <CardContent>
               <Skeleton variant="text" width={150} height={28} sx={{ mb: 2 }} />
-              
+
               <Box sx={{ '& > *': { mb: 2 } }}>
                 {[...Array(4)].map((_, index) => (
                   <Box key={index}>
@@ -65,7 +57,7 @@ export function MemberDetailsSkeleton() {
           <Card>
             <CardContent>
               <Skeleton variant="text" width={150} height={28} sx={{ mb: 2 }} />
-              
+
               <Box sx={{ '& > *': { mb: 2 } }}>
                 {[...Array(4)].map((_, index) => (
                   <Box key={index}>
@@ -83,7 +75,7 @@ export function MemberDetailsSkeleton() {
           <Card>
             <CardContent>
               <Skeleton variant="text" width={150} height={28} sx={{ mb: 2 }} />
-              
+
               <Box sx={{ '& > *': { mb: 2 } }}>
                 {[...Array(3)].map((_, index) => (
                   <Box key={index}>
@@ -101,7 +93,7 @@ export function MemberDetailsSkeleton() {
           <Paper sx={{ p: 3 }}>
             <Skeleton variant="text" width={200} height={28} sx={{ mb: 2 }} />
             <Divider sx={{ mb: 2 }} />
-            
+
             {[...Array(3)].map((_, index) => (
               <Box key={index} sx={{ mb: 2 }}>
                 <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -120,5 +112,5 @@ export function MemberDetailsSkeleton() {
         </Grid>
       </Grid>
     </Box>
-  );
+  )
 }

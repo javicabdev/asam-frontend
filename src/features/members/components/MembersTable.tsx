@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback } from 'react'
 import {
   DataGrid,
   GridColDef,
@@ -14,11 +14,11 @@ import {
   GridToolbarDensitySelector,
   GridToolbarQuickFilter,
   esES,
-} from '@mui/x-data-grid';
-import { 
-  Chip, 
-  Box, 
-  Tooltip, 
+} from '@mui/x-data-grid'
+import {
+  Chip,
+  Box,
+  Tooltip,
   IconButton,
   LinearProgress,
   Typography,
@@ -30,46 +30,46 @@ import {
   Alert,
   Snackbar,
   useTheme,
-} from '@mui/material';
-import { 
+} from '@mui/material'
+import {
   Visibility as VisibilityIcon,
   Email as EmailIcon,
   FileDownload as FileDownloadIcon,
   ExpandMore as ExpandMoreIcon,
   TableChart as TableChartIcon,
   Description as DescriptionIcon,
-} from '@mui/icons-material';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+} from '@mui/icons-material'
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 
-import { Member, MemberStatus, MembershipType } from '../types';
-import { useExportMembers } from '@/features/members/hooks';
-import { MemberFilter } from '@/graphql/generated/operations';
+import { Member, MemberStatus, MembershipType } from '../types'
+import { useExportMembers } from '@/features/members/hooks'
+import { MemberFilter } from '@/graphql/generated/operations'
 
 interface MembersTableProps {
-  members: Member[];
-  totalCount: number;
-  loading: boolean;
-  page: number;
-  pageSize: number;
-  filters?: MemberFilter;
-  onPageChange: (page: number) => void;
-  onPageSizeChange: (pageSize: number) => void;
-  onSortChange: (field: string, direction: 'ASC' | 'DESC' | null) => void;
-  onRowClick: (member: Member) => void;
-  onSelectionChange?: (selectedIds: string[]) => void;
-  selectable?: boolean;
+  members: Member[]
+  totalCount: number
+  loading: boolean
+  page: number
+  pageSize: number
+  filters?: MemberFilter
+  onPageChange: (page: number) => void
+  onPageSizeChange: (pageSize: number) => void
+  onSortChange: (field: string, direction: 'ASC' | 'DESC' | null) => void
+  onRowClick: (member: Member) => void
+  onSelectionChange?: (selectedIds: string[]) => void
+  selectable?: boolean
 }
 
 // Custom toolbar component
 interface CustomToolbarProps {
-  selectedCount: number;
-  filters?: MemberFilter;
-  onExportAll: () => void;
-  onExportFiltered: () => void;
-  onExportSelected: () => void;
-  isExporting: boolean;
-  exportProgress: number;
+  selectedCount: number
+  filters?: MemberFilter
+  onExportAll: () => void
+  onExportFiltered: () => void
+  onExportSelected: () => void
+  isExporting: boolean
+  exportProgress: number
 }
 
 function CustomToolbar({
@@ -81,31 +81,31 @@ function CustomToolbar({
   isExporting,
   exportProgress,
 }: CustomToolbarProps) {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   const handleExportAll = () => {
-    handleClose();
-    onExportAll();
-  };
+    handleClose()
+    onExportAll()
+  }
 
   const handleExportFiltered = () => {
-    handleClose();
-    onExportFiltered();
-  };
+    handleClose()
+    onExportFiltered()
+  }
 
   const handleExportSelected = () => {
-    handleClose();
-    onExportSelected();
-  };
+    handleClose()
+    onExportSelected()
+  }
 
   return (
     <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
@@ -114,7 +114,7 @@ function CustomToolbar({
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
         <Divider orientation="vertical" flexItem />
-        
+
         {/* Export button */}
         <Button
           variant="outlined"
@@ -126,16 +126,16 @@ function CustomToolbar({
         >
           {isExporting ? `Exportando... ${Math.round(exportProgress)}%` : 'Exportar'}
         </Button>
-        
+
         {selectedCount > 0 && (
           <Typography variant="body2" color="text.secondary">
             {selectedCount} seleccionado{selectedCount > 1 ? 's' : ''}
           </Typography>
         )}
       </Box>
-      
+
       <GridToolbarQuickFilter debounceMs={500} />
-      
+
       {/* Export menu */}
       <Menu
         anchorEl={anchorEl}
@@ -150,30 +150,30 @@ function CustomToolbar({
           <TableChartIcon sx={{ mr: 1, fontSize: 20 }} />
           Exportar todos los socios
         </MenuItem>
-        
+
         {filters && (
           <MenuItem onClick={handleExportFiltered}>
             <TableChartIcon sx={{ mr: 1, fontSize: 20 }} />
             Exportar socios filtrados
           </MenuItem>
         )}
-        
+
         {selectedCount > 0 && (
           <MenuItem onClick={handleExportSelected}>
             <TableChartIcon sx={{ mr: 1, fontSize: 20 }} />
             Exportar {selectedCount} seleccionado{selectedCount > 1 ? 's' : ''}
           </MenuItem>
         )}
-        
+
         <Divider />
-        
+
         <MenuItem disabled>
           <DescriptionIcon sx={{ mr: 1, fontSize: 20 }} />
           Exportar a Excel (próximamente)
         </MenuItem>
       </Menu>
     </GridToolbarContainer>
-  );
+  )
 }
 
 export function MembersTable({
@@ -190,17 +190,17 @@ export function MembersTable({
   onSelectionChange,
   selectable = false,
 }: MembersTableProps) {
-  const theme = useTheme();
-  const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+  const theme = useTheme()
+  const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([])
   const [snackbar, setSnackbar] = useState<{
-    open: boolean;
-    message: string;
-    severity: 'success' | 'error';
+    open: boolean
+    message: string
+    severity: 'success' | 'error'
   }>({
     open: false,
     message: '',
     severity: 'success',
-  });
+  })
 
   // Export hook
   const {
@@ -216,37 +216,37 @@ export function MembersTable({
         open: true,
         message: 'Exportación completada exitosamente',
         severity: 'success',
-      });
+      })
     },
     onError: (error) => {
       setSnackbar({
         open: true,
         message: `Error al exportar: ${error.message}`,
         severity: 'error',
-      });
+      })
     },
     csvOptions: {
       filename: `socios_${format(new Date(), 'yyyy-MM-dd')}`,
       dateFormat: 'ES',
     },
-  });
+  })
 
   const handleExportAll = useCallback(() => {
-    exportAllMembers();
-  }, [exportAllMembers]);
+    exportAllMembers()
+  }, [exportAllMembers])
 
   const handleExportFiltered = useCallback(() => {
     if (filters) {
-      exportFilteredMembers(filters);
+      exportFilteredMembers(filters)
     }
-  }, [exportFilteredMembers, filters]);
+  }, [exportFilteredMembers, filters])
 
   const handleExportSelected = useCallback(() => {
-    const selectedIds = rowSelectionModel as string[];
+    const selectedIds = rowSelectionModel as string[]
     if (selectedIds.length > 0) {
-      exportSelectedMembers(selectedIds, filters);
+      exportSelectedMembers(selectedIds, filters)
     }
-  }, [exportSelectedMembers, rowSelectionModel, filters]);
+  }, [exportSelectedMembers, rowSelectionModel, filters])
 
   const columns: GridColDef[] = useMemo(
     () => [
@@ -339,7 +339,7 @@ export function MembersTable({
         sortable: false,
         filterable: true,
         renderCell: (params: GridRenderCellParams) => {
-          if (!params.value) return '-';
+          if (!params.value) return '-'
           return (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <EmailIcon sx={{ fontSize: 16, mr: 0.5, color: 'text.secondary' }} />
@@ -349,7 +349,7 @@ export function MembersTable({
                 </Typography>
               </Tooltip>
             </Box>
-          );
+          )
         },
       },
       {
@@ -359,8 +359,8 @@ export function MembersTable({
         sortable: true,
         filterable: true,
         valueFormatter: (params) => {
-          if (!params.value) return '';
-          return format(new Date(params.value), 'dd/MM/yyyy', { locale: es });
+          if (!params.value) return ''
+          return format(new Date(params.value), 'dd/MM/yyyy', { locale: es })
         },
       },
       {
@@ -370,20 +370,16 @@ export function MembersTable({
         sortable: true,
         filterable: true,
         valueFormatter: (params) => {
-          if (!params.value) return '-';
-          return format(new Date(params.value), 'dd/MM/yyyy', { locale: es });
+          if (!params.value) return '-'
+          return format(new Date(params.value), 'dd/MM/yyyy', { locale: es })
         },
         renderCell: (params: GridRenderCellParams) => {
-          if (!params.value) return '-';
+          if (!params.value) return '-'
           return (
-            <Typography
-              variant="body2"
-              color="error"
-              sx={{ fontWeight: 'medium' }}
-            >
+            <Typography variant="body2" color="error" sx={{ fontWeight: 'medium' }}>
               {params.formattedValue}
             </Typography>
-          );
+          )
         },
       },
       {
@@ -399,8 +395,8 @@ export function MembersTable({
               <IconButton
                 size="small"
                 onClick={(e) => {
-                  e.stopPropagation();
-                  onRowClick(params.row as Member);
+                  e.stopPropagation()
+                  onRowClick(params.row as Member)
                 }}
               >
                 <VisibilityIcon fontSize="small" />
@@ -411,43 +407,43 @@ export function MembersTable({
       },
     ],
     [onRowClick]
-  );
+  )
 
   const handlePaginationModelChange = (model: GridPaginationModel) => {
     if (model.page !== page - 1) {
-      onPageChange(model.page + 1);
+      onPageChange(model.page + 1)
     }
     if (model.pageSize !== pageSize) {
-      onPageSizeChange(model.pageSize);
+      onPageSizeChange(model.pageSize)
     }
-  };
+  }
 
   const handleSortModelChange = (model: GridSortModel) => {
     if (model.length > 0) {
-      const { field, sort } = model[0];
-      onSortChange(field, sort as 'ASC' | 'DESC' | null);
+      const { field, sort } = model[0]
+      onSortChange(field, sort as 'ASC' | 'DESC' | null)
     } else {
-      onSortChange('', null);
+      onSortChange('', null)
     }
-  };
+  }
 
   const handleSelectionModelChange = (newSelectionModel: GridRowSelectionModel) => {
-    setRowSelectionModel(newSelectionModel);
+    setRowSelectionModel(newSelectionModel)
     if (onSelectionChange) {
-      onSelectionChange(newSelectionModel as string[]);
+      onSelectionChange(newSelectionModel as string[])
     }
-  };
+  }
 
   const getRowClassName = (params: GridRowParams) => {
     if (params.row.estado === MemberStatus.INACTIVE) {
-      return 'inactive-row';
+      return 'inactive-row'
     }
-    return '';
-  };
+    return ''
+  }
 
   const handleCloseSnackbar = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
+    setSnackbar({ ...snackbar, open: false })
+  }
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -498,31 +494,32 @@ export function MembersTable({
             },
           },
           '& .inactive-row': {
-            backgroundColor: theme.palette.mode === 'light' 
-              ? 'rgba(0, 0, 0, 0.04)' 
-              : 'rgba(255, 255, 255, 0.04)',
+            backgroundColor:
+              theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.04)',
             '&:hover': {
-              backgroundColor: theme.palette.mode === 'light'
-                ? 'rgba(0, 0, 0, 0.08)'
-                : 'rgba(255, 255, 255, 0.08)',
+              backgroundColor:
+                theme.palette.mode === 'light'
+                  ? 'rgba(0, 0, 0, 0.08)'
+                  : 'rgba(255, 255, 255, 0.08)',
             },
           },
           // Encabezados de columna con colores adaptativos
           '& .MuiDataGrid-columnHeader': {
-            backgroundColor: theme.palette.mode === 'light'
-              ? theme.palette.grey[100]
-              : theme.palette.grey[900],
-            color: theme.palette.mode === 'light'
-              ? theme.palette.text.primary
-              : theme.palette.text.primary,
+            backgroundColor:
+              theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
+            color:
+              theme.palette.mode === 'light'
+                ? theme.palette.text.primary
+                : theme.palette.text.primary,
             fontWeight: 'bold',
             borderBottom: `1px solid ${theme.palette.divider}`,
           },
           '& .MuiDataGrid-columnHeaderTitle': {
             fontWeight: 600,
-            color: theme.palette.mode === 'light'
-              ? theme.palette.text.primary
-              : theme.palette.text.primary,
+            color:
+              theme.palette.mode === 'light'
+                ? theme.palette.text.primary
+                : theme.palette.text.primary,
           },
           // Separador de columna
           '& .MuiDataGrid-columnSeparator': {
@@ -540,27 +537,29 @@ export function MembersTable({
           },
           // Footer/Pagination
           '& .MuiDataGrid-footerContainer': {
-            backgroundColor: theme.palette.mode === 'light'
-              ? theme.palette.grey[50]
-              : theme.palette.grey[900],
+            backgroundColor:
+              theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
             borderTop: `1px solid ${theme.palette.divider}`,
           },
           // Iconos de ordenamiento
           '& .MuiDataGrid-sortIcon': {
-            color: theme.palette.mode === 'light'
-              ? theme.palette.text.secondary
-              : theme.palette.text.secondary,
+            color:
+              theme.palette.mode === 'light'
+                ? theme.palette.text.secondary
+                : theme.palette.text.secondary,
           },
           '& .MuiDataGrid-menuIconButton': {
-            color: theme.palette.mode === 'light'
-              ? theme.palette.text.secondary
-              : theme.palette.text.secondary,
+            color:
+              theme.palette.mode === 'light'
+                ? theme.palette.text.secondary
+                : theme.palette.text.secondary,
           },
           // Checkboxes
           '& .MuiDataGrid-checkboxInput': {
-            color: theme.palette.mode === 'light'
-              ? theme.palette.primary.main
-              : theme.palette.primary.light,
+            color:
+              theme.palette.mode === 'light'
+                ? theme.palette.primary.main
+                : theme.palette.primary.light,
           },
           // Panel de filtros
           '& .MuiDataGrid-panel': {
@@ -569,13 +568,12 @@ export function MembersTable({
           },
           // Overlay cuando no hay datos
           '& .MuiDataGrid-overlay': {
-            backgroundColor: theme.palette.mode === 'light'
-              ? 'rgba(255, 255, 255, 0.9)'
-              : 'rgba(0, 0, 0, 0.9)',
+            backgroundColor:
+              theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.9)',
           },
         }}
       />
-      
+
       {/* Snackbar for export feedback */}
       <Snackbar
         open={snackbar.open}
@@ -583,14 +581,10 @@ export function MembersTable({
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity={snackbar.severity}
-          sx={{ width: '100%' }}
-        >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
           {snackbar.message}
         </Alert>
       </Snackbar>
     </Box>
-  );
+  )
 }

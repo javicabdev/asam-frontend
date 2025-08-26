@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   IconButton,
   Menu,
@@ -11,17 +11,17 @@ import {
   Divider,
   useTheme,
   Chip,
-} from '@mui/material';
-import { Language as LanguageIcon } from '@mui/icons-material';
-import { useTranslation } from 'react-i18next';
-import { useSettingsStore } from '@/stores/settingsStore';
-import { languages } from '@/lib/i18n';
+} from '@mui/material'
+import { Language as LanguageIcon } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
+import { useSettingsStore } from '@/stores/settingsStore'
+import { languages } from '@/lib/i18n'
 
 interface LanguageSelectorProps {
-  variant?: 'icon' | 'chip' | 'text';
-  size?: 'small' | 'medium' | 'large';
-  showLabel?: boolean;
-  inAppBar?: boolean; // New prop to indicate if it's in an AppBar
+  variant?: 'icon' | 'chip' | 'text'
+  size?: 'small' | 'medium' | 'large'
+  showLabel?: boolean
+  inAppBar?: boolean // New prop to indicate if it's in an AppBar
 }
 
 export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
@@ -30,51 +30,51 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   showLabel = true,
   inAppBar = false,
 }) => {
-  const { i18n } = useTranslation();
-  const theme = useTheme();
-  const { language, setLanguage } = useSettingsStore();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { i18n } = useTranslation()
+  const theme = useTheme()
+  const { language, setLanguage } = useSettingsStore()
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   const handleLanguageChange = async (lang: 'es' | 'fr' | 'wo') => {
     try {
       // Change language in i18next
-      await i18n.changeLanguage(lang);
-      
-      // Save to store and localStorage
-      setLanguage(lang);
-      localStorage.setItem('asam-language', lang);
-      
-      // Close menu
-      handleClose();
-    } catch (error) {
-      console.error('Error changing language:', error);
-    }
-  };
+      await i18n.changeLanguage(lang)
 
-  const currentLanguage = languages[language] || languages.es;
+      // Save to store and localStorage
+      setLanguage(lang)
+      localStorage.setItem('asam-language', lang)
+
+      // Close menu
+      handleClose()
+    } catch (error) {
+      console.error('Error changing language:', error)
+    }
+  }
+
+  const currentLanguage = languages[language] || languages.es
 
   // Determine icon color based on theme mode and context
   const getIconColor = () => {
     if (inAppBar && theme.palette.mode === 'light') {
-      return 'primary';
+      return 'primary'
     }
-    return 'inherit';
-  };
+    return 'inherit'
+  }
 
   const getChipColor = () => {
     if (inAppBar && theme.palette.mode === 'light') {
-      return 'primary';
+      return 'primary'
     }
-    return 'default';
-  };
+    return 'default'
+  }
 
   const renderTrigger = () => {
     switch (variant) {
@@ -82,26 +82,29 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         return (
           <Chip
             icon={<LanguageIcon />}
-            label={showLabel ? `${currentLanguage.flag} ${currentLanguage.name}` : currentLanguage.flag}
+            label={
+              showLabel ? `${currentLanguage.flag} ${currentLanguage.name}` : currentLanguage.flag
+            }
             onClick={handleClick}
             variant="outlined"
             size={size === 'large' ? 'medium' : size}
             color={getChipColor() as any}
             sx={{
-              ...(inAppBar && theme.palette.mode === 'light' && {
-                borderColor: theme.palette.primary.main,
-                color: theme.palette.primary.main,
-                '& .MuiChip-icon': {
+              ...(inAppBar &&
+                theme.palette.mode === 'light' && {
+                  borderColor: theme.palette.primary.main,
                   color: theme.palette.primary.main,
-                },
-                '&:hover': {
-                  backgroundColor: theme.palette.primary.light + '20',
-                },
-              }),
+                  '& .MuiChip-icon': {
+                    color: theme.palette.primary.main,
+                  },
+                  '&:hover': {
+                    backgroundColor: theme.palette.primary.light + '20',
+                  },
+                }),
             }}
           />
-        );
-      
+        )
+
       case 'text':
         return (
           <Box
@@ -113,9 +116,8 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
               cursor: 'pointer',
               padding: '6px 12px',
               borderRadius: 1,
-              color: inAppBar && theme.palette.mode === 'light' 
-                ? theme.palette.primary.main 
-                : 'inherit',
+              color:
+                inAppBar && theme.palette.mode === 'light' ? theme.palette.primary.main : 'inherit',
               '&:hover': {
                 backgroundColor: 'action.hover',
               },
@@ -129,8 +131,8 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
               </>
             )}
           </Box>
-        );
-      
+        )
+
       case 'icon':
       default:
         return (
@@ -143,19 +145,20 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
               aria-haspopup="true"
               size={size}
               sx={{
-                ...(inAppBar && theme.palette.mode === 'light' && {
-                  color: theme.palette.primary.main,
-                  '&:hover': {
-                    backgroundColor: theme.palette.primary.light + '20',
-                  },
-                }),
+                ...(inAppBar &&
+                  theme.palette.mode === 'light' && {
+                    color: theme.palette.primary.main,
+                    '&:hover': {
+                      backgroundColor: theme.palette.primary.light + '20',
+                    },
+                  }),
               }}
             >
               <Box display="flex" alignItems="center" gap={0.5}>
                 <LanguageIcon />
-                <Typography 
-                  variant="caption" 
-                  sx={{ 
+                <Typography
+                  variant="caption"
+                  sx={{
                     display: { xs: 'none', sm: 'block' },
                     fontWeight: 'bold',
                   }}
@@ -165,9 +168,9 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
               </Box>
             </IconButton>
           </Tooltip>
-        );
+        )
     }
-  };
+  }
 
   return (
     <>
@@ -192,7 +195,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           </Typography>
         </MenuItem>
         <Divider />
-        
+
         {Object.entries(languages).map(([code, lang]) => (
           <MenuItem
             key={code}
@@ -211,15 +214,12 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                 {lang.flag}
               </Box>
             </ListItemIcon>
-            <ListItemText
-              primary={lang.name}
-              secondary={code.toUpperCase()}
-            />
+            <ListItemText primary={lang.name} secondary={code.toUpperCase()} />
           </MenuItem>
         ))}
       </Menu>
     </>
-  );
-};
+  )
+}
 
-export default LanguageSelector;
+export default LanguageSelector

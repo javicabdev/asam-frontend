@@ -1,18 +1,20 @@
-import React from 'react';
-import { Box, Paper, Typography, Button } from '@mui/material';
-import { useAuthStore } from '@/stores/authStore';
+import React from 'react'
+import { Box, Paper, Typography, Button } from '@mui/material'
+import { useAuthStore } from '@/stores/authStore'
 
 export const AuthDebugPanel: React.FC = () => {
-  const state = useAuthStore();
-  
+  const state = useAuthStore()
+
   const clearLocalStorage = () => {
-    localStorage.clear();
-    window.location.reload();
-  };
-  
+    localStorage.clear()
+    window.location.reload()
+  }
+
   return (
     <Paper sx={{ position: 'fixed', bottom: 20, right: 20, p: 2, maxWidth: 400, zIndex: 9999 }}>
-      <Typography variant="h6" gutterBottom>Auth Debug Info</Typography>
+      <Typography variant="h6" gutterBottom>
+        Auth Debug Info
+      </Typography>
       <Box sx={{ fontSize: '12px', fontFamily: 'monospace' }}>
         <div>isAuthenticated: {String(state.isAuthenticated)}</div>
         <div>isLoading: {String(state.isLoading)}</div>
@@ -30,9 +32,9 @@ export const AuthDebugPanel: React.FC = () => {
           </>
         )}
       </Box>
-      <Button 
-        size="small" 
-        onClick={clearLocalStorage} 
+      <Button
+        size="small"
+        onClick={clearLocalStorage}
         sx={{ mt: 1 }}
         variant="outlined"
         color="error"
@@ -40,5 +42,5 @@ export const AuthDebugPanel: React.FC = () => {
         Clear Auth & Reload
       </Button>
     </Paper>
-  );
-};
+  )
+}

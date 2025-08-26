@@ -1,4 +1,4 @@
-import * as yup from 'yup';
+import * as yup from 'yup'
 
 // Schema para solicitar reset de contraseña
 export const requestPasswordResetSchema = yup.object({
@@ -6,9 +6,9 @@ export const requestPasswordResetSchema = yup.object({
     .string()
     .required('El correo electrónico es obligatorio')
     .email('El correo electrónico no es válido'),
-});
+})
 
-export type RequestPasswordResetFormData = yup.InferType<typeof requestPasswordResetSchema>;
+export type RequestPasswordResetFormData = yup.InferType<typeof requestPasswordResetSchema>
 
 // Schema para resetear contraseña con token
 export const resetPasswordSchema = yup.object({
@@ -24,6 +24,6 @@ export const resetPasswordSchema = yup.object({
     .string()
     .required('Debes confirmar la contraseña')
     .oneOf([yup.ref('newPassword')], 'Las contraseñas no coinciden'),
-});
+})
 
-export type ResetPasswordFormData = yup.InferType<typeof resetPasswordSchema>;
+export type ResetPasswordFormData = yup.InferType<typeof resetPasswordSchema>

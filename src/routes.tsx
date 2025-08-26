@@ -4,10 +4,7 @@ import { CircularProgress, Box } from '@mui/material'
 import { lazyWithPreload, preloadOnIdle } from '@/utils/lazyWithPreload'
 
 // Lazy load pages with preload capability
-const LoginPage = lazyWithPreload(
-  () => import('@/pages/auth/LoginPage'),
-  'LoginPage'
-)
+const LoginPage = lazyWithPreload(() => import('@/pages/auth/LoginPage'), 'LoginPage')
 
 const ForgotPasswordPage = lazyWithPreload(
   () => import('@/pages/auth/ForgotPasswordPage'),
@@ -44,13 +41,9 @@ const UnauthorizedPage = lazyWithPreload(
   'UnauthorizedPage'
 )
 
-const DashboardPage = lazyWithPreload(
-  () => import('@/pages/DashboardPage')
-)
+const DashboardPage = lazyWithPreload(() => import('@/pages/DashboardPage'))
 
-const MembersPage = lazyWithPreload(
-  () => import('@/pages/MembersPage')
-)
+const MembersPage = lazyWithPreload(() => import('@/pages/MembersPage'))
 
 const NewMemberPage = lazyWithPreload(
   () => import('@/pages/members/NewMemberPage'),
@@ -62,26 +55,15 @@ const MemberDetailsPage = lazyWithPreload(
   'MemberDetailsPage'
 )
 
-const FamiliesPage = lazyWithPreload(
-  () => import('@/pages/FamiliesPage')
-)
+const FamiliesPage = lazyWithPreload(() => import('@/pages/FamiliesPage'))
 
-const PaymentsPage = lazyWithPreload(
-  () => import('@/pages/PaymentsPage')
-)
+const PaymentsPage = lazyWithPreload(() => import('@/pages/PaymentsPage'))
 
-const CashFlowPage = lazyWithPreload(
-  () => import('@/pages/CashFlowPage')
-)
+const CashFlowPage = lazyWithPreload(() => import('@/pages/CashFlowPage'))
 
-const ProfilePage = lazyWithPreload(
-  () => import('@/pages/profile/ProfilePage'),
-  'ProfilePage'
-)
+const ProfilePage = lazyWithPreload(() => import('@/pages/profile/ProfilePage'), 'ProfilePage')
 
-const ReportsPage = lazyWithPreload(
-  () => import('@/pages/ReportsPage')
-)
+const ReportsPage = lazyWithPreload(() => import('@/pages/ReportsPage'))
 
 // Layout components
 import { AuthLayout } from '@/layouts/AuthLayout'
@@ -92,12 +74,7 @@ import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 
 // Loading component
 const LoadingScreen = () => (
-  <Box
-    display="flex"
-    justifyContent="center"
-    alignItems="center"
-    minHeight="100vh"
-  >
+  <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
     <CircularProgress />
   </Box>
 )
@@ -106,43 +83,40 @@ const LoadingScreen = () => (
 const usePreloadStrategy = () => {
   useEffect(() => {
     // Preload critical pages when browser is idle
-    const criticalPages = [
-      DashboardPage,
-      MembersPage,
-    ];
+    const criticalPages = [DashboardPage, MembersPage]
 
     // Preload after initial render
     const timer = setTimeout(() => {
-      criticalPages.forEach(page => preloadOnIdle(page));
-    }, 1000);
+      criticalPages.forEach((page) => preloadOnIdle(page))
+    }, 1000)
 
     // Also preload based on current route
-    const currentPath = window.location.pathname;
-    
+    const currentPath = window.location.pathname
+
     // If on login page, preload dashboard
     if (currentPath === '/login') {
-      preloadOnIdle(DashboardPage);
-    }
-    
-    // If on dashboard, preload commonly accessed pages
-    if (currentPath === '/dashboard') {
-      preloadOnIdle(MembersPage);
-      preloadOnIdle(PaymentsPage);
-    }
-    
-    // If on members page, preload detail and new member pages
-    if (currentPath === '/members') {
-      preloadOnIdle(MemberDetailsPage);
-      preloadOnIdle(NewMemberPage);
+      preloadOnIdle(DashboardPage)
     }
 
-    return () => clearTimeout(timer);
-  }, []);
-};
+    // If on dashboard, preload commonly accessed pages
+    if (currentPath === '/dashboard') {
+      preloadOnIdle(MembersPage)
+      preloadOnIdle(PaymentsPage)
+    }
+
+    // If on members page, preload detail and new member pages
+    if (currentPath === '/members') {
+      preloadOnIdle(MemberDetailsPage)
+      preloadOnIdle(NewMemberPage)
+    }
+
+    return () => clearTimeout(timer)
+  }, [])
+}
 
 export const AppRoutes = () => {
   // Apply preload strategy
-  usePreloadStrategy();
+  usePreloadStrategy()
 
   return (
     <Suspense fallback={<LoadingScreen />}>

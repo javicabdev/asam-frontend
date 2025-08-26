@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   Box,
   Card,
@@ -11,7 +11,7 @@ import {
   Divider,
   Chip,
   Avatar,
-} from '@mui/material';
+} from '@mui/material'
 import {
   AccountCircle as AccountIcon,
   Email as EmailIcon,
@@ -19,17 +19,15 @@ import {
   CalendarToday as CalendarIcon,
   Lock as LockIcon,
   VerifiedUser as VerifiedIcon,
-} from '@mui/icons-material';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { useAuth } from '@/hooks/useAuth';
+} from '@mui/icons-material'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import { useAuth } from '@/hooks/useAuth'
 
 // Validation schema for password change
 const passwordSchema = yup.object({
-  currentPassword: yup
-    .string()
-    .required('La contraseña actual es requerida'),
+  currentPassword: yup.string().required('La contraseña actual es requerida'),
   newPassword: yup
     .string()
     .required('La nueva contraseña es requerida')
@@ -42,14 +40,14 @@ const passwordSchema = yup.object({
     .string()
     .required('Confirma la nueva contraseña')
     .oneOf([yup.ref('newPassword')], 'Las contraseñas no coinciden'),
-});
+})
 
-type PasswordFormData = yup.InferType<typeof passwordSchema>;
+type PasswordFormData = yup.InferType<typeof passwordSchema>
 
 export const ProfilePage: React.FC = () => {
-  const { user, changePassword } = useAuth();
-  const [successMessage, setSuccessMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const { user, changePassword } = useAuth()
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const {
     register,
@@ -58,44 +56,41 @@ export const ProfilePage: React.FC = () => {
     formState: { errors, isSubmitting },
   } = useForm<PasswordFormData>({
     resolver: yupResolver(passwordSchema),
-  });
+  })
 
   const onSubmit = async (data: PasswordFormData) => {
     try {
-      setSuccessMessage('');
-      setErrorMessage('');
+      setSuccessMessage('')
+      setErrorMessage('')
 
-      const result = await changePassword(
-        data.currentPassword,
-        data.newPassword
-      );
+      const result = await changePassword(data.currentPassword, data.newPassword)
 
       if (result.success) {
-        setSuccessMessage(result.message || 'Contraseña actualizada exitosamente');
-        reset();
+        setSuccessMessage(result.message || 'Contraseña actualizada exitosamente')
+        reset()
       } else {
-        setErrorMessage(result.message || 'Error al cambiar la contraseña');
+        setErrorMessage(result.message || 'Error al cambiar la contraseña')
       }
     } catch (error) {
-      setErrorMessage('Error inesperado al cambiar la contraseña');
+      setErrorMessage('Error inesperado al cambiar la contraseña')
     }
-  };
+  }
 
   const formatDate = (dateString?: string | null) => {
-    if (!dateString) return 'N/A';
+    if (!dateString) return 'N/A'
     return new Date(dateString).toLocaleString('es-ES', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-    });
-  };
+    })
+  }
 
   const getUserInitials = () => {
-    if (!user?.username) return '?';
-    return user.username.substring(0, 2).toUpperCase();
-  };
+    if (!user?.username) return '?'
+    return user.username.substring(0, 2).toUpperCase()
+  }
 
   return (
     <Box>
@@ -121,12 +116,7 @@ export const ProfilePage: React.FC = () => {
                 </Avatar>
                 <Box ml={2}>
                   <Typography variant="h5">{user?.username}</Typography>
-                  <Chip
-                    label={user?.role}
-                    color="primary"
-                    size="small"
-                    sx={{ mt: 1 }}
-                  />
+                  <Chip label={user?.role} color="primary" size="small" sx={{ mt: 1 }} />
                 </Box>
               </Box>
 
@@ -150,9 +140,7 @@ export const ProfilePage: React.FC = () => {
                       Email
                     </Typography>
                     <Box display="flex" alignItems="center" gap={1}>
-                      <Typography variant="body1">
-                        {user?.email || 'No disponible'}
-                      </Typography>
+                      <Typography variant="body1">{user?.email || 'No disponible'}</Typography>
                       {user?.emailVerified ? (
                         <Chip
                           icon={<VerifiedIcon />}
@@ -161,11 +149,7 @@ export const ProfilePage: React.FC = () => {
                           size="small"
                         />
                       ) : (
-                        <Chip
-                          label="No verificado"
-                          color="warning"
-                          size="small"
-                        />
+                        <Chip label="No verificado" color="warning" size="small" />
                       )}
                     </Box>
                   </Box>
@@ -187,9 +171,7 @@ export const ProfilePage: React.FC = () => {
                     <Typography variant="body2" color="text.secondary">
                       Último acceso
                     </Typography>
-                    <Typography variant="body1">
-                      {formatDate(user?.lastLogin)}
-                    </Typography>
+                    <Typography variant="body1">{formatDate(user?.lastLogin)}</Typography>
                   </Box>
                 </Box>
               </Box>
@@ -249,12 +231,7 @@ export const ProfilePage: React.FC = () => {
                   sx={{ mb: 3 }}
                 />
 
-                <Button
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  disabled={isSubmitting}
-                >
+                <Button type="submit" variant="contained" fullWidth disabled={isSubmitting}>
                   {isSubmitting ? 'Actualizando...' : 'Actualizar Contraseña'}
                 </Button>
               </form>
@@ -263,7 +240,7 @@ export const ProfilePage: React.FC = () => {
         </Grid>
       </Grid>
     </Box>
-  );
-};
+  )
+}
 
-export default ProfilePage;
+export default ProfilePage

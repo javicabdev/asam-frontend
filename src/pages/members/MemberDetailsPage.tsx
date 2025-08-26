@@ -1,9 +1,9 @@
-import { 
-  Box, 
-  Typography, 
-  Button, 
-  Alert, 
-  Card, 
+import {
+  Box,
+  Typography,
+  Button,
+  Alert,
+  Card,
   CardContent,
   Grid,
   Chip,
@@ -12,8 +12,8 @@ import {
   Paper,
   Tooltip,
   Avatar,
-} from '@mui/material';
-import { 
+} from '@mui/material'
+import {
   ArrowBack as ArrowBackIcon,
   Edit as EditIcon,
   Email as EmailIcon,
@@ -26,64 +26,52 @@ import {
   AttachMoney as AttachMoneyIcon,
   History as HistoryIcon,
   Print as PrintIcon,
-} from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+} from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom'
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 
-import { useMemberDetails } from '@/features/members/hooks/useMemberDetails';
-import { MemberDetailsSkeleton } from '@/features/members/components';
-import { MemberStatus, MembershipType } from '@/features/members/types';
-import { useAuthStore } from '@/stores/authStore';
+import { useMemberDetails } from '@/features/members/hooks/useMemberDetails'
+import { MemberDetailsSkeleton } from '@/features/members/components'
+import { MemberStatus, MembershipType } from '@/features/members/types'
+import { useAuthStore } from '@/stores/authStore'
 
 export function MemberDetailsPage() {
-  const navigate = useNavigate();
-  const { user } = useAuthStore();
-  const isAdmin = user?.role === 'admin';
-  const { member, loading, error } = useMemberDetails();
+  const navigate = useNavigate()
+  const { user } = useAuthStore()
+  const isAdmin = user?.role === 'admin'
+  const { member, loading, error } = useMemberDetails()
 
   if (loading) {
-    return <MemberDetailsSkeleton />;
+    return <MemberDetailsSkeleton />
   }
 
   if (error) {
     return (
       <Box>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/members')}
-          sx={{ mb: 2 }}
-        >
+        <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/members')} sx={{ mb: 2 }}>
           Volver a la lista
         </Button>
-        <Alert severity="error">
-          Error al cargar los detalles del socio: {error.message}
-        </Alert>
+        <Alert severity="error">Error al cargar los detalles del socio: {error.message}</Alert>
       </Box>
-    );
+    )
   }
 
   if (!member) {
     return (
       <Box>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/members')}
-          sx={{ mb: 2 }}
-        >
+        <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/members')} sx={{ mb: 2 }}>
           Volver a la lista
         </Button>
-        <Alert severity="warning">
-          No se encontró el socio solicitado.
-        </Alert>
+        <Alert severity="warning">No se encontró el socio solicitado.</Alert>
       </Box>
-    );
+    )
   }
 
   const formatDate = (date: string | null | undefined) => {
-    if (!date) return '-';
-    return format(new Date(date), 'dd/MM/yyyy', { locale: es });
-  };
+    if (!date) return '-'
+    return format(new Date(date), 'dd/MM/yyyy', { locale: es })
+  }
 
   const getFullAddress = () => {
     const parts = [
@@ -92,9 +80,9 @@ export function MemberDetailsPage() {
       member.poblacion,
       member.provincia,
       member.pais,
-    ].filter(Boolean);
-    return parts.length > 0 ? parts.join(', ') : 'No especificada';
-  };
+    ].filter(Boolean)
+    return parts.length > 0 ? parts.join(', ') : 'No especificada'
+  }
 
   return (
     <Box>
@@ -124,11 +112,7 @@ export function MemberDetailsPage() {
           >
             Volver
           </Button>
-          <Button
-            variant="outlined"
-            startIcon={<PrintIcon />}
-            onClick={() => window.print()}
-          >
+          <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => window.print()}>
             Imprimir
           </Button>
           {isAdmin && (
@@ -158,7 +142,7 @@ export function MemberDetailsPage() {
                 Información Básica
               </Typography>
               <Divider sx={{ mb: 2 }} />
-              
+
               <Stack spacing={2}>
                 <Box>
                   <Typography variant="caption" color="text.secondary">
@@ -175,8 +159,16 @@ export function MemberDetailsPage() {
                   </Typography>
                   <Box>
                     <Chip
-                      label={member.tipo_membresia === MembershipType.INDIVIDUAL ? 'Individual' : 'Familiar'}
-                      color={member.tipo_membresia === MembershipType.INDIVIDUAL ? 'primary' : 'secondary'}
+                      label={
+                        member.tipo_membresia === MembershipType.INDIVIDUAL
+                          ? 'Individual'
+                          : 'Familiar'
+                      }
+                      color={
+                        member.tipo_membresia === MembershipType.INDIVIDUAL
+                          ? 'primary'
+                          : 'secondary'
+                      }
                       size="small"
                     />
                   </Box>
@@ -197,9 +189,7 @@ export function MemberDetailsPage() {
                     <CakeIcon sx={{ fontSize: 14, mr: 0.5 }} />
                     Fecha de Nacimiento
                   </Typography>
-                  <Typography variant="body1">
-                    {formatDate(member.fecha_nacimiento)}
-                  </Typography>
+                  <Typography variant="body1">{formatDate(member.fecha_nacimiento)}</Typography>
                 </Box>
 
                 <Box>
@@ -207,9 +197,7 @@ export function MemberDetailsPage() {
                     <EventIcon sx={{ fontSize: 14, mr: 0.5 }} />
                     Fecha de Alta
                   </Typography>
-                  <Typography variant="body1">
-                    {formatDate(member.fecha_alta)}
-                  </Typography>
+                  <Typography variant="body1">{formatDate(member.fecha_alta)}</Typography>
                 </Box>
 
                 {member.fecha_baja && (
@@ -236,7 +224,7 @@ export function MemberDetailsPage() {
                 Información de Contacto
               </Typography>
               <Divider sx={{ mb: 2 }} />
-              
+
               <Stack spacing={2}>
                 <Box>
                   <Typography variant="caption" color="text.secondary">
@@ -259,9 +247,7 @@ export function MemberDetailsPage() {
                     <HomeIcon sx={{ fontSize: 14, mr: 0.5 }} />
                     Dirección Completa
                   </Typography>
-                  <Typography variant="body1">
-                    {getFullAddress()}
-                  </Typography>
+                  <Typography variant="body1">{getFullAddress()}</Typography>
                 </Box>
 
                 <Box>
@@ -269,9 +255,7 @@ export function MemberDetailsPage() {
                     <WorkIcon sx={{ fontSize: 14, mr: 0.5 }} />
                     Profesión
                   </Typography>
-                  <Typography variant="body1">
-                    {member.profesion || 'No especificada'}
-                  </Typography>
+                  <Typography variant="body1">{member.profesion || 'No especificada'}</Typography>
                 </Box>
 
                 <Box>
@@ -313,7 +297,7 @@ export function MemberDetailsPage() {
               Actividad Reciente
             </Typography>
             <Divider sx={{ mb: 2 }} />
-            
+
             <Stack spacing={2}>
               {/* Payment History */}
               <Box>
@@ -323,9 +307,7 @@ export function MemberDetailsPage() {
                       <AttachMoneyIcon />
                     </Avatar>
                     <Box>
-                      <Typography variant="body1">
-                        Historial de Pagos
-                      </Typography>
+                      <Typography variant="body1">Historial de Pagos</Typography>
                       <Typography variant="caption" color="text.secondary">
                         Ver todos los pagos realizados
                       </Typography>
@@ -349,9 +331,7 @@ export function MemberDetailsPage() {
                         <HomeIcon />
                       </Avatar>
                       <Box>
-                        <Typography variant="body1">
-                          Información Familiar
-                        </Typography>
+                        <Typography variant="body1">Información Familiar</Typography>
                         <Typography variant="caption" color="text.secondary">
                           Ver miembros de la familia
                         </Typography>
@@ -371,5 +351,5 @@ export function MemberDetailsPage() {
         </Grid>
       </Grid>
     </Box>
-  );
+  )
 }

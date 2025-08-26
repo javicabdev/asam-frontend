@@ -17,62 +17,58 @@ import { InstallPrompt } from '@/components/pwa'
 import { ErrorBoundary, LoadingOverlay } from '@/components/common'
 import { useSettingsStore } from '@/stores/settingsStore'
 
-
 function App() {
-  const { language, themeMode } = useSettingsStore();
-  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light');
+  const { language, themeMode } = useSettingsStore()
+  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light')
 
   // Determine actual theme based on system preference if set to 'system'
   useEffect(() => {
     const determineTheme = () => {
       if (themeMode === 'system') {
-        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        setCurrentTheme(mediaQuery.matches ? 'dark' : 'light');
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+        setCurrentTheme(mediaQuery.matches ? 'dark' : 'light')
       } else {
-        setCurrentTheme(themeMode === 'dark' ? 'dark' : 'light');
+        setCurrentTheme(themeMode === 'dark' ? 'dark' : 'light')
       }
-    };
+    }
 
-    determineTheme();
+    determineTheme()
 
     // Listen for system theme changes when in system mode
     if (themeMode === 'system') {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
       const handler = (e: MediaQueryListEvent) => {
-        setCurrentTheme(e.matches ? 'dark' : 'light');
-      };
-      
-      mediaQuery.addEventListener('change', handler);
-      return () => mediaQuery.removeEventListener('change', handler);
+        setCurrentTheme(e.matches ? 'dark' : 'light')
+      }
+
+      mediaQuery.addEventListener('change', handler)
+      return () => mediaQuery.removeEventListener('change', handler)
     }
-  }, [themeMode]);
+  }, [themeMode])
 
   // Sync i18n with language from store
   useEffect(() => {
     if (i18n.language !== language) {
-      i18n.changeLanguage(language);
+      i18n.changeLanguage(language)
     }
-  }, [language]);
+  }, [language])
 
   // Create theme based on current settings
-  const theme = useMemo(
-    () => createAppTheme(currentTheme, language),
-    [currentTheme, language]
-  );
+  const theme = useMemo(() => createAppTheme(currentTheme, language), [currentTheme, language])
 
   // Get date-fns locale based on current language
   const dateLocale = useMemo(() => {
     switch (language) {
       case 'fr':
-        return fr;
+        return fr
       case 'wo':
         // Wolof uses Spanish locale as fallback since date-fns doesn't have Wolof
-        return es;
+        return es
       case 'es':
       default:
-        return es;
+        return es
     }
-  }, [language]);
+  }, [language])
 
   return (
     <ApolloProvider client={apolloClient}>

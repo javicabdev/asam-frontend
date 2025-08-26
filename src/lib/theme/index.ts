@@ -1,17 +1,17 @@
-import { createTheme, ThemeOptions } from '@mui/material/styles';
-import { esES, frFR, enUS } from '@mui/material/locale';
+import { createTheme, ThemeOptions } from '@mui/material/styles'
+import { esES, frFR, enUS } from '@mui/material/locale'
 
 // Color palette inspired by Senegal and Spain flags
 const senegalColors = {
   green: '#00853F', // Senegal flag green
   yellow: '#FDEF42', // Senegal flag yellow
   red: '#E31E24', // Senegal flag red
-};
+}
 
 const spainColors = {
   red: '#AA151B', // Spain flag red
   yellow: '#F1BF00', // Spain flag yellow
-};
+}
 
 // Common colors for the association
 const asamColors = {
@@ -22,7 +22,7 @@ const asamColors = {
   warning: '#ff9800',
   error: '#f44336',
   info: '#2196f3',
-};
+}
 
 const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
   palette: {
@@ -149,61 +149,62 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
   shape: {
     borderRadius: 12,
   },
-  shadows: mode === 'light'
-    ? [
-        'none',
-        '0px 2px 4px rgba(0,0,0,0.05)',
-        '0px 4px 8px rgba(0,0,0,0.08)',
-        '0px 8px 16px rgba(0,0,0,0.1)',
-        '0px 12px 24px rgba(0,0,0,0.12)',
-        '0px 16px 32px rgba(0,0,0,0.14)',
-        '0px 20px 40px rgba(0,0,0,0.16)',
-        '0px 24px 48px rgba(0,0,0,0.18)',
-        '0px 28px 56px rgba(0,0,0,0.2)',
-        '0px 32px 64px rgba(0,0,0,0.22)',
-        '0px 36px 72px rgba(0,0,0,0.24)',
-        '0px 40px 80px rgba(0,0,0,0.26)',
-        '0px 44px 88px rgba(0,0,0,0.28)',
-        '0px 48px 96px rgba(0,0,0,0.3)',
-        '0px 52px 104px rgba(0,0,0,0.32)',
-        '0px 56px 112px rgba(0,0,0,0.34)',
-        '0px 60px 120px rgba(0,0,0,0.36)',
-        '0px 64px 128px rgba(0,0,0,0.38)',
-        '0px 68px 136px rgba(0,0,0,0.4)',
-        '0px 72px 144px rgba(0,0,0,0.42)',
-        '0px 76px 152px rgba(0,0,0,0.44)',
-        '0px 80px 160px rgba(0,0,0,0.46)',
-        '0px 84px 168px rgba(0,0,0,0.48)',
-        '0px 88px 176px rgba(0,0,0,0.5)',
-        '0px 92px 184px rgba(0,0,0,0.52)',
-      ]
-    : [
-        'none',
-        '0px 2px 4px rgba(0,0,0,0.2)',
-        '0px 4px 8px rgba(0,0,0,0.25)',
-        '0px 8px 16px rgba(0,0,0,0.3)',
-        '0px 12px 24px rgba(0,0,0,0.35)',
-        '0px 16px 32px rgba(0,0,0,0.4)',
-        '0px 20px 40px rgba(0,0,0,0.45)',
-        '0px 24px 48px rgba(0,0,0,0.5)',
-        '0px 28px 56px rgba(0,0,0,0.55)',
-        '0px 32px 64px rgba(0,0,0,0.6)',
-        '0px 36px 72px rgba(0,0,0,0.65)',
-        '0px 40px 80px rgba(0,0,0,0.7)',
-        '0px 44px 88px rgba(0,0,0,0.75)',
-        '0px 48px 96px rgba(0,0,0,0.8)',
-        '0px 52px 104px rgba(0,0,0,0.85)',
-        '0px 56px 112px rgba(0,0,0,0.9)',
-        '0px 60px 120px rgba(0,0,0,0.95)',
-        '0px 64px 128px rgba(0,0,0,1)',
-        '0px 68px 136px rgba(0,0,0,1)',
-        '0px 72px 144px rgba(0,0,0,1)',
-        '0px 76px 152px rgba(0,0,0,1)',
-        '0px 80px 160px rgba(0,0,0,1)',
-        '0px 84px 168px rgba(0,0,0,1)',
-        '0px 88px 176px rgba(0,0,0,1)',
-        '0px 92px 184px rgba(0,0,0,1)',
-      ],
+  shadows:
+    mode === 'light'
+      ? [
+          'none',
+          '0px 2px 4px rgba(0,0,0,0.05)',
+          '0px 4px 8px rgba(0,0,0,0.08)',
+          '0px 8px 16px rgba(0,0,0,0.1)',
+          '0px 12px 24px rgba(0,0,0,0.12)',
+          '0px 16px 32px rgba(0,0,0,0.14)',
+          '0px 20px 40px rgba(0,0,0,0.16)',
+          '0px 24px 48px rgba(0,0,0,0.18)',
+          '0px 28px 56px rgba(0,0,0,0.2)',
+          '0px 32px 64px rgba(0,0,0,0.22)',
+          '0px 36px 72px rgba(0,0,0,0.24)',
+          '0px 40px 80px rgba(0,0,0,0.26)',
+          '0px 44px 88px rgba(0,0,0,0.28)',
+          '0px 48px 96px rgba(0,0,0,0.3)',
+          '0px 52px 104px rgba(0,0,0,0.32)',
+          '0px 56px 112px rgba(0,0,0,0.34)',
+          '0px 60px 120px rgba(0,0,0,0.36)',
+          '0px 64px 128px rgba(0,0,0,0.38)',
+          '0px 68px 136px rgba(0,0,0,0.4)',
+          '0px 72px 144px rgba(0,0,0,0.42)',
+          '0px 76px 152px rgba(0,0,0,0.44)',
+          '0px 80px 160px rgba(0,0,0,0.46)',
+          '0px 84px 168px rgba(0,0,0,0.48)',
+          '0px 88px 176px rgba(0,0,0,0.5)',
+          '0px 92px 184px rgba(0,0,0,0.52)',
+        ]
+      : [
+          'none',
+          '0px 2px 4px rgba(0,0,0,0.2)',
+          '0px 4px 8px rgba(0,0,0,0.25)',
+          '0px 8px 16px rgba(0,0,0,0.3)',
+          '0px 12px 24px rgba(0,0,0,0.35)',
+          '0px 16px 32px rgba(0,0,0,0.4)',
+          '0px 20px 40px rgba(0,0,0,0.45)',
+          '0px 24px 48px rgba(0,0,0,0.5)',
+          '0px 28px 56px rgba(0,0,0,0.55)',
+          '0px 32px 64px rgba(0,0,0,0.6)',
+          '0px 36px 72px rgba(0,0,0,0.65)',
+          '0px 40px 80px rgba(0,0,0,0.7)',
+          '0px 44px 88px rgba(0,0,0,0.75)',
+          '0px 48px 96px rgba(0,0,0,0.8)',
+          '0px 52px 104px rgba(0,0,0,0.85)',
+          '0px 56px 112px rgba(0,0,0,0.9)',
+          '0px 60px 120px rgba(0,0,0,0.95)',
+          '0px 64px 128px rgba(0,0,0,1)',
+          '0px 68px 136px rgba(0,0,0,1)',
+          '0px 72px 144px rgba(0,0,0,1)',
+          '0px 76px 152px rgba(0,0,0,1)',
+          '0px 80px 160px rgba(0,0,0,1)',
+          '0px 84px 168px rgba(0,0,0,1)',
+          '0px 88px 176px rgba(0,0,0,1)',
+          '0px 92px 184px rgba(0,0,0,1)',
+        ],
   components: {
     MuiCssBaseline: {
       styleOverrides: {
@@ -247,13 +248,10 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
     MuiCard: {
       styleOverrides: {
         root: {
-          boxShadow: mode === 'light' 
-            ? '0 2px 8px rgba(0,0,0,0.08)' 
-            : '0 2px 8px rgba(0,0,0,0.3)',
+          boxShadow: mode === 'light' ? '0 2px 8px rgba(0,0,0,0.08)' : '0 2px 8px rgba(0,0,0,0.3)',
           '&:hover': {
-            boxShadow: mode === 'light'
-              ? '0 4px 16px rgba(0,0,0,0.12)'
-              : '0 4px 16px rgba(0,0,0,0.4)',
+            boxShadow:
+              mode === 'light' ? '0 4px 16px rgba(0,0,0,0.12)' : '0 4px 16px rgba(0,0,0,0.4)',
           },
         },
       },
@@ -261,13 +259,9 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          boxShadow: mode === 'light'
-            ? '0 1px 3px rgba(0,0,0,0.12)'
-            : '0 1px 3px rgba(0,0,0,0.4)',
+          boxShadow: mode === 'light' ? '0 1px 3px rgba(0,0,0,0.12)' : '0 1px 3px rgba(0,0,0,0.4)',
           backdropFilter: 'blur(8px)',
-          backgroundColor: mode === 'light'
-            ? 'rgba(255,255,255,0.9)'
-            : 'rgba(30,30,30,0.9)',
+          backgroundColor: mode === 'light' ? 'rgba(255,255,255,0.9)' : 'rgba(30,30,30,0.9)',
         },
       },
     },
@@ -298,48 +292,48 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
       },
     },
   },
-});
+})
 
 // Language-specific theme options
 const localeMap = {
   es: esES,
   fr: frFR,
   wo: enUS, // Wolof uses English locale as base
-};
+}
 
 export const createAppTheme = (mode: 'light' | 'dark', language: 'es' | 'fr' | 'wo' = 'es') => {
-  const designTokens = getDesignTokens(mode);
-  const locale = localeMap[language] || esES;
-  
-  return createTheme(designTokens, locale);
-};
+  const designTokens = getDesignTokens(mode)
+  const locale = localeMap[language] || esES
+
+  return createTheme(designTokens, locale)
+}
 
 // Export default light theme in Spanish
-export const theme = createAppTheme('light', 'es');
+export const theme = createAppTheme('light', 'es')
 
 // Export color constants for use in components
-export { senegalColors, spainColors, asamColors };
+export { senegalColors, spainColors, asamColors }
 
 // Declare module to add custom palette colors
 declare module '@mui/material/styles' {
   interface Palette {
-    accent: Palette['primary'];
+    accent: Palette['primary']
   }
   interface PaletteOptions {
-    accent: PaletteOptions['primary'];
+    accent: PaletteOptions['primary']
   }
 }
 
 // Update the Button's color prop options
 declare module '@mui/material/Button' {
   interface ButtonPropsColorOverrides {
-    accent: true;
+    accent: true
   }
 }
 
 // Update the Chip's color prop options
 declare module '@mui/material/Chip' {
   interface ChipPropsColorOverrides {
-    accent: true;
+    accent: true
   }
 }

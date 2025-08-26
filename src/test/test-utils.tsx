@@ -14,10 +14,7 @@ interface CustomRenderOptions extends Omit<RenderOptions, 'wrapper'> {
 /**
  * Custom render function that includes all providers
  */
-export function render(
-  ui: React.ReactElement,
-  options?: CustomRenderOptions
-) {
+export function render(ui: React.ReactElement, options?: CustomRenderOptions) {
   const { routerProps, ...renderOptions } = options || {}
 
   function Wrapper({ children }: { children: React.ReactNode }) {

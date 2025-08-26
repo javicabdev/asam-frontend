@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useEffect, useMemo } from 'react'
+import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useTranslation } from 'react-i18next'
 import {
   Box,
   Button,
@@ -16,29 +16,25 @@ import {
   CircularProgress,
   Link,
   Divider,
-} from '@mui/material';
-import {
-  Visibility,
-  VisibilityOff,
-  LockOutlined as LockIcon,
-} from '@mui/icons-material';
-import { useAuth } from '@/hooks/useAuth';
-import { createLoginSchema, LoginFormData } from './loginSchema';
-import { LanguageSelector } from '@/components/common';
+} from '@mui/material'
+import { Visibility, VisibilityOff, LockOutlined as LockIcon } from '@mui/icons-material'
+import { useAuth } from '@/hooks/useAuth'
+import { createLoginSchema, LoginFormData } from './loginSchema'
+import { LanguageSelector } from '@/components/common'
 
 export const LoginPage: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { t, i18n } = useTranslation('auth');
-  const { login, isAuthenticated, isLoading } = useAuth();
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { t, i18n } = useTranslation('auth')
+  const { login, isAuthenticated, isLoading } = useAuth()
+  const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   // Get the redirect location from state
-  const from = location.state?.from?.pathname || '/dashboard';
+  const from = location.state?.from?.pathname || '/dashboard'
 
   // Create the validation schema with current translations
-  const validationSchema = useMemo(() => createLoginSchema(t), [t, i18n.language]);
+  const validationSchema = useMemo(() => createLoginSchema(t), [t, i18n.language])
 
   // Form configuration
   const {
@@ -52,61 +48,56 @@ export const LoginPage: React.FC = () => {
       username: '',
       password: '',
     },
-  });
+  })
 
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(from, { replace: true });
+      navigate(from, { replace: true })
     }
-  }, [isAuthenticated, navigate, from]);
+  }, [isAuthenticated, navigate, from])
 
   // Focus on username field on mount
   useEffect(() => {
-    setFocus('username');
-  }, [setFocus]);
+    setFocus('username')
+  }, [setFocus])
 
   // Handle form submission
   const onSubmit = async (data: LoginFormData) => {
-    setError(null);
+    setError(null)
 
-    const result = await login(data.username, data.password);
+    const result = await login(data.username, data.password)
 
     if (!result.success) {
       // Try to use a specific error translation if available
-      const errorKey = result.error?.replace(/\s+/g, '').toLowerCase();
-      const translationKey = `login.errors.${errorKey}`;
-      const translatedError = t(translationKey);
-      
+      const errorKey = result.error?.replace(/\s+/g, '').toLowerCase()
+      const translationKey = `login.errors.${errorKey}`
+      const translatedError = t(translationKey)
+
       // If translation exists, use it, otherwise use the original error or generic
       setError(
-        translatedError !== translationKey 
-          ? translatedError 
+        translatedError !== translationKey
+          ? translatedError
           : result.error || t('login.errors.generic')
-      );
-      
+      )
+
       // Focus on username field after error
-      setFocus('username');
+      setFocus('username')
     }
-  };
+  }
 
   // Toggle password visibility
   const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
-  };
+    setShowPassword(!showPassword)
+  }
 
   // Show loading state while checking auth
   if (isLoading) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh"
-      >
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
         <CircularProgress />
       </Box>
-    );
+    )
   }
 
   return (
@@ -151,7 +142,7 @@ export const LoginPage: React.FC = () => {
           <Typography component="h1" variant="h5" sx={{ mb: 1 }}>
             {t('login.title')}
           </Typography>
-          
+
           {/* Subtitle */}
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
             {t('login.subtitle')}
@@ -165,11 +156,7 @@ export const LoginPage: React.FC = () => {
           )}
 
           {/* Login Form */}
-          <Box
-            component="form"
-            onSubmit={handleSubmit(onSubmit)}
-            sx={{ width: '100%' }}
-          >
+          <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ width: '100%' }}>
             <TextField
               {...register('username')}
               margin="normal"
@@ -219,11 +206,7 @@ export const LoginPage: React.FC = () => {
               sx={{ mt: 3, mb: 2 }}
               disabled={isSubmitting}
             >
-              {isSubmitting ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : (
-                t('login.submit')
-              )}
+              {isSubmitting ? <CircularProgress size={24} color="inherit" /> : t('login.submit')}
             </Button>
 
             <Divider sx={{ my: 2 }}>{t('common:or', { defaultValue: 'O' })}</Divider>
@@ -238,7 +221,7 @@ export const LoginPage: React.FC = () => {
               >
                 {t('login.forgotPassword')}
               </Link>
-              
+
               <Typography variant="body2" color="text.secondary">
                 {t('login.noAccount')}{' '}
                 <Link component={RouterLink} to="/contact" variant="body2">
@@ -251,9 +234,10 @@ export const LoginPage: React.FC = () => {
 
         {/* Footer */}
         <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 4 }}>
-          © {new Date().getFullYear()} Mutua ASAM. {t('common:footer.rights', { defaultValue: 'Todos los derechos reservados.' })}
+          © {new Date().getFullYear()} Mutua ASAM.{' '}
+          {t('common:footer.rights', { defaultValue: 'Todos los derechos reservados.' })}
         </Typography>
       </Box>
     </Container>
-  );
-};
+  )
+}

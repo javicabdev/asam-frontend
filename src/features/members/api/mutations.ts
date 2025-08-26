@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
 export const CREATE_FAMILY_MUTATION = gql`
   mutation CreateFamily($input: CreateFamilyInput!) {
@@ -16,7 +16,7 @@ export const CREATE_FAMILY_MUTATION = gql`
       }
     }
   }
-`;
+`
 
 export const ADD_FAMILY_MEMBER_MUTATION = gql`
   mutation AddFamilyMember($family_id: ID!, $familiar: FamiliarInput!) {
@@ -32,7 +32,7 @@ export const ADD_FAMILY_MEMBER_MUTATION = gql`
       }
     }
   }
-`;
+`
 
 export const GET_FAMILY_QUERY = gql`
   query GetFamily($id: ID!) {
@@ -64,4 +64,4 @@ export const GET_FAMILY_QUERY = gql`
       }
     }
   }
-`;
+`

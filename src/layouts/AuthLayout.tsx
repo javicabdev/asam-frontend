@@ -26,7 +26,7 @@ export function AuthLayout() {
         <LanguageSelector />
         <ThemeToggle />
       </Box>
-      
+
       {/* Main content */}
       <Box
         sx={{

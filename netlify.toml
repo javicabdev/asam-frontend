@@ -6,11 +6,11 @@
   
   # Directorio de publicación
   publish = "dist"
-  
-  # Node version (opcional pero recomendado)
-  environment = { NODE_VERSION = "18.17.0" }
 
 [build.environment]
+  # Node version
+  NODE_VERSION = "18.17.0"
+  
   # Variables de entorno para el build
   # Estas se pueden sobrescribir en el panel de Netlify
   VITE_APP_NAME = "ASAM"

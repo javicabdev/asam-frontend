@@ -1,0 +1,9 @@
+# Redirecciones para Netlify
+# Este archivo es una alternativa más simple a netlify.toml
+
+# SPA - Todas las rutas van a index.html
+/*    /index.html   200
+
+# API Proxy (cambiar URL según tu backend)
+/graphql    https://api.asam.org/graphql    200
+/api/*      https://api.asam.org/api/:splat  200

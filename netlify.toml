@@ -1,0 +1,113 @@
+# Configuración de Netlify para ASAM Frontend
+
+[build]
+  # Comando de build
+  command = "npm run build:safe"
+  
+  # Directorio de publicación
+  publish = "dist"
+  
+  # Node version (opcional pero recomendado)
+  environment = { NODE_VERSION = "18.17.0" }
+
+[build.environment]
+  # Variables de entorno para el build
+  # Estas se pueden sobrescribir en el panel de Netlify
+  VITE_APP_NAME = "ASAM"
+  VITE_APP_VERSION = "1.0.0"
+  VITE_ENABLE_PWA = "true"
+  VITE_ENABLE_ANALYTICS = "false"
+
+# Redirecciones para SPA (React Router)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# API Proxy (si el backend está en otro dominio)
+[[redirects]]
+  from = "/graphql"
+  to = "https://asam-backend-67685084900.europe-west1.run.app"  # URL del backend en Cloud Run
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
+
+# Headers de seguridad
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Seguridad básica
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Content Security Policy (ajustar según necesidades)
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      font-src 'self' https://fonts.gstatic.com;
+      img-src 'self' data: https:;
+      connect-src 'self' https://asam-backend-xxxxx-ew.a.run.app wss://asam-backend-xxxxx-ew.a.run.app;
+      frame-ancestors 'none';
+    """
+    
+    # Permisos de características
+    Permissions-Policy = """
+      accelerometer=(),
+      camera=(),
+      geolocation=(),
+      gyroscope=(),
+      magnetometer=(),
+      microphone=(),
+      payment=(),
+      usb=()
+    """
+
+# Headers específicos para el Service Worker
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    Service-Worker-Allowed = "/"
+
+# Headers para archivos estáticos
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/workbox-*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Función para manejar el 404
+[[redirects]]
+  from = "/404"
+  to = "/index.html"
+  status = 404
+
+# Plugins de Netlify (opcional)
+[[plugins]]
+  # Plugin para mejorar el caché
+  package = "@netlify/plugin-caching"
+
+# Configuración de funciones (si usas Netlify Functions)
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Configuración de desarrollo local
+[dev]
+  command = "npm run dev"
+  port = 5173
+  targetPort = 5173
+  publish = "dist"
+  autoLaunch = true

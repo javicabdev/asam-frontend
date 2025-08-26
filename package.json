@@ -34,6 +34,10 @@
     "test:ui": "vitest --ui",
     "ci": "node scripts/ci-check.cjs",
     "ci:strict": "npm run lint:strict && npm run test && npm run build",
+    "netlify:validate": "node scripts/validate-netlify.cjs",
+    "netlify:build": "npm run netlify:validate && npm run build:safe",
+    "pwa:copy-icons": "node scripts/copy-pwa-icons.cjs",
+    "netlify:prepare": "npm run pwa:copy-icons && npm run netlify:validate",
     "test:coverage": "vitest --coverage"
   },
   "dependencies": {

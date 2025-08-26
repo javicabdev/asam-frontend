@@ -94,11 +94,6 @@
   to = "/index.html"
   status = 404
 
-# Plugins de Netlify (opcional)
-[[plugins]]
-  # Plugin para mejorar el caché
-  package = "@netlify/plugin-caching"
-
 # Configuración de funciones (si usas Netlify Functions)
 [functions]
   directory = "netlify/functions"

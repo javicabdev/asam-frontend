@@ -51,7 +51,7 @@
       font-src 'self' data: https://fonts.gstatic.com;
       img-src 'self' data: blob: https:;
       media-src 'self';
-      connect-src 'self' https://asam-backend-67685084900.europe-west1.run.app wss://asam-backend-67685084900.europe-west1.run.app;
+      connect-src 'self' https://asam-backend-67685084900.europe-west1.run.app wss://asam-backend-67685084900.europe-west1.run.app https://fonts.googleapis.com https://fonts.gstatic.com;
       worker-src 'self' blob:;
       frame-ancestors 'none';
       form-action 'self';

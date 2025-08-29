@@ -27,7 +27,7 @@
 # API Proxy para el backend en Google Cloud Run
 [[redirects]]
   from = "/graphql"
-  to = "https://asam-backend-67685084900.europe-west1.run.app/graphql"
+  to = "https://asam-backend-jtpswzdxuq-ew.a.run.app/graphql"
   status = 200
   force = true
   headers = {X-From = "Netlify"}
@@ -51,7 +51,7 @@
       font-src 'self' data: https://fonts.gstatic.com;
       img-src 'self' data: blob: https:;
       media-src 'self';
-      connect-src 'self' https://asam-backend-67685084900.europe-west1.run.app wss://asam-backend-67685084900.europe-west1.run.app https://fonts.googleapis.com https://fonts.gstatic.com;
+      connect-src 'self' https://asam-backend-jtpswzdxuq-ew.a.run.app wss://asam-backend-jtpswzdxuq-ew.a.run.app https://fonts.googleapis.com https://fonts.gstatic.com;
       worker-src 'self' blob:;
       frame-ancestors 'none';
       form-action 'self';

@@ -5,5 +5,5 @@
 /*    /index.html   200
 
 # API Proxy para Google Cloud Run
-/graphql    https://asam-backend-67685084900.europe-west1.run.app/graphql    200
-/api/*      https://asam-backend-67685084900.europe-west1.run.app/api/:splat  200
+/graphql    https://asam-backend-jtpswzdxuq-ew.a.run.app/graphql    200
+/api/*      https://asam-backend-jtpswzdxuq-ew.a.run.app/api/:splat  200

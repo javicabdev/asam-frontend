@@ -31,8 +31,12 @@
     "title": "Acciones Rápidas",
     "newMember": "Nuevo Miembro",
     "registerPayment": "Registrar Pago",
-    "viewReports": "Ver Reportes",
-    "manageFamily": "Gestionar Familias"
+    "viewMembers": "Ver Miembros",
+    "viewReports": "Ver Informes",
+    "manageFamily": "Gestionar Familias",
+    "cashFlow": "Flujo de Caja",
+    "membersDescription": "Lista de miembros activos",
+    "cashFlowDescription": "Balance y transacciones"
   },
   "loading": "Cargando dashboard...",
   "error": {

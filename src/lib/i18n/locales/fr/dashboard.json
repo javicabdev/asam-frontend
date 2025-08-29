@@ -31,8 +31,12 @@
     "title": "Actions Rapides",
     "newMember": "Nouveau Membre",
     "registerPayment": "Enregistrer un Paiement",
+    "viewMembers": "Voir les Membres",
     "viewReports": "Voir les Rapports",
-    "manageFamily": "Gérer les Familles"
+    "manageFamily": "Gérer les Familles",
+    "cashFlow": "Flux de Trésorerie",
+    "membersDescription": "Liste des membres actifs",
+    "cashFlowDescription": "Solde et transactions"
   },
   "loading": "Chargement du tableau de bord...",
   "error": {

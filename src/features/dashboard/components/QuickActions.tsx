@@ -6,8 +6,8 @@ import {
   Payment,
   Assessment,
   Group,
-  Receipt,
-  Description,
+  People,
+  AccountBalance,
   ArrowForward,
 } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
@@ -37,14 +37,14 @@ export default function QuickActions() {
       title: t('quickActions.registerPayment'),
       description: t('recentActivity.paymentReceived'),
       icon: <Payment />,
-      path: '/payments/new',
+      path: '/payments',
       color: 'primary',
     },
     {
-      title: t('quickActions.viewReports'),
-      description: t('charts.memberGrowth'),
-      icon: <Assessment />,
-      path: '/reports',
+      title: t('quickActions.viewMembers'),
+      description: t('quickActions.membersDescription'),
+      icon: <People />,
+      path: '/members',
       color: 'info',
     },
     {
@@ -55,17 +55,17 @@ export default function QuickActions() {
       color: 'secondary',
     },
     {
-      title: t('quickActions.registerPayment'),
-      description: t('recentActivity.paymentReceived'),
-      icon: <Receipt />,
-      path: '/receipts/new',
+      title: t('quickActions.viewReports'),
+      description: t('charts.memberGrowth'),
+      icon: <Assessment />,
+      path: '/reports',
       color: 'warning',
     },
     {
-      title: t('quickActions.viewReports'),
-      description: t('charts.monthlyPayments'),
-      icon: <Description />,
-      path: '/documents',
+      title: t('quickActions.cashFlow'),
+      description: t('quickActions.cashFlowDescription'),
+      icon: <AccountBalance />,
+      path: '/cash-flow',
       color: 'primary',
     },
   ]
@@ -106,7 +106,7 @@ export default function QuickActions() {
 
         <Grid container spacing={2}>
           {actions.map((action, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
+            <Grid item xs={12} sm={6} md={4} lg={2} key={index}>
               <Button
                 fullWidth
                 variant="outlined"

@@ -31,8 +31,12 @@
     "title": "Jëf Yu Gaaw",
     "newMember": "Mbooloo Bu Bees",
     "registerPayment": "Bindu Fey",
+    "viewMembers": "Xool Mbooloo Yi",
     "viewReports": "Xool Rapport Yi",
-    "manageFamily": "Saytu Njaboot Yi"
+    "manageFamily": "Saytu Njaboot Yi",
+    "cashFlow": "Doxinu Xaalis",
+    "membersDescription": "Limu mbooloo yu dox",
+    "cashFlowDescription": "Wut ak njurite yi"
   },
   "loading": "Di yeb tablo...",
   "error": {

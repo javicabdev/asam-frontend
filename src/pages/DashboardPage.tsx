@@ -140,6 +140,15 @@ export default function DashboardPage() {
         </Alert>
       )}
 
+      {/* Acciones rápidas - Priorizadas en la parte superior */}
+      <Grid container spacing={3} mb={4}>
+        <Grid item xs={12}>
+          <Paper elevation={0} sx={{ p: 3 }}>
+            <QuickActions />
+          </Paper>
+        </Grid>
+      </Grid>
+
       {/* Stats Cards - Grid mejorado para la estructura del backend */}
       <Grid container spacing={3} mb={4}>
         {/* Primera fila - 4 cards principales */}
@@ -242,16 +251,9 @@ export default function DashboardPage() {
         </Grid>
 
         {/* Actividad reciente */}
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           <Paper elevation={0} sx={{ p: 3, height: '400px' }}>
             <RecentActivity activities={recentActivity} loading={loading} />
-          </Paper>
-        </Grid>
-
-        {/* Acciones rápidas */}
-        <Grid item xs={12} md={6}>
-          <Paper elevation={0} sx={{ p: 3, height: '400px' }}>
-            <QuickActions />
           </Paper>
         </Grid>
       </Grid>

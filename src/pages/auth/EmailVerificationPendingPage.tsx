@@ -23,6 +23,19 @@ import {
 import { useAuth } from '@/hooks/useAuth'
 import { useAuthStore } from '@/stores/authStore'
 
+/**
+ * Helper function to safely extract error messages
+ */
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message
+  }
+  if (typeof error === 'object' && error !== null && 'message' in error) {
+    return String((error as { message: unknown }).message)
+  }
+  return 'Error desconocido'
+}
+
 export const EmailVerificationPendingPage: React.FC = () => {
   const { user } = useAuthStore()
   const { sendVerificationEmail, logout } = useAuth()
@@ -71,7 +84,7 @@ export const EmailVerificationPendingPage: React.FC = () => {
       }
     }
 
-    sendInitialEmail()
+    void sendInitialEmail()
   }, [user, sendVerificationEmail, hasTriedSending])
 
   // Handle resend verification email
@@ -129,11 +142,12 @@ export const EmailVerificationPendingPage: React.FC = () => {
 
         console.error('Failed to send verification email:', result.message)
       }
-    } catch (error: any) {
+    } catch (error) {
       setStatus('error')
       setMessage('Error inesperado. Por favor, intenta de nuevo.')
-      setErrorDetails(error.message || 'Error desconocido')
-      console.error('Exception in handleResendEmail:', error.message)
+      const errorMessage = getErrorMessage(error)
+      setErrorDetails(errorMessage)
+      console.error('Exception in handleResendEmail:', errorMessage)
     }
   }
 
@@ -274,7 +288,7 @@ export const EmailVerificationPendingPage: React.FC = () => {
                   <RefreshIcon />
                 )
               }
-              onClick={handleResendEmail}
+              onClick={() => void handleResendEmail()}
               disabled={status === 'loading' || cooldown}
             >
               {status === 'loading'
@@ -290,7 +304,7 @@ export const EmailVerificationPendingPage: React.FC = () => {
               variant="outlined"
               fullWidth
               startIcon={<LogoutIcon />}
-              onClick={handleLogout}
+              onClick={() => void handleLogout()}
               color="error"
             >
               Cerrar Sesión

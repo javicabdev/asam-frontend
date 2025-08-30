@@ -211,7 +211,7 @@ class TokenManager {
         if (this.isAuthenticationError(new Error('Invalid refresh token response'))) {
           this.clearTokens()
         }
-        // eslint-disable-next-line @typescript-eslint/only-throw-error
+
         throw new Error('Invalid refresh token response: no data returned')
       }
 
@@ -220,7 +220,7 @@ class TokenManager {
       // Validate the new access token format
       if (!this.isValidTokenFormat(accessToken)) {
         console.error('[TokenManager] Invalid access token format in refresh response')
-        // eslint-disable-next-line @typescript-eslint/only-throw-error
+
         throw new Error('Invalid access token format in refresh response')
       }
 

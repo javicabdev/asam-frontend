@@ -23,7 +23,7 @@ export function MemberDetailsSkeleton() {
               <Skeleton variant="text" width={150} height={28} sx={{ mb: 2 }} />
 
               <Box sx={{ '& > *': { mb: 2 } }}>
-                {[...Array(5)].map((_, index) => (
+                {Array.from({ length: 5 }).map((_, index) => (
                   <Box key={index}>
                     <Skeleton variant="text" width={100} height={16} />
                     <Skeleton variant="text" width="80%" height={24} />
@@ -41,7 +41,7 @@ export function MemberDetailsSkeleton() {
               <Skeleton variant="text" width={150} height={28} sx={{ mb: 2 }} />
 
               <Box sx={{ '& > *': { mb: 2 } }}>
-                {[...Array(4)].map((_, index) => (
+                {Array.from({ length: 4 }).map((_, index) => (
                   <Box key={index}>
                     <Skeleton variant="text" width={100} height={16} />
                     <Skeleton variant="text" width="75%" height={24} />
@@ -59,7 +59,7 @@ export function MemberDetailsSkeleton() {
               <Skeleton variant="text" width={150} height={28} sx={{ mb: 2 }} />
 
               <Box sx={{ '& > *': { mb: 2 } }}>
-                {[...Array(4)].map((_, index) => (
+                {Array.from({ length: 4 }).map((_, index) => (
                   <Box key={index}>
                     <Skeleton variant="text" width={100} height={16} />
                     <Skeleton variant="text" width="70%" height={24} />
@@ -77,7 +77,7 @@ export function MemberDetailsSkeleton() {
               <Skeleton variant="text" width={150} height={28} sx={{ mb: 2 }} />
 
               <Box sx={{ '& > *': { mb: 2 } }}>
-                {[...Array(3)].map((_, index) => (
+                {Array.from({ length: 3 }).map((_, index) => (
                   <Box key={index}>
                     <Skeleton variant="text" width={100} height={16} />
                     <Skeleton variant="text" width="60%" height={24} />
@@ -94,7 +94,7 @@ export function MemberDetailsSkeleton() {
             <Skeleton variant="text" width={200} height={28} sx={{ mb: 2 }} />
             <Divider sx={{ mb: 2 }} />
 
-            {[...Array(3)].map((_, index) => (
+            {Array.from({ length: 3 }).map((_, index) => (
               <Box key={index} sx={{ mb: 2 }}>
                 <Box display="flex" justifyContent="space-between" alignItems="center">
                   <Box display="flex" alignItems="center" gap={2}>

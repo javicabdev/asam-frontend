@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { useSnackbar, VariantType, SnackbarKey } from 'notistack'
 import { IconButton } from '@mui/material'
 import { Close as CloseIcon } from '@mui/icons-material'
@@ -132,9 +132,9 @@ export const useAsyncNotification = () => {
       }: {
         loadingMessage?: string
         successMessage?: string | ((result: T) => string)
-        errorMessage?: string | ((error: any) => string)
+        errorMessage?: string | ((error: unknown) => string)
         onSuccess?: (result: T) => void
-        onError?: (error: any) => void
+        onError?: (error: unknown) => void
       } = {}
     ): Promise<T | null> => {
       const loadingNotification = notification.loading(loadingMessage)

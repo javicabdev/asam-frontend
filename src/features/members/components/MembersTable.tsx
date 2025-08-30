@@ -4,8 +4,6 @@ import {
   GridColDef,
   GridPaginationModel,
   GridSortModel,
-  GridValueGetterParams,
-  GridRenderCellParams,
   GridRowParams,
   GridRowSelectionModel,
   GridToolbarContainer,
@@ -232,31 +230,31 @@ export function MembersTable({
   })
 
   const handleExportAll = useCallback(() => {
-    exportAllMembers()
+    void exportAllMembers()
   }, [exportAllMembers])
 
   const handleExportFiltered = useCallback(() => {
     if (filters) {
-      exportFilteredMembers(filters)
+      void exportFilteredMembers(filters)
     }
   }, [exportFilteredMembers, filters])
 
   const handleExportSelected = useCallback(() => {
     const selectedIds = rowSelectionModel as string[]
     if (selectedIds.length > 0) {
-      exportSelectedMembers(selectedIds, filters)
+      void exportSelectedMembers(selectedIds, filters)
     }
   }, [exportSelectedMembers, rowSelectionModel, filters])
 
-  const columns: GridColDef[] = useMemo(
+  const columns: GridColDef<Member>[] = useMemo(
     () => [
       {
         field: 'numero_socio',
         headerName: 'Nº Socio',
         width: 110,
         sortable: true,
-        renderCell: (params: GridRenderCellParams) => (
-          <Tooltip title={`Ver detalles de ${params.row.nombre}`}>
+        renderCell: (params) => (
+          <Tooltip title={`Ver detalles de ${params.row ? params.row.nombre || '' : ''}`}>
             <Box
               sx={{
                 cursor: 'pointer',
@@ -275,12 +273,14 @@ export function MembersTable({
         headerName: 'Nombre Completo',
         width: 250,
         sortable: true,
-        valueGetter: (params: GridValueGetterParams) =>
-          `${params.row.nombre} ${params.row.apellidos}`,
-        renderCell: (params: GridRenderCellParams) => (
+        valueGetter: (params) => {
+          if (!params.row) return ''
+          return `${params.row.nombre || ''} ${params.row.apellidos || ''}`
+        },
+        renderCell: (params) => (
           <Box>
-            <Typography variant="body2">{params.value}</Typography>
-            {params.row.documento_identidad && (
+            <Typography variant="body2">{params.value || ''}</Typography>
+            {params.row && params.row.documento_identidad && (
               <Typography variant="caption" color="text.secondary">
                 DNI: {params.row.documento_identidad}
               </Typography>
@@ -294,7 +294,7 @@ export function MembersTable({
         width: 120,
         sortable: true,
         filterable: true,
-        renderCell: (params: GridRenderCellParams) => (
+        renderCell: (params) => (
           <Chip
             label={params.value === MembershipType.INDIVIDUAL ? 'Individual' : 'Familiar'}
             color={params.value === MembershipType.INDIVIDUAL ? 'primary' : 'secondary'}
@@ -308,7 +308,7 @@ export function MembersTable({
         width: 120,
         sortable: true,
         filterable: true,
-        renderCell: (params: GridRenderCellParams) => (
+        renderCell: (params) => (
           <Chip
             label={params.value === MemberStatus.ACTIVE ? 'Activo' : 'Inactivo'}
             color={params.value === MemberStatus.ACTIVE ? 'success' : 'default'}
@@ -330,7 +330,10 @@ export function MembersTable({
         width: 130,
         sortable: true,
         filterable: true,
-        renderCell: (params: GridRenderCellParams) => params.value || '-',
+        renderCell: (params) => {
+          const value = params.value as string | null | undefined
+          return value || '-'
+        },
       },
       {
         field: 'correo_electronico',
@@ -338,14 +341,14 @@ export function MembersTable({
         width: 200,
         sortable: false,
         filterable: true,
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params) => {
           if (!params.value) return '-'
           return (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <EmailIcon sx={{ fontSize: 16, mr: 0.5, color: 'text.secondary' }} />
-              <Tooltip title={params.value}>
+              <Tooltip title={params.value as string}>
                 <Typography variant="body2" noWrap>
-                  {params.value}
+                  {params.value as string}
                 </Typography>
               </Tooltip>
             </Box>
@@ -359,8 +362,9 @@ export function MembersTable({
         sortable: true,
         filterable: true,
         valueFormatter: (params) => {
-          if (!params.value) return ''
-          return format(new Date(params.value), 'dd/MM/yyyy', { locale: es })
+          const dateValue = params.value as string
+          if (!dateValue) return ''
+          return format(new Date(dateValue), 'dd/MM/yyyy', { locale: es })
         },
       },
       {
@@ -370,10 +374,11 @@ export function MembersTable({
         sortable: true,
         filterable: true,
         valueFormatter: (params) => {
-          if (!params.value) return '-'
-          return format(new Date(params.value), 'dd/MM/yyyy', { locale: es })
+          const dateValue = params.value as string
+          if (!dateValue) return '-'
+          return format(new Date(dateValue), 'dd/MM/yyyy', { locale: es })
         },
-        renderCell: (params: GridRenderCellParams) => {
+        renderCell: (params) => {
           if (!params.value) return '-'
           return (
             <Typography variant="body2" color="error" sx={{ fontWeight: 'medium' }}>
@@ -389,14 +394,16 @@ export function MembersTable({
         sortable: false,
         filterable: false,
         disableColumnMenu: true,
-        renderCell: (params: GridRenderCellParams) => (
+        renderCell: (params) => (
           <Box>
             <Tooltip title="Ver detalles">
               <IconButton
                 size="small"
                 onClick={(e) => {
                   e.stopPropagation()
-                  onRowClick(params.row as Member)
+                  if (params.row) {
+                    onRowClick(params.row)
+                  }
                 }}
               >
                 <VisibilityIcon fontSize="small" />
@@ -434,7 +441,7 @@ export function MembersTable({
     }
   }
 
-  const getRowClassName = (params: GridRowParams) => {
+  const getRowClassName = (params: GridRowParams<Member>) => {
     if (params.row.estado === MemberStatus.INACTIVE) {
       return 'inactive-row'
     }
@@ -462,7 +469,12 @@ export function MembersTable({
         onSortModelChange={handleSortModelChange}
         paginationMode="server"
         sortingMode="server"
-        onRowClick={(params) => onRowClick(params.row as Member)}
+        onRowClick={(params) => {
+          if (params.row) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            onRowClick(params.row)
+          }
+        }}
         disableRowSelectionOnClick
         checkboxSelection={selectable}
         rowSelectionModel={rowSelectionModel}

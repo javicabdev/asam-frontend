@@ -1,5 +1,6 @@
+import React from 'react'
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { renderHook, act, waitFor } from '@testing-library/react'
+import { renderHook, waitFor } from '@testing-library/react'
 import { MockedProvider } from '@apollo/client/testing'
 import { useAuth } from '@/hooks/useAuth'
 import { useAuthStore } from '@/stores/authStore'
@@ -10,8 +11,8 @@ import {
 
 // Mock navigate
 const mockNavigate = vi.fn()
-vi.mock('react-router-dom', () => ({
-  ...vi.importActual('react-router-dom'),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
   useNavigate: () => mockNavigate,
 }))
 
@@ -55,17 +56,14 @@ describe('Email Verification Flow', () => {
     ]
 
     const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         {children}
       </MockedProvider>
     )
 
     const { result } = renderHook(() => useAuth(), { wrapper })
 
-    let response
-    await act(async () => {
-      response = await result.current.sendVerificationEmail()
-    })
+    const response = await result.current.sendVerificationEmail()
 
     await waitFor(() => {
       expect(response).toEqual({
@@ -80,17 +78,14 @@ describe('Email Verification Flow', () => {
     useAuthStore.getState().logout()
 
     const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         {children}
       </MockedProvider>
     )
 
     const { result } = renderHook(() => useAuth(), { wrapper })
 
-    let response
-    await act(async () => {
-      response = await result.current.sendVerificationEmail()
-    })
+    const response = await result.current.sendVerificationEmail()
 
     expect(response).toEqual({
       success: false,
@@ -115,17 +110,14 @@ describe('Email Verification Flow', () => {
     })
 
     const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         {children}
       </MockedProvider>
     )
 
     const { result } = renderHook(() => useAuth(), { wrapper })
 
-    let response
-    await act(async () => {
-      response = await result.current.sendVerificationEmail()
-    })
+    const response = await result.current.sendVerificationEmail()
 
     expect(response).toEqual({
       success: false,
@@ -166,17 +158,14 @@ describe('Email Verification Flow', () => {
     ]
 
     const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         {children}
       </MockedProvider>
     )
 
     const { result } = renderHook(() => useAuth(), { wrapper })
 
-    let response
-    await act(async () => {
-      response = await result.current.sendVerificationEmail()
-    })
+    const response = await result.current.sendVerificationEmail()
 
     expect(response).toEqual({
       success: false,

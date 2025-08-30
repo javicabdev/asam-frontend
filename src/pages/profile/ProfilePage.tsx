@@ -71,7 +71,7 @@ export const ProfilePage: React.FC = () => {
       } else {
         setErrorMessage(result.message || 'Error al cambiar la contraseña')
       }
-    } catch (error) {
+    } catch {
       setErrorMessage('Error inesperado al cambiar la contraseña')
     }
   }
@@ -200,7 +200,7 @@ export const ProfilePage: React.FC = () => {
                 </Alert>
               )}
 
-              <form onSubmit={handleSubmit(onSubmit)}>
+              <form onSubmit={(...args) => void handleSubmit(onSubmit)(...args)}>
                 <TextField
                   fullWidth
                   type="password"

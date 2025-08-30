@@ -38,7 +38,7 @@ const formatDate = (date: string | null | undefined, format: 'ISO' | 'ES' = 'ES'
 /**
  * Escapes a string value for CSV
  */
-const escapeCSVValue = (value: any): string => {
+const escapeCSVValue = (value: string | number | boolean | null | undefined): string => {
   if (value === null || value === undefined) return ''
 
   const stringValue = String(value)

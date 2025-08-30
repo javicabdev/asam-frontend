@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React from 'react'
 import { render as rtlRender, RenderOptions } from '@testing-library/react'
 import { MemoryRouter, MemoryRouterProps } from 'react-router-dom'
@@ -32,6 +33,23 @@ export function render(ui: React.ReactElement, options?: CustomRenderOptions) {
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
 }
 
-// Re-export everything
-export * from '@testing-library/react'
-export { default as userEvent } from '@testing-library/user-event'
+// Re-export specific utilities from @testing-library/react
+export {
+  screen,
+  fireEvent,
+  waitFor,
+  within,
+  cleanup,
+  act,
+  renderHook,
+  waitForElementToBeRemoved,
+} from '@testing-library/react'
+
+// Re-export types
+export type {
+  RenderResult,
+  RenderOptions,
+  Queries,
+  queries,
+  BoundFunctions,
+} from '@testing-library/react'

@@ -10,7 +10,7 @@ afterEach(() => {
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation((query) => ({
+  value: vi.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -23,16 +23,22 @@ Object.defineProperty(window, 'matchMedia', {
 })
 
 // Mock IntersectionObserver
-global.IntersectionObserver = class IntersectionObserver {
-  root = null
-  rootMargin = ''
-  thresholds = []
+class MockIntersectionObserver implements IntersectionObserver {
+  readonly root: Element | Document | null = null
+  readonly rootMargin: string = ''
+  readonly thresholds: ReadonlyArray<number> = []
 
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  unobserve() {}
-  takeRecords() {
+  constructor(
+    public callback: IntersectionObserverCallback,
+    public options?: IntersectionObserverInit
+  ) {}
+  
+  disconnect(): void {}
+  observe(_target: Element): void {}
+  unobserve(_target: Element): void {}
+  takeRecords(): IntersectionObserverEntry[] {
     return []
   }
-} as any
+}
+
+global.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver

@@ -12,6 +12,19 @@ import {
 } from '@/graphql/generated/operations'
 
 /**
+ * Helper function to safely extract error messages
+ */
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message
+  }
+  if (typeof error === 'object' && error !== null && 'message' in error) {
+    return String((error as { message: unknown }).message)
+  }
+  return 'An unexpected error occurred'
+}
+
+/**
  * @deprecated Use useAuth instead
  * A lightweight version of useAuth for public pages (login, register, etc.)
  * that doesn't attempt to fetch the current user
@@ -95,11 +108,12 @@ export const useAuthPublic = () => {
           success: false,
           error: 'Invalid credentials',
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error('Login error:', error)
+        const errorMessage = getErrorMessage(error)
         return {
           success: false,
-          error: error.message || 'Login failed',
+          error: errorMessage || 'Login failed',
         }
       }
     },
@@ -133,10 +147,11 @@ export const useAuthPublic = () => {
         success: data?.sendVerificationEmail?.success || false,
         message: data?.sendVerificationEmail?.message,
       }
-    } catch (error: any) {
+    } catch (error) {
+      const errorMessage = getErrorMessage(error)
       return {
         success: false,
-        message: error.message || 'Failed to send verification email',
+        message: errorMessage || 'Failed to send verification email',
       }
     }
   }, [sendVerificationEmail])
@@ -177,11 +192,12 @@ export const useAuthPublic = () => {
             data?.verifyEmail?.error ||
             'Email verification completed',
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error('❌ Verify email error:', error)
+        const errorMessage = getErrorMessage(error)
         return {
           success: false,
-          message: error.message || 'Failed to verify email',
+          message: errorMessage || 'Failed to verify email',
         }
       }
     },
@@ -200,10 +216,11 @@ export const useAuthPublic = () => {
           success: data?.requestPasswordReset?.success || false,
           message: data?.requestPasswordReset?.message,
         }
-      } catch (error: any) {
+      } catch (error) {
+        const errorMessage = getErrorMessage(error)
         return {
           success: false,
-          message: error.message || 'Failed to request password reset',
+          message: errorMessage || 'Failed to request password reset',
         }
       }
     },
@@ -222,10 +239,11 @@ export const useAuthPublic = () => {
           success: data?.resetPasswordWithToken?.success || false,
           message: data?.resetPasswordWithToken?.message,
         }
-      } catch (error: any) {
+      } catch (error) {
+        const errorMessage = getErrorMessage(error)
         return {
           success: false,
-          message: error.message || 'Failed to reset password',
+          message: errorMessage || 'Failed to reset password',
         }
       }
     },

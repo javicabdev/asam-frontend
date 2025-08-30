@@ -42,7 +42,7 @@ export const LoginPage: React.FC = () => {
   const from = locationState?.from?.pathname || '/dashboard'
 
   // Create the validation schema with current translations
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   const validationSchema = useMemo(() => createLoginSchema(t), [t])
 
   // Form configuration

@@ -13,6 +13,12 @@ import {
   useResetPasswordWithTokenMutation,
   useChangePasswordMutation,
 } from '@/graphql/generated/operations'
+import { ApolloError } from '@apollo/client'
+
+interface GraphQLErrorExtensions {
+  code?: string
+  [key: string]: unknown
+}
 
 export const useAuth = () => {
   const navigate = useNavigate()
@@ -40,21 +46,31 @@ export const useAuth = () => {
   const [changePassword] = useChangePasswordMutation()
 
   // Lazy query para control manual
-  const [getCurrentUser, { loading: userLoading }] = useGetCurrentUserLazyQuery({
-    fetchPolicy: 'network-only', // Siempre obtener datos frescos
-    onCompleted: (data) => {
-      if (data.getCurrentUser) {
-        setUser(data.getCurrentUser)
-      }
+  const [getCurrentUser, { loading: userLoading, data: userData, error: userError }] = 
+    useGetCurrentUserLazyQuery({
+      fetchPolicy: 'network-only', // Siempre obtener datos frescos
+    })
+
+  // Manejar la respuesta exitosa con useEffect
+  useEffect(() => {
+    if (userData?.getCurrentUser) {
+      setUser(userData.getCurrentUser)
       setLoading(false)
       fetchingUserRef.current = false
-    },
-    onError: (error) => {
-      console.error('GetCurrentUser error:', error)
+    }
+  }, [userData, setUser, setLoading])
 
+  // Manejar errores con useEffect
+  useEffect(() => {
+    if (userError) {
+      console.error('GetCurrentUser error:', userError)
+      
       // Verificar si es un error de autenticación real
-      const isAuthError = error.graphQLErrors?.some(
-        (e) => e.extensions?.code === 'UNAUTHENTICATED' || e.message.includes('UNAUTHORIZED')
+      const isAuthError = userError.graphQLErrors?.some(
+        (e) => {
+          const extensions = e.extensions as GraphQLErrorExtensions | undefined
+          return extensions?.code === 'UNAUTHENTICATED' || e.message.includes('UNAUTHORIZED')
+        }
       )
 
       if (isAuthError) {
@@ -63,8 +79,8 @@ export const useAuth = () => {
 
       setLoading(false)
       fetchingUserRef.current = false
-    },
-  })
+    }
+  }, [userError, clearAuthData, setLoading])
 
   // Función para obtener el usuario actual de forma segura
   const fetchCurrentUser = useCallback(async () => {
@@ -77,7 +93,7 @@ export const useAuth = () => {
     // Pequeño delay para asegurar que el token esté en Apollo Client
     await new Promise((resolve) => setTimeout(resolve, 100))
 
-    getCurrentUser()
+    void getCurrentUser()
   }, [isAuthenticated, accessToken, getCurrentUser])
 
   // Login function
@@ -131,11 +147,12 @@ export const useAuth = () => {
           success: false,
           error: 'Invalid credentials',
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error('Login error:', error)
+        const message = error instanceof Error ? error.message : 'Login failed'
         return {
           success: false,
-          error: error.message || 'Login failed',
+          error: message,
         }
       }
     },
@@ -230,7 +247,10 @@ export const useAuth = () => {
         // Check for GraphQL errors
         if (errors && errors.length > 0) {
           const authError = errors.find(
-            (e) => e.extensions?.code === 'UNAUTHENTICATED' || e.message.includes('UNAUTHORIZED')
+            (e) => {
+              const extensions = e.extensions as GraphQLErrorExtensions | undefined
+              return extensions?.code === 'UNAUTHENTICATED' || e.message.includes('UNAUTHORIZED')
+            }
           )
 
           if (authError && attempt < maxRetries) {
@@ -265,20 +285,24 @@ export const useAuth = () => {
 
         // If it's an auth error and we have retries left, continue
         console.log('[useAuth] Auth error, will retry if attempts remain')
-      } catch (error: any) {
+      } catch (error) {
         console.error(`[useAuth] Exception on attempt ${attempt}:`, error)
 
         // Check if it's an auth error
         const isAuthError =
-          error.message?.includes('UNAUTHORIZED') ||
-          error.message?.includes('401') ||
-          error.graphQLErrors?.some((e: any) => e.extensions?.code === 'UNAUTHENTICATED')
+          (error instanceof Error && 
+            (error.message?.includes('UNAUTHORIZED') || error.message?.includes('401'))) ||
+          (error instanceof ApolloError && 
+            error.graphQLErrors?.some((e) => 
+              (e.extensions as GraphQLErrorExtensions)?.code === 'UNAUTHENTICATED'
+            ))
 
         // If it's not an auth error or we're out of retries, return the error
         if (!isAuthError || attempt === maxRetries) {
+          const message = error instanceof Error ? error.message : 'Error al enviar el email de verificación'
           return {
             success: false,
-            message: error.message || 'Error al enviar el email de verificación',
+            message,
           }
         }
       }
@@ -309,10 +333,11 @@ export const useAuth = () => {
           success: data?.verifyEmail?.success || false,
           message: data?.verifyEmail?.message,
         }
-      } catch (error: any) {
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to verify email'
         return {
           success: false,
-          message: error.message || 'Failed to verify email',
+          message,
         }
       }
     },
@@ -331,10 +356,11 @@ export const useAuth = () => {
           success: data?.requestPasswordReset?.success || false,
           message: data?.requestPasswordReset?.message,
         }
-      } catch (error: any) {
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to request password reset'
         return {
           success: false,
-          message: error.message || 'Failed to request password reset',
+          message,
         }
       }
     },
@@ -353,10 +379,11 @@ export const useAuth = () => {
           success: data?.resetPasswordWithToken?.success || false,
           message: data?.resetPasswordWithToken?.message,
         }
-      } catch (error: any) {
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to reset password'
         return {
           success: false,
-          message: error.message || 'Failed to reset password',
+          message,
         }
       }
     },
@@ -377,10 +404,11 @@ export const useAuth = () => {
           success: data?.changePassword?.success || false,
           message: data?.changePassword?.message,
         }
-      } catch (error: any) {
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to change password'
         return {
           success: false,
-          message: error.message || 'Failed to change password',
+          message,
         }
       }
     },
@@ -395,7 +423,7 @@ export const useAuth = () => {
     // 3. Tiene un token de acceso
     // 4. No está cargando actualmente
     if (isAuthenticated && !user && accessToken && !userLoading && !fetchingUserRef.current) {
-      fetchCurrentUser()
+      void fetchCurrentUser()
     } else if (!isAuthenticated || !accessToken) {
       setLoading(false)
     }

@@ -26,15 +26,17 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx"
+  ],
   "exclude": [
     "node_modules",
     "**/*.example.ts",
-    "**/*.example.tsx",
-    "**/*.test.ts",
-    "**/*.test.tsx",
-    "**/*.spec.ts",
-    "**/*.spec.tsx"
+    "**/*.example.tsx"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

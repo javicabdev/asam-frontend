@@ -1,0 +1,9 @@
+# Health check queries
+
+query Health {
+  health
+}
+
+query Ping {
+  ping
+}

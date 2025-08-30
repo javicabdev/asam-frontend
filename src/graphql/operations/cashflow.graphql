@@ -1,0 +1,136 @@
+# CashFlow queries and mutations
+
+query GetCashFlow($id: ID!) {
+  getCashFlow(id: $id) {
+    id
+    amount
+    date
+    operation_type
+    detail
+    member {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    family {
+      id
+      numero_socio
+      esposo_nombre
+      esposa_nombre
+    }
+    payment {
+      id
+      amount
+      payment_date
+      status
+      payment_method
+    }
+  }
+}
+
+query GetBalance {
+  getBalance
+}
+
+query GetTransactions($filter: TransactionFilter) {
+  getTransactions(filter: $filter) {
+    nodes {
+      id
+      amount
+      date
+      operation_type
+      detail
+      member {
+        miembro_id
+        numero_socio
+        nombre
+        apellidos
+      }
+      family {
+        id
+        numero_socio
+        esposo_nombre
+        esposa_nombre
+      }
+      payment {
+        id
+        amount
+        payment_date
+        status
+        payment_method
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      totalCount
+    }
+  }
+}
+
+mutation RegisterTransaction($input: TransactionInput!) {
+  registerTransaction(input: $input) {
+    id
+    amount
+    date
+    operation_type
+    detail
+    member {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    family {
+      id
+      numero_socio
+      esposo_nombre
+      esposa_nombre
+    }
+    payment {
+      id
+      amount
+      payment_date
+      status
+      payment_method
+    }
+  }
+}
+
+mutation UpdateTransaction($id: ID!, $input: TransactionInput!) {
+  updateTransaction(id: $id, input: $input) {
+    id
+    amount
+    date
+    operation_type
+    detail
+    member {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    family {
+      id
+      numero_socio
+      esposo_nombre
+      esposa_nombre
+    }
+    payment {
+      id
+      amount
+      payment_date
+      status
+      payment_method
+    }
+  }
+}
+
+mutation AdjustBalance($amount: Float!, $reason: String!) {
+  adjustBalance(amount: $amount, reason: $reason) {
+    success
+    message
+    error
+  }
+}

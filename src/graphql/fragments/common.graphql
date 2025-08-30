@@ -1,0 +1,90 @@
+# Common fragments for reuse across queries
+
+fragment MemberBasicInfo on Member {
+  miembro_id
+  numero_socio
+  nombre
+  apellidos
+  tipo_membresia
+  estado
+}
+
+fragment MemberFullInfo on Member {
+  miembro_id
+  numero_socio
+  tipo_membresia
+  nombre
+  apellidos
+  calle_numero_piso
+  codigo_postal
+  poblacion
+  provincia
+  pais
+  estado
+  fecha_alta
+  fecha_baja
+  fecha_nacimiento
+  documento_identidad
+  correo_electronico
+  profesion
+  nacionalidad
+  observaciones
+}
+
+fragment FamilyBasicInfo on Family {
+  id
+  numero_socio
+  esposo_nombre
+  esposo_apellidos
+  esposa_nombre
+  esposa_apellidos
+}
+
+fragment FamiliarInfo on Familiar {
+  id
+  nombre
+  apellidos
+  fecha_nacimiento
+  dni_nie
+  correo_electronico
+}
+
+fragment UserInfo on User {
+  id
+  username
+  email
+  role
+  isActive
+  lastLogin
+  emailVerified
+  emailVerifiedAt
+}
+
+fragment PaymentInfo on Payment {
+  id
+  amount
+  payment_date
+  status
+  payment_method
+  notes
+}
+
+fragment CashFlowInfo on CashFlow {
+  id
+  amount
+  date
+  operation_type
+  detail
+}
+
+fragment PageInfoFragment on PageInfo {
+  hasNextPage
+  hasPreviousPage
+  totalCount
+}
+
+fragment MutationResult on MutationResponse {
+  success
+  message
+  error
+}

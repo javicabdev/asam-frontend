@@ -1,6 +1,10 @@
 import { useState, useCallback, useRef } from 'react'
 import { useLazyQuery } from '@apollo/client'
-import { CheckMemberNumberExistsDocument } from '@/graphql/generated/operations'
+import {
+  CheckMemberNumberExistsQuery,
+  CheckMemberNumberExistsQueryVariables,
+  CheckMemberNumberExistsDocument
+} from '@/graphql/generated/operations'
 
 interface UseMemberNumberValidationResult {
   isValidating: boolean
@@ -22,7 +26,10 @@ export function useMemberNumberValidation(): UseMemberNumberValidationResult {
   // Use a ref to store the timeout for debouncing
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const [checkExists] = useLazyQuery(CheckMemberNumberExistsDocument, {
+  const [checkExists] = useLazyQuery<
+    CheckMemberNumberExistsQuery,
+    CheckMemberNumberExistsQueryVariables
+  >(CheckMemberNumberExistsDocument, {
     fetchPolicy: 'no-cache',
     errorPolicy: 'all',
   })
@@ -47,28 +54,30 @@ export function useMemberNumberValidation(): UseMemberNumberValidationResult {
       setIsValidating(true)
 
       return new Promise((resolve) => {
-        timeoutRef.current = setTimeout(async () => {
-          try {
-            const { data, error: queryError } = await checkExists({
-              variables: { memberNumber },
-            })
+        timeoutRef.current = setTimeout(() => {
+          void (async () => {
+            try {
+              const { data, error: queryError } = await checkExists({
+                variables: { memberNumber },
+              })
 
-            if (queryError) {
+              if (queryError) {
+                setError('Error al verificar el número de socio')
+                setIsValidating(false)
+                resolve(false)
+                return
+              }
+
+              const exists = Boolean(data?.checkMemberNumberExists)
+              setIsDuplicate(exists)
+              setIsValidating(false)
+              resolve(!exists)
+            } catch {
               setError('Error al verificar el número de socio')
               setIsValidating(false)
               resolve(false)
-              return
             }
-
-            const exists = data?.checkMemberNumberExists || false
-            setIsDuplicate(exists)
-            setIsValidating(false)
-            resolve(!exists)
-          } catch (err) {
-            setError('Error al verificar el número de socio')
-            setIsValidating(false)
-            resolve(false)
-          }
+          })()
         }, 500) // 500ms debounce
       })
     },

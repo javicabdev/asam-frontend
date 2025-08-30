@@ -1,35 +1,47 @@
-# Fragments
-fragment UserFields on User {
-  id
-  username
-  email
-  role
-  isActive
-  lastLogin
-  emailVerified
-  emailVerifiedAt
-}
+# Authentication queries and mutations
 
-fragment AuthTokens on AuthResponse {
-  accessToken
-  refreshToken
-  expiresAt
-}
-
-# Queries
 query GetCurrentUser {
   getCurrentUser {
-    ...UserFields
+    id
+    username
+    email
+    role
+    member {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+      correo_electronico
+    }
+    isActive
+    lastLogin
+    emailVerified
+    emailVerifiedAt
   }
 }
 
-# Mutations
 mutation Login($input: LoginInput!) {
   login(input: $input) {
     user {
-      ...UserFields
+      id
+      username
+      email
+      role
+      member {
+        miembro_id
+        numero_socio
+        nombre
+        apellidos
+        correo_electronico
+      }
+      isActive
+      lastLogin
+      emailVerified
+      emailVerifiedAt
     }
-    ...AuthTokens
+    accessToken
+    refreshToken
+    expiresAt
   }
 }
 
@@ -73,6 +85,14 @@ mutation VerifyEmail($token: String!) {
   }
 }
 
+mutation ResendVerificationEmail($email: String!) {
+  resendVerificationEmail(email: $email) {
+    success
+    message
+    error
+  }
+}
+
 mutation RequestPasswordReset($email: String!) {
   requestPasswordReset(email: $email) {
     success
@@ -83,15 +103,6 @@ mutation RequestPasswordReset($email: String!) {
 
 mutation ResetPasswordWithToken($token: String!, $newPassword: String!) {
   resetPasswordWithToken(token: $token, newPassword: $newPassword) {
-    success
-    message
-    error
-  }
-}
-
-# Resend verification email - was missing
-mutation ResendVerificationEmail($email: String!) {
-  resendVerificationEmail(email: $email) {
     success
     message
     error

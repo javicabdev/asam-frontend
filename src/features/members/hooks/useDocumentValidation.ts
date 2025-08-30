@@ -1,6 +1,10 @@
 import { useState, useCallback, useRef } from 'react'
 import { useLazyQuery } from '@apollo/client'
-import { ValidateDocumentDocument } from '@/graphql/generated/operations'
+import { 
+  ValidateDocumentQuery,
+  ValidateDocumentQueryVariables,
+  ValidateDocumentDocument 
+} from '@/graphql/generated/operations'
 
 interface DocumentValidationResult {
   isValid: boolean
@@ -28,10 +32,13 @@ export function useDocumentValidation(): UseDocumentValidationResult {
   // Use a ref to store the timeout for debouncing
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const [checkDocument] = useLazyQuery(ValidateDocumentDocument, {
-    fetchPolicy: 'no-cache',
-    errorPolicy: 'all',
-  })
+  const [checkDocument] = useLazyQuery<ValidateDocumentQuery, ValidateDocumentQueryVariables>(
+    ValidateDocumentDocument,
+    {
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'all',
+    }
+  )
 
   const validateDocument = useCallback(
     async (documentNumber: string): Promise<DocumentValidationResult | null> => {
@@ -53,28 +60,38 @@ export function useDocumentValidation(): UseDocumentValidationResult {
       setIsValidating(true)
 
       return new Promise((resolve) => {
-        timeoutRef.current = setTimeout(async () => {
-          try {
-            const { data, error: queryError } = await checkDocument({
-              variables: { documentNumber: documentNumber.trim() },
-            })
+        timeoutRef.current = setTimeout(() => {
+          void (async () => {
+            try {
+              const { data, error: queryError } = await checkDocument({
+                variables: { documentNumber: documentNumber.trim() },
+              })
 
-            if (queryError) {
+              if (queryError) {
+                setError('Error al validar el documento')
+                setIsValidating(false)
+                resolve(null)
+                return
+              }
+
+              const validationData = data?.checkDocumentValidity
+              const result: DocumentValidationResult | null = validationData
+                ? {
+                    isValid: validationData.isValid,
+                    normalizedValue: validationData.normalizedValue || '',
+                    errorMessage: validationData.errorMessage || undefined,
+                  }
+                : null
+              
+              setValidationResult(result)
+              setIsValidating(false)
+              resolve(result)
+            } catch {
               setError('Error al validar el documento')
               setIsValidating(false)
               resolve(null)
-              return
             }
-
-            const result = data?.checkDocumentValidity || null
-            setValidationResult(result)
-            setIsValidating(false)
-            resolve(result)
-          } catch (err) {
-            setError('Error al validar el documento')
-            setIsValidating(false)
-            resolve(null)
-          }
+          })()
         }, 500) // 500ms debounce
       })
     },

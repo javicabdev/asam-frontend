@@ -1,5 +1,11 @@
 import { useQuery, ApolloError } from '@apollo/client'
-import { gql } from '@apollo/client'
+import {
+  GetDashboardStatsQuery,
+  GetDashboardStatsDocument,
+  GetRecentActivityQuery,
+  GetRecentActivityQueryVariables,
+  GetRecentActivityDocument,
+} from '@/graphql/generated/operations'
 import {
   DashboardStats,
   RecentActivity,
@@ -8,87 +14,6 @@ import {
   convertTrendsToChartData,
 } from '../types'
 
-// Tipos para las respuestas de GraphQL
-interface GetDashboardStatsResponse {
-  getDashboardStats: DashboardStats
-}
-
-interface GetRecentActivityResponse {
-  getRecentActivity: RecentActivity[]
-}
-
-interface GetRecentActivityVariables {
-  limit?: number
-}
-
-// Query para obtener estadísticas del dashboard - Estructura real del backend
-const GET_DASHBOARD_STATS = gql`
-  query GetDashboardStats {
-    getDashboardStats {
-      # Member stats
-      totalMembers
-      activeMembers
-      inactiveMembers
-      individualMembers
-      familyMembers
-      newMembersThisMonth
-      newMembersLastMonth
-      memberGrowthPercentage
-
-      # Payment stats
-      totalRevenue
-      monthlyRevenue
-      pendingPayments
-      averagePayment
-      paymentCompletionRate
-      revenueGrowthPercentage
-
-      # Financial stats
-      currentBalance
-      monthlyExpenses
-
-      # Activity stats
-      totalTransactions
-      recentPaymentsCount
-
-      # Time-based data for charts
-      membershipTrend {
-        month
-        newMembers
-        totalMembers
-      }
-      revenueTrend {
-        month
-        revenue
-        expenses
-      }
-    }
-  }
-`
-
-// Query para obtener actividad reciente
-const GET_RECENT_ACTIVITY = gql`
-  query GetRecentActivity($limit: Int) {
-    getRecentActivity(limit: $limit) {
-      id
-      type
-      description
-      timestamp
-      amount
-      relatedMember {
-        miembro_id
-        nombre
-        apellidos
-      }
-      relatedFamily {
-        id
-        esposo_nombre
-        esposa_nombre
-      }
-    }
-  }
-`
-
 interface UseDashboardStatsOptions {
   pollInterval?: number
   skip?: boolean
@@ -96,251 +21,169 @@ interface UseDashboardStatsOptions {
 
 interface UseDashboardStatsResult {
   stats: DashboardStats | null
+  monthlyStats: MonthlyStats[]
   recentActivity: RecentActivity[]
-  monthlyData: MonthlyStats[]
   loading: boolean
   error: ApolloError | undefined
-  refetch: () => void
+  refetch: () => Promise<void>
 }
 
-export function useDashboardStats(options: UseDashboardStatsOptions = {}): UseDashboardStatsResult {
-  const { pollInterval = 300000, skip = false } = options // 5 minutos (300000ms)
+/**
+ * Hook to fetch dashboard statistics and recent activity
+ * Provides both real-time stats and formatted data for charts
+ */
+export function useDashboardStats(
+  options: UseDashboardStatsOptions = {}
+): UseDashboardStatsResult {
+  const { pollInterval = 0, skip = false } = options
 
-  // Query para las estadísticas principales
+  // Fetch dashboard statistics
   const {
     data: statsData,
     loading: statsLoading,
     error: statsError,
     refetch: refetchStats,
-  } = useQuery<GetDashboardStatsResponse>(GET_DASHBOARD_STATS, {
+  } = useQuery<GetDashboardStatsQuery>(GetDashboardStatsDocument, {
     skip,
     pollInterval,
     fetchPolicy: 'cache-and-network',
-    notifyOnNetworkStatusChange: true,
+    errorPolicy: 'all',
   })
 
-  // Query para la actividad reciente
+  // Fetch recent activity
   const {
     data: activityData,
     loading: activityLoading,
+    error: activityError,
     refetch: refetchActivity,
-  } = useQuery<GetRecentActivityResponse, GetRecentActivityVariables>(GET_RECENT_ACTIVITY, {
-    variables: { limit: 10 },
-    skip,
-    fetchPolicy: 'cache-and-network',
-  })
+  } = useQuery<GetRecentActivityQuery, GetRecentActivityQueryVariables>(
+    GetRecentActivityDocument,
+    {
+      variables: { limit: 10 },
+      skip,
+      fetchPolicy: 'cache-and-network',
+      errorPolicy: 'all',
+    }
+  )
 
-  // Combinar refetch - void las promesas ya que no necesitamos esperar el resultado
-  const refetch = () => {
-    void refetchStats()
-    void refetchActivity()
+  // Combined refetch function
+  const refetch = async (): Promise<void> => {
+    await Promise.all([refetchStats(), refetchActivity()])
   }
 
-  // Convertir los datos del backend al formato esperado para los charts
-  const monthlyData = statsData?.getDashboardStats
-    ? convertTrendsToChartData(
-        statsData.getDashboardStats.membershipTrend,
-        statsData.getDashboardStats.revenueTrend
-      )
-    : []
+  // Process dashboard stats
+  const stats = statsData?.getDashboardStats || null
+
+  // Convert trends to chart-compatible format
+  const monthlyStats = stats ? convertTrendsToChartData(stats) : []
+
+  // Process recent activity
+  const recentActivity = activityData?.getRecentActivity || []
+
+  // Combined loading state
+  const loading = statsLoading || activityLoading
+
+  // Prioritize stats error over activity error
+  const error = statsError || activityError
 
   return {
-    stats: statsData?.getDashboardStats || null,
-    recentActivity: activityData?.getRecentActivity || [],
-    monthlyData,
-    loading: statsLoading || activityLoading,
-    error: statsError,
-    refetch,
-  }
-}
-
-// Tipo para el formato legacy de activity
-type LegacyActivityType = 'member_registered' | 'payment_received' | 'family_created' | 'member_deactivated' | 'transaction_recorded'
-
-interface LegacyActivity {
-  type: LegacyActivityType
-  description: string
-  timestamp: string
-  userId?: string
-  userName?: string
-}
-
-interface LegacyStats {
-  members: {
-    total: number
-    active: number
-    inactive: number
-    newThisMonth: number
-    growthPercentage: number
-  }
-  payments: {
-    totalThisMonth: number
-    totalThisYear: number
-    pending: number
-    overdue: number
-    averageAmount: number
-    lastPaymentDate: string | null
-  }
-  families: {
-    total: number
-    active: number
-    averageSize: number
-  }
-  recentActivity: LegacyActivity[]
-}
-
-// Hook con formato legacy para compatibilidad
-export function useDashboardStatsLegacy(options: UseDashboardStatsOptions = {}) {
-  const {
-    stats: backendStats,
+    stats,
+    monthlyStats,
     recentActivity,
-    monthlyData,
     loading,
     error,
     refetch,
-  } = useDashboardStats(options)
+  }
+}
 
-  const legacyStats: LegacyStats | null = backendStats
-    ? {
-        ...mapBackendToLegacyStats(backendStats),
-        recentActivity: recentActivity.map((activity) => ({
-          type: activity.type.toLowerCase().replace('_', '_') as LegacyActivityType,
-          description: activity.description,
-          timestamp: activity.timestamp,
-          userId: activity.relatedMember?.miembro_id,
-          userName: activity.relatedMember
-            ? `${activity.relatedMember.nombre} ${activity.relatedMember.apellidos}`
-            : undefined,
-        })),
-      }
-    : null
+/**
+ * Hook to fetch only dashboard statistics (without activity)
+ * Useful for components that only need stats data
+ */
+export function useDashboardStatsOnly(
+  options: UseDashboardStatsOptions = {}
+): Omit<UseDashboardStatsResult, 'recentActivity'> {
+  const { pollInterval = 0, skip = false } = options
+
+  const {
+    data,
+    loading,
+    error,
+    refetch,
+  } = useQuery<GetDashboardStatsQuery>(GetDashboardStatsDocument, {
+    skip,
+    pollInterval,
+    fetchPolicy: 'cache-and-network',
+    errorPolicy: 'all',
+  })
+
+  const stats = data?.getDashboardStats || null
+  const monthlyStats = stats ? convertTrendsToChartData(stats) : []
+
+  return {
+    stats,
+    monthlyStats,
+    loading,
+    error,
+    refetch: async () => {
+      await refetch()
+    },
+  }
+}
+
+/**
+ * Hook to fetch only recent activity
+ * Useful for activity feed components
+ */
+export function useRecentActivity(
+  limit = 10,
+  skip = false
+): {
+  activities: RecentActivity[]
+  loading: boolean
+  error: ApolloError | undefined
+  refetch: () => Promise<void>
+} {
+  const { data, loading, error, refetch } = useQuery<
+    GetRecentActivityQuery,
+    GetRecentActivityQueryVariables
+  >(GetRecentActivityDocument, {
+    variables: { limit },
+    skip,
+    fetchPolicy: 'cache-and-network',
+    errorPolicy: 'all',
+  })
+
+  return {
+    activities: data?.getRecentActivity || [],
+    loading,
+    error,
+    refetch: async () => {
+      await refetch()
+    },
+  }
+}
+
+/**
+ * Hook to fetch legacy format dashboard data
+ * This is for backward compatibility with existing components
+ */
+export function useLegacyDashboardStats(
+  options: UseDashboardStatsOptions = {}
+): {
+  stats: ReturnType<typeof mapBackendToLegacyStats> | null
+  loading: boolean
+  error: ApolloError | undefined
+  refetch: () => Promise<void>
+} {
+  const { stats: backendStats, loading, error, refetch } = useDashboardStatsOnly(options)
+
+  const legacyStats = backendStats ? mapBackendToLegacyStats(backendStats) : null
 
   return {
     stats: legacyStats,
-    monthlyData,
     loading,
     error,
     refetch,
-  }
-}
-
-// Hook para datos mock - Se mantiene como fallback para desarrollo
-export function useMockDashboardData() {
-  const currentYear = new Date().getFullYear()
-  const currentMonth = new Date().getMonth()
-
-  // Generar datos mock para los últimos 12 meses
-  const generateMonthlyData = (): MonthlyStats[] => {
-    const data: MonthlyStats[] = []
-
-    for (let i = 11; i >= 0; i--) {
-      const date = new Date(currentYear, currentMonth - i, 1)
-      const month = date.toISOString().slice(0, 7)
-
-      data.push({
-        month,
-        newMembers: Math.floor(Math.random() * 15) + 5,
-        totalPayments: Math.floor(Math.random() * 50) + 20,
-        paymentAmount: Math.floor(Math.random() * 10000) + 5000,
-      })
-    }
-
-    return data
-  }
-
-  const mockStats: DashboardStats = {
-    // Member stats
-    totalMembers: 1234,
-    activeMembers: 1156,
-    inactiveMembers: 78,
-    individualMembers: 734,
-    familyMembers: 500,
-    newMembersThisMonth: 23,
-    newMembersLastMonth: 19,
-    memberGrowthPercentage: 2.5,
-
-    // Payment stats
-    totalRevenue: 523400,
-    monthlyRevenue: 45600,
-    pendingPayments: 12300,
-    averagePayment: 150,
-    paymentCompletionRate: 92.5,
-    revenueGrowthPercentage: 3.8,
-
-    // Financial stats
-    currentBalance: 125000,
-    monthlyExpenses: 8500,
-
-    // Activity stats
-    totalTransactions: 3456,
-    recentPaymentsCount: 45,
-
-    // Trends
-    membershipTrend: generateMonthlyData().map((d) => ({
-      month: d.month,
-      newMembers: d.newMembers,
-      totalMembers: 1200 + Math.floor(Math.random() * 100),
-    })),
-    revenueTrend: generateMonthlyData().map((d) => ({
-      month: d.month,
-      revenue: d.paymentAmount,
-      expenses: Math.floor(Math.random() * 3000) + 2000,
-    })),
-  }
-
-  const mockRecentActivity: RecentActivity[] = [
-    {
-      id: '1',
-      type: 'MEMBER_REGISTERED',
-      description: 'Juan García Pérez se ha unido como nuevo miembro',
-      timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-      relatedMember: {
-        miembro_id: '123',
-        nombre: 'Juan',
-        apellidos: 'García Pérez',
-      },
-    },
-    {
-      id: '2',
-      type: 'PAYMENT_RECEIVED',
-      description: 'Pago de cuota mensual recibido',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-      amount: 150,
-    },
-    {
-      id: '3',
-      type: 'FAMILY_CREATED',
-      description: 'Nueva familia registrada: Familia Rodríguez',
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
-      relatedFamily: {
-        id: '456',
-        esposo_nombre: 'Pedro',
-        esposa_nombre: 'María',
-      },
-    },
-  ]
-
-  // Convertir al formato legacy para compatibilidad
-  const legacyStats = mapBackendToLegacyStats(mockStats)
-  const legacyFormat: LegacyStats = {
-    ...legacyStats,
-    recentActivity: mockRecentActivity.map((activity) => ({
-      type: activity.type.toLowerCase().replace('_', '_') as LegacyActivityType,
-      description: activity.description,
-      timestamp: activity.timestamp,
-      userId: activity.relatedMember?.miembro_id,
-      userName: activity.relatedMember
-        ? `${activity.relatedMember.nombre} ${activity.relatedMember.apellidos}`
-        : undefined,
-    })),
-  }
-
-  return {
-    stats: legacyFormat,
-    backendStats: mockStats,
-    recentActivity: mockRecentActivity,
-    monthlyData: generateMonthlyData(),
-    loading: false,
-    error: undefined,
   }
 }

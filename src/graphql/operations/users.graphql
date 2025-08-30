@@ -1,9 +1,18 @@
-# Queries
+# User management queries and mutations (Admin only)
+
 query GetUser($id: ID!) {
   getUser(id: $id) {
     id
     username
+    email
     role
+    member {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+      correo_electronico
+    }
     isActive
     lastLogin
     emailVerified
@@ -11,11 +20,19 @@ query GetUser($id: ID!) {
   }
 }
 
-query ListUsers($page: Int = 1, $pageSize: Int = 10) {
+query ListUsers($page: Int, $pageSize: Int) {
   listUsers(page: $page, pageSize: $pageSize) {
     id
     username
+    email
     role
+    member {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+      correo_electronico
+    }
     isActive
     lastLogin
     emailVerified
@@ -23,13 +40,23 @@ query ListUsers($page: Int = 1, $pageSize: Int = 10) {
   }
 }
 
-# Mutations
 mutation CreateUser($input: CreateUserInput!) {
   createUser(input: $input) {
     id
     username
+    email
     role
+    member {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+      correo_electronico
+    }
     isActive
+    lastLogin
+    emailVerified
+    emailVerifiedAt
   }
 }
 
@@ -37,9 +64,19 @@ mutation UpdateUser($input: UpdateUserInput!) {
   updateUser(input: $input) {
     id
     username
+    email
     role
+    member {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+      correo_electronico
+    }
     isActive
+    lastLogin
     emailVerified
+    emailVerifiedAt
   }
 }
 

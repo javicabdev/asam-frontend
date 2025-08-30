@@ -1,25 +1,8 @@
-# Fragments
-fragment PaymentFields on Payment {
-  id
-  amount
-  payment_date
-  status
-  payment_method
-  notes
-}
+# Payment queries and mutations
 
-fragment CashFlowFields on CashFlow {
-  id
-  amount
-  date
-  operation_type
-  detail
-}
-
-# Queries
 query GetPayment($id: ID!) {
   getPayment(id: $id) {
-    ...PaymentFields
+    id
     member {
       miembro_id
       numero_socio
@@ -29,51 +12,48 @@ query GetPayment($id: ID!) {
     family {
       id
       numero_socio
+      esposo_nombre
+      esposa_nombre
     }
+    amount
+    payment_date
+    status
+    payment_method
+    notes
   }
 }
 
 query GetMemberPayments($memberId: ID!) {
   getMemberPayments(memberId: $memberId) {
-    ...PaymentFields
+    id
+    member {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    amount
+    payment_date
+    status
+    payment_method
+    notes
   }
 }
 
 query GetFamilyPayments($familyId: ID!) {
   getFamilyPayments(familyId: $familyId) {
-    ...PaymentFields
-  }
-}
-
-query GetBalance {
-  getBalance
-}
-
-query GetTransactions($filter: TransactionFilter) {
-  getTransactions(filter: $filter) {
-    nodes {
-      ...CashFlowFields
-      member {
-        miembro_id
-        numero_socio
-        nombre
-        apellidos
-      }
-      family {
-        id
-        numero_socio
-      }
-      payment {
-        id
-        amount
-        payment_method
-      }
+    id
+    family {
+      id
+      numero_socio
+      esposo_nombre
+      esposa_nombre
     }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      totalCount
-    }
+    amount
+    payment_date
+    status
+    payment_method
+    notes
   }
 }
 
@@ -81,9 +61,9 @@ query GetPaymentStatus($id: ID!) {
   getPaymentStatus(id: $id)
 }
 
-query GetCashFlow($id: ID!) {
-  getCashFlow(id: $id) {
-    ...CashFlowFields
+mutation RegisterPayment($input: PaymentInput!) {
+  registerPayment(input: $input) {
+    id
     member {
       miembro_id
       numero_socio
@@ -93,26 +73,37 @@ query GetCashFlow($id: ID!) {
     family {
       id
       numero_socio
+      esposo_nombre
+      esposa_nombre
     }
-    payment {
-      id
-      amount
-      payment_method
-      status
-    }
-  }
-}
-
-# Mutations
-mutation RegisterPayment($input: PaymentInput!) {
-  registerPayment(input: $input) {
-    ...PaymentFields
+    amount
+    payment_date
+    status
+    payment_method
+    notes
   }
 }
 
 mutation UpdatePayment($id: ID!, $input: PaymentInput!) {
   updatePayment(id: $id, input: $input) {
-    ...PaymentFields
+    id
+    member {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    family {
+      id
+      numero_socio
+      esposo_nombre
+      esposa_nombre
+    }
+    amount
+    payment_date
+    status
+    payment_method
+    notes
   }
 }
 
@@ -124,28 +115,8 @@ mutation CancelPayment($id: ID!, $reason: String!) {
   }
 }
 
-mutation RegisterFee($year: Int!, $month: Int!, $baseAmount: Float!) {
-  registerFee(year: $year, month: $month, base_amount: $baseAmount) {
-    success
-    message
-    error
-  }
-}
-
-mutation RegisterTransaction($input: TransactionInput!) {
-  registerTransaction(input: $input) {
-    ...CashFlowFields
-  }
-}
-
-mutation UpdateTransaction($id: ID!, $input: TransactionInput!) {
-  updateTransaction(id: $id, input: $input) {
-    ...CashFlowFields
-  }
-}
-
-mutation AdjustBalance($amount: Float!, $reason: String!) {
-  adjustBalance(amount: $amount, reason: $reason) {
+mutation RegisterFee($year: Int!, $month: Int!, $base_amount: Float!) {
+  registerFee(year: $year, month: $month, base_amount: $base_amount) {
     success
     message
     error

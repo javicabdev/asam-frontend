@@ -1,41 +1,68 @@
-# Fragments
-fragment MemberBasicFields on Member {
-  miembro_id
-  numero_socio
-  tipo_membresia
-  nombre
-  apellidos
-  estado
-  fecha_alta
-  fecha_baja
-  correo_electronico
-  poblacion
-  provincia
-  documento_identidad
+# Member validation queries
+
+query ValidateDocument($documentNumber: String!) {
+  checkDocumentValidity(documentNumber: $documentNumber) {
+    isValid
+    normalizedValue
+    errorMessage
+  }
 }
 
-fragment MemberFullFields on Member {
-  ...MemberBasicFields
-  calle_numero_piso
-  codigo_postal
-  pais
-  fecha_nacimiento
-  profesion
-  nacionalidad
-  observaciones
+query CheckMemberNumberExists($memberNumber: String!) {
+  checkMemberNumberExists(memberNumber: $memberNumber)
 }
 
-# Queries
+query GetNextMemberNumber($isFamily: Boolean!) {
+  getNextMemberNumber(isFamily: $isFamily)
+}
+
+# Member queries
 query GetMember($id: ID!) {
   getMember(id: $id) {
-    ...MemberFullFields
+    miembro_id
+    numero_socio
+    tipo_membresia
+    nombre
+    apellidos
+    calle_numero_piso
+    codigo_postal
+    poblacion
+    provincia
+    pais
+    estado
+    fecha_alta
+    fecha_baja
+    fecha_nacimiento
+    documento_identidad
+    correo_electronico
+    profesion
+    nacionalidad
+    observaciones
   }
 }
 
 query ListMembers($filter: MemberFilter) {
   listMembers(filter: $filter) {
     nodes {
-      ...MemberBasicFields
+      miembro_id
+      numero_socio
+      tipo_membresia
+      nombre
+      apellidos
+      calle_numero_piso
+      codigo_postal
+      poblacion
+      provincia
+      pais
+      estado
+      fecha_alta
+      fecha_baja
+      fecha_nacimiento
+      documento_identidad
+      correo_electronico
+      profesion
+      nacionalidad
+      observaciones
     }
     pageInfo {
       hasNextPage
@@ -47,36 +74,74 @@ query ListMembers($filter: MemberFilter) {
 
 query SearchMembers($criteria: String!) {
   searchMembers(criteria: $criteria) {
-    ...MemberBasicFields
+    miembro_id
+    numero_socio
+    tipo_membresia
+    nombre
+    apellidos
+    calle_numero_piso
+    codigo_postal
+    poblacion
+    provincia
+    pais
+    estado
+    fecha_alta
+    fecha_baja
+    fecha_nacimiento
+    documento_identidad
+    correo_electronico
+    profesion
+    nacionalidad
+    observaciones
   }
 }
 
-query GetNextMemberNumber($isFamily: Boolean!) {
-  getNextMemberNumber(isFamily: $isFamily)
-}
-
-query CheckMemberNumberExists($memberNumber: String!) {
-  checkMemberNumberExists(memberNumber: $memberNumber)
-}
-
-query ValidateDocument($documentNumber: String!) {
-  checkDocumentValidity(documentNumber: $documentNumber) {
-    isValid
-    normalizedValue
-    errorMessage
-  }
-}
-
-# Mutations
+# Member mutations
 mutation CreateMember($input: CreateMemberInput!) {
   createMember(input: $input) {
-    ...MemberFullFields
+    miembro_id
+    numero_socio
+    tipo_membresia
+    nombre
+    apellidos
+    calle_numero_piso
+    codigo_postal
+    poblacion
+    provincia
+    pais
+    estado
+    fecha_alta
+    fecha_baja
+    fecha_nacimiento
+    documento_identidad
+    correo_electronico
+    profesion
+    nacionalidad
+    observaciones
   }
 }
 
 mutation UpdateMember($input: UpdateMemberInput!) {
   updateMember(input: $input) {
-    ...MemberFullFields
+    miembro_id
+    numero_socio
+    tipo_membresia
+    nombre
+    apellidos
+    calle_numero_piso
+    codigo_postal
+    poblacion
+    provincia
+    pais
+    estado
+    fecha_alta
+    fecha_baja
+    fecha_nacimiento
+    documento_identidad
+    correo_electronico
+    profesion
+    nacionalidad
+    observaciones
   }
 }
 
@@ -90,6 +155,24 @@ mutation DeleteMember($id: ID!) {
 
 mutation ChangeMemberStatus($id: ID!, $status: MemberStatus!) {
   changeMemberStatus(id: $id, status: $status) {
-    ...MemberBasicFields
+    miembro_id
+    numero_socio
+    tipo_membresia
+    nombre
+    apellidos
+    calle_numero_piso
+    codigo_postal
+    poblacion
+    provincia
+    pais
+    estado
+    fecha_alta
+    fecha_baja
+    fecha_nacimiento
+    documento_identidad
+    correo_electronico
+    profesion
+    nacionalidad
+    observaciones
   }
 }

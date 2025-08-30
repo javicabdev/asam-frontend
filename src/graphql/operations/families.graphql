@@ -1,17 +1,119 @@
-# Family Operations
+# Family queries and mutations
+
+query GetFamily($id: ID!) {
+  getFamily(id: $id) {
+    id
+    numero_socio
+    miembro_origen {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    esposo_nombre
+    esposo_apellidos
+    esposa_nombre
+    esposa_apellidos
+    familiares {
+      id
+      nombre
+      apellidos
+      fecha_nacimiento
+      dni_nie
+      correo_electronico
+    }
+  }
+}
+
+query ListFamilies($filter: FamilyFilter) {
+  listFamilies(filter: $filter) {
+    nodes {
+      id
+      numero_socio
+      miembro_origen {
+        miembro_id
+        numero_socio
+        nombre
+        apellidos
+      }
+      esposo_nombre
+      esposo_apellidos
+      esposa_nombre
+      esposa_apellidos
+      familiares {
+        id
+        nombre
+        apellidos
+        fecha_nacimiento
+        dni_nie
+        correo_electronico
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      totalCount
+    }
+  }
+}
+
+query GetFamilyMembers($familyId: ID!) {
+  getFamilyMembers(familyId: $familyId) {
+    id
+    nombre
+    apellidos
+    fecha_nacimiento
+    dni_nie
+    correo_electronico
+  }
+}
 
 mutation CreateFamily($input: CreateFamilyInput!) {
   createFamily(input: $input) {
     id
     numero_socio
+    miembro_origen {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
     esposo_nombre
     esposo_apellidos
     esposa_nombre
     esposa_apellidos
-    miembro_origen {
-      miembro_id
+    familiares {
+      id
       nombre
       apellidos
+      fecha_nacimiento
+      dni_nie
+      correo_electronico
+    }
+  }
+}
+
+mutation UpdateFamily($input: UpdateFamilyInput!) {
+  updateFamily(input: $input) {
+    id
+    numero_socio
+    miembro_origen {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    esposo_nombre
+    esposo_apellidos
+    esposa_nombre
+    esposa_apellidos
+    familiares {
+      id
+      nombre
+      apellidos
+      fecha_nacimiento
+      dni_nie
+      correo_electronico
     }
   }
 }
@@ -19,6 +121,17 @@ mutation CreateFamily($input: CreateFamilyInput!) {
 mutation AddFamilyMember($family_id: ID!, $familiar: FamiliarInput!) {
   addFamilyMember(family_id: $family_id, familiar: $familiar) {
     id
+    numero_socio
+    miembro_origen {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    esposo_nombre
+    esposo_apellidos
+    esposa_nombre
+    esposa_apellidos
     familiares {
       id
       nombre
@@ -30,26 +143,10 @@ mutation AddFamilyMember($family_id: ID!, $familiar: FamiliarInput!) {
   }
 }
 
-query GetFamily($id: ID!) {
-  getFamily(id: $id) {
-    id
-    numero_socio
-    esposo_nombre
-    esposo_apellidos
-    esposa_nombre
-    esposa_apellidos
-    miembro_origen {
-      miembro_id
-      nombre
-      apellidos
-    }
-    familiares {
-      id
-      nombre
-      apellidos
-      fecha_nacimiento
-      dni_nie
-      correo_electronico
-    }
+mutation RemoveFamilyMember($familiar_id: ID!) {
+  removeFamilyMember(familiar_id: $familiar_id) {
+    success
+    message
+    error
   }
 }

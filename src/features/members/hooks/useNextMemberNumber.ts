@@ -1,5 +1,9 @@
 import { useQuery } from '@apollo/client'
-import { GetNextMemberNumberDocument } from '@/graphql/generated/operations'
+import {
+  GetNextMemberNumberQuery,
+  GetNextMemberNumberQueryVariables,
+  GetNextMemberNumberDocument
+} from '@/graphql/generated/operations'
 
 interface UseNextMemberNumberOptions {
   isFamily: boolean
@@ -22,7 +26,10 @@ export function useNextMemberNumber({
   isFamily,
   skip = false,
 }: UseNextMemberNumberOptions): UseNextMemberNumberResult {
-  const { data, loading, error, refetch } = useQuery(GetNextMemberNumberDocument, {
+  const { data, loading, error, refetch } = useQuery<
+    GetNextMemberNumberQuery,
+    GetNextMemberNumberQueryVariables
+  >(GetNextMemberNumberDocument, {
     variables: { isFamily },
     skip,
     // Don't cache this query as we always want fresh data
@@ -43,14 +50,15 @@ export function useNextMemberNumber({
     return `${prefix}${suffix}`
   }
 
-  const memberNumber = data?.getNextMemberNumber || (error ? getFallbackNumber() : null)
+  const memberNumberData = data?.getNextMemberNumber
+  const memberNumber = memberNumberData || (error ? getFallbackNumber() : null)
 
   return {
     memberNumber,
     loading,
     error: error || undefined,
     refetch: () => {
-      refetch()
+      void refetch()
     },
   }
 }

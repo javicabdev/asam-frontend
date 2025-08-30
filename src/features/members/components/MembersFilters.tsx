@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import {
   Paper,
   Grid,
@@ -50,11 +50,14 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
   const [localFilter, setLocalFilter] = useState<Partial<MemberFilter>>({})
   const [expanded, setExpanded] = useState(false)
 
-  const handleChange = (field: keyof MemberFilter, value: any) => {
+  const handleChange = <K extends keyof MemberFilter>(
+    field: K, 
+    value: MemberFilter[K] | ''
+  ) => {
     const newValue = value === '' ? undefined : value
     const updatedFilter = {
       ...localFilter,
-      [field]: newValue,
+      [field]: newValue as MemberFilter[K],
     }
 
     // Remove undefined values
@@ -108,7 +111,7 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
     onFilterChange({})
   }
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleApplyFilters()
     }
@@ -125,7 +128,7 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
               label="Buscar por nombre, apellidos o nº socio"
               value={localFilter.search_term || ''}
               onChange={(e) => handleChange('search_term', e.target.value)}
-              onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyDown}
               placeholder="Buscar..."
               InputProps={{
                 endAdornment: (
@@ -142,7 +145,7 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
               <InputLabel>Estado</InputLabel>
               <Select
                 value={localFilter.estado || ''}
-                onChange={(e) => handleChange('estado', e.target.value)}
+                onChange={(e) => handleChange('estado', e.target.value as MemberStatus | undefined)}
                 label="Estado"
               >
                 <MenuItem value="">Todos</MenuItem>
@@ -157,7 +160,7 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
               <InputLabel>Tipo</InputLabel>
               <Select
                 value={localFilter.tipo_membresia || ''}
-                onChange={(e) => handleChange('tipo_membresia', e.target.value)}
+                onChange={(e) => handleChange('tipo_membresia', e.target.value as MembershipType | undefined)}
                 label="Tipo"
               >
                 <MenuItem value="">Todos</MenuItem>
@@ -223,7 +226,7 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
                   label="Población"
                   value={localFilter.poblacion || ''}
                   onChange={(e) => handleChange('poblacion', e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyDown}
                 />
               </Grid>
 
@@ -303,7 +306,7 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
                   label="Email"
                   value={localFilter.correo_electronico || ''}
                   onChange={(e) => handleChange('correo_electronico', e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyDown}
                 />
               </Grid>
 
@@ -313,7 +316,7 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
                   label="Documento de identidad"
                   value={localFilter.documento_identidad || ''}
                   onChange={(e) => handleChange('documento_identidad', e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyDown}
                 />
               </Grid>
             </Grid>

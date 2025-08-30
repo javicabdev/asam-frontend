@@ -1,5 +1,6 @@
-import { useQuery } from '@apollo/client'
+import { useQuery, ApolloError, ApolloQueryResult } from '@apollo/client'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 import { GET_MEMBER_QUERY } from '../api/queries'
 import { GetMemberQuery, GetMemberQueryVariables } from '@/graphql/generated/operations'
 import { Member } from '../types'
@@ -7,8 +8,8 @@ import { Member } from '../types'
 interface UseMemberDetailsResult {
   member: Member | null
   loading: boolean
-  error: any
-  refetch: () => void
+  error: ApolloError | undefined
+  refetch: () => Promise<ApolloQueryResult<GetMemberQuery>>
   memberId: string | undefined
 }
 
@@ -22,14 +23,15 @@ export function useMemberDetails(): UseMemberDetailsResult {
       variables: { id: id || '' },
       skip: !id,
       fetchPolicy: 'cache-and-network',
-      notifyOnNetworkStatusChange: true,
-      onError: (error) => {
-        if (error.graphQLErrors.some((e) => e.extensions?.code === 'NOT_FOUND')) {
-          navigate('/members', { replace: true })
-        }
-      },
     }
   )
+
+  // Handle NOT_FOUND errors
+  useEffect(() => {
+    if (error?.graphQLErrors.some((e) => e.extensions?.code === 'NOT_FOUND')) {
+      navigate('/members', { replace: true })
+    }
+  }, [error, navigate])
 
   return {
     member: (data?.getMember as Member) || null,

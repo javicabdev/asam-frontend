@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { useQuery, ApolloQueryResult } from '@apollo/client'
+import { useQuery, ApolloQueryResult, ApolloError } from '@apollo/client'
 import { useNavigate } from 'react-router-dom'
 
 import { LIST_MEMBERS_QUERY } from '../api/queries'
@@ -10,7 +10,7 @@ interface UseMembersTableResult {
   members: Member[]
   totalCount: number
   loading: boolean
-  error: any
+  error: ApolloError | undefined
   page: number
   pageSize: number
   filter: MemberFilter
@@ -45,7 +45,6 @@ export function useMembersTable(): UseMembersTableResult {
 
   const { data, loading, error, refetch } = useQuery<ListMembersQueryResponse>(LIST_MEMBERS_QUERY, {
     variables: { filter: graphqlFilter },
-    notifyOnNetworkStatusChange: true,
     fetchPolicy: 'network-only', // Always fetch fresh data
   })
 

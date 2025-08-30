@@ -91,7 +91,7 @@ interface UseDashboardStatsResult {
 }
 
 export function useDashboardStats(options: UseDashboardStatsOptions = {}): UseDashboardStatsResult {
-  const { pollInterval = 30000, skip = false } = options
+  const { pollInterval = 300000, skip = false } = options // 5 minutos (300000ms)
 
   // Query para las estadísticas principales
   const {

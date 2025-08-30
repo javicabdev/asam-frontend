@@ -22,19 +22,28 @@ import { useAuth } from '@/hooks/useAuth'
 import { createLoginSchema, LoginFormData } from './loginSchema'
 import { LanguageSelector } from '@/components/common'
 
+// Type for location state
+interface LocationState {
+  from?: {
+    pathname: string
+  }
+}
+
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { t, i18n } = useTranslation('auth')
+  const { t } = useTranslation('auth')
   const { login, isAuthenticated, isLoading } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Get the redirect location from state
-  const from = location.state?.from?.pathname || '/dashboard'
+  // Get the redirect location from state with proper typing
+  const locationState = location.state as LocationState | null
+  const from = locationState?.from?.pathname || '/dashboard'
 
   // Create the validation schema with current translations
-  const validationSchema = useMemo(() => createLoginSchema(t), [t, i18n.language])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const validationSchema = useMemo(() => createLoginSchema(t), [t])
 
   // Form configuration
   const {
@@ -156,7 +165,7 @@ export const LoginPage: React.FC = () => {
           )}
 
           {/* Login Form */}
-          <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ width: '100%' }}>
+          <Box component="form" onSubmit={(...args) => void handleSubmit(onSubmit)(...args)} sx={{ width: '100%' }}>
             <TextField
               {...register('username')}
               margin="normal"

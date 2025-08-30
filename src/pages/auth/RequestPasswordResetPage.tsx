@@ -19,11 +19,11 @@ import {
   Email as EmailIcon,
   CheckCircle as CheckCircleIcon,
 } from '@mui/icons-material'
-import { useAuthPublic } from '@/hooks/useAuthPublic'
+import { useAuth } from '@/hooks/useAuth'
 import { requestPasswordResetSchema, RequestPasswordResetFormData } from './passwordSchemas'
 
 export const RequestPasswordResetPage: React.FC = () => {
-  const { requestPasswordReset } = useAuthPublic()
+  const { requestPasswordReset } = useAuth()
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState<string>('')
 
@@ -55,14 +55,15 @@ export const RequestPasswordResetPage: React.FC = () => {
 
     if (result.success) {
       setStatus('success')
-      setMessage(
+      const successMessage = 
         result.message ||
-          'Si el correo electrónico existe en nuestro sistema, recibirás instrucciones para restablecer tu contraseña.'
-      )
+        'Si el correo electrónico existe en nuestro sistema, recibirás instrucciones para restablecer tu contraseña.'
+      setMessage(successMessage)
       reset()
     } else {
       setStatus('error')
-      setMessage(result.message || 'Error al procesar la solicitud')
+      const errorMessage = result.message || 'Error al procesar la solicitud'
+      setMessage(errorMessage)
     }
   }
 
@@ -145,7 +146,7 @@ export const RequestPasswordResetPage: React.FC = () => {
               )}
 
               {/* Form */}
-              <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ width: '100%' }}>
+              <Box component="form" onSubmit={(...args) => void handleSubmit(onSubmit)(...args)} sx={{ width: '100%' }}>
                 <TextField
                   {...register('email')}
                   margin="normal"

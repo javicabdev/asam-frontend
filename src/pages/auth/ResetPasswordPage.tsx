@@ -22,13 +22,13 @@ import {
   VisibilityOff,
   Error as ErrorIcon,
 } from '@mui/icons-material'
-import { useAuthPublic } from '@/hooks/useAuthPublic'
+import { useAuth } from '@/hooks/useAuth'
 import { resetPasswordSchema, ResetPasswordFormData } from './passwordSchemas'
 
 export const ResetPasswordPage: React.FC = () => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const { resetPasswordWithToken } = useAuthPublic()
+  const { resetPasswordWithToken } = useAuth()
 
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState<string>('')
@@ -73,7 +73,8 @@ export const ResetPasswordPage: React.FC = () => {
 
     if (result.success) {
       setStatus('success')
-      setMessage(result.message || 'Contraseña restablecida exitosamente')
+      const successMessage = result.message || 'Contraseña restablecida exitosamente'
+      setMessage(successMessage)
 
       // Redirect to login after 3 seconds
       setTimeout(() => {
@@ -81,7 +82,8 @@ export const ResetPasswordPage: React.FC = () => {
       }, 3000)
     } else {
       setStatus('error')
-      setMessage(result.message || 'Error al restablecer la contraseña')
+      const errorMessage = result.message || 'Error al restablecer la contraseña'
+      setMessage(errorMessage)
     }
   }
 
@@ -215,7 +217,7 @@ export const ResetPasswordPage: React.FC = () => {
               )}
 
               {/* Form */}
-              <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ width: '100%' }}>
+              <Box component="form" onSubmit={(...args) => void handleSubmit(onSubmit)(...args)} sx={{ width: '100%' }}>
                 <TextField
                   {...register('newPassword')}
                   margin="normal"

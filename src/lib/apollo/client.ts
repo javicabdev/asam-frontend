@@ -1,5 +1,6 @@
 import { ApolloClient, InMemoryCache, ApolloLink, FieldPolicy } from '@apollo/client'
-import { createCustomHttpLink } from './links/customHttpLink'
+import { createHttpLink } from './links/httpLink'
+import { createAuthLink } from './links/authLink'
 import { createDebugLink } from './links/debugLink'
 import { createAuthRefreshLink } from './links/authRefreshLink'
 import { setApolloClientInstance } from './apolloClientInstance'
@@ -68,20 +69,23 @@ const GRAPHQL_URL = import.meta.env.VITE_GRAPHQL_URL || 'http://localhost:8080/g
  * This sets up the client and stores it in the singleton instance
  */
 export const createApolloClient = () => {
-  console.log('🏭 Creating Apollo Client with customHttpLink that handles auth internally')
+  console.log('🏭 Creating Apollo Client with separated auth and HTTP links')
 
   // Create the links
-  const customHttpLink = createCustomHttpLink(GRAPHQL_URL)
+  const httpLink = createHttpLink(GRAPHQL_URL)
+  const authLink = createAuthLink()
   const authRefreshLink = createAuthRefreshLink()
 
   // Build the link chain:
   // 1. Debug link (dev only) - logs operations
   // 2. Auth refresh link - handles token refresh on 401
-  // 3. Custom HTTP link - adds auth headers and makes requests
+  // 3. Auth link - adds authentication headers
+  // 4. HTTP link - makes the actual HTTP request
   const links = [
     ...(import.meta.env.DEV ? [createDebugLink()] : []),
     authRefreshLink,
-    customHttpLink,
+    authLink,
+    httpLink,
   ]
 
   const link = ApolloLink.from(links)

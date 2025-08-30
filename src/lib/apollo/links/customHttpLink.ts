@@ -1,3 +1,14 @@
+/**
+ * @deprecated This file has been replaced by separate authLink and httpLink
+ * following the Single Responsibility Principle.
+ * 
+ * The functionality has been split into:
+ * - authLink.ts: Handles authentication headers
+ * - httpLink.ts: Handles HTTP transport
+ * 
+ * This file will be removed in a future commit.
+ */
+
 import { ApolloLink, Observable } from '@apollo/client'
 import { print } from 'graphql'
 import { useAuthStore } from '@/stores/authStore'

@@ -12,7 +12,7 @@ export const EmailVerificationCheck: React.FC = () => {
   const { user, isAuthenticated } = useAuthStore()
 
   useEffect(() => {
-    const checkEmailVerification = async () => {
+    const checkEmailVerification = () => {
       console.log('[EmailVerificationCheck] Starting check:', {
         isAuthenticated,
         user: user?.username,
@@ -42,7 +42,7 @@ export const EmailVerificationCheck: React.FC = () => {
 
     // Small delay to ensure state is stable
     const timer = setTimeout(() => {
-      checkEmailVerification()
+      void checkEmailVerification()
     }, 100)
 
     return () => clearTimeout(timer)

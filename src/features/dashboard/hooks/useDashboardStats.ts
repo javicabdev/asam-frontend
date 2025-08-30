@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client'
+import { useQuery, ApolloError } from '@apollo/client'
 import { gql } from '@apollo/client'
 import {
   DashboardStats,
@@ -7,6 +7,19 @@ import {
   mapBackendToLegacyStats,
   convertTrendsToChartData,
 } from '../types'
+
+// Tipos para las respuestas de GraphQL
+interface GetDashboardStatsResponse {
+  getDashboardStats: DashboardStats
+}
+
+interface GetRecentActivityResponse {
+  getRecentActivity: RecentActivity[]
+}
+
+interface GetRecentActivityVariables {
+  limit?: number
+}
 
 // Query para obtener estadísticas del dashboard - Estructura real del backend
 const GET_DASHBOARD_STATS = gql`
@@ -86,7 +99,7 @@ interface UseDashboardStatsResult {
   recentActivity: RecentActivity[]
   monthlyData: MonthlyStats[]
   loading: boolean
-  error: Error | undefined
+  error: ApolloError | undefined
   refetch: () => void
 }
 
@@ -99,7 +112,7 @@ export function useDashboardStats(options: UseDashboardStatsOptions = {}): UseDa
     loading: statsLoading,
     error: statsError,
     refetch: refetchStats,
-  } = useQuery(GET_DASHBOARD_STATS, {
+  } = useQuery<GetDashboardStatsResponse>(GET_DASHBOARD_STATS, {
     skip,
     pollInterval,
     fetchPolicy: 'cache-and-network',
@@ -111,16 +124,16 @@ export function useDashboardStats(options: UseDashboardStatsOptions = {}): UseDa
     data: activityData,
     loading: activityLoading,
     refetch: refetchActivity,
-  } = useQuery(GET_RECENT_ACTIVITY, {
+  } = useQuery<GetRecentActivityResponse, GetRecentActivityVariables>(GET_RECENT_ACTIVITY, {
     variables: { limit: 10 },
     skip,
     fetchPolicy: 'cache-and-network',
   })
 
-  // Combinar refetch
+  // Combinar refetch - void las promesas ya que no necesitamos esperar el resultado
   const refetch = () => {
-    refetchStats()
-    refetchActivity()
+    void refetchStats()
+    void refetchActivity()
   }
 
   // Convertir los datos del backend al formato esperado para los charts
@@ -141,6 +154,41 @@ export function useDashboardStats(options: UseDashboardStatsOptions = {}): UseDa
   }
 }
 
+// Tipo para el formato legacy de activity
+type LegacyActivityType = 'member_registered' | 'payment_received' | 'family_created' | 'member_deactivated' | 'transaction_recorded'
+
+interface LegacyActivity {
+  type: LegacyActivityType
+  description: string
+  timestamp: string
+  userId?: string
+  userName?: string
+}
+
+interface LegacyStats {
+  members: {
+    total: number
+    active: number
+    inactive: number
+    newThisMonth: number
+    growthPercentage: number
+  }
+  payments: {
+    totalThisMonth: number
+    totalThisYear: number
+    pending: number
+    overdue: number
+    averageAmount: number
+    lastPaymentDate: string | null
+  }
+  families: {
+    total: number
+    active: number
+    averageSize: number
+  }
+  recentActivity: LegacyActivity[]
+}
+
 // Hook con formato legacy para compatibilidad
 export function useDashboardStatsLegacy(options: UseDashboardStatsOptions = {}) {
   const {
@@ -152,11 +200,11 @@ export function useDashboardStatsLegacy(options: UseDashboardStatsOptions = {}) 
     refetch,
   } = useDashboardStats(options)
 
-  const legacyStats = backendStats
+  const legacyStats: LegacyStats | null = backendStats
     ? {
         ...mapBackendToLegacyStats(backendStats),
         recentActivity: recentActivity.map((activity) => ({
-          type: activity.type.toLowerCase().replace('_', '_') as any,
+          type: activity.type.toLowerCase().replace('_', '_') as LegacyActivityType,
           description: activity.description,
           timestamp: activity.timestamp,
           userId: activity.relatedMember?.miembro_id,
@@ -274,10 +322,10 @@ export function useMockDashboardData() {
 
   // Convertir al formato legacy para compatibilidad
   const legacyStats = mapBackendToLegacyStats(mockStats)
-  const legacyFormat = {
+  const legacyFormat: LegacyStats = {
     ...legacyStats,
     recentActivity: mockRecentActivity.map((activity) => ({
-      type: activity.type.toLowerCase().replace('_', '_') as any,
+      type: activity.type.toLowerCase().replace('_', '_') as LegacyActivityType,
       description: activity.description,
       timestamp: activity.timestamp,
       userId: activity.relatedMember?.miembro_id,

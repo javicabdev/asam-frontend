@@ -83,7 +83,7 @@ export const InstallPrompt: React.FC = () => {
     if (!deferredPrompt) return
 
     // Show the install prompt
-    deferredPrompt.prompt()
+    void deferredPrompt.prompt()
 
     // Wait for the user to respond to the prompt
     const { outcome } = await deferredPrompt.userChoice
@@ -164,7 +164,7 @@ export const InstallPrompt: React.FC = () => {
                 size="small"
                 color="inherit"
                 startIcon={<InstallIcon />}
-                onClick={handleInstallClick}
+                onClick={() => void handleInstallClick()}
                 sx={{ whiteSpace: 'nowrap' }}
               >
                 Instalar

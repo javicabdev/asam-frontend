@@ -49,7 +49,7 @@ function App() {
   // Sync i18n with language from store
   useEffect(() => {
     if (i18n.language !== language) {
-      i18n.changeLanguage(language)
+      void i18n.changeLanguage(language)
     }
   }, [language])
 

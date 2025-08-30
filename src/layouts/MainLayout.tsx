@@ -313,7 +313,7 @@ export const MainLayout: React.FC = () => {
                 <ListItemText primary={t('menu.profile')} />
               </MenuItem>
 
-              <MenuItem onClick={handleLogout}>
+              <MenuItem onClick={() => void handleLogout()}>
                 <ListItemIcon>
                   <LogoutIcon fontSize="small" />
                 </ListItemIcon>
@@ -381,5 +381,3 @@ export const MainLayout: React.FC = () => {
     </Box>
   )
 }
-
-export default MainLayout

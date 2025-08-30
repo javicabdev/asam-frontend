@@ -90,7 +90,7 @@ export default function MembersPage() {
           <Button
             variant="outlined"
             startIcon={<RefreshIcon />}
-            onClick={() => refetch()}
+            onClick={() => void refetch()}
             disabled={loading}
           >
             {t('refresh', 'Actualizar')}

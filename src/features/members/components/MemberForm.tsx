@@ -31,9 +31,57 @@ import {
 } from '../hooks'
 import { formatMemberNumber } from '../utils'
 
+// Tipo para los miembros de familia
+interface FamilyMember {
+  nombre: string
+  apellidos: string
+  fecha_nacimiento?: string | null
+  dni_nie?: string
+  correo_electronico?: string
+  parentesco?: string
+}
+
+// Tipo para los datos del formulario
+interface MemberFormData {
+  numero_socio: string
+  tipo_membresia: string
+  nombre: string
+  apellidos: string
+  calle_numero_piso: string
+  codigo_postal: string
+  poblacion: string
+  provincia: string
+  pais: string
+  fecha_nacimiento: Date | null | undefined
+  documento_identidad: string
+  correo_electronico: string
+  profesion: string | null | undefined
+  nacionalidad: string | null | undefined
+  observaciones: string | null | undefined
+  // Campos de familia - Yup.nullable() genera string | null | undefined
+  esposo_nombre: string | null | undefined
+  esposo_apellidos: string | null | undefined
+  esposo_fecha_nacimiento: Date | null | undefined
+  esposo_documento_identidad: string | null | undefined
+  esposo_correo_electronico: string | null | undefined
+  esposa_nombre: string | null | undefined
+  esposa_apellidos: string | null | undefined
+  esposa_fecha_nacimiento: Date | null | undefined
+  esposa_documento_identidad: string | null | undefined
+  esposa_correo_electronico: string | null | undefined
+}
+
+// Tipo extendido con campos adicionales que se añaden en el submit
+interface MemberFormSubmitData extends Omit<MemberFormData, 'fecha_nacimiento' | 'esposo_fecha_nacimiento' | 'esposa_fecha_nacimiento'> {
+  fecha_nacimiento: string | null
+  esposo_fecha_nacimiento: string | null
+  esposa_fecha_nacimiento: string | null
+  familyMembers: FamilyMember[]
+}
+
 interface MemberFormProps {
   onCancel?: () => void
-  onSubmit?: (data: any) => void
+  onSubmit?: (data: MemberFormSubmitData) => void | Promise<void>
 }
 
 const validationSchema = Yup.object({
@@ -98,15 +146,8 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
     validateDocument,
   } = useDocumentValidation()
 
-  const {
-    control,
-    handleSubmit,
-    watch,
-    setValue,
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = useForm({
+  const form = useForm<MemberFormData>({
+    // @ts-expect-error - Schema dinámico de Yup con validación condicional no infiere tipos correctamente
     resolver: yupResolver(familyValidationSchema),
     defaultValues: {
       numero_socio: '', // Will be set by useNextMemberNumber hook
@@ -137,6 +178,16 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
       esposa_correo_electronico: '',
     },
   })
+
+  const {
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = form
 
   const tipoMembresia = watch('tipo_membresia')
   const isFamily = tipoMembresia === MembershipType.FAMILY
@@ -182,7 +233,9 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
     clearErrors('numero_socio')
   }, [isFamily, clearValidation, clearErrors])
 
-  const onSubmitForm = (data: any) => {
+  // Función interna que maneja el submit
+  const handleFormSubmit = React.useCallback(
+    async (data: MemberFormData) => {
     // Validación adicional para familias
     if (isFamily && familyMembers.length === 0) {
       setFamilyMembersError('Debe añadir al menos un familiar')
@@ -209,7 +262,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
 
     setFamilyMembersError(null)
 
-    const formattedData = {
+    const formattedData: MemberFormSubmitData = {
       ...data,
       // Use normalized document if available
       documento_identidad: documentValidation?.normalizedValue || data.documento_identidad,
@@ -221,10 +274,25 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
         ? format(data.esposa_fecha_nacimiento, 'yyyy-MM-dd')
         : null,
       familyMembers: isFamily ? familyMembers : [],
-    }
+    } as MemberFormSubmitData
 
-    onSubmit?.(formattedData)
-  }
+    if (onSubmit) {
+      await onSubmit(formattedData)
+    }
+    },
+    [isFamily, familyMembers, isDuplicate, documentValidation, onSubmit, setError]
+  )
+
+  // Wrapper para manejar correctamente el evento del formulario
+  const onFormSubmit = React.useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      // @ts-expect-error - handleSubmit espera tipo genérico pero handleFormSubmit es seguro
+      const submitHandler = handleSubmit(handleFormSubmit)
+      void submitHandler(e)
+    },
+    [handleSubmit, handleFormSubmit]
+  )
 
   return (
     <Paper elevation={2} sx={{ p: 3 }}>
@@ -235,7 +303,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
       <Divider sx={{ mb: 3 }} />
 
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
-        <Box component="form" onSubmit={handleSubmit(onSubmitForm)}>
+        <Box component="form" onSubmit={onFormSubmit}>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
             Complete el formulario para registrar un nuevo socio. Los campos marcados con * son
             obligatorios.
@@ -293,7 +361,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                       if (formatted !== e.target.value) {
                         setValue('numero_socio', formatted)
                         // Trigger validation after formatting
-                        validateMemberNumber(formatted).then((isValid) => {
+                        void validateMemberNumber(formatted).then((isValid) => {
                           if (!isValid) {
                             setError('numero_socio', {
                               type: 'manual',
@@ -401,14 +469,14 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                       field.onChange(e)
                       // Validate document when user types
                       if (e.target.value.length >= 8) {
-                        validateDocument(e.target.value)
+                        void validateDocument(e.target.value)
                       }
                     }}
                     onBlur={(e) => {
                       field.onBlur()
                       // Validate on blur if not already validated
                       if (e.target.value && !documentValidation) {
-                        validateDocument(e.target.value).then((result) => {
+                        void validateDocument(e.target.value).then((result) => {
                           if (
                             result &&
                             result.normalizedValue &&

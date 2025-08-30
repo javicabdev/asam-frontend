@@ -1,8 +1,64 @@
-import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client'
+import { ApolloClient, InMemoryCache, ApolloLink, FieldPolicy } from '@apollo/client'
 import { createCustomHttpLink } from './links/customHttpLink'
 import { createDebugLink } from './links/debugLink'
 import { createAuthRefreshLink } from './links/authRefreshLink'
 import { setApolloClientInstance } from './apolloClientInstance'
+import type { Member, Payment } from '@/graphql/generated/operations'
+
+interface PaginatedResult<T = unknown> {
+  items?: T[]
+  pagination?: {
+    page?: number
+    total?: number
+    totalPages?: number
+  }
+}
+
+interface PaginationArgs {
+  filter?: {
+    pagination?: {
+      page?: number
+      pageSize?: number
+    }
+  }
+}
+
+/**
+ * Creates a field policy for paginated queries
+ * Handles merging of paginated results when fetching additional pages
+ */
+const createPaginationFieldPolicy = <T = unknown>(): FieldPolicy<PaginatedResult<T>> => ({
+  keyArgs: ['filter'],
+  merge(
+    existing: PaginatedResult<T> | undefined,
+    incoming: PaginatedResult<T>,
+    { args }
+  ) {
+    // Cast args to our expected type, handling null case
+    const paginationArgs = args as PaginationArgs | null | undefined
+    
+    // If no pagination args, replace entirely
+    if (!paginationArgs?.filter?.pagination) {
+      return incoming
+    }
+
+    const page = paginationArgs.filter.pagination.page || 1
+
+    // First page replaces all existing data
+    if (page === 1) {
+      return incoming
+    }
+
+    // Subsequent pages append to existing items
+    const existingItems = existing?.items || []
+    const incomingItems = incoming?.items || []
+
+    return {
+      ...incoming,
+      items: [...existingItems, ...incomingItems],
+    }
+  },
+})
 
 // Get GraphQL endpoint
 const GRAPHQL_URL = import.meta.env.VITE_GRAPHQL_URL || 'http://localhost:8080/graphql'
@@ -36,52 +92,12 @@ export const createApolloClient = () => {
       typePolicies: {
         Query: {
           fields: {
-            // Pagination handling for listMembers
-            listMembers: {
-              keyArgs: ['filter'],
-              merge(existing, incoming, { args }) {
-                if (!args?.filter?.pagination) {
-                  return incoming
-                }
-
-                const page = args.filter.pagination.page || 1
-
-                if (page === 1) {
-                  return incoming
-                }
-
-                const existingItems = existing?.items || []
-                const incomingItems = incoming?.items || []
-
-                return {
-                  ...incoming,
-                  items: [...existingItems, ...incomingItems],
-                }
-              },
-            },
-            // Pagination handling for listPayments
-            listPayments: {
-              keyArgs: ['filter'],
-              merge(existing, incoming, { args }) {
-                if (!args?.filter?.pagination) {
-                  return incoming
-                }
-
-                const page = args.filter.pagination.page || 1
-
-                if (page === 1) {
-                  return incoming
-                }
-
-                const existingItems = existing?.items || []
-                const incomingItems = incoming?.items || []
-
-                return {
-                  ...incoming,
-                  items: [...existingItems, ...incomingItems],
-                }
-              },
-            },
+            // Pagination handling for listMembers with typed Member items
+            listMembers: createPaginationFieldPolicy<Member>(),
+            // Pagination handling for listPayments with typed Payment items
+            listPayments: createPaginationFieldPolicy<Payment>(),
+            // Add more paginated queries here as needed
+            // listAnotherEntity: createPaginationFieldPolicy(),
           },
         },
       },
@@ -99,7 +115,8 @@ export const createApolloClient = () => {
         errorPolicy: 'all',
       },
     },
-    connectToDevTools: import.meta.env.DEV,
+    // Apollo Client automatically connects to DevTools in development
+    // The connectToDevTools option is deprecated and no longer needed
   })
 
   // Store the client instance in the singleton

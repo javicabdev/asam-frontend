@@ -10,7 +10,6 @@ import {
   DashboardStats,
   RecentActivity,
   MonthlyStats,
-  mapBackendToLegacyStats,
   convertTrendsToChartData,
 } from '../types'
 
@@ -74,11 +73,30 @@ export function useDashboardStats(
   // Process dashboard stats
   const stats = statsData?.getDashboardStats || null
 
-  // Convert trends to chart-compatible format
-  const monthlyStats = stats ? convertTrendsToChartData(stats) : []
+  // Convert trends to chart-compatible format - Fixed: passing both required arguments
+  const monthlyStats = stats 
+    ? convertTrendsToChartData(stats.membershipTrend, stats.revenueTrend) 
+    : []
 
-  // Process recent activity
-  const recentActivity = activityData?.getRecentActivity || []
+  // Process recent activity - Fixed: mapping to handle null values
+  const recentActivity: RecentActivity[] = (activityData?.getRecentActivity || [])
+    .map(activity => ({
+      id: activity.id,
+      type: activity.type,
+      description: activity.description,
+      timestamp: activity.timestamp,
+      amount: activity.amount ?? undefined, // Convert null to undefined
+      relatedMember: activity.relatedMember ? {
+        miembro_id: activity.relatedMember.miembro_id,
+        nombre: activity.relatedMember.nombre,
+        apellidos: activity.relatedMember.apellidos,
+      } : undefined,
+      relatedFamily: activity.relatedFamily ? {
+        id: activity.relatedFamily.id,
+        esposo_nombre: activity.relatedFamily.esposo_nombre,
+        esposa_nombre: activity.relatedFamily.esposa_nombre,
+      } : undefined,
+    }))
 
   // Combined loading state
   const loading = statsLoading || activityLoading
@@ -99,91 +117,117 @@ export function useDashboardStats(
 /**
  * Hook to fetch only dashboard statistics (without activity)
  * Useful for components that only need stats data
+ * @deprecated Currently not in use, kept for future implementation
  */
-export function useDashboardStatsOnly(
-  options: UseDashboardStatsOptions = {}
-): Omit<UseDashboardStatsResult, 'recentActivity'> {
-  const { pollInterval = 0, skip = false } = options
+// export function useDashboardStatsOnly(
+//   options: UseDashboardStatsOptions = {}
+// ): Omit<UseDashboardStatsResult, 'recentActivity'> {
+//   const { pollInterval = 0, skip = false } = options
 
-  const {
-    data,
-    loading,
-    error,
-    refetch,
-  } = useQuery<GetDashboardStatsQuery>(GetDashboardStatsDocument, {
-    skip,
-    pollInterval,
-    fetchPolicy: 'cache-and-network',
-    errorPolicy: 'all',
-  })
+//   const {
+//     data,
+//     loading,
+//     error,
+//     refetch,
+//   } = useQuery<GetDashboardStatsQuery>(GetDashboardStatsDocument, {
+//     skip,
+//     pollInterval,
+//     fetchPolicy: 'cache-and-network',
+//     errorPolicy: 'all',
+//   })
 
-  const stats = data?.getDashboardStats || null
-  const monthlyStats = stats ? convertTrendsToChartData(stats) : []
+//   const stats = data?.getDashboardStats || null
+//   // Fixed: passing both required arguments
+//   const monthlyStats = stats 
+//     ? convertTrendsToChartData(stats.membershipTrend, stats.revenueTrend)
+//     : []
 
-  return {
-    stats,
-    monthlyStats,
-    loading,
-    error,
-    refetch: async () => {
-      await refetch()
-    },
-  }
-}
+//   return {
+//     stats,
+//     monthlyStats,
+//     loading,
+//     error,
+//     refetch: async () => {
+//       await refetch()
+//     },
+//   }
+// }
 
 /**
  * Hook to fetch only recent activity
  * Useful for activity feed components
+ * @deprecated Currently not in use, kept for future implementation
  */
-export function useRecentActivity(
-  limit = 10,
-  skip = false
-): {
-  activities: RecentActivity[]
-  loading: boolean
-  error: ApolloError | undefined
-  refetch: () => Promise<void>
-} {
-  const { data, loading, error, refetch } = useQuery<
-    GetRecentActivityQuery,
-    GetRecentActivityQueryVariables
-  >(GetRecentActivityDocument, {
-    variables: { limit },
-    skip,
-    fetchPolicy: 'cache-and-network',
-    errorPolicy: 'all',
-  })
+// export function useRecentActivity(
+//   limit = 10,
+//   skip = false
+// ): {
+//   activities: RecentActivity[]
+//   loading: boolean
+//   error: ApolloError | undefined
+//   refetch: () => Promise<void>
+// } {
+//   const { data, loading, error, refetch } = useQuery<
+//     GetRecentActivityQuery,
+//     GetRecentActivityQueryVariables
+//   >(GetRecentActivityDocument, {
+//     variables: { limit },
+//     skip,
+//     fetchPolicy: 'cache-and-network',
+//     errorPolicy: 'all',
+//   })
 
-  return {
-    activities: data?.getRecentActivity || [],
-    loading,
-    error,
-    refetch: async () => {
-      await refetch()
-    },
-  }
-}
+//   // Map to handle null values in amount field
+//   const activities: RecentActivity[] = (data?.getRecentActivity || [])
+//     .map(activity => ({
+//       id: activity.id,
+//       type: activity.type,
+//       description: activity.description,
+//       timestamp: activity.timestamp,
+//       amount: activity.amount ?? undefined,
+//       relatedMember: activity.relatedMember ? {
+//         miembro_id: activity.relatedMember.miembro_id,
+//         nombre: activity.relatedMember.nombre,
+//         apellidos: activity.relatedMember.apellidos,
+//       } : undefined,
+//       relatedFamily: activity.relatedFamily ? {
+//         id: activity.relatedFamily.id,
+//         esposo_nombre: activity.relatedFamily.esposo_nombre,
+//         esposa_nombre: activity.relatedFamily.esposa_nombre,
+//       } : undefined,
+//     }))
+
+//   return {
+//     activities,
+//     loading,
+//     error,
+//     refetch: async () => {
+//       await refetch()
+//     },
+//   }
+// }
 
 /**
  * Hook to fetch legacy format dashboard data
  * This is for backward compatibility with existing components
+ * @deprecated Currently not in use, kept for backward compatibility
  */
-export function useLegacyDashboardStats(
-  options: UseDashboardStatsOptions = {}
-): {
-  stats: ReturnType<typeof mapBackendToLegacyStats> | null
-  loading: boolean
-  error: ApolloError | undefined
-  refetch: () => Promise<void>
-} {
-  const { stats: backendStats, loading, error, refetch } = useDashboardStatsOnly(options)
+// export function useLegacyDashboardStats(
+//   options: UseDashboardStatsOptions = {}
+// ): {
+//   stats: ReturnType<typeof mapBackendToLegacyStats> | null
+//   loading: boolean
+//   error: ApolloError | undefined
+//   refetch: () => Promise<void>
+// } {
+//   const { stats: backendStats, loading, error, refetch } = useDashboardStatsOnly(options)
 
-  const legacyStats = backendStats ? mapBackendToLegacyStats(backendStats) : null
+//   const legacyStats = backendStats ? mapBackendToLegacyStats(backendStats) : null
 
-  return {
-    stats: legacyStats,
-    loading,
-    error,
-    refetch,
-  }
-}
+//   return {
+//     stats: legacyStats,
+//     loading,
+//     error,
+//     refetch,
+//   }
+// }

@@ -1,5 +1,6 @@
 import { ApolloLink, Observable, Operation, FetchResult, NextLink } from '@apollo/client'
-import { GraphQLError } from 'graphql'
+import { ApolloError } from '@apollo/client/errors'
+import type { GraphQLFormattedError } from 'graphql'
 import { useAuthStore } from '@/stores/authStore'
 import { getApolloClientInstance } from '../apolloClientInstance'
 
@@ -26,7 +27,7 @@ const SKIP_REFRESH_OPERATIONS = [
 /**
  * Check if an error is an authentication error that requires token refresh
  */
-const isAuthenticationError = (error: GraphQLError): boolean => {
+const isAuthenticationError = (error: GraphQLFormattedError): boolean => {
   return (
     error.extensions?.code === 'UNAUTHENTICATED' ||
     error.message.includes('UNAUTHORIZED') ||
@@ -34,6 +35,17 @@ const isAuthenticationError = (error: GraphQLError): boolean => {
     error.message.includes('token expired') ||
     error.message.includes('invalid token')
   )
+}
+
+/**
+ * Result type for the refresh token mutation
+ */
+interface RefreshTokenResult {
+  refreshToken: {
+    accessToken: string
+    refreshToken: string
+    expiresAt: string
+  }
 }
 
 /**
@@ -54,7 +66,7 @@ const executeTokenRefresh = async (): Promise<boolean> => {
 
     console.log('AuthRefreshLink: Attempting to refresh token')
 
-    const { data } = await apolloClient.mutate({
+    const { data } = await apolloClient.mutate<RefreshTokenResult>({
       mutation: RefreshTokenDocument,
       variables: {
         input: { refreshToken },
@@ -103,7 +115,8 @@ export const createAuthRefreshLink = (): ApolloLink => {
     }
 
     return new Observable<FetchResult>((observer) => {
-      let subscription: any
+      // Using any for subscription as the exact type varies between Observable implementations
+      let subscription: { unsubscribe: () => void } | null = null
       let didRefresh = false
 
       // Create a unique key for this operation
@@ -115,7 +128,7 @@ export const createAuthRefreshLink = (): ApolloLink => {
           next: (result) => {
             observer.next(result)
           },
-          error: async (error) => {
+          error: (error: ApolloError) => {
             // Check if we have GraphQL errors with authentication issues
             const hasAuthError = error.graphQLErrors?.some(isAuthenticationError)
 
@@ -126,53 +139,59 @@ export const createAuthRefreshLink = (): ApolloLink => {
               refreshAttempts.set(operationKey, true)
               didRefresh = true
 
-              try {
-                let refreshSuccess = false
+              // Handle the async refresh operation
+              void (async () => {
+                try {
+                  let refreshSuccess
 
-                // If we're already refreshing, wait for it
-                if (isRefreshing && refreshPromise) {
-                  console.log('AuthRefreshLink: Waiting for ongoing refresh')
-                  refreshSuccess = await refreshPromise
-                } else {
-                  // Start a new refresh
-                  isRefreshing = true
-                  refreshPromise = executeTokenRefresh()
-                  refreshSuccess = await refreshPromise
-                  isRefreshing = false
-                  refreshPromise = null
+                  // If we're already refreshing, wait for it
+                  if (isRefreshing && refreshPromise) {
+                    console.log('AuthRefreshLink: Waiting for ongoing refresh')
+                    refreshSuccess = await refreshPromise
+                  } else {
+                    // Start a new refresh
+                    isRefreshing = true
+                    refreshPromise = executeTokenRefresh()
+                    refreshSuccess = await refreshPromise
+                    isRefreshing = false
+                    refreshPromise = null
+                  }
+
+                  if (refreshSuccess) {
+                    console.log(`AuthRefreshLink: Retrying ${operation.operationName} after refresh`)
+
+                    // Retry the operation - the new token will be picked up by authLink
+                    subscription = forward(operation).subscribe({
+                      next: (result) => {
+                        observer.next(result)
+                      },
+                      error: (retryError: ApolloError) => {
+                        console.error('AuthRefreshLink: Retry failed:', retryError)
+                        observer.error(retryError)
+                      },
+                      complete: () => {
+                        observer.complete()
+                      },
+                    })
+                  } else {
+                    // Refresh failed, forward the original error
+                    observer.error(error)
+                  }
+                } catch (refreshError) {
+                  console.error('AuthRefreshLink: Refresh error:', refreshError)
+                  // Forward the original error on refresh failure
+                  observer.error(error)
+                } finally {
+                  // Clean up the refresh attempt tracking
+                  setTimeout(() => {
+                    refreshAttempts.delete(operationKey)
+                  }, 1000)
                 }
-
-                if (refreshSuccess) {
-                  console.log(`AuthRefreshLink: Retrying ${operation.operationName} after refresh`)
-
-                  // Retry the operation - the new token will be picked up by customHttpLink
-                  subscription = forward(operation).subscribe({
-                    next: (result) => {
-                      observer.next(result)
-                    },
-                    error: (retryError) => {
-                      console.error('AuthRefreshLink: Retry failed:', retryError)
-                      observer.error(retryError)
-                    },
-                    complete: () => {
-                      observer.complete()
-                    },
-                  })
-
-                  return
-                }
-              } catch (refreshError) {
-                console.error('AuthRefreshLink: Refresh error:', refreshError)
-              } finally {
-                // Clean up the refresh attempt tracking
-                setTimeout(() => {
-                  refreshAttempts.delete(operationKey)
-                }, 1000)
-              }
+              })()
+            } else {
+              // If we can't refresh or refresh failed, forward the original error
+              observer.error(error)
             }
-
-            // If we can't refresh or refresh failed, forward the original error
-            observer.error(error)
           },
           complete: () => {
             observer.complete()

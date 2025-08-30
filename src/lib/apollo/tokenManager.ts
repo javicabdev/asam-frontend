@@ -38,8 +38,9 @@ class TokenManager {
    * Validate JWT token format
    */
   private isValidTokenFormat(token: string): boolean {
-    if (!token || typeof token !== 'string') {
-      console.error('[TokenManager] Invalid token: not a string')
+    // Token parameter is already typed as string, no need to check
+    if (!token) {
+      console.error('[TokenManager] Invalid token: empty string')
       return false
     }
 
@@ -128,7 +129,7 @@ class TokenManager {
    * Perform token refresh with retry logic
    */
   private async performTokenRefreshWithRetry(refreshToken: string): Promise<string> {
-    let lastError: any = null
+    let lastError: unknown = null
 
     for (let attempt = 1; attempt <= this.MAX_REFRESH_ATTEMPTS; attempt++) {
       try {
@@ -156,14 +157,20 @@ class TokenManager {
       }
     }
 
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
     throw lastError || new Error('Token refresh failed after all attempts')
   }
 
   /**
    * Check if error is an authentication error
    */
-  private isAuthenticationError(error: any): boolean {
-    const errorMessage = error?.message?.toLowerCase() || ''
+  private isAuthenticationError(error: unknown): boolean {
+    // Type guard to safely access error properties
+    const errorMessage = 
+      (error && typeof error === 'object' && 'message' in error && typeof error.message === 'string')
+        ? error.message.toLowerCase()
+        : ''
+    
     return (
       errorMessage.includes('invalid refresh token') ||
       errorMessage.includes('refresh token expired') ||
@@ -199,6 +206,12 @@ class TokenManager {
       })
 
       if (!data?.refreshToken) {
+        console.error('[TokenManager] Invalid refresh token response: no data returned')
+        // Only clear tokens if it's an authentication error
+        if (this.isAuthenticationError(new Error('Invalid refresh token response'))) {
+          this.clearTokens()
+        }
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw new Error('Invalid refresh token response: no data returned')
       }
 
@@ -206,6 +219,8 @@ class TokenManager {
 
       // Validate the new access token format
       if (!this.isValidTokenFormat(accessToken)) {
+        console.error('[TokenManager] Invalid access token format in refresh response')
+        // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw new Error('Invalid access token format in refresh response')
       }
 
@@ -219,7 +234,7 @@ class TokenManager {
       })
 
       return accessToken
-    } catch (error: any) {
+    } catch (error) {
       console.error('[TokenManager] Token refresh failed:', error)
 
       // Only clear tokens if it's an authentication error
@@ -268,8 +283,7 @@ class TokenManager {
     if (this.isTokenExpired()) {
       console.log('[TokenManager] Token expired or about to expire, refreshing...')
       try {
-        const newToken = await this.refreshAccessToken()
-        return newToken
+        return await this.refreshAccessToken()
       } catch (error) {
         console.error('[TokenManager] Failed to get valid token:', error)
         return null
@@ -279,13 +293,6 @@ class TokenManager {
     return currentToken
   }
 
-  /**
-   * Reset refresh attempts counter
-   * @deprecated This method is no longer used as attempts are tracked locally
-   */
-  resetRefreshAttempts(): void {
-    // No-op: attempts are now tracked locally in performTokenRefreshWithRetry
-  }
 }
 
 // Export a singleton instance

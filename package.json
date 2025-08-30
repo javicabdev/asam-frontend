@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "concurrently \"vite\" \"npm run codegen:watch\"",
     "dev:vite": "vite",
+    "dev:clean": "npm run clean:sw && npm run dev",
+    "clean:sw": "node scripts/clean-sw.cjs",
     "build": "npm run codegen:safe && tsc && vite build",
     "build:local": "npm run codegen:local && tsc && vite build",
     "build:nobackend": "tsc && vite build",

@@ -47,6 +47,11 @@ export default defineConfig(({ mode }) => {
       
       VitePWA({
         registerType: 'autoUpdate',
+        injectRegister: 'auto',
+        devOptions: {
+          enabled: true,
+          type: 'module'
+        },
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,gif,webp,woff,woff2}'],

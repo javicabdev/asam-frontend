@@ -11,6 +11,8 @@ import {
   Cell,
 } from 'recharts'
 import { MonthlyStats } from '../types'
+import type { CustomTooltipProps } from '../types/chart-types'
+import { formatMonth, formatCurrency } from '../utils/chart-utils'
 
 interface PaymentsChartProps {
   data: MonthlyStats[]
@@ -29,46 +31,11 @@ export default function PaymentsChart({ data, loading = false, height = 300 }: P
     [t('charts.numberOfPayments')]: item.totalPayments,
   }))
 
-  const formatMonth = (month: string) => {
-    const monthNumber = month.split('-')[1]
-    const monthNames = {
-      '01': t('months.january'),
-      '02': t('months.february'),
-      '03': t('months.march'),
-      '04': t('months.april'),
-      '05': t('months.may'),
-      '06': t('months.june'),
-      '07': t('months.july'),
-      '08': t('months.august'),
-      '09': t('months.september'),
-      '10': t('months.october'),
-      '11': t('months.november'),
-      '12': t('months.december'),
-    }
-    
-    // Para abreviaciones, tomar las primeras 3 letras
-    const fullName = monthNames[monthNumber as keyof typeof monthNames] || month
-    return i18n.language === 'wo' ? fullName : fullName.substring(0, 3)
-  }
+  const formatMonthLabel = (month: string) => formatMonth(month, t, i18n.language)
+  const formatCurrencyValue = (value: number) => formatCurrency(value, i18n.language)
 
-  const formatCurrency = (value: number) => {
-    // Mapear idioma i18n a locale
-    const localeMap: { [key: string]: string } = {
-      es: 'es-ES',
-      fr: 'fr-FR',
-      wo: 'fr-SN', // Usar formato francés para wolof en Senegal
-    }
-    const locale = localeMap[i18n.language] || 'es-ES'
-    
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: 'EUR',
-      minimumFractionDigits: 0,
-    }).format(value)
-  }
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
+  const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+    if (active && payload && payload.length && label) {
       return (
         <Box
           sx={{
@@ -81,7 +48,7 @@ export default function PaymentsChart({ data, loading = false, height = 300 }: P
           }}
         >
           <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5 }}>
-            {formatMonth(label)}
+            {formatMonthLabel(label)}
           </Typography>
           <Typography
             variant="caption"
@@ -91,7 +58,7 @@ export default function PaymentsChart({ data, loading = false, height = 300 }: P
               fontWeight: 500,
             }}
           >
-            {t('charts.monthlyRevenue')}: {formatCurrency(payload[0]?.value || 0)}
+            {t('charts.monthlyRevenue')}: {formatCurrencyValue(payload[0].value)}
           </Typography>
           <Typography
             variant="caption"
@@ -101,7 +68,7 @@ export default function PaymentsChart({ data, loading = false, height = 300 }: P
               fontWeight: 400,
             }}
           >
-            {t('charts.numberOfPayments')}: {payload[0]?.payload[t('charts.numberOfPayments')] || 0}
+            {t('charts.numberOfPayments')}: {(payload[0].payload[t('charts.numberOfPayments')] as number) || 0}
           </Typography>
         </Box>
       )
@@ -158,7 +125,7 @@ export default function PaymentsChart({ data, loading = false, height = 300 }: P
           </Typography>
           <Box display="flex" gap={1}>
             <Chip
-              label={`${t('charts.amount')}: ${formatCurrency(totalIngresos)}`}
+              label={`${t('charts.amount')}: ${formatCurrencyValue(totalIngresos)}`}
               size="small"
               color="primary"
               variant="outlined"
@@ -177,7 +144,7 @@ export default function PaymentsChart({ data, loading = false, height = 300 }: P
 
             <XAxis
               dataKey="mes"
-              tickFormatter={formatMonth}
+              tickFormatter={formatMonthLabel}
               stroke={theme.palette.text.secondary}
               style={{ fontSize: 12 }}
             />

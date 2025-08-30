@@ -12,6 +12,8 @@ import {
   AreaChart,
 } from 'recharts'
 import { MonthlyStats } from '../types'
+import type { CustomTooltipProps, TooltipPayloadItem } from '../types/chart-types'
+import { formatMonth } from '../utils/chart-utils'
 
 interface MembersChartProps {
   data: MonthlyStats[]
@@ -32,30 +34,10 @@ export default function MembersChart({ data, loading = false, height = 300 }: Me
       .reduce((sum, d) => sum + d.newMembers, 0),
   }))
 
-  const formatMonth = (month: string) => {
-    const monthNumber = month.split('-')[1]
-    const monthNames = {
-      '01': t('months.january'),
-      '02': t('months.february'),
-      '03': t('months.march'),
-      '04': t('months.april'),
-      '05': t('months.may'),
-      '06': t('months.june'),
-      '07': t('months.july'),
-      '08': t('months.august'),
-      '09': t('months.september'),
-      '10': t('months.october'),
-      '11': t('months.november'),
-      '12': t('months.december'),
-    }
-    
-    // Para abreviaciones, tomar las primeras 3 letras
-    const fullName = monthNames[monthNumber as keyof typeof monthNames] || month
-    return i18n.language === 'wo' ? fullName : fullName.substring(0, 3)
-  }
+  const formatMonthLabel = (month: string) => formatMonth(month, t, i18n.language)
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
+  const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+    if (active && payload && payload.length && label) {
       return (
         <Box
           sx={{
@@ -68,9 +50,9 @@ export default function MembersChart({ data, loading = false, height = 300 }: Me
           }}
         >
           <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5 }}>
-            {formatMonth(label)}
+            {formatMonthLabel(label)}
           </Typography>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry: TooltipPayloadItem, index: number) => (
             <Typography
               key={index}
               variant="caption"
@@ -140,7 +122,7 @@ export default function MembersChart({ data, loading = false, height = 300 }: Me
 
             <XAxis
               dataKey="mes"
-              tickFormatter={formatMonth}
+              tickFormatter={formatMonthLabel}
               stroke={theme.palette.text.secondary}
               style={{ fontSize: 12 }}
             />

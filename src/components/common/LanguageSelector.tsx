@@ -62,14 +62,14 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   const currentLanguage = languages[language] || languages.es
 
   // Determine icon color based on theme mode and context
-  const getIconColor = () => {
+  const getIconColor = (): 'primary' | 'inherit' => {
     if (inAppBar && theme.palette.mode === 'light') {
       return 'primary'
     }
     return 'inherit'
   }
 
-  const getChipColor = () => {
+  const getChipColor = (): 'primary' | 'default' => {
     if (inAppBar && theme.palette.mode === 'light') {
       return 'primary'
     }
@@ -88,7 +88,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             onClick={handleClick}
             variant="outlined"
             size={size === 'large' ? 'medium' : size}
-            color={getChipColor() as any}
+            color={getChipColor()}
             sx={{
               ...(inAppBar &&
                 theme.palette.mode === 'light' && {
@@ -138,7 +138,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         return (
           <Tooltip title={i18n.t('language.select')}>
             <IconButton
-              color={getIconColor() as any}
+              color={getIconColor()}
               onClick={handleClick}
               aria-label="select language"
               aria-controls="language-menu"
@@ -199,7 +199,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         {Object.entries(languages).map(([code, lang]) => (
           <MenuItem
             key={code}
-            onClick={() => handleLanguageChange(code as 'es' | 'fr' | 'wo')}
+            onClick={() => void handleLanguageChange(code as 'es' | 'fr' | 'wo')}
             selected={language === code}
           >
             <ListItemIcon>

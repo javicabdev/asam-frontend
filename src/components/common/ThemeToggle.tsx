@@ -66,7 +66,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ inAppBar = false }) =>
   }
 
   // Determine icon color based on theme mode and context
-  const getIconColor = () => {
+  const getIconColor = (): 'primary' | 'inherit' => {
     if (inAppBar && theme.palette.mode === 'light') {
       return 'primary'
     }
@@ -83,7 +83,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ inAppBar = false }) =>
     <>
       <Tooltip title={getTooltipText()}>
         <IconButton
-          color={getIconColor() as any}
+          color={getIconColor()}
           onClick={handleClick}
           aria-label="select theme mode"
           aria-controls="theme-menu"

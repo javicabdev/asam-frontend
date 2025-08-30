@@ -74,7 +74,7 @@ export interface RecentActivity {
 export interface ChartDataPoint {
   name: string
   value: number
-  [key: string]: any
+  [key: string]: string | number | undefined
 }
 
 // Tipos para los componentes

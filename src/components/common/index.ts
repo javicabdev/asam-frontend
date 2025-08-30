@@ -1,6 +1,10 @@
 export { ErrorBoundary, useErrorHandler, withErrorBoundary } from './ErrorBoundary'
-export { PageTransition, usePageTransition, withPageTransition } from './PageTransition'
+export { PageTransition } from './PageTransition'
 export type { TransitionType } from './PageTransition'
 export { LanguageSelector } from './LanguageSelector'
 export { ThemeToggle } from './ThemeToggle'
-export { LoadingOverlay, useLoadingOverlay } from './LoadingOverlay'
+export { LoadingOverlay } from './LoadingOverlay'
+// Hooks are now exported from src/hooks
+export { usePageTransition } from '@/hooks/usePageTransition'
+export { withPageTransition } from '@/hooks/withPageTransition'
+export { useLoadingOverlay } from '@/hooks/useLoadingOverlay'

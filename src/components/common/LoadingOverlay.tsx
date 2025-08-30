@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React from 'react'
 import { Backdrop, Box, CircularProgress, Typography, Fade } from '@mui/material'
 import { RefreshOutlined } from '@mui/icons-material'
 import { useUIStore } from '@/stores/uiStore'
@@ -7,30 +7,6 @@ interface LoadingOverlayProps {
   open?: boolean
   message?: string
   icon?: React.ReactNode
-}
-
-/**
- * Hook para controlar el LoadingOverlay programáticamente
- */
-export const useLoadingOverlay = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [message, setMessage] = useState('Cargando...')
-
-  const show = useCallback((msg?: string) => {
-    if (msg) setMessage(msg)
-    setIsOpen(true)
-  }, [])
-
-  const hide = useCallback(() => {
-    setIsOpen(false)
-  }, [])
-
-  return {
-    isOpen,
-    message,
-    show,
-    hide,
-  }
 }
 
 /**

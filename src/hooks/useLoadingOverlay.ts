@@ -1,17 +1,25 @@
-import { useUIStore } from '@/stores/uiStore'
+import { useState, useCallback } from 'react'
 
 /**
- * Hook to control the loading overlay
+ * Hook para controlar el LoadingOverlay programáticamente
  */
 export const useLoadingOverlay = () => {
-  const { isRefreshingToken, setRefreshingToken } = useUIStore()
+  const [isOpen, setIsOpen] = useState(false)
+  const [message, setMessage] = useState('Cargando...')
 
-  const showTokenRefresh = () => setRefreshingToken(true)
-  const hideTokenRefresh = () => setRefreshingToken(false)
+  const show = useCallback((msg?: string) => {
+    if (msg) setMessage(msg)
+    setIsOpen(true)
+  }, [])
+
+  const hide = useCallback(() => {
+    setIsOpen(false)
+  }, [])
 
   return {
-    isRefreshingToken,
-    showTokenRefresh,
-    hideTokenRefresh,
+    isOpen,
+    message,
+    show,
+    hide,
   }
 }

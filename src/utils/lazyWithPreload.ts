@@ -1,9 +1,5 @@
 import { lazy, ComponentType, LazyExoticComponent } from 'react'
 
-// Type for module with named exports
-type ModuleWithNamedExports<T> = { [key: string]: T }
-type ImportedModule<T> = { default: T } | ModuleWithNamedExports<T>
-
 /**
  * Enhanced lazy loading with preload capability
  * Allows components to be preloaded before they're actually needed
@@ -19,10 +15,10 @@ export interface PreloadableComponent<T extends ComponentType<unknown>> extends 
  * @returns Lazy component with preload method
  */
 export function lazyWithPreload<T extends ComponentType<unknown>>(
-  importFunc: () => Promise<ImportedModule<T>>,
+  importFunc: () => Promise<unknown>,
   namedExport?: string
 ): PreloadableComponent<T> {
-  let preloadedModule: ImportedModule<T> | null = null
+  let preloadedModule: unknown = null
   let preloadPromise: Promise<void> | null = null
 
   const load = async () => {
@@ -43,9 +39,9 @@ export function lazyWithPreload<T extends ComponentType<unknown>>(
   const LazyComponent = lazy(async () => {
     const module = await load()
 
-    if (namedExport && typeof module === 'object' && namedExport in module) {
-      const namedModule = module as ModuleWithNamedExports<T>
-      return { default: namedModule[namedExport] }
+    if (namedExport && typeof module === 'object' && module !== null && namedExport in module) {
+      const namedModule = module as Record<string, unknown>
+      return { default: namedModule[namedExport] as T }
     }
 
     return module as { default: T }
@@ -63,3 +59,21 @@ export function lazyWithPreload<T extends ComponentType<unknown>>(
   return LazyComponent
 }
 
+/**
+ * Preload a component when the browser is idle
+ * @param component Preloadable component
+ */
+export function preloadOnIdle<T extends ComponentType<unknown>>(
+  component: PreloadableComponent<T>
+): void {
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(() => {
+      void component.preload()
+    })
+  } else {
+    // Fallback for browsers that don't support requestIdleCallback
+    setTimeout(() => {
+      void component.preload()
+    }, 1)
+  }
+}

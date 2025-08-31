@@ -2,7 +2,7 @@
   "menu": {
     "dashboard": "Panel de Control",
     "members": "Miembros",
-    "families": "Familias",
+    "users": "Usuarios",
     "payments": "Pagos",
     "cashFlow": "Flujo de Caja",
     "reports": "Informes",
@@ -18,11 +18,11 @@
       "edit": "Editar Miembro",
       "details": "Detalles del Miembro"
     },
-    "families": {
-      "list": "Lista de Familias",
-      "new": "Nueva Familia",
-      "edit": "Editar Familia",
-      "details": "Detalles de la Familia"
+    "users": {
+      "list": "Lista de Usuarios",
+      "new": "Nuevo Usuario",
+      "edit": "Editar Usuario",
+      "details": "Detalles del Usuario"
     },
     "payments": {
       "list": "Lista de Pagos",

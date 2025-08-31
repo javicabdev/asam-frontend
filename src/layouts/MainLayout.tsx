@@ -26,6 +26,7 @@ import {
   Menu as MenuIcon,
   Dashboard as DashboardIcon,
   People as PeopleIcon,
+  SupervisedUserCircle as UsersIcon,
   Payment as PaymentIcon,
   AccountBalance as AccountBalanceIcon,
   Assessment as AssessmentIcon,
@@ -58,6 +59,11 @@ const navigationItems: NavItem[] = [
     text: 'menu.members',
     icon: <PeopleIcon />,
     path: '/members',
+  },
+  {
+    text: 'menu.users',
+    icon: <UsersIcon />,
+    path: '/users',
   },
   {
     text: 'menu.payments',

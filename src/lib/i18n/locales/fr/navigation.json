@@ -2,7 +2,7 @@
   "menu": {
     "dashboard": "Tableau de bord",
     "members": "Membres",
-    "families": "Familles",
+    "users": "Utilisateurs",
     "payments": "Paiements",
     "cashFlow": "Flux de trésorerie",
     "reports": "Rapports",
@@ -18,11 +18,11 @@
       "edit": "Modifier membre",
       "details": "Détails du membre"
     },
-    "families": {
-      "list": "Liste des familles",
-      "new": "Nouvelle famille",
-      "edit": "Modifier famille",
-      "details": "Détails de la famille"
+    "users": {
+      "list": "Liste des utilisateurs",
+      "new": "Nouvel utilisateur",
+      "edit": "Modifier utilisateur",
+      "details": "Détails de l'utilisateur"
     },
     "payments": {
       "list": "Liste des paiements",

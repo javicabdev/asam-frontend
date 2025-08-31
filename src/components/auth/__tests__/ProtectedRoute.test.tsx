@@ -1,8 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { screen, waitFor } from '@testing-library/react'
-// Import types needed for mocking
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { Navigate, Outlet } from 'react-router-dom'
 import { render } from '@/test/test-utils'
 import { ProtectedRoute } from '../ProtectedRoute'
 import * as useAuthModule from '@/hooks/useAuth'
@@ -11,15 +8,17 @@ import * as useAuthModule from '@/hooks/useAuth'
 vi.mock('@/hooks/useAuth')
 
 // Mock react-router-dom components
+/* eslint-disable @typescript-eslint/no-unused-vars */
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom')
   return {
     ...actual,
-    Navigate: vi.fn(({ to }) => <div data-testid="navigate">Navigate to {to}</div>),
+    Navigate: vi.fn(({ to }: { to: string }) => <div data-testid="navigate">Navigate to {to}</div>),
     Outlet: vi.fn(() => <div data-testid="outlet">Outlet Component</div>),
     useLocation: vi.fn(() => ({ pathname: '/test-path' })),
   }
 })
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 describe('ProtectedRoute', () => {
   const mockUseAuth = vi.mocked(useAuthModule.useAuth)
@@ -36,7 +35,12 @@ describe('ProtectedRoute', () => {
         user: null,
         login: vi.fn(),
         logout: vi.fn(),
-        updateUser: vi.fn(),
+        sendVerificationEmail: vi.fn(),
+        verifyEmail: vi.fn(),
+        requestPasswordReset: vi.fn(),
+        resetPasswordWithToken: vi.fn(),
+        changePassword: vi.fn(),
+        refetchUser: vi.fn(),
       })
 
       render(<ProtectedRoute />)
@@ -53,7 +57,12 @@ describe('ProtectedRoute', () => {
         user: null,
         login: vi.fn(),
         logout: vi.fn(),
-        updateUser: vi.fn(),
+        sendVerificationEmail: vi.fn(),
+        verifyEmail: vi.fn(),
+        requestPasswordReset: vi.fn(),
+        resetPasswordWithToken: vi.fn(),
+        changePassword: vi.fn(),
+        refetchUser: vi.fn(),
       })
 
       render(<ProtectedRoute />)
@@ -69,7 +78,12 @@ describe('ProtectedRoute', () => {
         user: null,
         login: vi.fn(),
         logout: vi.fn(),
-        updateUser: vi.fn(),
+        sendVerificationEmail: vi.fn(),
+        verifyEmail: vi.fn(),
+        requestPasswordReset: vi.fn(),
+        resetPasswordWithToken: vi.fn(),
+        changePassword: vi.fn(),
+        refetchUser: vi.fn(),
       })
 
       render(<ProtectedRoute redirectTo="/custom-login" />)
@@ -85,14 +99,18 @@ describe('ProtectedRoute', () => {
           id: '1',
           username: 'testuser',
           email: 'test@example.com',
-          role: 'USER',
+          role: 'user',
           emailVerified: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          isActive: true,
         },
         login: vi.fn(),
         logout: vi.fn(),
-        updateUser: vi.fn(),
+        sendVerificationEmail: vi.fn(),
+        verifyEmail: vi.fn(),
+        requestPasswordReset: vi.fn(),
+        resetPasswordWithToken: vi.fn(),
+        changePassword: vi.fn(),
+        refetchUser: vi.fn(),
       })
 
       render(<ProtectedRoute />)
@@ -109,14 +127,18 @@ describe('ProtectedRoute', () => {
           id: '1',
           username: 'testuser',
           email: 'test@example.com',
-          role: 'USER',
+          role: 'user',
           emailVerified: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          isActive: true,
         },
         login: vi.fn(),
         logout: vi.fn(),
-        updateUser: vi.fn(),
+        sendVerificationEmail: vi.fn(),
+        verifyEmail: vi.fn(),
+        requestPasswordReset: vi.fn(),
+        resetPasswordWithToken: vi.fn(),
+        changePassword: vi.fn(),
+        refetchUser: vi.fn(),
       })
 
       render(
@@ -139,14 +161,18 @@ describe('ProtectedRoute', () => {
           id: '1',
           username: 'testuser',
           email: 'test@example.com',
-          role: 'USER',
+          role: 'user',
           emailVerified: false,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          isActive: true,
         },
         login: vi.fn(),
         logout: vi.fn(),
-        updateUser: vi.fn(),
+        sendVerificationEmail: vi.fn(),
+        verifyEmail: vi.fn(),
+        requestPasswordReset: vi.fn(),
+        resetPasswordWithToken: vi.fn(),
+        changePassword: vi.fn(),
+        refetchUser: vi.fn(),
       })
 
       render(<ProtectedRoute />)
@@ -163,14 +189,18 @@ describe('ProtectedRoute', () => {
           id: '1',
           username: 'testuser',
           email: 'test@example.com',
-          role: 'USER',
+          role: 'user',
           emailVerified: false,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          isActive: true,
         },
         login: vi.fn(),
         logout: vi.fn(),
-        updateUser: vi.fn(),
+        sendVerificationEmail: vi.fn(),
+        verifyEmail: vi.fn(),
+        requestPasswordReset: vi.fn(),
+        resetPasswordWithToken: vi.fn(),
+        changePassword: vi.fn(),
+        refetchUser: vi.fn(),
       })
 
       render(<ProtectedRoute requireEmailVerification />)
@@ -187,14 +217,18 @@ describe('ProtectedRoute', () => {
           id: '1',
           username: 'testuser',
           email: 'test@example.com',
-          role: 'USER',
+          role: 'user',
           emailVerified: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          isActive: true,
         },
         login: vi.fn(),
         logout: vi.fn(),
-        updateUser: vi.fn(),
+        sendVerificationEmail: vi.fn(),
+        verifyEmail: vi.fn(),
+        requestPasswordReset: vi.fn(),
+        resetPasswordWithToken: vi.fn(),
+        changePassword: vi.fn(),
+        refetchUser: vi.fn(),
       })
 
       render(<ProtectedRoute requireEmailVerification />)
@@ -212,7 +246,12 @@ describe('ProtectedRoute', () => {
         user: null,
         login: vi.fn(),
         logout: vi.fn(),
-        updateUser: vi.fn(),
+        sendVerificationEmail: vi.fn(),
+        verifyEmail: vi.fn(),
+        requestPasswordReset: vi.fn(),
+        resetPasswordWithToken: vi.fn(),
+        changePassword: vi.fn(),
+        refetchUser: vi.fn(),
       })
 
       render(<ProtectedRoute requireEmailVerification />)
@@ -231,7 +270,12 @@ describe('ProtectedRoute', () => {
         user: null,
         login: vi.fn(),
         logout: vi.fn(),
-        updateUser: vi.fn(),
+        sendVerificationEmail: vi.fn(),
+        verifyEmail: vi.fn(),
+        requestPasswordReset: vi.fn(),
+        resetPasswordWithToken: vi.fn(),
+        changePassword: vi.fn(),
+        refetchUser: vi.fn(),
       })
 
       rerender(<ProtectedRoute />)
@@ -245,14 +289,18 @@ describe('ProtectedRoute', () => {
           id: '1',
           username: 'testuser',
           email: 'test@example.com',
-          role: 'USER',
+          role: 'user',
           emailVerified: true,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
+          isActive: true,
         },
         login: vi.fn(),
         logout: vi.fn(),
-        updateUser: vi.fn(),
+        sendVerificationEmail: vi.fn(),
+        verifyEmail: vi.fn(),
+        requestPasswordReset: vi.fn(),
+        resetPasswordWithToken: vi.fn(),
+        changePassword: vi.fn(),
+        refetchUser: vi.fn(),
       })
 
       rerender(<ProtectedRoute />)

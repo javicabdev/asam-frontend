@@ -1,5 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { ApolloError } from '@apollo/client'
+import type { DashboardStats, RecentActivityType, MonthlyStats } from '../features/dashboard'
 import {
   Grid,
   Box,
@@ -41,7 +43,7 @@ export default function DashboardPage() {
   const {
     stats: realBackendStats,
     recentActivity: realActivity,
-    monthlyData: realMonthlyData,
+    monthlyStats: realMonthlyData,
     loading: realLoading,
     error: realError,
     refetch: realRefetch,
@@ -50,16 +52,16 @@ export default function DashboardPage() {
   // Hook para datos mock
   const mockData = useMockDashboardData()
 
-  // Seleccionar datos según el switch
-  const backendStats = useMockData ? mockData.backendStats : realBackendStats
-  const monthlyData = useMockData ? mockData.monthlyData : realMonthlyData
-  const recentActivity = useMockData ? mockData.recentActivity : realActivity
-  const loading = useMockData ? mockData.loading : realLoading
-  const error = useMockData ? mockData.error : realError
+  // Seleccionar datos según el switch con tipos explícitos
+  const backendStats: DashboardStats | null | undefined = useMockData ? mockData.backendStats : realBackendStats
+  const monthlyData: MonthlyStats[] | undefined = useMockData ? mockData.monthlyData : realMonthlyData
+  const recentActivity: RecentActivityType[] | undefined = useMockData ? mockData.recentActivity : realActivity
+  const loading: boolean = useMockData ? mockData.loading : realLoading
+  const error: ApolloError | undefined = useMockData ? mockData.error : realError
 
   const [isRefreshing, setIsRefreshing] = React.useState(false)
 
-  const handleRefresh = async () => {
+  const handleRefresh = async (): Promise<void> => {
     setIsRefreshing(true)
     if (!useMockData) {
       await realRefetch()
@@ -83,7 +85,7 @@ export default function DashboardPage() {
       <Container maxWidth="lg" sx={{ mt: 4 }}>
         <Alert severity="error">
           <AlertTitle>{t('error.title')}</AlertTitle>
-          {error.message}
+          {error?.message || 'Unknown error'}
           <Box mt={2}>
             <Button variant="outlined" size="small" onClick={() => setUseMockData(true)}>
               {t('error.useMockData')}
@@ -116,7 +118,7 @@ export default function DashboardPage() {
             <Button
               variant="outlined"
               startIcon={<Refresh />}
-              onClick={handleRefresh}
+              onClick={() => void handleRefresh()}
               disabled={isRefreshing}
             >
               {isRefreshing ? <CircularProgress size={20} /> : t('header.refresh')}
@@ -155,18 +157,18 @@ export default function DashboardPage() {
         <Grid item xs={12} sm={6} md={3}>
           <StatsCard
             title={t('stats.totalMembers')}
-            value={backendStats?.totalMembers || 0}
+            value={backendStats?.totalMembers ?? 0}
             icon={<People />}
-            trend={backendStats?.memberGrowthPercentage || 0}
+            trend={backendStats?.memberGrowthPercentage ?? 0}
             loading={loading}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <StatsCard
             title={t('stats.activeMembers')}
-            value={backendStats?.activeMembers || 0}
+            value={backendStats?.activeMembers ?? 0}
             icon={<CheckCircle />}
-            trend={backendStats?.memberGrowthPercentage || 0}
+            trend={backendStats?.memberGrowthPercentage ?? 0}
             loading={loading}
             color="success"
           />
@@ -174,9 +176,9 @@ export default function DashboardPage() {
         <Grid item xs={12} sm={6} md={3}>
           <StatsCard
             title={t('stats.totalRevenue')}
-            value={backendStats?.totalRevenue || 0}
+            value={backendStats?.totalRevenue ?? 0}
             icon={<AccountBalance />}
-            trend={backendStats?.revenueGrowthPercentage || 0}
+            trend={backendStats?.revenueGrowthPercentage ?? 0}
             loading={loading}
             color="primary"
             isCurrency
@@ -185,7 +187,7 @@ export default function DashboardPage() {
         <Grid item xs={12} sm={6} md={3}>
           <StatsCard
             title={t('stats.pendingPayments')}
-            value={backendStats?.pendingPayments || 0}
+            value={backendStats?.pendingPayments ?? 0}
             icon={<Warning />}
             loading={loading}
             color="warning"
@@ -196,7 +198,7 @@ export default function DashboardPage() {
         <Grid item xs={12} sm={6} md={3}>
           <StatsCard
             title={t('stats.familiesRegistered')}
-            value={backendStats?.familyMembers || 0}
+            value={backendStats?.familyMembers ?? 0}
             icon={<Group />}
             loading={loading}
             color="info"
@@ -205,7 +207,7 @@ export default function DashboardPage() {
         <Grid item xs={12} sm={6} md={3}>
           <StatsCard
             title={t('stats.averageContribution')}
-            value={backendStats?.averagePayment || 0}
+            value={backendStats?.averagePayment ?? 0}
             icon={<TrendingUp />}
             loading={loading}
             color="success"
@@ -215,7 +217,7 @@ export default function DashboardPage() {
         <Grid item xs={12} sm={6} md={3}>
           <StatsCard
             title={t('stats.monthlyGrowth')}
-            value={backendStats?.memberGrowthPercentage || 0}
+            value={backendStats?.memberGrowthPercentage ?? 0}
             icon={<TrendingUp />}
             loading={loading}
             color="primary"
@@ -225,10 +227,10 @@ export default function DashboardPage() {
         <Grid item xs={12} sm={6} md={3}>
           <StatsCard
             title={t('stats.paymentRate')}
-            value={backendStats?.paymentCompletionRate || 0}
-            icon={(backendStats?.paymentCompletionRate || 0) >= 80 ? <CheckCircle /> : <TrendingDown />}
+            value={backendStats?.paymentCompletionRate ?? 0}
+            icon={(backendStats?.paymentCompletionRate ?? 0) >= 80 ? <CheckCircle /> : <TrendingDown />}
             loading={loading}
-            color={(backendStats?.paymentCompletionRate || 0) >= 80 ? 'success' : 'error'}
+            color={(backendStats?.paymentCompletionRate ?? 0) >= 80 ? 'success' : 'error'}
             isPercentage
           />
         </Grid>
@@ -239,21 +241,21 @@ export default function DashboardPage() {
         {/* Gráfico de miembros */}
         <Grid item xs={12} md={6}>
           <Paper elevation={0} sx={{ p: 3, height: '100%' }}>
-            <MembersChart data={monthlyData} loading={loading} />
+            <MembersChart data={monthlyData ?? []} loading={loading} />
           </Paper>
         </Grid>
 
         {/* Gráfico de pagos */}
         <Grid item xs={12} md={6}>
           <Paper elevation={0} sx={{ p: 3, height: '100%' }}>
-            <PaymentsChart data={monthlyData} loading={loading} />
+            <PaymentsChart data={monthlyData ?? []} loading={loading} />
           </Paper>
         </Grid>
 
         {/* Actividad reciente */}
         <Grid item xs={12}>
           <Paper elevation={0} sx={{ p: 3, height: '400px' }}>
-            <RecentActivity activities={recentActivity} loading={loading} />
+            <RecentActivity activities={recentActivity ?? []} loading={loading} />
           </Paper>
         </Grid>
       </Grid>

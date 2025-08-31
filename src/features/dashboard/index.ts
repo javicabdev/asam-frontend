@@ -5,11 +5,8 @@ export { default as PaymentsChart } from './components/PaymentsChart'
 export { default as RecentActivity } from './components/RecentActivity'
 export { default as QuickActions } from './components/QuickActions'
 
-export {
-  useDashboardStats,
-  useDashboardStatsLegacy,
-  useMockDashboardData,
-} from './hooks/useDashboardStats'
+export { useDashboardStats } from './hooks/useDashboardStats'
+export { useMockDashboardData } from './hooks/useMockDashboardData'
 
 export type {
   DashboardStats,

@@ -83,8 +83,8 @@ export const VerifyEmailPage: React.FC = () => {
       }
     }
 
-    performVerification()
-  }, [token, isAuthenticated]) // Include isAuthenticated to handle auth state changes
+    void performVerification()
+  }, [token, isAuthenticated, verifyEmail, refetchUser, searchParams, setSearchParams]) // Include all dependencies
 
   // Handle navigation based on auth status
   const handleContinue = () => {

@@ -26,7 +26,6 @@ import {
   Menu as MenuIcon,
   Dashboard as DashboardIcon,
   People as PeopleIcon,
-  FamilyRestroom as FamilyIcon,
   Payment as PaymentIcon,
   AccountBalance as AccountBalanceIcon,
   Assessment as AssessmentIcon,
@@ -59,11 +58,6 @@ const navigationItems: NavItem[] = [
     text: 'menu.members',
     icon: <PeopleIcon />,
     path: '/members',
-  },
-  {
-    text: 'menu.families',
-    icon: <FamilyIcon />,
-    path: '/families',
   },
   {
     text: 'menu.payments',

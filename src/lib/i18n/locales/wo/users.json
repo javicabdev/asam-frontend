@@ -68,14 +68,25 @@
       "confirmPassword": "Dëggal Baatu Jàmm bi",
       "role": "Anam",
       "member": "Mbooloo ju Bokk",
+      "associatedMember": "Mbooloo ju Bokk",
       "isActive": "Jëfandikukat Dox na"
+    },
+    "passwordHint": "Bàyyi ko weex ngir baatu jàmm bi mu nekk",
+    "memberSearch": {
+      "placeholder": "Seet ci tur, sant walla limub mbooloo...",
+      "typeToSearch": "Bind lu ëpp 2 araf ngir seet",
+      "noResults": "Giseewul benn mbooloo",
+      "loading": "Ci seet..."
     },
     "validation": {
       "usernameRequired": "Turu jëfandikukat lu laaj la",
+      "usernameMin": "Turu jëfandikukat war na am lu ëpp {{min}} araf",
+      "usernamePattern": "Turu jëfandikukat war na am araf, lim ak tiret suuf rek",
       "emailRequired": "Màkkaanu email lu laaj la",
       "emailInvalid": "Màkkaanu email baaxul",
       "passwordRequired": "Baatu jàmm lu laaj la",
-      "passwordMin": "Baatu jàmm war na am lu ëpp 8 araf",
+      "passwordMin": "Baatu jàmm war na am lu ëpp {{min}} araf",
+      "confirmPasswordRequired": "War nga dëggal baatu jàmm bi",
       "passwordsNotMatch": "Baatu jàmm yi bokkuñu",
       "roleRequired": "Anam lu laaj la"
     },

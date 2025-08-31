@@ -68,14 +68,25 @@
       "confirmPassword": "Confirmer le Mot de Passe",
       "role": "Rôle",
       "member": "Membre Associé",
+      "associatedMember": "Membre Associé",
       "isActive": "Utilisateur Actif"
+    },
+    "passwordHint": "Laisser vide pour conserver le mot de passe actuel",
+    "memberSearch": {
+      "placeholder": "Rechercher par nom, prénom ou numéro de membre...",
+      "typeToSearch": "Tapez au moins 2 caractères pour rechercher",
+      "noResults": "Aucun membre trouvé",
+      "loading": "Recherche..."
     },
     "validation": {
       "usernameRequired": "Le nom d'utilisateur est requis",
+      "usernameMin": "Le nom d'utilisateur doit contenir au moins {{min}} caractères",
+      "usernamePattern": "Le nom d'utilisateur ne peut contenir que des lettres, des chiffres et des tirets bas",
       "emailRequired": "L'adresse email est requise",
       "emailInvalid": "L'adresse email n'est pas valide",
       "passwordRequired": "Le mot de passe est requis",
-      "passwordMin": "Le mot de passe doit contenir au moins 8 caractères",
+      "passwordMin": "Le mot de passe doit contenir au moins {{min}} caractères",
+      "confirmPasswordRequired": "Vous devez confirmer le mot de passe",
       "passwordsNotMatch": "Les mots de passe ne correspondent pas",
       "roleRequired": "Le rôle est requis"
     },

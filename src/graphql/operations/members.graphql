@@ -96,6 +96,21 @@ query SearchMembers($criteria: String!) {
   }
 }
 
+# Search members that don't have an associated user account
+# TODO: Uncomment when backend implements this query
+# query SearchMembersWithoutUser($criteria: String!) {
+#   searchMembersWithoutUser(criteria: $criteria) {
+#     miembro_id
+#     numero_socio
+#     tipo_membresia
+#     nombre
+#     apellidos
+#     estado
+#     documento_identidad
+#     correo_electronico
+#   }
+# }
+
 # Member mutations
 mutation CreateMember($input: CreateMemberInput!) {
   createMember(input: $input) {

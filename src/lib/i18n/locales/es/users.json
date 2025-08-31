@@ -68,14 +68,25 @@
       "confirmPassword": "Confirmar Contraseña",
       "role": "Rol",
       "member": "Socio Asociado",
+      "associatedMember": "Socio Asociado",
       "isActive": "Usuario Activo"
+    },
+    "passwordHint": "Dejar en blanco para mantener la contraseña actual",
+    "memberSearch": {
+      "placeholder": "Buscar por nombre, apellido o número de socio...",
+      "typeToSearch": "Escribe al menos 2 caracteres para buscar",
+      "noResults": "No se encontraron socios",
+      "loading": "Buscando..."
     },
     "validation": {
       "usernameRequired": "El nombre de usuario es requerido",
+      "usernameMin": "El nombre de usuario debe tener al menos {{min}} caracteres",
+      "usernamePattern": "El nombre de usuario solo puede contener letras, números y guión bajo",
       "emailRequired": "El correo electrónico es requerido",
       "emailInvalid": "El correo electrónico no es válido",
       "passwordRequired": "La contraseña es requerida",
-      "passwordMin": "La contraseña debe tener al menos 8 caracteres",
+      "passwordMin": "La contraseña debe tener al menos {{min}} caracteres",
+      "confirmPasswordRequired": "Debe confirmar la contraseña",
       "passwordsNotMatch": "Las contraseñas no coinciden",
       "roleRequired": "El rol es requerido"
     },

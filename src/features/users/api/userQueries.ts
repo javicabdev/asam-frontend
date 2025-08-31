@@ -88,3 +88,54 @@ export const DELETE_USER = gql`
     }
   }
 `
+
+// Query to search members for association
+export const SEARCH_MEMBERS = gql`
+  query SearchMembers($criteria: String!) {
+    searchMembers(criteria: $criteria) {
+      miembro_id
+      nombre
+      apellidos
+      numero_socio
+      documento_identidad
+      correo_electronico
+      estado
+    }
+  }
+`
+
+// Query to search members for user association (filters out members with existing users)
+// TODO: Uncomment when backend implements this query
+// export const SEARCH_MEMBERS_FOR_USER_ASSOCIATION = gql`
+//   query SearchMembersForUserAssociation($criteria: String!) {
+//     searchMembersWithoutUser(criteria: $criteria) {
+//       miembro_id
+//       nombre
+//       apellidos
+//       numero_socio
+//       documento_identidad
+//       correo_electronico
+//       estado
+//     }
+//   }
+// `
+
+// Temporary: Use regular search until backend implements the optimized query
+export const SEARCH_MEMBERS_FOR_USER_ASSOCIATION = SEARCH_MEMBERS
+
+// Query to get members without user account
+export const GET_MEMBERS_WITHOUT_USER = gql`
+  query GetMembersWithoutUser {
+    listMembers(filter: { pagination: { pageSize: 100 } }) {
+      nodes {
+        miembro_id
+        nombre
+        apellidos
+        numero_socio
+        documento_identidad
+        correo_electronico
+        estado
+      }
+    }
+  }
+`

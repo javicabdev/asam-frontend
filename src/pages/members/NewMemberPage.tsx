@@ -151,7 +151,9 @@ export const NewMemberPage: React.FC = () => {
 
       // Validate response with proper type checking
       if (!memberResult.data?.createMember?.miembro_id) {
-        throw new Error('No se recibió una respuesta válida del servidor')
+        setError('No se recibió una respuesta válida del servidor')
+        setLoading(false)
+        return
       }
 
       const newMemberId = memberResult.data.createMember.miembro_id
@@ -182,7 +184,9 @@ export const NewMemberPage: React.FC = () => {
         console.log('Family creation result:', familyResult)
 
         if (!familyResult.data?.createFamily?.id) {
-          throw new Error('No se pudo crear la familia')
+          setError('No se pudo crear la familia')
+          setLoading(false)
+          return
         }
 
         const familyId = familyResult.data.createFamily.id

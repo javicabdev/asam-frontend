@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useMutation } from '@apollo/client'
+import { useMutation, ApolloError, FetchResult } from '@apollo/client'
 import {
   Container,
   Typography,
@@ -25,6 +25,52 @@ import {
   ADD_FAMILY_MEMBER_MUTATION,
 } from '@/features/members/api/mutations'
 import { MembershipType } from '@/features/members/types'
+import type {
+  CreateMemberMutation,
+  CreateMemberMutationVariables,
+  CreateFamilyMutation,
+  CreateFamilyMutationVariables,
+  AddFamilyMemberMutation,
+  AddFamilyMemberMutationVariables,
+  MembershipType as GraphQLMembershipType,
+} from '@/graphql/generated/operations'
+
+// Import the form data type from MemberForm
+interface MemberFormSubmitData {
+  numero_socio: string
+  tipo_membresia: string
+  nombre: string
+  apellidos: string
+  calle_numero_piso: string
+  codigo_postal: string
+  poblacion: string
+  provincia: string
+  pais: string
+  fecha_nacimiento: string | null
+  documento_identidad: string
+  correo_electronico: string
+  profesion: string | null | undefined
+  nacionalidad: string | null | undefined
+  observaciones: string | null | undefined
+  esposo_nombre: string | null | undefined
+  esposo_apellidos: string | null | undefined
+  esposo_fecha_nacimiento: string | null
+  esposo_documento_identidad: string | null | undefined
+  esposo_correo_electronico: string | null | undefined
+  esposa_nombre: string | null | undefined
+  esposa_apellidos: string | null | undefined
+  esposa_fecha_nacimiento: string | null
+  esposa_documento_identidad: string | null | undefined
+  esposa_correo_electronico: string | null | undefined
+  familyMembers: Array<{
+    nombre: string
+    apellidos: string
+    fecha_nacimiento?: string | null
+    dni_nie?: string
+    correo_electronico?: string
+    parentesco?: string
+  }>
+}
 
 export const NewMemberPage: React.FC = () => {
   const navigate = useNavigate()
@@ -34,9 +80,20 @@ export const NewMemberPage: React.FC = () => {
   // Get auth state for debugging
   const { user, isAuthenticated, accessToken } = useAuthStore()
 
-  const [createMember] = useMutation(CREATE_MEMBER_MUTATION)
-  const [createFamily] = useMutation(CREATE_FAMILY_MUTATION)
-  const [addFamilyMember] = useMutation(ADD_FAMILY_MEMBER_MUTATION)
+  const [createMember] = useMutation<
+    CreateMemberMutation,
+    CreateMemberMutationVariables
+  >(CREATE_MEMBER_MUTATION)
+  
+  const [createFamily] = useMutation<
+    CreateFamilyMutation,
+    CreateFamilyMutationVariables
+  >(CREATE_FAMILY_MUTATION)
+  
+  const [addFamilyMember] = useMutation<
+    AddFamilyMemberMutation,
+    AddFamilyMemberMutationVariables
+  >(ADD_FAMILY_MEMBER_MUTATION)
 
   const handleCancel = () => {
     navigate('/members')
@@ -51,7 +108,7 @@ export const NewMemberPage: React.FC = () => {
     }
   }, [isAuthenticated, user])
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: MemberFormSubmitData) => {
     setLoading(true)
     setError(null)
 
@@ -68,7 +125,7 @@ export const NewMemberPage: React.FC = () => {
       // Step 1: Create the main member
       const memberInput = {
         numero_socio: data.numero_socio, // Use the number from the form
-        tipo_membresia: data.tipo_membresia,
+        tipo_membresia: data.tipo_membresia as GraphQLMembershipType,
         nombre: data.nombre,
         apellidos: data.apellidos,
         calle_numero_piso: data.calle_numero_piso,
@@ -86,14 +143,14 @@ export const NewMemberPage: React.FC = () => {
 
       console.log('Creating member with input:', memberInput)
 
-      const memberResult = await createMember({
+      const memberResult: FetchResult<CreateMemberMutation> = await createMember({
         variables: { input: memberInput },
       })
 
       console.log('Member creation result:', memberResult)
 
-      // Validate response
-      if (!memberResult.data || !memberResult.data.createMember) {
+      // Validate response with proper type checking
+      if (!memberResult.data?.createMember?.miembro_id) {
         throw new Error('No se recibió una respuesta válida del servidor')
       }
 
@@ -118,13 +175,13 @@ export const NewMemberPage: React.FC = () => {
 
         console.log('Creating family with input:', familyInput)
 
-        const familyResult = await createFamily({
+        const familyResult: FetchResult<CreateFamilyMutation> = await createFamily({
           variables: { input: familyInput },
         })
 
         console.log('Family creation result:', familyResult)
 
-        if (!familyResult.data || !familyResult.data.createFamily) {
+        if (!familyResult.data?.createFamily?.id) {
           throw new Error('No se pudo crear la familia')
         }
 
@@ -134,7 +191,7 @@ export const NewMemberPage: React.FC = () => {
         for (const familyMember of data.familyMembers || []) {
           console.log('Adding family member:', familyMember)
 
-          const addMemberResult = await addFamilyMember({
+          const addMemberResult: FetchResult<AddFamilyMemberMutation> = await addFamilyMember({
             variables: {
               family_id: familyId,
               familiar: {
@@ -155,17 +212,21 @@ export const NewMemberPage: React.FC = () => {
       // Navigate to payment page with member ID
       console.log('Member created successfully, navigating to payment page')
       navigate(`/payments/initial/${newMemberId}`)
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error creating member:', err)
 
       // Better error handling
       let errorMessage = 'Ha ocurrido un error al crear el socio'
 
-      if (err.graphQLErrors && err.graphQLErrors.length > 0) {
-        errorMessage = err.graphQLErrors[0].message
-      } else if (err.networkError) {
-        errorMessage = 'Error de conexión. Por favor verifica tu conexión a internet.'
-      } else if (err.message) {
+      if (err instanceof ApolloError) {
+        if (err.graphQLErrors && err.graphQLErrors.length > 0) {
+          errorMessage = err.graphQLErrors[0].message
+        } else if (err.networkError) {
+          errorMessage = 'Error de conexión. Por favor verifica tu conexión a internet.'
+        } else if (err.message) {
+          errorMessage = err.message
+        }
+      } else if (err instanceof Error) {
         errorMessage = err.message
       }
 
@@ -183,7 +244,7 @@ export const NewMemberPage: React.FC = () => {
             underline="hover"
             color="inherit"
             href="#"
-            onClick={(e) => {
+            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
               e.preventDefault()
               navigate('/dashboard')
             }}
@@ -194,7 +255,7 @@ export const NewMemberPage: React.FC = () => {
             underline="hover"
             color="inherit"
             href="#"
-            onClick={(e) => {
+            onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
               e.preventDefault()
               navigate('/members')
             }}
@@ -241,7 +302,7 @@ export const NewMemberPage: React.FC = () => {
       </Card>
 
       {user?.role === 'admin' ? (
-        <MemberForm onCancel={handleCancel} onSubmit={handleSubmit} />
+        <MemberForm onCancel={handleCancel} onSubmit={(data) => void handleSubmit(data)} />
       ) : (
         <Alert severity="error" sx={{ mt: 2 }}>
           {!isAuthenticated

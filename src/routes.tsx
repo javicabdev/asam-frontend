@@ -55,8 +55,6 @@ const MemberDetailsPage = lazyWithPreload(
   'MemberDetailsPage'
 )
 
-const FamiliesPage = lazyWithPreload(() => import('@/pages/FamiliesPage'))
-
 const PaymentsPage = lazyWithPreload(() => import('@/pages/PaymentsPage'))
 
 const CashFlowPage = lazyWithPreload(() => import('@/pages/CashFlowPage'))
@@ -144,8 +142,6 @@ export const AppRoutes = () => {
             <Route path="/members" element={<MembersPage />} />
             <Route path="/members/new" element={<NewMemberPage />} />
             <Route path="/members/:id" element={<MemberDetailsPage />} />
-            <Route path="/families" element={<FamiliesPage />} />
-            <Route path="/families/:id" element={<FamiliesPage />} />
             <Route path="/payments" element={<PaymentsPage />} />
             <Route path="/cash-flow" element={<CashFlowPage />} />
             <Route path="/reports" element={<ReportsPage />} />

@@ -1,0 +1,93 @@
+{
+  "title": "Gestión de Usuarios",
+  "subtitle": "Administra los usuarios del sistema, tanto administradores como usuarios regulares.",
+  "table": {
+    "title": "Gestión de Usuarios",
+    "addButton": "Nuevo Usuario",
+    "searchPlaceholder": "Buscar por nombre, email o número de socio...",
+    "tabs": {
+      "admins": "Administradores",
+      "users": "Usuarios"
+    },
+    "columns": {
+      "username": "Usuario",
+      "email": "Email",
+      "role": "Rol",
+      "associatedMember": "Socio Asociado",
+      "status": "Estado",
+      "emailVerified": "Email Verificado",
+      "lastLogin": "Último Acceso",
+      "actions": "Acciones"
+    },
+    "roles": {
+      "admin": "Administrador",
+      "user": "Usuario"
+    },
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "emailStatus": {
+      "verified": "Verificado",
+      "pending": "Pendiente"
+    },
+    "memberStatus": {
+      "notAssociated": "Sin asociar",
+      "memberNumber": "N°"
+    },
+    "lastLoginStatus": {
+      "never": "Nunca"
+    },
+    "actions": {
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "deleteConfirm": "¿Estás seguro de que deseas eliminar este usuario?",
+      "cannotDeleteSelf": "No puedes eliminarte a ti mismo",
+      "cannotDelete": "Este usuario no puede ser eliminado"
+    },
+    "empty": "No se encontraron usuarios",
+    "error": "Error al cargar usuarios: {{message}}",
+    "pagination": {
+      "rowsPerPage": "Filas por página:",
+      "displayedRows": "{{from}}-{{to}} de {{count}}"
+    }
+  },
+  "form": {
+    "create": {
+      "title": "Crear Nuevo Usuario",
+      "submit": "Crear Usuario"
+    },
+    "edit": {
+      "title": "Editar Usuario",
+      "submit": "Guardar Cambios"
+    },
+    "fields": {
+      "username": "Nombre de Usuario",
+      "email": "Correo Electrónico",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar Contraseña",
+      "role": "Rol",
+      "member": "Socio Asociado",
+      "isActive": "Usuario Activo"
+    },
+    "validation": {
+      "usernameRequired": "El nombre de usuario es requerido",
+      "emailRequired": "El correo electrónico es requerido",
+      "emailInvalid": "El correo electrónico no es válido",
+      "passwordRequired": "La contraseña es requerida",
+      "passwordMin": "La contraseña debe tener al menos 8 caracteres",
+      "passwordsNotMatch": "Las contraseñas no coinciden",
+      "roleRequired": "El rol es requerido"
+    },
+    "errors": {
+      "createFailed": "Error al crear el usuario",
+      "updateFailed": "Error al actualizar el usuario",
+      "usernameTaken": "El nombre de usuario ya está en uso",
+      "emailTaken": "El correo electrónico ya está en uso"
+    },
+    "success": {
+      "created": "Usuario creado exitosamente",
+      "updated": "Usuario actualizado exitosamente"
+    }
+  }
+}

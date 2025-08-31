@@ -1,8 +1,11 @@
 import { Box, Typography } from '@mui/material'
 import { UsersTable } from '@/features/users/components/UsersTable'
 import type { User } from '@/graphql/generated/operations'
+import { useTranslation } from 'react-i18next'
 
 export default function UsersPage() {
+  const { t } = useTranslation('users')
+  
   const handleEditUser = (user: User) => {
     // TODO: Implement edit user dialog
     console.log('Edit user:', user)
@@ -16,10 +19,10 @@ export default function UsersPage() {
   return (
     <Box>
       <Typography variant="h4" component="h1" gutterBottom>
-        Gestión de Usuarios
+        {t('title')}
       </Typography>
       <Typography variant="body1" color="text.secondary" gutterBottom>
-        Administra los usuarios del sistema, tanto administradores como miembros de la asociación.
+        {t('subtitle')}
       </Typography>
       
       <Box sx={{ mt: 3 }}>

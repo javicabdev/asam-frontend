@@ -27,6 +27,10 @@ import navigationEs from './locales/es/navigation.json'
 import navigationFr from './locales/fr/navigation.json'
 import navigationWo from './locales/wo/navigation.json'
 
+import usersEs from './locales/es/users.json'
+import usersFr from './locales/fr/users.json'
+import usersWo from './locales/wo/users.json'
+
 export const defaultNS = 'common'
 export const resources = {
   es: {
@@ -36,6 +40,7 @@ export const resources = {
     members: membersEs,
     payments: paymentsEs,
     navigation: navigationEs,
+    users: usersEs,
   },
   fr: {
     common: commonFr,
@@ -44,6 +49,7 @@ export const resources = {
     members: membersFr,
     payments: paymentsFr,
     navigation: navigationFr,
+    users: usersFr,
   },
   wo: {
     common: commonWo,
@@ -52,6 +58,7 @@ export const resources = {
     members: membersWo,
     payments: paymentsWo,
     navigation: navigationWo,
+    users: usersWo,
   },
 } as const
 
@@ -85,7 +92,7 @@ void i18n
     defaultNS,
     lng: 'es', // Default language
     fallbackLng: 'es',
-    ns: ['common', 'auth', 'dashboard', 'members', 'payments', 'navigation'],
+    ns: ['common', 'auth', 'dashboard', 'members', 'payments', 'navigation', 'users'],
 
     interpolation: {
       escapeValue: false, // React already escapes values

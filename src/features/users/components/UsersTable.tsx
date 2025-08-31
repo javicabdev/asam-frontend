@@ -33,23 +33,15 @@ import { useQuery, useMutation } from '@apollo/client'
 import { LIST_USERS, DELETE_USER } from '../api/userQueries'
 import { useAuthStore } from '@/stores/authStore'
 import type { User, UserRole } from '@/graphql/generated/operations'
+import { useTranslation } from 'react-i18next'
 
 interface UsersTableProps {
   onEditUser: (user: User) => void
   onAddUser: () => void
 }
 
-interface UserWithMember extends User {
-  member?: {
-    miembro_id: string
-    nombre: string
-    apellidos: string
-    numero_socio: string
-  } | null
-}
-
 interface ListUsersResponse {
-  listUsers: UserWithMember[]
+  listUsers: User[]
 }
 
 interface DeleteUserResponse {
@@ -61,6 +53,7 @@ interface DeleteUserResponse {
 }
 
 export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser }) => {
+  const { t } = useTranslation('users')
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [tabValue, setTabValue] = useState<UserRole>('admin')
@@ -136,12 +129,12 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser })
   }
 
   const handleDelete = (userId: string) => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+    if (window.confirm(t('table.actions.deleteConfirm'))) {
       void deleteUser({ variables: { id: userId } })
     }
   }
 
-  const canDeleteUser = (user: UserWithMember) => {
+  const canDeleteUser = (user: User) => {
     // Cannot delete yourself
     if (currentUser?.id === user.id) return false
     // Cannot delete admin "javi"
@@ -152,7 +145,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser })
   if (error) {
     return (
       <Alert severity="error">
-        Error al cargar usuarios: {error.message}
+        {t('table.error', { message: error.message })}
       </Alert>
     )
   }
@@ -161,20 +154,20 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser })
     <Paper>
       <Box sx={{ borderBottom: 1, borderColor: 'divider', p: 2 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h6">Gestión de Usuarios</Typography>
+          <Typography variant="h6">{t('table.title')}</Typography>
           <Button
             variant="contained"
             startIcon={<PersonAddIcon />}
             onClick={onAddUser}
           >
-            Nuevo Usuario
+            {t('table.addButton')}
           </Button>
         </Box>
         
         <TextField
           fullWidth
           variant="outlined"
-          placeholder="Buscar por nombre, email o número de socio..."
+          placeholder={t('table.searchPlaceholder')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           InputProps={{
@@ -190,13 +183,13 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser })
         <Tabs value={tabValue} onChange={(_, value) => setTabValue(value as UserRole)}>
           <Tab
             icon={<AdminIcon />}
-            label="Administradores"
+            label={t('table.tabs.admins')}
             value={'admin' as UserRole}
             iconPosition="start"
           />
           <Tab
             icon={<UserIcon />}
-            label="Usuarios"
+            label={t('table.tabs.users')}
             value={'user' as UserRole}
             iconPosition="start"
           />
@@ -207,14 +200,14 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser })
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell>Usuario</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Rol</TableCell>
-              {tabValue === 'user' && <TableCell>Socio Asociado</TableCell>}
-              <TableCell>Estado</TableCell>
-              <TableCell>Email Verificado</TableCell>
-              <TableCell>Último Acceso</TableCell>
-              <TableCell align="center">Acciones</TableCell>
+              <TableCell>{t('table.columns.username')}</TableCell>
+              <TableCell>{t('table.columns.email')}</TableCell>
+              <TableCell>{t('table.columns.role')}</TableCell>
+              {tabValue === 'user' && <TableCell>{t('table.columns.associatedMember')}</TableCell>}
+              <TableCell>{t('table.columns.status')}</TableCell>
+              <TableCell>{t('table.columns.emailVerified')}</TableCell>
+              <TableCell>{t('table.columns.lastLogin')}</TableCell>
+              <TableCell align="center">{t('table.columns.actions')}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -230,7 +223,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser })
               <TableRow>
                 <TableCell colSpan={8} align="center">
                   <Typography variant="body2" color="text.secondary">
-                    No se encontraron usuarios
+                    {t('table.empty')}
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -241,7 +234,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser })
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
                     <Chip
-                      label={user.role === 'admin' ? 'Administrador' : 'Usuario'}
+                      label={user.role === 'admin' ? t('table.roles.admin') : t('table.roles.user')}
                       color={user.role === 'admin' ? 'warning' : 'default'}
                       size="small"
                       icon={user.role === 'admin' ? <AdminIcon /> : <UserIcon />}
@@ -255,19 +248,19 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser })
                             {user.member.nombre} {user.member.apellidos}
                           </Typography>
                           <Typography variant="caption" color="text.secondary">
-                            N° {user.member.numero_socio}
+                            {t('table.memberStatus.memberNumber')} {user.member.numero_socio}
                           </Typography>
                         </Box>
                       ) : (
                         <Typography variant="body2" color="text.secondary">
-                          Sin asociar
+                          {t('table.memberStatus.notAssociated')}
                         </Typography>
                       )}
                     </TableCell>
                   )}
                   <TableCell>
                     <Chip
-                      label={user.isActive ? 'Activo' : 'Inactivo'}
+                      label={user.isActive ? t('table.status.active') : t('table.status.inactive')}
                       color={user.isActive ? 'success' : 'default'}
                       size="small"
                       variant={user.isActive ? 'filled' : 'outlined'}
@@ -275,7 +268,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser })
                   </TableCell>
                   <TableCell>
                     <Chip
-                      label={user.emailVerified ? 'Verificado' : 'Pendiente'}
+                      label={user.emailVerified ? t('table.emailStatus.verified') : t('table.emailStatus.pending')}
                       color={user.emailVerified ? 'success' : 'warning'}
                       size="small"
                       variant="outlined"
@@ -288,13 +281,13 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser })
                       </Typography>
                     ) : (
                       <Typography variant="body2" color="text.secondary">
-                        Nunca
+                        {t('table.lastLoginStatus.never')}
                       </Typography>
                     )}
                   </TableCell>
                   <TableCell align="center">
                     <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-                      <Tooltip title="Editar">
+                      <Tooltip title={t('table.actions.edit')}>
                         <IconButton
                           size="small"
                           onClick={() => onEditUser(user)}
@@ -306,10 +299,10 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser })
                       <Tooltip
                         title={
                           canDeleteUser(user)
-                            ? 'Eliminar'
+                            ? t('table.actions.delete')
                             : user.id === currentUser?.id
-                            ? 'No puedes eliminarte a ti mismo'
-                            : 'Este usuario no puede ser eliminado'
+                            ? t('table.actions.cannotDeleteSelf')
+                            : t('table.actions.cannotDelete')
                         }
                       >
                         <span>
@@ -340,8 +333,8 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser })
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage="Filas por página:"
-        labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
+        labelRowsPerPage={t('table.pagination.rowsPerPage')}
+        labelDisplayedRows={({ from, to, count }) => t('table.pagination.displayedRows', { from, to, count })}
       />
     </Paper>
   )

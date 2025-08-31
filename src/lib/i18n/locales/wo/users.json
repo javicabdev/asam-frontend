@@ -1,0 +1,93 @@
+{
+  "title": "Saytu Jëfandikukat yi",
+  "subtitle": "Saytu jëfandikukat yu sistem bi, saytukat ak jëfandikukat yu yeneen.",
+  "table": {
+    "title": "Saytu Jëfandikukat yi",
+    "addButton": "Jëfandikukat Bu Bees",
+    "searchPlaceholder": "Seet ci tur, email walla limub mbooloo...",
+    "tabs": {
+      "admins": "Saytukat yi",
+      "users": "Jëfandikukat yi"
+    },
+    "columns": {
+      "username": "Jëfandikukat",
+      "email": "Email",
+      "role": "Anam",
+      "associatedMember": "Mbooloo ju Bokk",
+      "status": "Nekkin",
+      "emailVerified": "Email Dëggal",
+      "lastLogin": "Dugg bu Mujj",
+      "actions": "Jëf yi"
+    },
+    "roles": {
+      "admin": "Saytukat",
+      "user": "Jëfandikukat"
+    },
+    "status": {
+      "active": "Dox na",
+      "inactive": "Doxul"
+    },
+    "emailStatus": {
+      "verified": "Dëggal na",
+      "pending": "Ci yoon"
+    },
+    "memberStatus": {
+      "notAssociated": "Bokkul",
+      "memberNumber": "N°"
+    },
+    "lastLoginStatus": {
+      "never": "Musul"
+    },
+    "actions": {
+      "edit": "Soppi",
+      "delete": "Far",
+      "deleteConfirm": "Ndax dëgg-dëgg nga bëgg a far jëfandikukat bi?",
+      "cannotDeleteSelf": "Doo mën a far sa bopp",
+      "cannotDelete": "Jëfandikukat bi doo ko mën a far"
+    },
+    "empty": "Giseewul benn jëfandikukat",
+    "error": "Njuumte ci yeb jëfandikukat yi: {{message}}",
+    "pagination": {
+      "rowsPerPage": "Rëdd ci xët:",
+      "displayedRows": "{{from}}-{{to}} ci {{count}}"
+    }
+  },
+  "form": {
+    "create": {
+      "title": "Sos Jëfandikukat Bu Bees",
+      "submit": "Sos Jëfandikukat bi"
+    },
+    "edit": {
+      "title": "Soppi Jëfandikukat bi",
+      "submit": "Denc Coppite yi"
+    },
+    "fields": {
+      "username": "Turu Jëfandikukat",
+      "email": "Màkkaanu Email",
+      "password": "Baatu Jàmm",
+      "confirmPassword": "Dëggal Baatu Jàmm bi",
+      "role": "Anam",
+      "member": "Mbooloo ju Bokk",
+      "isActive": "Jëfandikukat Dox na"
+    },
+    "validation": {
+      "usernameRequired": "Turu jëfandikukat lu laaj la",
+      "emailRequired": "Màkkaanu email lu laaj la",
+      "emailInvalid": "Màkkaanu email baaxul",
+      "passwordRequired": "Baatu jàmm lu laaj la",
+      "passwordMin": "Baatu jàmm war na am lu ëpp 8 araf",
+      "passwordsNotMatch": "Baatu jàmm yi bokkuñu",
+      "roleRequired": "Anam lu laaj la"
+    },
+    "errors": {
+      "createFailed": "Njuumte ci sos jëfandikukat bi",
+      "updateFailed": "Njuumte ci soppi jëfandikukat bi",
+      "usernameTaken": "Turu jëfandikukat bi ñu ngi koy jëfandikoo",
+      "emailTaken": "Màkkaanu email bi ñu ngi koy jëfandikoo"
+    },
+    "success": {
+      "created": "Jëfandikukat bi sos na bu baax",
+      "updated": "Jëfandikukat bi soppi na bu baax"
+    }
+  }
+}

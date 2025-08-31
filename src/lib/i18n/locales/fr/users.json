@@ -1,0 +1,93 @@
+{
+  "title": "Gestion des Utilisateurs",
+  "subtitle": "Gérer les utilisateurs du système, administrateurs et utilisateurs réguliers.",
+  "table": {
+    "title": "Gestion des Utilisateurs",
+    "addButton": "Nouvel Utilisateur",
+    "searchPlaceholder": "Rechercher par nom, email ou numéro de membre...",
+    "tabs": {
+      "admins": "Administrateurs",
+      "users": "Utilisateurs"
+    },
+    "columns": {
+      "username": "Utilisateur",
+      "email": "Email",
+      "role": "Rôle",
+      "associatedMember": "Membre Associé",
+      "status": "Statut",
+      "emailVerified": "Email Vérifié",
+      "lastLogin": "Dernière Connexion",
+      "actions": "Actions"
+    },
+    "roles": {
+      "admin": "Administrateur",
+      "user": "Utilisateur"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "emailStatus": {
+      "verified": "Vérifié",
+      "pending": "En attente"
+    },
+    "memberStatus": {
+      "notAssociated": "Non associé",
+      "memberNumber": "N°"
+    },
+    "lastLoginStatus": {
+      "never": "Jamais"
+    },
+    "actions": {
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cet utilisateur?",
+      "cannotDeleteSelf": "Vous ne pouvez pas vous supprimer vous-même",
+      "cannotDelete": "Cet utilisateur ne peut pas être supprimé"
+    },
+    "empty": "Aucun utilisateur trouvé",
+    "error": "Erreur lors du chargement des utilisateurs: {{message}}",
+    "pagination": {
+      "rowsPerPage": "Lignes par page:",
+      "displayedRows": "{{from}}-{{to}} de {{count}}"
+    }
+  },
+  "form": {
+    "create": {
+      "title": "Créer un Nouvel Utilisateur",
+      "submit": "Créer l'Utilisateur"
+    },
+    "edit": {
+      "title": "Modifier l'Utilisateur",
+      "submit": "Enregistrer les Modifications"
+    },
+    "fields": {
+      "username": "Nom d'Utilisateur",
+      "email": "Adresse Email",
+      "password": "Mot de Passe",
+      "confirmPassword": "Confirmer le Mot de Passe",
+      "role": "Rôle",
+      "member": "Membre Associé",
+      "isActive": "Utilisateur Actif"
+    },
+    "validation": {
+      "usernameRequired": "Le nom d'utilisateur est requis",
+      "emailRequired": "L'adresse email est requise",
+      "emailInvalid": "L'adresse email n'est pas valide",
+      "passwordRequired": "Le mot de passe est requis",
+      "passwordMin": "Le mot de passe doit contenir au moins 8 caractères",
+      "passwordsNotMatch": "Les mots de passe ne correspondent pas",
+      "roleRequired": "Le rôle est requis"
+    },
+    "errors": {
+      "createFailed": "Erreur lors de la création de l'utilisateur",
+      "updateFailed": "Erreur lors de la mise à jour de l'utilisateur",
+      "usernameTaken": "Le nom d'utilisateur est déjà utilisé",
+      "emailTaken": "L'adresse email est déjà utilisée"
+    },
+    "success": {
+      "created": "Utilisateur créé avec succès",
+      "updated": "Utilisateur mis à jour avec succès"
+    }
+  }
+}

@@ -8,7 +8,6 @@ import * as useAuthModule from '@/hooks/useAuth'
 vi.mock('@/hooks/useAuth')
 
 // Mock react-router-dom components
-/* eslint-disable @typescript-eslint/no-unused-vars */
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual<typeof import('react-router-dom')>('react-router-dom')
   return {
@@ -18,7 +17,6 @@ vi.mock('react-router-dom', async () => {
     useLocation: vi.fn(() => ({ pathname: '/test-path' })),
   }
 })
-/* eslint-enable @typescript-eslint/no-unused-vars */
 
 describe('ProtectedRoute', () => {
   const mockUseAuth = vi.mocked(useAuthModule.useAuth)

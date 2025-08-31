@@ -19,7 +19,7 @@ export default function UsersPage() {
         Gestión de Usuarios
       </Typography>
       <Typography variant="body1" color="text.secondary" gutterBottom>
-        Administra los usuarios del sistema, tanto administradores como usuarios regulares.
+        Administra los usuarios del sistema, tanto administradores como miembros de la asociación.
       </Typography>
       
       <Box sx={{ mt: 3 }}>

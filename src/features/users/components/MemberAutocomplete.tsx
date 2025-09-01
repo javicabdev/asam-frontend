@@ -8,7 +8,7 @@ import {
   CircularProgress,
 } from '@mui/material'
 import { useLazyQuery } from '@apollo/client'
-import { SEARCH_MEMBERS } from '../api/userQueries'
+import { SEARCH_MEMBERS, SEARCH_MEMBERS_FOR_USER_ASSOCIATION } from '../api/userQueries'
 import type { Member } from '@/graphql/generated/operations'
 import { useTranslation } from 'react-i18next'
 
@@ -48,10 +48,15 @@ interface MemberAutocompleteProps {
   disabled?: boolean
   label?: string
   required?: boolean
+  excludeMembersWithUser?: boolean
 }
 
 interface SearchMembersResponse {
   searchMembers: Member[]
+}
+
+interface SearchMembersWithoutUserResponse {
+  searchMembersWithoutUser: Member[]
 }
 
 export const MemberAutocomplete: React.FC<MemberAutocompleteProps> = ({
@@ -62,18 +67,22 @@ export const MemberAutocomplete: React.FC<MemberAutocompleteProps> = ({
   disabled,
   label,
   required,
+  excludeMembersWithUser = false,
 }) => {
   const { t } = useTranslation('users')
   const [open, setOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
   const [options, setOptions] = useState<Member[]>([])
   
-  // Use the regular search query
-  // TODO: When backend implements searchMembersWithoutUser, add fallback logic
+  // Use the appropriate query based on the prop
+  const query = excludeMembersWithUser 
+    ? SEARCH_MEMBERS_FOR_USER_ASSOCIATION 
+    : SEARCH_MEMBERS
+    
   const [searchMembers, { 
     loading, 
     data 
-  }] = useLazyQuery<SearchMembersResponse>(SEARCH_MEMBERS)
+  }] = useLazyQuery<SearchMembersResponse | SearchMembersWithoutUserResponse>(query)
 
   // Search function
   const performSearch = useCallback((searchTerm: string) => {
@@ -92,12 +101,14 @@ export const MemberAutocomplete: React.FC<MemberAutocompleteProps> = ({
 
   // Effect to update options when data changes
   useEffect(() => {
-    if (data?.searchMembers) {
-      // Filter active members
-      // TODO: When backend provides searchMembersWithoutUser, this filtering won't be needed
+    if (excludeMembersWithUser && data && 'searchMembersWithoutUser' in data) {
+      // When using the optimized query, members are already filtered by backend
+      setOptions(data.searchMembersWithoutUser)
+    } else if (!excludeMembersWithUser && data && 'searchMembers' in data) {
+      // For regular search, filter active members
       setOptions(data.searchMembers.filter((m: Member) => m.estado === 'ACTIVE'))
     }
-  }, [data])
+  }, [data, excludeMembersWithUser])
 
   // Effect to trigger search on input change
   useEffect(() => {

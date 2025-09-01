@@ -391,6 +391,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
                   helperText={errors.member?.message}
                   disabled={loading}
                   label={t('form.fields.associatedMember')}
+                  excludeMembersWithUser={!isEditMode}
                 />
               )}
             />

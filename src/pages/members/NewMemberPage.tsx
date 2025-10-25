@@ -160,19 +160,26 @@ export const NewMemberPage: React.FC = () => {
 
       // Step 2: If it's a family membership, create the family
       if (data.tipo_membresia === MembershipType.FAMILY) {
+        // Validate required fields for family creation
+        if (!data.esposo_nombre || !data.esposo_apellidos) {
+          setError('Para crear una familia, los campos "Nombre del Esposo" y "Apellidos del Esposo" son obligatorios')
+          setLoading(false)
+          return
+        }
+
         const familyInput = {
           numero_socio: data.numero_socio, // Use the same number as the main member
           miembro_origen_id: newMemberId,
-          esposo_nombre: data.esposo_nombre || null,
-          esposo_apellidos: data.esposo_apellidos || null,
+          esposo_nombre: data.esposo_nombre,
+          esposo_apellidos: data.esposo_apellidos,
           esposo_fecha_nacimiento: formatDateToRFC3339(data.esposo_fecha_nacimiento),
-          esposo_documento_identidad: data.esposo_documento_identidad || null,
-          esposo_correo_electronico: data.esposo_correo_electronico || null,
-          esposa_nombre: data.esposa_nombre || null,
-          esposa_apellidos: data.esposa_apellidos || null,
+          esposo_documento_identidad: data.esposo_documento_identidad || undefined,
+          esposo_correo_electronico: data.esposo_correo_electronico || undefined,
+          esposa_nombre: data.esposa_nombre || undefined,
+          esposa_apellidos: data.esposa_apellidos || undefined,
           esposa_fecha_nacimiento: formatDateToRFC3339(data.esposa_fecha_nacimiento),
-          esposa_documento_identidad: data.esposa_documento_identidad || null,
-          esposa_correo_electronico: data.esposa_correo_electronico || null,
+          esposa_documento_identidad: data.esposa_documento_identidad || undefined,
+          esposa_correo_electronico: data.esposa_correo_electronico || undefined,
         }
 
         console.log('Creating family with input:', familyInput)

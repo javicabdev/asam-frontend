@@ -106,6 +106,7 @@ const validationSchema = Yup.object({
 })
 
 const familyValidationSchema = validationSchema.shape({
+  // Esposo: campos obligatorios cuando es familia
   esposo_nombre: Yup.string().when('tipo_membresia', {
     is: MembershipType.FAMILY,
     then: (schema) => schema.required('El nombre del esposo es obligatorio'),
@@ -119,16 +120,9 @@ const familyValidationSchema = validationSchema.shape({
   esposo_fecha_nacimiento: Yup.date().nullable(),
   esposo_documento_identidad: Yup.string().nullable(),
   esposo_correo_electronico: Yup.string().email('Email inválido').nullable(),
-  esposa_nombre: Yup.string().when('tipo_membresia', {
-    is: MembershipType.FAMILY,
-    then: (schema) => schema.required('El nombre de la esposa es obligatorio'),
-    otherwise: (schema) => schema.nullable(),
-  }),
-  esposa_apellidos: Yup.string().when('tipo_membresia', {
-    is: MembershipType.FAMILY,
-    then: (schema) => schema.required('Los apellidos de la esposa son obligatorios'),
-    otherwise: (schema) => schema.nullable(),
-  }),
+  // Esposa: campos OPCIONALES (cambio crítico)
+  esposa_nombre: Yup.string().nullable(),
+  esposa_apellidos: Yup.string().nullable(),
   esposa_fecha_nacimiento: Yup.date().nullable(),
   esposa_documento_identidad: Yup.string().nullable(),
   esposa_correo_electronico: Yup.string().email('Email inválido').nullable(),
@@ -136,14 +130,31 @@ const familyValidationSchema = validationSchema.shape({
 
 export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) => {
   const { familyMembers, addFamilyMember, editFamilyMember, removeFamilyMember } = useFamilyForm()
-  const [familyMembersError, setFamilyMembersError] = React.useState<string | null>(null)
   const [memberNumberManuallyEdited, setMemberNumberManuallyEdited] = React.useState(false)
   const { isValidating, isDuplicate, validateMemberNumber, clearValidation } =
     useMemberNumberValidation()
+  
+  // Validación de DNI para socio principal
   const {
     isValidating: isValidatingDocument,
     validationResult: documentValidation,
     validateDocument,
+  } = useDocumentValidation()
+  
+  // Validación de DNI para esposo
+  const {
+    isValidating: isValidatingEsposoDoc,
+    validationResult: esposoDocValidation,
+    validateDocument: validateEsposoDoc,
+    clearValidation: clearEsposoDocValidation,
+  } = useDocumentValidation()
+  
+  // Validación de DNI para esposa
+  const {
+    isValidating: isValidatingEsposaDoc,
+    validationResult: esposaDocValidation,
+    validateDocument: validateEsposaDoc,
+    clearValidation: clearEsposaDocValidation,
   } = useDocumentValidation()
 
   const form = useForm<MemberFormData>({
@@ -157,13 +168,13 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
       calle_numero_piso: '',
       codigo_postal: '',
       poblacion: '',
-      provincia: '',
+      provincia: 'Barcelona',
       pais: 'España',
       fecha_nacimiento: null,
       documento_identidad: '',
       correo_electronico: '',
       profesion: '',
-      nacionalidad: 'Española',
+      nacionalidad: 'Senegalesa',
       observaciones: '',
       // Campos de familia
       esposo_nombre: '',
@@ -192,6 +203,13 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
   const tipoMembresia = watch('tipo_membresia')
   const isFamily = tipoMembresia === MembershipType.FAMILY
   const numeroSocio = watch('numero_socio')
+  
+  // Watch para auto-copia de datos
+  const nombre = watch('nombre')
+  const apellidos = watch('apellidos')
+  const fechaNacimiento = watch('fecha_nacimiento')
+  const documentoIdentidad = watch('documento_identidad')
+  const correoElectronico = watch('correo_electronico')
 
   // Use the hook to get the next member number
   const {
@@ -233,14 +251,32 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
     clearErrors('numero_socio')
   }, [isFamily, clearValidation, clearErrors])
 
+  // CAMBIO CRÍTICO 1: Auto-copia de datos del socio principal al esposo
+  React.useEffect(() => {
+    if (isFamily) {
+      // Copiar datos automáticamente cuando se activa membresía familiar
+      // El operario puede modificarlos libremente después
+      setValue('esposo_nombre', nombre || '')
+      setValue('esposo_apellidos', apellidos || '')
+      setValue('esposo_fecha_nacimiento', fechaNacimiento || null)
+      setValue('esposo_documento_identidad', documentoIdentidad || '')
+      setValue('esposo_correo_electronico', correoElectronico || '')
+    }
+  }, [isFamily, nombre, apellidos, fechaNacimiento, documentoIdentidad, correoElectronico, setValue])
+
+  // Limpiar validaciones de DNI de familia cuando se cambia a individual
+  React.useEffect(() => {
+    if (!isFamily) {
+      clearEsposoDocValidation()
+      clearEsposaDocValidation()
+    }
+  }, [isFamily, clearEsposoDocValidation, clearEsposaDocValidation])
+
   // Función interna que maneja el submit
   const handleFormSubmit = React.useCallback(
     async (data: MemberFormData) => {
-    // Validación adicional para familias
-    if (isFamily && familyMembers.length === 0) {
-      setFamilyMembersError('Debe añadir al menos un familiar')
-      return
-    }
+    // CAMBIO CRÍTICO 2: Eliminar validación que requiere familiares adicionales
+    // Los familiares adicionales ahora son opcionales
 
     // Don't submit if member number is duplicate
     if (isDuplicate === true) {
@@ -260,12 +296,30 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
       return
     }
 
-    setFamilyMembersError(null)
+    // CAMBIO CRÍTICO 3: Validar DNI del esposo si se proporcionó
+    if (isFamily && data.esposo_documento_identidad && esposoDocValidation && !esposoDocValidation.isValid) {
+      setError('esposo_documento_identidad', {
+        type: 'manual',
+        message: esposoDocValidation.errorMessage || 'Documento inválido',
+      })
+      return
+    }
+
+    // Validar DNI de la esposa si se proporcionó
+    if (isFamily && data.esposa_documento_identidad && esposaDocValidation && !esposaDocValidation.isValid) {
+      setError('esposa_documento_identidad', {
+        type: 'manual',
+        message: esposaDocValidation.errorMessage || 'Documento inválido',
+      })
+      return
+    }
 
     const formattedData: MemberFormSubmitData = {
       ...data,
       // Use normalized document if available
       documento_identidad: documentValidation?.normalizedValue || data.documento_identidad,
+      esposo_documento_identidad: esposoDocValidation?.normalizedValue || data.esposo_documento_identidad,
+      esposa_documento_identidad: esposaDocValidation?.normalizedValue || data.esposa_documento_identidad,
       fecha_nacimiento: data.fecha_nacimiento ? format(data.fecha_nacimiento, 'yyyy-MM-dd') : null,
       esposo_fecha_nacimiento: data.esposo_fecha_nacimiento
         ? format(data.esposo_fecha_nacimiento, 'yyyy-MM-dd')
@@ -280,7 +334,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
       await onSubmit(formattedData)
     }
     },
-    [isFamily, familyMembers, isDuplicate, documentValidation, onSubmit, setError]
+    [isFamily, familyMembers, isDuplicate, documentValidation, esposoDocValidation, esposaDocValidation, onSubmit, setError]
   )
 
   // Wrapper para manejar correctamente el evento del formulario
@@ -383,8 +437,13 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
             {/* Datos Personales del Socio Principal */}
             <Grid item xs={12}>
               <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
-                Datos Personales {isFamily && '(Socio Principal)'}
+                Datos Personales {isFamily && '(Socio Principal / Esposo)'}
               </Typography>
+              {isFamily && (
+                <Alert severity="info" sx={{ mb: 2 }}>
+                  Los datos del socio principal se copiarán automáticamente a los campos del esposo. Puede modificarlos si es necesario.
+                </Alert>
+              )}
             </Grid>
 
             <Grid item xs={12} sm={6}>
@@ -645,8 +704,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                     Datos de la Familia
                   </Typography>
                   <Alert severity="info" sx={{ mb: 2 }}>
-                    Para membresías familiares, debe proporcionar los datos del cónyuge y añadir al
-                    menos un familiar adicional.
+                    Para membresías familiares, debe proporcionar los datos del esposo. Los datos de la esposa y familiares adicionales son opcionales.
                   </Alert>
                 </Grid>
 
@@ -667,7 +725,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                         fullWidth
                         label="Nombre del Esposo"
                         error={!!errors.esposo_nombre}
-                        helperText={errors.esposo_nombre?.message}
+                        helperText={errors.esposo_nombre?.message || 'Se copia automáticamente del socio principal'}
                         required={isFamily}
                       />
                     )}
@@ -684,7 +742,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                         fullWidth
                         label="Apellidos del Esposo"
                         error={!!errors.esposo_apellidos}
-                        helperText={errors.esposo_apellidos?.message}
+                        helperText={errors.esposo_apellidos?.message || 'Se copia automáticamente del socio principal'}
                         required={isFamily}
                       />
                     )}
@@ -703,6 +761,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                         slotProps={{
                           textField: {
                             fullWidth: true,
+                            helperText: 'Se copia automáticamente',
                           },
                         }}
                         maxDate={new Date()}
@@ -716,7 +775,33 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                     name="esposo_documento_identidad"
                     control={control}
                     render={({ field }) => (
-                      <TextField {...field} fullWidth label="DNI/NIE del Esposo" />
+                      <TextField 
+                        {...field} 
+                        fullWidth 
+                        label="DNI/NIE del Esposo"
+                        error={esposoDocValidation ? !esposoDocValidation.isValid : false}
+                        helperText={
+                          (esposoDocValidation && !esposoDocValidation.isValid && esposoDocValidation.errorMessage) ||
+                          (isValidatingEsposoDoc && 'Validando...') ||
+                          'Se copia automáticamente'
+                        }
+                        onChange={(e) => {
+                          field.onChange(e)
+                          if (e.target.value.length >= 8) {
+                            void validateEsposoDoc(e.target.value)
+                          }
+                        }}
+                        onBlur={(e) => {
+                          field.onBlur()
+                          if (e.target.value) {
+                            void validateEsposoDoc(e.target.value).then((result) => {
+                              if (result && result.normalizedValue && result.normalizedValue !== e.target.value) {
+                                setValue('esposo_documento_identidad', result.normalizedValue)
+                              }
+                            })
+                          }
+                        }}
+                      />
                     )}
                   />
                 </Grid>
@@ -726,7 +811,13 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                     name="esposo_correo_electronico"
                     control={control}
                     render={({ field }) => (
-                      <TextField {...field} fullWidth label="Email del Esposo" type="email" />
+                      <TextField 
+                        {...field} 
+                        fullWidth 
+                        label="Email del Esposo" 
+                        type="email"
+                        helperText="Se copia automáticamente"
+                      />
                     )}
                   />
                 </Grid>
@@ -734,7 +825,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                 {/* Datos de la Esposa */}
                 <Grid item xs={12}>
                   <Typography variant="subtitle1" sx={{ mb: 1, mt: 2 }}>
-                    Datos de la Esposa
+                    Datos de la Esposa (Opcional)
                   </Typography>
                 </Grid>
 
@@ -749,7 +840,6 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                         label="Nombre de la Esposa"
                         error={!!errors.esposa_nombre}
                         helperText={errors.esposa_nombre?.message}
-                        required={isFamily}
                       />
                     )}
                   />
@@ -766,7 +856,6 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                         label="Apellidos de la Esposa"
                         error={!!errors.esposa_apellidos}
                         helperText={errors.esposa_apellidos?.message}
-                        required={isFamily}
                       />
                     )}
                   />
@@ -797,7 +886,32 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                     name="esposa_documento_identidad"
                     control={control}
                     render={({ field }) => (
-                      <TextField {...field} fullWidth label="DNI/NIE de la Esposa" />
+                      <TextField 
+                        {...field} 
+                        fullWidth 
+                        label="DNI/NIE de la Esposa"
+                        error={esposaDocValidation ? !esposaDocValidation.isValid : false}
+                        helperText={
+                          (esposaDocValidation && !esposaDocValidation.isValid && esposaDocValidation.errorMessage) ||
+                          (isValidatingEsposaDoc && 'Validando...')
+                        }
+                        onChange={(e) => {
+                          field.onChange(e)
+                          if (e.target.value.length >= 8) {
+                            void validateEsposaDoc(e.target.value)
+                          }
+                        }}
+                        onBlur={(e) => {
+                          field.onBlur()
+                          if (e.target.value) {
+                            void validateEsposaDoc(e.target.value).then((result) => {
+                              if (result && result.normalizedValue && result.normalizedValue !== e.target.value) {
+                                setValue('esposa_documento_identidad', result.normalizedValue)
+                              }
+                            })
+                          }
+                        }}
+                      />
                     )}
                   />
                 </Grid>
@@ -814,17 +928,15 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
 
                 {/* Lista de Familiares */}
                 <Grid item xs={12} sx={{ mt: 3 }}>
+                  <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                    Miembros de la Familia (Opcional)
+                  </Typography>
                   <FamilyMembersList
                     members={familyMembers}
                     onAdd={addFamilyMember}
                     onEdit={editFamilyMember}
                     onRemove={removeFamilyMember}
                   />
-                  {familyMembersError && (
-                    <FormHelperText error sx={{ mt: 1 }}>
-                      {familyMembersError}
-                    </FormHelperText>
-                  )}
                 </Grid>
               </>
             )}

@@ -163,13 +163,13 @@ export const NewMemberPage: React.FC = () => {
         const familyInput = {
           numero_socio: data.numero_socio, // Use the same number as the main member
           miembro_origen_id: newMemberId,
-          esposo_nombre: data.esposo_nombre || '',
-          esposo_apellidos: data.esposo_apellidos || '',
+          esposo_nombre: data.esposo_nombre || null,
+          esposo_apellidos: data.esposo_apellidos || null,
           esposo_fecha_nacimiento: formatDateToRFC3339(data.esposo_fecha_nacimiento),
           esposo_documento_identidad: data.esposo_documento_identidad || null,
           esposo_correo_electronico: data.esposo_correo_electronico || null,
-          esposa_nombre: data.esposa_nombre || '',
-          esposa_apellidos: data.esposa_apellidos || '',
+          esposa_nombre: data.esposa_nombre || null,
+          esposa_apellidos: data.esposa_apellidos || null,
           esposa_fecha_nacimiento: formatDateToRFC3339(data.esposa_fecha_nacimiento),
           esposa_documento_identidad: data.esposa_documento_identidad || null,
           esposa_correo_electronico: data.esposa_correo_electronico || null,
@@ -219,14 +219,26 @@ export const NewMemberPage: React.FC = () => {
     } catch (err) {
       console.error('Error creating member:', err)
 
-      // Better error handling
+      // Better error handling with specific messages
       let errorMessage = 'Ha ocurrido un error al crear el socio'
 
       if (err instanceof ApolloError) {
-        if (err.graphQLErrors && err.graphQLErrors.length > 0) {
-          errorMessage = err.graphQLErrors[0].message
+        // Check for specific error types
+        const graphQLError = err.graphQLErrors && err.graphQLErrors.length > 0 
+          ? err.graphQLErrors[0].message 
+          : ''
+        
+        // Detect duplicate number error
+        if (graphQLError.toLowerCase().includes('duplicate') || 
+            graphQLError.toLowerCase().includes('duplicado') ||
+            graphQLError.toLowerCase().includes('already exists')) {
+          errorMessage = `El número de socio "${data.numero_socio}" ya existe. Por favor, genera un nuevo número o verifica en la base de datos.`
+        } else if (graphQLError) {
+          errorMessage = graphQLError
         } else if (err.networkError) {
           errorMessage = 'Error de conexión. Por favor verifica tu conexión a internet.'
+        } else if (err.message.toLowerCase().includes('internal server error')) {
+          errorMessage = `Error del servidor. El socio puede haber sido creado parcialmente. Verifica en la lista de socios antes de intentar de nuevo.`
         } else if (err.message) {
           errorMessage = err.message
         }

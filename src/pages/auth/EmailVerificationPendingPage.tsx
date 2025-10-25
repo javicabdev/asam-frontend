@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   Box,
   Button,
@@ -44,22 +44,34 @@ export const EmailVerificationPendingPage: React.FC = () => {
   const [errorDetails, setErrorDetails] = useState<string>('')
   const [cooldown, setCooldown] = useState(false)
   const [showErrorDetails, setShowErrorDetails] = useState(false)
-  const [hasTriedSending, setHasTriedSending] = useState(false)
+  
+  // Use ref instead of state to prevent re-renders and ensure single execution
+  const hasTriedSendingRef = useRef(false)
 
   // Auto-send verification email on mount (only once)
   useEffect(() => {
     const sendInitialEmail = async () => {
-      if (!user || !user.username || hasTriedSending) {
+      // Guard clause: Check ref before any operation to prevent double execution
+      if (hasTriedSendingRef.current) {
+        console.log('[EmailVerificationPending] Already tried sending, skipping to prevent duplicate')
+        return
+      }
+
+      if (!user || !user.username) {
+        console.log('[EmailVerificationPending] No user data available, skipping auto-send')
         return
       }
 
       // Don't auto-send if email is already verified
       if (user.emailVerified) {
+        console.log('[EmailVerificationPending] Email already verified, skipping auto-send')
         return
       }
 
-      console.log('[EmailVerificationPending] Auto-sending verification email...')
-      setHasTriedSending(true)
+      console.log('[EmailVerificationPending] Auto-sending verification email (first and only time)...')
+      
+      // Set ref BEFORE the async operation to prevent race conditions
+      hasTriedSendingRef.current = true
 
       // Wait a bit to ensure token is properly set in Apollo Client
       await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -67,6 +79,7 @@ export const EmailVerificationPendingPage: React.FC = () => {
       try {
         const result = await sendVerificationEmail()
         if (result.success) {
+          console.log('[EmailVerificationPending] Auto-send successful')
           setStatus('success')
           setMessage(result.message || 'Email de verificación enviado automáticamente')
           setCooldown(true)
@@ -85,7 +98,11 @@ export const EmailVerificationPendingPage: React.FC = () => {
     }
 
     void sendInitialEmail()
-  }, [user, sendVerificationEmail, hasTriedSending])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Justificación: sendVerificationEmail es estable (mutación de Apollo Client)
+    // y no debe estar en las dependencias para evitar el doble envío del email.
+    // Solo queremos ejecutar este efecto cuando 'user' cambie.
+  }, [user])
 
   // Handle resend verification email
   const handleResendEmail = async () => {

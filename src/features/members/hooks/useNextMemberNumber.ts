@@ -41,13 +41,9 @@ export function useNextMemberNumber({
   // If query fails, generate a fallback value
   const getFallbackNumber = (): string => {
     const prefix = isFamily ? 'A' : 'B'
-    // In production, this should be more sophisticated
-    // For now, we'll use a timestamp-based approach as fallback
-    // TODO: The backend getNextMemberNumber query should return the next available number
-    // by checking existing numbers in the database
-    const timestamp = new Date().getTime()
-    const suffix = String(timestamp).slice(-5).padStart(5, '0')
-    return `${prefix}${suffix}`
+    // Generate a random unique number
+    const randomNum = Math.floor(Math.random() * 90000) + 10000 // 10000-99999
+    return `${prefix}${randomNum}`
   }
 
   const memberNumberData = data?.getNextMemberNumber

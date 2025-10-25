@@ -115,8 +115,8 @@ mutation CancelPayment($id: ID!, $reason: String!) {
   }
 }
 
-mutation RegisterFee($year: Int!, $month: Int!, $base_amount: Float!) {
-  registerFee(year: $year, month: $month, base_amount: $base_amount) {
+mutation RegisterFee($year: Int!, $base_amount: Float!) {
+  registerFee(year: $year, base_amount: $base_amount) {
     success
     message
     error

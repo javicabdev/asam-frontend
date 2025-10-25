@@ -57,6 +57,11 @@ const MemberDetailsPage = lazyWithPreload(
 
 const PaymentsPage = lazyWithPreload(() => import('@/pages/PaymentsPage'))
 
+const InitialPaymentPage = lazyWithPreload(
+  () => import('@/pages/payments/InitialPaymentPage'),
+  'InitialPaymentPage'
+)
+
 const UsersPage = lazyWithPreload(() => import('@/pages/UsersPage'))
 
 const CashFlowPage = lazyWithPreload(() => import('@/pages/CashFlowPage'))
@@ -110,6 +115,11 @@ const usePreloadStrategy = () => {
       preloadOnIdle(NewMemberPage)
     }
 
+    // If on new member page, preload initial payment page
+    if (currentPath === '/members/new') {
+      preloadOnIdle(InitialPaymentPage)
+    }
+
     return () => clearTimeout(timer)
   }, [])
 }
@@ -146,6 +156,7 @@ export const AppRoutes = () => {
             <Route path="/members/:id" element={<MemberDetailsPage />} />
             <Route path="/users" element={<UsersPage />} />
             <Route path="/payments" element={<PaymentsPage />} />
+            <Route path="/payments/initial/:memberId" element={<InitialPaymentPage />} />
             <Route path="/cash-flow" element={<CashFlowPage />} />
             <Route path="/reports" element={<ReportsPage />} />
             <Route path="/profile" element={<ProfilePage />} />

@@ -25,6 +25,31 @@ query GetFamily($id: ID!) {
   }
 }
 
+query GetFamilyByOriginMember($memberId: ID!) {
+  getFamilyByOriginMember(memberId: $memberId) {
+    id
+    numero_socio
+    miembro_origen {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    esposo_nombre
+    esposo_apellidos
+    esposa_nombre
+    esposa_apellidos
+    familiares {
+      id
+      nombre
+      apellidos
+      fecha_nacimiento
+      dni_nie
+      correo_electronico
+    }
+  }
+}
+
 query ListFamilies($filter: FamilyFilter) {
   listFamilies(filter: $filter) {
     nodes {

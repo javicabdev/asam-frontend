@@ -49,18 +49,24 @@ export type ChangePasswordInput = {
 };
 
 export type CreateFamilyInput = {
-  esposa_apellidos: Scalars['String']['input'];
+  codigo_postal?: InputMaybe<Scalars['String']['input']>;
+  direccion?: InputMaybe<Scalars['String']['input']>;
+  esposa_apellidos?: InputMaybe<Scalars['String']['input']>;
   esposa_correo_electronico?: InputMaybe<Scalars['String']['input']>;
   esposa_documento_identidad?: InputMaybe<Scalars['String']['input']>;
   esposa_fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
-  esposa_nombre: Scalars['String']['input'];
+  esposa_nombre?: InputMaybe<Scalars['String']['input']>;
   esposo_apellidos: Scalars['String']['input'];
   esposo_correo_electronico?: InputMaybe<Scalars['String']['input']>;
   esposo_documento_identidad?: InputMaybe<Scalars['String']['input']>;
   esposo_fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
   esposo_nombre: Scalars['String']['input'];
+  familiares?: InputMaybe<Array<FamiliarInput>>;
   miembro_origen_id?: InputMaybe<Scalars['ID']['input']>;
   numero_socio: Scalars['String']['input'];
+  pais?: InputMaybe<Scalars['String']['input']>;
+  poblacion?: InputMaybe<Scalars['String']['input']>;
+  provincia?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateMemberInput = {
@@ -221,6 +227,17 @@ export type MemberStatus =
   | 'ACTIVE'
   | 'INACTIVE';
 
+export type MembershipFee = {
+  __typename?: 'MembershipFee';
+  base_fee_amount: Scalars['Float']['output'];
+  due_date: Scalars['Time']['output'];
+  family_fee_extra: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
+  payment?: Maybe<Payment>;
+  status: PaymentStatus;
+  year: Scalars['Int']['output'];
+};
+
 export type MembershipTrendData = {
   __typename?: 'MembershipTrendData';
   month: Scalars['String']['output'];
@@ -331,7 +348,6 @@ export type MutationRefreshTokenArgs = {
 
 export type MutationRegisterFeeArgs = {
   base_amount: Scalars['Float']['input'];
-  month: Scalars['Int']['input'];
   year: Scalars['Int']['input'];
 };
 
@@ -435,6 +451,7 @@ export type Payment = {
   family?: Maybe<Family>;
   id: Scalars['ID']['output'];
   member?: Maybe<Member>;
+  membership_fee?: Maybe<MembershipFee>;
   notes?: Maybe<Scalars['String']['output']>;
   payment_date: Scalars['Time']['output'];
   payment_method: Scalars['String']['output'];
@@ -463,22 +480,27 @@ export type Query = {
   getCurrentUser: User;
   getDashboardStats: DashboardStats;
   getFamily?: Maybe<Family>;
+  getFamilyByOriginMember?: Maybe<Family>;
   getFamilyMembers: Array<Familiar>;
   getFamilyPayments: Array<Payment>;
   getMember?: Maybe<Member>;
   getMemberPayments: Array<Payment>;
+  getMembershipFee?: Maybe<MembershipFee>;
   getNextMemberNumber: Scalars['String']['output'];
   getPayment?: Maybe<Payment>;
   getPaymentStatus: PaymentStatus;
+  getPendingFees: Array<MembershipFee>;
   getRecentActivity: Array<RecentActivity>;
   getTransactions: TransactionConnection;
   getUser?: Maybe<User>;
   health: Scalars['String']['output'];
   listFamilies: FamilyConnection;
   listMembers: MemberConnection;
+  listMembershipFees: Array<MembershipFee>;
   listUsers: Array<User>;
   ping: Scalars['String']['output'];
   searchMembers: Array<Member>;
+  searchMembersWithoutUser: Array<Member>;
 };
 
 
@@ -502,6 +524,11 @@ export type QueryGetFamilyArgs = {
 };
 
 
+export type QueryGetFamilyByOriginMemberArgs = {
+  memberId: Scalars['ID']['input'];
+};
+
+
 export type QueryGetFamilyMembersArgs = {
   familyId: Scalars['ID']['input'];
 };
@@ -519,6 +546,11 @@ export type QueryGetMemberArgs = {
 
 export type QueryGetMemberPaymentsArgs = {
   memberId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetMembershipFeeArgs = {
+  year: Scalars['Int']['input'];
 };
 
 
@@ -562,6 +594,12 @@ export type QueryListMembersArgs = {
 };
 
 
+export type QueryListMembershipFeesArgs = {
+  page?: InputMaybe<Scalars['Int']['input']>;
+  pageSize?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
 export type QueryListUsersArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   pageSize?: InputMaybe<Scalars['Int']['input']>;
@@ -569,6 +607,11 @@ export type QueryListUsersArgs = {
 
 
 export type QuerySearchMembersArgs = {
+  criteria: Scalars['String']['input'];
+};
+
+
+export type QuerySearchMembersWithoutUserArgs = {
   criteria: Scalars['String']['input'];
 };
 

@@ -52,18 +52,24 @@ export type ChangePasswordInput = {
 };
 
 export type CreateFamilyInput = {
-  esposa_apellidos: Scalars['String']['input'];
+  codigo_postal?: InputMaybe<Scalars['String']['input']>;
+  direccion?: InputMaybe<Scalars['String']['input']>;
+  esposa_apellidos?: InputMaybe<Scalars['String']['input']>;
   esposa_correo_electronico?: InputMaybe<Scalars['String']['input']>;
   esposa_documento_identidad?: InputMaybe<Scalars['String']['input']>;
   esposa_fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
-  esposa_nombre: Scalars['String']['input'];
+  esposa_nombre?: InputMaybe<Scalars['String']['input']>;
   esposo_apellidos: Scalars['String']['input'];
   esposo_correo_electronico?: InputMaybe<Scalars['String']['input']>;
   esposo_documento_identidad?: InputMaybe<Scalars['String']['input']>;
   esposo_fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
   esposo_nombre: Scalars['String']['input'];
+  familiares?: InputMaybe<Array<FamiliarInput>>;
   miembro_origen_id?: InputMaybe<Scalars['ID']['input']>;
   numero_socio: Scalars['String']['input'];
+  pais?: InputMaybe<Scalars['String']['input']>;
+  poblacion?: InputMaybe<Scalars['String']['input']>;
+  provincia?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateMemberInput = {
@@ -224,6 +230,17 @@ export type MemberStatus =
   | 'ACTIVE'
   | 'INACTIVE';
 
+export type MembershipFee = {
+  __typename?: 'MembershipFee';
+  base_fee_amount: Scalars['Float']['output'];
+  due_date: Scalars['Time']['output'];
+  family_fee_extra: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
+  payment?: Maybe<Payment>;
+  status: PaymentStatus;
+  year: Scalars['Int']['output'];
+};
+
 export type MembershipTrendData = {
   __typename?: 'MembershipTrendData';
   month: Scalars['String']['output'];
@@ -334,7 +351,6 @@ export type MutationRefreshTokenArgs = {
 
 export type MutationRegisterFeeArgs = {
   base_amount: Scalars['Float']['input'];
-  month: Scalars['Int']['input'];
   year: Scalars['Int']['input'];
 };
 
@@ -438,6 +454,7 @@ export type Payment = {
   family?: Maybe<Family>;
   id: Scalars['ID']['output'];
   member?: Maybe<Member>;
+  membership_fee?: Maybe<MembershipFee>;
   notes?: Maybe<Scalars['String']['output']>;
   payment_date: Scalars['Time']['output'];
   payment_method: Scalars['String']['output'];
@@ -466,22 +483,27 @@ export type Query = {
   getCurrentUser: User;
   getDashboardStats: DashboardStats;
   getFamily?: Maybe<Family>;
+  getFamilyByOriginMember?: Maybe<Family>;
   getFamilyMembers: Array<Familiar>;
   getFamilyPayments: Array<Payment>;
   getMember?: Maybe<Member>;
   getMemberPayments: Array<Payment>;
+  getMembershipFee?: Maybe<MembershipFee>;
   getNextMemberNumber: Scalars['String']['output'];
   getPayment?: Maybe<Payment>;
   getPaymentStatus: PaymentStatus;
+  getPendingFees: Array<MembershipFee>;
   getRecentActivity: Array<RecentActivity>;
   getTransactions: TransactionConnection;
   getUser?: Maybe<User>;
   health: Scalars['String']['output'];
   listFamilies: FamilyConnection;
   listMembers: MemberConnection;
+  listMembershipFees: Array<MembershipFee>;
   listUsers: Array<User>;
   ping: Scalars['String']['output'];
   searchMembers: Array<Member>;
+  searchMembersWithoutUser: Array<Member>;
 };
 
 
@@ -505,6 +527,11 @@ export type QueryGetFamilyArgs = {
 };
 
 
+export type QueryGetFamilyByOriginMemberArgs = {
+  memberId: Scalars['ID']['input'];
+};
+
+
 export type QueryGetFamilyMembersArgs = {
   familyId: Scalars['ID']['input'];
 };
@@ -522,6 +549,11 @@ export type QueryGetMemberArgs = {
 
 export type QueryGetMemberPaymentsArgs = {
   memberId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetMembershipFeeArgs = {
+  year: Scalars['Int']['input'];
 };
 
 
@@ -565,6 +597,12 @@ export type QueryListMembersArgs = {
 };
 
 
+export type QueryListMembershipFeesArgs = {
+  page?: InputMaybe<Scalars['Int']['input']>;
+  pageSize?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
 export type QueryListUsersArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   pageSize?: InputMaybe<Scalars['Int']['input']>;
@@ -572,6 +610,11 @@ export type QueryListUsersArgs = {
 
 
 export type QuerySearchMembersArgs = {
+  criteria: Scalars['String']['input'];
+};
+
+
+export type QuerySearchMembersWithoutUserArgs = {
   criteria: Scalars['String']['input'];
 };
 
@@ -837,6 +880,13 @@ export type GetFamilyQueryVariables = Exact<{
 
 export type GetFamilyQuery = { __typename?: 'Query', getFamily?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> | null } | null };
 
+export type GetFamilyByOriginMemberQueryVariables = Exact<{
+  memberId: Scalars['ID']['input'];
+}>;
+
+
+export type GetFamilyByOriginMemberQuery = { __typename?: 'Query', getFamilyByOriginMember?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> | null } | null };
+
 export type ListFamiliesQueryVariables = Exact<{
   filter?: InputMaybe<FamilyFilter>;
 }>;
@@ -932,6 +982,13 @@ export type SearchMembersQueryVariables = Exact<{
 
 export type SearchMembersQuery = { __typename?: 'Query', searchMembers: Array<{ __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null }> };
 
+export type SearchMembersWithoutUserQueryVariables = Exact<{
+  criteria: Scalars['String']['input'];
+}>;
+
+
+export type SearchMembersWithoutUserQuery = { __typename?: 'Query', searchMembersWithoutUser: Array<{ __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, estado: MemberStatus, documento_identidad?: string | null, correo_electronico?: string | null }> };
+
 export type CreateMemberMutationVariables = Exact<{
   input: CreateMemberInput;
 }>;
@@ -1014,7 +1071,6 @@ export type CancelPaymentMutation = { __typename?: 'Mutation', cancelPayment: { 
 
 export type RegisterFeeMutationVariables = Exact<{
   year: Scalars['Int']['input'];
-  month: Scalars['Int']['input'];
   base_amount: Scalars['Float']['input'];
 }>;
 
@@ -2050,6 +2106,65 @@ export type GetFamilyQueryHookResult = ReturnType<typeof useGetFamilyQuery>;
 export type GetFamilyLazyQueryHookResult = ReturnType<typeof useGetFamilyLazyQuery>;
 export type GetFamilySuspenseQueryHookResult = ReturnType<typeof useGetFamilySuspenseQuery>;
 export type GetFamilyQueryResult = Apollo.QueryResult<GetFamilyQuery, GetFamilyQueryVariables>;
+export const GetFamilyByOriginMemberDocument = gql`
+    query GetFamilyByOriginMember($memberId: ID!) {
+  getFamilyByOriginMember(memberId: $memberId) {
+    id
+    numero_socio
+    miembro_origen {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    esposo_nombre
+    esposo_apellidos
+    esposa_nombre
+    esposa_apellidos
+    familiares {
+      id
+      nombre
+      apellidos
+      fecha_nacimiento
+      dni_nie
+      correo_electronico
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetFamilyByOriginMemberQuery__
+ *
+ * To run a query within a React component, call `useGetFamilyByOriginMemberQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFamilyByOriginMemberQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFamilyByOriginMemberQuery({
+ *   variables: {
+ *      memberId: // value for 'memberId'
+ *   },
+ * });
+ */
+export function useGetFamilyByOriginMemberQuery(baseOptions: Apollo.QueryHookOptions<GetFamilyByOriginMemberQuery, GetFamilyByOriginMemberQueryVariables> & ({ variables: GetFamilyByOriginMemberQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFamilyByOriginMemberQuery, GetFamilyByOriginMemberQueryVariables>(GetFamilyByOriginMemberDocument, options);
+      }
+export function useGetFamilyByOriginMemberLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFamilyByOriginMemberQuery, GetFamilyByOriginMemberQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFamilyByOriginMemberQuery, GetFamilyByOriginMemberQueryVariables>(GetFamilyByOriginMemberDocument, options);
+        }
+export function useGetFamilyByOriginMemberSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetFamilyByOriginMemberQuery, GetFamilyByOriginMemberQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetFamilyByOriginMemberQuery, GetFamilyByOriginMemberQueryVariables>(GetFamilyByOriginMemberDocument, options);
+        }
+export type GetFamilyByOriginMemberQueryHookResult = ReturnType<typeof useGetFamilyByOriginMemberQuery>;
+export type GetFamilyByOriginMemberLazyQueryHookResult = ReturnType<typeof useGetFamilyByOriginMemberLazyQuery>;
+export type GetFamilyByOriginMemberSuspenseQueryHookResult = ReturnType<typeof useGetFamilyByOriginMemberSuspenseQuery>;
+export type GetFamilyByOriginMemberQueryResult = Apollo.QueryResult<GetFamilyByOriginMemberQuery, GetFamilyByOriginMemberQueryVariables>;
 export const ListFamiliesDocument = gql`
     query ListFamilies($filter: FamilyFilter) {
   listFamilies(filter: $filter) {
@@ -2726,6 +2841,53 @@ export type SearchMembersQueryHookResult = ReturnType<typeof useSearchMembersQue
 export type SearchMembersLazyQueryHookResult = ReturnType<typeof useSearchMembersLazyQuery>;
 export type SearchMembersSuspenseQueryHookResult = ReturnType<typeof useSearchMembersSuspenseQuery>;
 export type SearchMembersQueryResult = Apollo.QueryResult<SearchMembersQuery, SearchMembersQueryVariables>;
+export const SearchMembersWithoutUserDocument = gql`
+    query SearchMembersWithoutUser($criteria: String!) {
+  searchMembersWithoutUser(criteria: $criteria) {
+    miembro_id
+    numero_socio
+    tipo_membresia
+    nombre
+    apellidos
+    estado
+    documento_identidad
+    correo_electronico
+  }
+}
+    `;
+
+/**
+ * __useSearchMembersWithoutUserQuery__
+ *
+ * To run a query within a React component, call `useSearchMembersWithoutUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchMembersWithoutUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchMembersWithoutUserQuery({
+ *   variables: {
+ *      criteria: // value for 'criteria'
+ *   },
+ * });
+ */
+export function useSearchMembersWithoutUserQuery(baseOptions: Apollo.QueryHookOptions<SearchMembersWithoutUserQuery, SearchMembersWithoutUserQueryVariables> & ({ variables: SearchMembersWithoutUserQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchMembersWithoutUserQuery, SearchMembersWithoutUserQueryVariables>(SearchMembersWithoutUserDocument, options);
+      }
+export function useSearchMembersWithoutUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchMembersWithoutUserQuery, SearchMembersWithoutUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchMembersWithoutUserQuery, SearchMembersWithoutUserQueryVariables>(SearchMembersWithoutUserDocument, options);
+        }
+export function useSearchMembersWithoutUserSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SearchMembersWithoutUserQuery, SearchMembersWithoutUserQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchMembersWithoutUserQuery, SearchMembersWithoutUserQueryVariables>(SearchMembersWithoutUserDocument, options);
+        }
+export type SearchMembersWithoutUserQueryHookResult = ReturnType<typeof useSearchMembersWithoutUserQuery>;
+export type SearchMembersWithoutUserLazyQueryHookResult = ReturnType<typeof useSearchMembersWithoutUserLazyQuery>;
+export type SearchMembersWithoutUserSuspenseQueryHookResult = ReturnType<typeof useSearchMembersWithoutUserSuspenseQuery>;
+export type SearchMembersWithoutUserQueryResult = Apollo.QueryResult<SearchMembersWithoutUserQuery, SearchMembersWithoutUserQueryVariables>;
 export const CreateMemberDocument = gql`
     mutation CreateMember($input: CreateMemberInput!) {
   createMember(input: $input) {
@@ -3250,8 +3412,8 @@ export type CancelPaymentMutationHookResult = ReturnType<typeof useCancelPayment
 export type CancelPaymentMutationResult = Apollo.MutationResult<CancelPaymentMutation>;
 export type CancelPaymentMutationOptions = Apollo.BaseMutationOptions<CancelPaymentMutation, CancelPaymentMutationVariables>;
 export const RegisterFeeDocument = gql`
-    mutation RegisterFee($year: Int!, $month: Int!, $base_amount: Float!) {
-  registerFee(year: $year, month: $month, base_amount: $base_amount) {
+    mutation RegisterFee($year: Int!, $base_amount: Float!) {
+  registerFee(year: $year, base_amount: $base_amount) {
     success
     message
     error
@@ -3274,7 +3436,6 @@ export type RegisterFeeMutationFn = Apollo.MutationFunction<RegisterFeeMutation,
  * const [registerFeeMutation, { data, loading, error }] = useRegisterFeeMutation({
  *   variables: {
  *      year: // value for 'year'
- *      month: // value for 'month'
  *      base_amount: // value for 'base_amount'
  *   },
  * });

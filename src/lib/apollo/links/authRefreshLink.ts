@@ -131,8 +131,13 @@ export const createAuthRefreshLink = (): ApolloLink => {
           error: (error: ApolloError) => {
             // Check if we have GraphQL errors with authentication issues
             const hasAuthError = error.graphQLErrors?.some(isAuthenticationError)
+            
+            // Also check for Network errors with 401 status (from middleware)
+            const isNetworkAuthError = error.networkError && 
+              'statusCode' in error.networkError && 
+              error.networkError.statusCode === 401
 
-            if (hasAuthError && !didRefresh && !refreshAttempts.get(operationKey)) {
+            if ((hasAuthError || isNetworkAuthError) && !didRefresh && !refreshAttempts.get(operationKey)) {
               console.log(`AuthRefreshLink: Auth error detected for ${operation.operationName}`)
 
               // Mark that we've attempted refresh for this operation

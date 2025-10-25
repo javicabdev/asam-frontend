@@ -14,6 +14,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { FamilyMember } from '../types'
+import { useDocumentValidation } from '../hooks'
 
 interface FamilyMemberFormProps {
   open: boolean
@@ -52,11 +53,23 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
 
   const [fechaNacimiento, setFechaNacimiento] = React.useState<Date | null>(null)
 
+  // Validación de DNI
+  const {
+    isValidating: isValidatingDocument,
+    validationResult: documentValidation,
+    validateDocument,
+    clearValidation,
+  } = useDocumentValidation()
+
   React.useEffect(() => {
     if (member) {
       setFormData(member)
       if (member.fecha_nacimiento) {
         setFechaNacimiento(new Date(member.fecha_nacimiento))
+      }
+      // Validar DNI si existe
+      if (member.dni_nie) {
+        void validateDocument(member.dni_nie)
       }
     } else {
       setFormData({
@@ -68,8 +81,9 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
         parentesco: 'Hijo/a',
       })
       setFechaNacimiento(null)
+      clearValidation()
     }
-  }, [member, open])
+  }, [member, open, validateDocument, clearValidation])
 
   const handleChange =
     (field: keyof FamilyMember) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,12 +101,65 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
     }))
   }
 
-  const handleSubmit = () => {
-    if (formData.nombre && formData.apellidos && formData.parentesco) {
-      onSave(formData)
-      onClose()
+  const handleDniChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+    setFormData((prev) => ({
+      ...prev,
+      dni_nie: value,
+    }))
+
+    // Validar DNI cuando tiene al menos 8 caracteres
+    if (value.length >= 8) {
+      void validateDocument(value)
+    } else {
+      clearValidation()
     }
   }
+
+  const handleDniBlur = () => {
+    if (formData.dni_nie) {
+      void validateDocument(formData.dni_nie).then((result) => {
+        // Si hay normalización, actualizar el valor
+        if (result && result.normalizedValue && result.normalizedValue !== formData.dni_nie) {
+          setFormData((prev) => ({
+            ...prev,
+            dni_nie: result.normalizedValue,
+          }))
+        }
+      })
+    }
+  }
+
+  const handleSubmit = () => {
+    // Validaciones básicas
+    if (!formData.nombre || !formData.apellidos || !formData.parentesco) {
+      return
+    }
+
+    // Si hay DNI, debe ser válido
+    if (formData.dni_nie && documentValidation && !documentValidation.isValid) {
+      return
+    }
+
+    // Usar el DNI normalizado si está disponible
+    const dataToSave = {
+      ...formData,
+      dni_nie: documentValidation?.normalizedValue || formData.dni_nie,
+    }
+
+    onSave(dataToSave)
+    onClose()
+  }
+
+  // Determinar si el botón de guardar debe estar deshabilitado
+  const isSubmitDisabled =
+    !formData.nombre ||
+    !formData.apellidos ||
+    !formData.parentesco ||
+    // Si hay DNI, debe ser válido
+    (formData.dni_nie !== '' && documentValidation !== null && !documentValidation.isValid) ||
+    // Si está validando, deshabilitar
+    isValidatingDocument
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
@@ -136,7 +203,20 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
                 fullWidth
                 label="DNI/NIE"
                 value={formData.dni_nie || ''}
-                onChange={handleChange('dni_nie')}
+                onChange={handleDniChange}
+                onBlur={handleDniBlur}
+                error={
+                  formData.dni_nie !== '' &&
+                  documentValidation !== null &&
+                  !documentValidation.isValid
+                }
+                helperText={
+                  formData.dni_nie !== '' && documentValidation && !documentValidation.isValid
+                    ? documentValidation.errorMessage
+                    : isValidatingDocument
+                      ? 'Validando...'
+                      : 'Introduzca el DNI o NIE'
+                }
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -168,11 +248,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Cancelar</Button>
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            disabled={!formData.nombre || !formData.apellidos || !formData.parentesco}
-          >
+          <Button onClick={handleSubmit} variant="contained" disabled={isSubmitDisabled}>
             {member ? 'Actualizar' : 'Añadir'}
           </Button>
         </DialogActions>

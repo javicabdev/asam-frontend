@@ -314,7 +314,11 @@ export const useAuth = () => {
       success: false,
       message: 'Error al enviar el email de verificación. Por favor, contacta con soporte.',
     }
-  }, [sendVerificationEmail])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Justificación: sendVerificationEmail es una mutación de Apollo Client que es estable.
+    // Incluirla en las dependencias causa recreaciones innecesarias del callback y
+    // puede provocar envíos duplicados de emails cuando se usa en useEffect.
+  }, [])
 
   // Verify email with token
   const verifyEmailHandler = useCallback(

@@ -15,6 +15,7 @@ import i18n from '@/lib/i18n'
 import { AppRoutes } from './routes'
 import { InstallPrompt } from '@/components/pwa'
 import { ErrorBoundary, LoadingOverlay } from '@/components/common'
+import { AppContent } from '@/components/app'
 import { useSettingsStore } from '@/stores/settingsStore'
 
 function App() {
@@ -87,9 +88,11 @@ function App() {
             >
               <ErrorBoundary>
                 <BrowserRouter>
-                  <AppRoutes />
-                  <InstallPrompt />
-                  <LoadingOverlay />
+                  <AppContent>
+                    <AppRoutes />
+                    <InstallPrompt />
+                    <LoadingOverlay />
+                  </AppContent>
                 </BrowserRouter>
               </ErrorBoundary>
             </SnackbarProvider>

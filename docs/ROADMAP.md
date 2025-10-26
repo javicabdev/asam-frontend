@@ -1,6 +1,7 @@
 # 🗺️ Hoja de Ruta - ASAM Frontend
 
 **Fecha de creación**: 18 de octubre de 2025  
+**Última actualización**: 26 de octubre de 2025  
 **Versión actual**: 0.1.0  
 **Estado**: En desarrollo activo
 
@@ -16,11 +17,11 @@ PWA (Aplicación Web Progresiva) para la gestión de la Asociación ASAM, constr
 - React Router + Zustand
 - Workbox (PWA)
 
-### Progreso Global: ~45% completado
+### Progreso Global: ~60% completado ⬆️
 
 ---
 
-## ✅ Funcionalidades Implementadas (45%)
+## ✅ Funcionalidades Implementadas (60%)
 
 ### 1. ✅ Infraestructura Base (100%)
 - [x] Configuración del proyecto (React 18 + TypeScript + Vite)
@@ -32,24 +33,26 @@ PWA (Aplicación Web Progresiva) para la gestión de la Asociación ASAM, constr
 - [x] GraphQL Code Generator para tipado automático
 - [x] Scripts de CI/CD (build, lint, testing)
 
-### 2. ✅ Sistema de Autenticación (80%)
+### 2. ✅ Sistema de Autenticación (100%) ⬆️
 - [x] Login con credenciales
 - [x] Logout
 - [x] Refresh automático de tokens
 - [x] Rutas protegidas (`ProtectedRoute`)
 - [x] Control de roles (admin/user)
+- [x] **Protección de rutas admin-only (`AdminRoute`)** 🆕
+- [x] **Redirección basada en roles** 🆕
 - [x] Páginas de verificación de email
 - [x] Páginas de reset de contraseña
-- [ ] Testing completo del flujo de auth
 
 **Archivos clave:**
 ```
 src/stores/authStore.ts
 src/components/auth/ProtectedRoute.tsx
+src/components/auth/AdminRoute.tsx (nuevo)
 src/pages/auth/*
 ```
 
-### 3. ✅ Módulo de Miembros (75%)
+### 3. ✅ Módulo de Miembros (95%) ⬆️
 - [x] Listado con DataGrid avanzado (paginación, ordenamiento, filtros)
 - [x] Creación de socios individuales
 - [x] Creación de socios familiares (con cónyuge y familiares dinámicos)
@@ -57,8 +60,11 @@ src/pages/auth/*
 - [x] Control de permisos (solo admin)
 - [x] Exportación a CSV (todos/filtrados/seleccionados)
 - [x] Vista de detalles de socio
-- [ ] **Edición de socios existentes**
-- [ ] **Eliminación de socios (individual y masiva)**
+- [x] **Edición de socios existentes** ✅ 🆕
+- [x] **Acciones en tabla (Ver, Editar, Dar de baja)** ✅ 🆕
+- [x] **Diálogo de confirmación para dar de baja** ✅ 🆕
+- [x] **Restricción de acciones por rol** ✅ 🆕
+- [ ] Eliminación definitiva de socios (individual y masiva)
 - [ ] **Página de pago inicial tras alta**
 - [ ] Gestión completa de familias (CRUD)
 
@@ -68,14 +74,50 @@ src/features/members/*
 src/pages/MembersPage.tsx
 src/pages/members/NewMemberPage.tsx
 src/pages/members/MemberDetailsPage.tsx
+src/pages/members/EditMemberPage.tsx (nuevo)
+src/features/members/components/MembersTable.tsx (actualizado)
+src/features/members/components/ConfirmDeactivateDialog.tsx (nuevo)
 ```
 
-### 4. ⚠️ Módulo de Usuarios (30%)
+**Cambios recientes (26/10/2025)**:
+- ✅ Implementada página de edición de socios con validación completa
+- ✅ Añadidas tres acciones en la tabla: Ver detalles, Editar, Dar de baja
+- ✅ Creado diálogo de confirmación para cambio de estado a INACTIVE
+- ✅ Botón "Dar de baja" se deshabilita automáticamente para socios inactivos
+- ✅ Acciones de editar y dar de baja solo visibles para administradores
+
+### 4. ✅ Sistema de Permisos y Navegación (100%) 🆕
+- [x] **Navegación adaptada por roles** 🆕
+- [x] **Filtrado de menú según permisos** 🆕
+- [x] **Protección de rutas admin-only** 🆕
+- [x] **Redirección inteligente según rol** 🆕
+
+**Estructura de permisos**:
+
+**Solo Admin:**
+- Panel de control (Dashboard)
+- Usuarios (Users)
+- Informes (Reports)
+
+**Todos los usuarios:**
+- Socios (Members)
+- Pagos (Payments)
+- Flujo de Caja (Cash Flow)
+
+**Archivos clave:**
+```
+src/layouts/MainLayout.tsx (actualizado)
+src/routes.tsx (actualizado)
+src/components/auth/AdminRoute.tsx (nuevo)
+```
+
+### 5. ⚠️ Módulo de Usuarios (30%)
 - [x] Página básica creada (`UsersPage.tsx`)
+- [x] Restricción solo para admin
 - [ ] CRUD completo de usuarios
 - [ ] Gestión de roles y permisos
 
-### 5. ⚠️ Otros Módulos Pendientes (0-10%)
+### 6. ⚠️ Otros Módulos Pendientes (0-10%)
 - [ ] **Payments**: Página creada pero sin funcionalidad
 - [ ] **CashFlow**: Página creada pero sin funcionalidad
 - [ ] **Reports**: Página creada pero sin funcionalidad
@@ -85,13 +127,64 @@ src/pages/members/MemberDetailsPage.tsx
 
 ## 🎯 Roadmap para Primera Versión Útil (MVP)
 
-### 🔴 FASE 1: Completar Módulo de Socios (1 semana)
+### 🔴 FASE 1: Completar Módulo de Socios (~2 días restantes) ⬆️
 
-#### **REQ-2.5: Página de Pago Inicial** 🔴 CRÍTICO
+#### ✅ **Edición de Socios** - COMPLETADO 🎉
+```
+Estado: ✅ COMPLETADO (26/10/2025)
+Tiempo real: 2 días
+```
+
+**Implementado**:
+- ✅ Página `/members/:id/edit` con formulario completo
+- ✅ Carga de datos existentes del socio
+- ✅ Validación completa de campos
+- ✅ Mutation GraphQL `UpdateMember`
+- ✅ Manejo de errores detallado
+- ✅ Breadcrumbs de navegación
+- ✅ Feedback visual (success/error)
+
+---
+
+#### ✅ **Sistema de Acciones en Tabla** - COMPLETADO 🎉
+```
+Estado: ✅ COMPLETADO (26/10/2025)
+Tiempo real: 1 día
+```
+
+**Implementado**:
+- ✅ Tres acciones en columna "Acciones": Ver, Editar, Dar de baja
+- ✅ Permisos por rol (editar y dar de baja solo para admin)
+- ✅ Ancho de columna dinámico según rol
+- ✅ Tooltips descriptivos en cada acción
+- ✅ Navegación a página de edición funcional
+
+---
+
+#### ✅ **Diálogo de Confirmación para Baja** - COMPLETADO 🎉
+```
+Estado: ✅ COMPLETADO (26/10/2025)
+Tiempo real: 1 día
+```
+
+**Implementado**:
+- ✅ Componente `ConfirmDeactivateDialog`
+- ✅ Muestra datos del socio (nombre, número)
+- ✅ Mensaje de advertencia claro
+- ✅ Mutation GraphQL `ChangeMemberStatus`
+- ✅ Actualización automática de lista tras operación
+- ✅ Notificaciones con notistack
+- ✅ Prevención de cierre durante operación
+- ✅ Botón deshabilitado para socios ya inactivos
+
+---
+
+#### **REQ-2.5: Página de Pago Inicial** 🔴 CRÍTICO - PENDIENTE
 ```
 Prioridad: ALTA
 Tiempo estimado: 2-3 días
 Complejidad: Media
+Estado: 🔴 PENDIENTE
 ```
 
 **Objetivo**: Permitir registrar el pago inicial tras el alta de un socio.
@@ -107,7 +200,7 @@ Complejidad: Media
 
 **Archivos a crear/modificar**:
 ```
-src/pages/payments/InitialPaymentPage.tsx (nuevo)
+src/pages/payments/InitialPaymentPage.tsx (actualizar - ya existe esqueleto)
 src/features/payments/components/PaymentForm.tsx (nuevo)
 src/features/payments/api/mutations.ts (nuevo)
 src/graphql/operations/payments.graphql (actualizar)
@@ -121,64 +214,22 @@ src/graphql/operations/payments.graphql (actualizar)
 
 ---
 
-#### **Edición de Socios**
+#### **Eliminación Definitiva de Socios**
 ```
-Prioridad: ALTA
-Tiempo estimado: 2 días
-Complejidad: Media
-```
-
-**Objetivo**: Permitir corregir datos de socios existentes.
-
-**Tareas**:
-- [ ] Reutilizar componentes de `NewMemberPage`
-- [ ] Implementar mutation GraphQL `UpdateMember`
-- [ ] Cargar datos existentes en formulario
-- [ ] Validación de cambios
-- [ ] Actualizar familia si tipo cambia
-- [ ] Manejo de errores y confirmación
-
-**Archivos a crear/modificar**:
-```
-src/pages/members/EditMemberPage.tsx (nuevo)
-src/features/members/api/mutations.ts (actualizar)
-src/routes.tsx (añadir ruta)
-```
-
-**Criterios de aceptación**:
-- ✅ Botón "Editar" en vista de detalles
-- ✅ Formulario prellenado con datos actuales
-- ✅ Validación completa de campos
-- ✅ Actualización exitosa en base de datos
-
----
-
-#### **Eliminación de Socios**
-```
-Prioridad: ALTA
+Prioridad: MEDIA-BAJA
 Tiempo estimado: 1 día
 Complejidad: Baja
+Estado: 🟡 OPCIONAL (para post-MVP)
 ```
 
-**Tareas**:
-- [ ] Botón de eliminar en vista de detalles
-- [ ] Diálogo de confirmación con advertencias
+**Nota**: Con el sistema de dar de baja (cambiar a INACTIVE) implementado, la eliminación definitiva puede posponerse. Los socios inactivos quedan en el sistema para mantener historial.
+
+**Tareas** (si se decide implementar):
+- [ ] Botón de eliminar definitivamente en vista de detalles
+- [ ] Diálogo de confirmación con múltiples advertencias
 - [ ] Mutation GraphQL `DeleteMember`
 - [ ] Eliminación masiva desde tabla (checkboxes)
-- [ ] Actualizar lista tras eliminación
-
-**Archivos a modificar**:
-```
-src/pages/members/MemberDetailsPage.tsx
-src/features/members/components/MembersTable.tsx
-src/features/members/api/mutations.ts
-```
-
-**Criterios de aceptación**:
-- ✅ Confirmación obligatoria antes de eliminar
-- ✅ Eliminación individual funcional
-- ✅ Eliminación masiva funcional
-- ✅ Lista actualizada automáticamente
+- [ ] Verificación de dependencias (pagos, familias)
 
 ---
 
@@ -189,6 +240,7 @@ src/features/members/api/mutations.ts
 Prioridad: ALTA
 Tiempo estimado: 3-4 días
 Complejidad: Alta
+Estado: 🔴 PENDIENTE
 ```
 
 **Objetivo**: Sistema completo de gestión de pagos y cuotas.
@@ -268,6 +320,7 @@ src/features/payments/
 Prioridad: MEDIA-ALTA
 Tiempo estimado: 2 días
 Complejidad: Media
+Estado: 🟡 PENDIENTE
 ```
 
 **Métricas principales**:
@@ -298,6 +351,7 @@ src/features/dashboard/
 Prioridad: MEDIA
 Tiempo estimado: 2 días
 Complejidad: Media
+Estado: 🟡 PENDIENTE
 ```
 
 **Reportes a implementar**:
@@ -340,6 +394,7 @@ src/features/reports/
 Prioridad: MEDIA
 Tiempo estimado: 3 días
 Complejidad: Media
+Estado: 🟡 PENDIENTE
 ```
 
 **Funcionalidades**:
@@ -378,14 +433,124 @@ src/features/cashflow/
     └── mutations.ts
 ```
 
+**Nota Importante**: El backend debe filtrar automáticamente por usuario cuando `role !== 'admin'`
+
 ---
 
-### 🔵 FASE 5: Funcionalidades Secundarias (Post-MVP)
+### 🔵 FASE 5: Mejoras de PWA y UX (Post-MVP) 🆕
+
+#### **REQ-5.1: Setup Básico de PWA**
+```
+Prioridad: MEDIA-ALTA
+Tiempo estimado: 2-3 días
+Complejidad: Media
+Estado: 🟡 PENDIENTE
+```
+
+**Objetivo**: Convertir la app en una verdadera PWA con funcionalidad offline básica.
+
+**Tareas**:
+1. **Manifest.json Optimizado**
+   - [ ] Configurar manifest con todos los campos requeridos
+   - [ ] Generar iconos en todos los tamaños necesarios (192x192, 512x512)
+   - [ ] Añadir iconos maskables para Android
+   - [ ] Configurar colores de tema (theme_color, background_color)
+   - [ ] Definir start_url optimizada según rol
+
+2. **Service Worker con Workbox**
+   - [ ] Configurar estrategia de caché para assets estáticos
+   - [ ] Implementar App Shell caching
+   - [ ] Página offline personalizada
+   - [ ] Estrategia Stale-While-Revalidate para datos dinámicos
+
+3. **Capacidad de Instalación**
+   - [ ] Prompt de instalación personalizado
+   - [ ] Detección de estado de instalación
+   - [ ] Banner "Añadir a pantalla de inicio"
+
+4. **Funcionalidad Offline Básica**
+   - [ ] Caché de lista de socios (lectura)
+   - [ ] Caché de detalles de socio
+   - [ ] Indicador visual de modo offline
+   - [ ] Mensajes informativos cuando offline
+
+**Archivos a crear/modificar**:
+```
+public/manifest.json
+public/icons/ (192x192, 512x512, maskable)
+src/service-worker.ts
+src/components/common/OfflineIndicator.tsx
+src/components/common/InstallPrompt.tsx
+vite.config.ts (configuración PWA)
+```
+
+---
+
+#### **REQ-5.2: Accesibilidad (WCAG 2.1 AA)**
+```
+Prioridad: MEDIA
+Tiempo estimado: 3-4 días
+Complejidad: Media
+Estado: 🟡 PENDIENTE
+```
+
+**Tareas**:
+1. **Auditoría de Accesibilidad**
+   - [ ] Ejecutar Lighthouse audit
+   - [ ] Revisar con WAVE tool
+   - [ ] Testing con lectores de pantalla (NVDA/JAWS)
+
+2. **Correcciones Prioritarias**
+   - [ ] Navegación completa por teclado
+   - [ ] Focus indicators visibles
+   - [ ] ARIA labels en componentes dinámicos
+   - [ ] Contraste de colores AAA en textos importantes
+   - [ ] Alternativas de texto para iconos
+
+3. **Testing y Validación**
+   - [ ] Tests automatizados con jest-axe
+   - [ ] Manual testing con VoiceOver/NVDA
+   - [ ] Verificación con usuarios reales
+
+---
+
+#### **REQ-5.3: Optimización de Rendimiento**
+```
+Prioridad: MEDIA
+Tiempo estimado: 2-3 días
+Complejidad: Media
+Estado: 🟡 PENDIENTE
+```
+
+**Tareas**:
+1. **Presupuesto de Rendimiento**
+   - [ ] Definir métricas objetivo (TTI < 5s, FCP < 2s)
+   - [ ] Setup de monitoreo continuo
+
+2. **Code Splitting Avanzado**
+   - [ ] División por rutas con React.lazy
+   - [ ] División por componentes pesados
+   - [ ] Lazy loading de componentes de tabla
+
+3. **Optimización de Assets**
+   - [ ] Compresión de imágenes (WebP/AVIF)
+   - [ ] Minificación agresiva
+   - [ ] Tree shaking optimizado
+
+4. **Auditoría y Mejoras**
+   - [ ] Análisis de bundle con Rollup visualizer
+   - [ ] Identificar dependencias pesadas
+   - [ ] Implementar mejoras incrementales
+
+---
+
+### 🔵 FASE 6: Funcionalidades Secundarias (Post-MVP)
 
 #### **REQ-3.1: Gestión Completa de Familias**
 ```
 Prioridad: MEDIA-BAJA
 Tiempo estimado: 2 días
+Estado: 🟡 PENDIENTE
 ```
 
 - [ ] Vista independiente de familias
@@ -400,6 +565,7 @@ Tiempo estimado: 2 días
 ```
 Prioridad: BAJA
 Tiempo estimado: 2 días
+Estado: 🟡 PENDIENTE
 ```
 
 - [ ] CRUD de usuarios
@@ -409,26 +575,57 @@ Tiempo estimado: 2 días
 
 ---
 
-## 📅 Timeline Estimado
-
-### MVP Mínimo (2 semanas)
+#### **Sistema de Notificaciones**
 ```
-Sprint 1 (Semana 1): Completar Módulo de Socios
-├── Día 1-2: Página de pago inicial (REQ-2.5)
-├── Día 3-4: Edición de socios
-└── Día 5: Eliminación de socios
+Prioridad: MEDIA-BAJA
+Tiempo estimado: 2-3 días
+Estado: 🟡 PENDIENTE
+```
 
-Sprint 2 (Semana 2): Módulo de Pagos Básico
+- [ ] Notificaciones in-app para eventos importantes
+- [ ] Push notifications (opcional, complejo)
+- [ ] Sistema de alertas para admins
+- [ ] Preferencias de notificaciones por usuario
+
+---
+
+#### **Testing Completo**
+```
+Prioridad: ALTA (para producción)
+Tiempo estimado: 1 semana
+Estado: 🟡 PENDIENTE
+```
+
+- [ ] Tests unitarios para componentes críticos
+- [ ] Tests de integración para flujos clave
+- [ ] Tests E2E con Playwright/Cypress
+- [ ] Tests de accesibilidad automatizados
+- [ ] Setup de CI/CD para tests
+
+---
+
+## 📅 Timeline Actualizado
+
+### MVP Mínimo (1.5 semanas restantes) ⬆️
+```
+Sprint Actual (Semana en curso): Finalizar Módulo de Socios
+├── ✅ Edición de socios - COMPLETADO
+├── ✅ Sistema de acciones en tabla - COMPLETADO
+├── ✅ Diálogo de confirmación baja - COMPLETADO
+└── 🔴 Día 1-2: Página de pago inicial (REQ-2.5) - PENDIENTE
+
+Sprint 2 (Semana siguiente): Módulo de Pagos Básico
 ├── Día 1-2: Listado y registro de pagos
 ├── Día 3: Confirmación y cuotas masivas
 └── Día 4-5: Generación de recibos
 ```
 
-### Versión Completa (4-5 semanas)
+### Versión Completa (3-4 semanas restantes)
 ```
 Semana 3: Dashboard y Reportes
-Semana 4: Flujo de Caja
-Semana 5: Pulido, Testing y Optimización
+Semana 4: Flujo de Caja + PWA Setup Básico
+Semana 5: Accesibilidad + Optimización
+Semana 6: Testing + Pulido Final
 ```
 
 ---
@@ -437,44 +634,50 @@ Semana 5: Pulido, Testing y Optimización
 
 ### Funcional
 - ✅ Alta completa de socios (individual y familiar)
-- ✅ Registro de pago inicial
-- ✅ Edición y eliminación de socios
-- ✅ Sistema básico de pagos (registro, confirmación, recibos)
-- ✅ Dashboard con métricas principales
+- ✅ Edición de socios existentes
+- ✅ Dar de baja socios (cambio a INACTIVE)
+- ✅ Sistema de permisos por roles
+- [ ] Registro de pago inicial
+- [ ] Sistema básico de pagos (registro, confirmación, recibos)
+- [ ] Dashboard con métricas principales
 
 ### Técnico
 - ✅ Sin errores críticos en consola
 - ✅ Tiempo de carga < 3 segundos
 - ✅ Responsive en móvil y desktop
-- ✅ PWA instalable y funcional offline (lectura)
+- [ ] PWA instalable y funcional offline (lectura)
+- ✅ Sistema de permisos robusto
 
 ### Usuario
 - ✅ Flujo completo sin interrupciones
 - ✅ Interfaz intuitiva y consistente
 - ✅ Feedback claro en cada acción
 - ✅ Manejo de errores amigable
+- ✅ Experiencia diferenciada por rol
 
 ---
 
 ## 📈 Métricas de Progreso
 
-### Estado Actual (18/10/2025)
+### Estado Actual (26/10/2025) ⬆️
 ```
 Infraestructura:     ████████████████████ 100%
-Autenticación:       ████████████████░░░░  80%
-Miembros:            ███████████████░░░░░  75%
+Autenticación:       ████████████████████ 100% ⬆️
+Permisos y Roles:    ████████████████████ 100% 🆕
+Miembros:            ███████████████████░  95% ⬆️
 Pagos:               ██░░░░░░░░░░░░░░░░░░  10%
 Dashboard:           ██░░░░░░░░░░░░░░░░░░  10%
 Flujo de Caja:       ░░░░░░░░░░░░░░░░░░░░   0%
 Reportes:            ░░░░░░░░░░░░░░░░░░░░   0%
 
-TOTAL:               ████████░░░░░░░░░░░░  45%
+TOTAL:               ████████████░░░░░░░░  60% ⬆️
 ```
 
-### Meta MVP (Estimado: 2 semanas)
+### Meta MVP (Estimado: 1.5 semanas)
 ```
 Infraestructura:     ████████████████████ 100%
 Autenticación:       ████████████████████ 100%
+Permisos y Roles:    ████████████████████ 100%
 Miembros:            ████████████████████ 100%
 Pagos:               ████████████████░░░░  80%
 Dashboard:           ████████████░░░░░░░░  60%
@@ -486,27 +689,57 @@ TOTAL:               ██████████████░░░░░�
 
 ---
 
-## 🚀 Recomendación de Inicio
+## 🚀 Recomendación de Inicio Inmediato
 
-### Orden de Implementación Sugerido
+### ⚡ Próxima Tarea Prioritaria
 
-1. **Comenzar HOY**: REQ-2.5 - Página de Pago Inicial
-   - Es crítico para completar el flujo de alta
-   - Bloquea el resto del módulo de pagos
-   - Tiempo: 2-3 días
+**REQ-2.5: Página de Pago Inicial** 🔴
+```
+Prioridad: CRÍTICA
+Impacto: ALTO
+Complejidad: MEDIA
+Tiempo estimado: 2-3 días
+```
 
-2. **Siguiente**: Edición y Eliminación de Socios
-   - Completa el CRUD básico
-   - Permite corregir errores
-   - Tiempo: 2-3 días
+**¿Por qué es crítico?**
+- Completa el flujo de alta de socios
+- Bloquea el resto del módulo de pagos
+- Es el siguiente paso lógico tras implementar edición
 
-3. **Después**: Módulo de Pagos Completo
-   - Core del negocio de la asociación
-   - Tiempo: 3-4 días
+**¿Qué implica?**
+- Crear página `/payments/initial/:memberId`
+- Formulario de registro de pago
+- Integración con mutation GraphQL
+- Generación de recibo básico
 
-4. **Finalmente**: Dashboard y Reportes Básicos
-   - Da visibilidad al estado de la asociación
-   - Tiempo: 3-4 días
+---
+
+## 📝 Cambios Recientes (Log de Actualizaciones)
+
+### 26 de Octubre de 2025 🆕
+
+#### Commits Realizados:
+1. `fix(users): corregir clave de traducción del botón cancelar`
+2. `feat(members): add edit and deactivate actions to members table`
+3. `feat(members): add confirmation dialog for member deactivation`
+4. `feat(members): restrict edit and deactivate actions to admin users`
+5. `feat(navigation): implement role-based navigation and redirection`
+6. `feat(auth): add admin-only route protection for dashboard and admin pages`
+
+#### Funcionalidades Añadidas:
+- ✅ Página completa de edición de socios
+- ✅ Tres acciones en tabla de socios (Ver, Editar, Dar de baja)
+- ✅ Diálogo de confirmación para cambio de estado
+- ✅ Sistema de permisos por rol en acciones
+- ✅ Navegación filtrada por rol de usuario
+- ✅ Protección de rutas admin-only
+- ✅ Redirección inteligente según rol
+
+#### Progreso:
+- Módulo de Miembros: 75% → 95% ⬆️
+- Sistema de Autenticación: 80% → 100% ⬆️
+- Sistema de Permisos: 0% → 100% 🆕
+- **Total del Proyecto: 45% → 60%** ⬆️
 
 ---
 
@@ -519,6 +752,8 @@ TOTAL:               ██████████████░░░░░�
 - ✅ Tipado estricto con TypeScript
 - ✅ GraphQL types generados automáticamente
 - ✅ Conventional Commits para control de versiones
+- ✅ **Permisos basados en roles (RBAC)** 🆕
+- ✅ **Separación clara de rutas públicas/privadas/admin** 🆕
 
 ### Mejoras Pendientes
 - ⚠️ Implementar testing sistemático (cobertura < 10%)
@@ -526,6 +761,14 @@ TOTAL:               ██████████████░░░░░�
 - ⚠️ Mejorar estrategia offline (Service Worker avanzado)
 - ⚠️ Optimizar bundle size (code splitting)
 - ⚠️ Añadir logging estructurado
+- ⚠️ **Implementar auditoría de acciones de usuario** 🆕
+
+### Seguridad
+- ✅ Autenticación JWT con refresh tokens
+- ✅ Rutas protegidas en frontend
+- ✅ Control de permisos por rol
+- ⚠️ **PENDIENTE**: Backend debe validar permisos en todos los endpoints
+- ⚠️ **PENDIENTE**: Backend debe filtrar datos por usuario en endpoints compartidos
 
 ---
 
@@ -544,5 +787,5 @@ TOTAL:               ██████████████░░░░░�
 
 ---
 
-**Última actualización**: 18 de octubre de 2025  
+**Última actualización**: 26 de octubre de 2025  
 **Mantenido por**: Equipo de desarrollo ASAM Frontend

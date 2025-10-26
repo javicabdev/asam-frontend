@@ -2,11 +2,12 @@ import React from 'react'
 import { Paper, Typography, Box, Chip, Divider, Grid } from '@mui/material'
 import { CheckCircle } from '@mui/icons-material'
 import { formatPaymentDate, formatAmount, getPaymentStatusColor, getPaymentStatusLabel } from '../utils'
+import type { PaymentStatus } from '@/graphql/generated/schema'
 
 interface PaymentSummaryProps {
   amount: number
   paymentMethod: string
-  status: string
+  status: PaymentStatus | string // Allow string for backward compatibility
   paymentDate: string
   notes?: string | null
 }

@@ -18,3 +18,6 @@ export const PAYMENT_METHODS = {
 
 // Default annual membership fee amount (€40 per year)
 export const DEFAULT_INITIAL_PAYMENT_AMOUNT = 40
+
+// Maximum payment amount allowed without admin approval (€1000)
+export const MAX_PAYMENT_AMOUNT = 1000

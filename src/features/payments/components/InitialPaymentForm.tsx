@@ -20,6 +20,7 @@ import {
   InitialPaymentFormData,
   PAYMENT_METHODS,
   DEFAULT_INITIAL_PAYMENT_AMOUNT,
+  MAX_PAYMENT_AMOUNT,
 } from '../types'
 
 // Schema de validación explícitamente tipado
@@ -27,7 +28,11 @@ const validationSchema: Yup.ObjectSchema<InitialPaymentFormData> = Yup.object({
   amount: Yup.number()
     .required('El monto es obligatorio')
     .positive('El monto debe ser positivo')
-    .min(1, 'El monto mínimo es 1€'),
+    .min(1, 'El monto mínimo es 1€')
+    .max(
+      MAX_PAYMENT_AMOUNT,
+      `El monto máximo es €${MAX_PAYMENT_AMOUNT}. Para montos superiores, contacte con un administrador`
+    ),
   payment_method: Yup.string().required('El método de pago es obligatorio'),
   notes: Yup.string().nullable().optional(),
 }).required()
@@ -100,6 +105,7 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
                   }}
                   inputProps={{
                     min: 1,
+                    max: MAX_PAYMENT_AMOUNT,
                     step: 0.01,
                   }}
                 />

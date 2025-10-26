@@ -4,11 +4,22 @@ import { gql } from '@apollo/client'
 export {
   useUpdateMemberMutation,
   useDeleteMemberMutation,
-  useChangeMemberStatusMutation,
   UpdateMemberDocument as UPDATE_MEMBER_MUTATION,
   DeleteMemberDocument as DELETE_MEMBER_MUTATION,
-  ChangeMemberStatusDocument as CHANGE_MEMBER_STATUS_MUTATION,
 } from '@/graphql/generated/operations'
+
+// Change Member Status Mutation
+export const CHANGE_MEMBER_STATUS_MUTATION = gql`
+  mutation ChangeMemberStatus($id: ID!, $status: MemberStatus!) {
+    changeMemberStatus(id: $id, status: $status) {
+      miembro_id
+      nombre
+      apellidos
+      estado
+      fecha_baja
+    }
+  }
+`
 
 // Export types
 export type {

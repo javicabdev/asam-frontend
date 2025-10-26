@@ -61,6 +61,7 @@ interface MembersTableProps {
   onDeactivateClick: (member: Member) => void
   onSelectionChange?: (selectedIds: string[]) => void
   selectable?: boolean
+  isAdmin?: boolean
 }
 
 // Custom toolbar component
@@ -193,6 +194,7 @@ export function MembersTable({
   onDeactivateClick,
   onSelectionChange,
   selectable = false,
+  isAdmin = false,
 }: MembersTableProps) {
   const theme = useTheme()
   const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([])
@@ -396,7 +398,7 @@ export function MembersTable({
       {
         field: 'actions',
         headerName: 'Acciones',
-        width: 150,
+        width: isAdmin ? 150 : 80,
         sortable: false,
         filterable: false,
         disableColumnMenu: true,
@@ -416,41 +418,45 @@ export function MembersTable({
               </IconButton>
             </Tooltip>
             
-            <Tooltip title="Editar">
-              <IconButton
-                size="small"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  if (params.row) {
-                    onEditClick(params.row)
-                  }
-                }}
-              >
-                <EditIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-            
-            <Tooltip title="Dar de baja">
-              <span>
-                <IconButton
-                  size="small"
-                  disabled={params.row?.estado === MemberStatus.INACTIVE}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    if (params.row) {
-                      onDeactivateClick(params.row)
-                    }
-                  }}
-                >
-                  <PersonRemoveIcon fontSize="small" />
-                </IconButton>
-              </span>
-            </Tooltip>
+            {isAdmin && (
+              <>
+                <Tooltip title="Editar">
+                  <IconButton
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      if (params.row) {
+                        onEditClick(params.row)
+                      }
+                    }}
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+                
+                <Tooltip title="Dar de baja">
+                  <span>
+                    <IconButton
+                      size="small"
+                      disabled={params.row?.estado === MemberStatus.INACTIVE}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        if (params.row) {
+                          onDeactivateClick(params.row)
+                        }
+                      }}
+                    >
+                      <PersonRemoveIcon fontSize="small" />
+                    </IconButton>
+                  </span>
+                </Tooltip>
+              </>
+            )}
           </Box>
         ),
       },
     ],
-    [onRowClick, onEditClick, onDeactivateClick]
+    [onRowClick, onEditClick, onDeactivateClick, isAdmin]
   )
 
   const handlePaginationModelChange = (model: GridPaginationModel) => {

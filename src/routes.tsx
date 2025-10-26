@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { Suspense, useEffect } from 'react'
 import { CircularProgress, Box } from '@mui/material'
 import { lazyWithPreload, preloadOnIdle } from '@/utils/lazyWithPreload'
+import { useAuth } from '@/hooks/useAuth'
 
 // Lazy load pages with preload capability
 const LoginPage = lazyWithPreload(() => import('@/pages/auth/LoginPage'), 'LoginPage')
@@ -89,6 +90,13 @@ const LoadingScreen = () => (
   </Box>
 )
 
+// Role-based redirect component
+const RoleBasedRedirect = () => {
+  const { user } = useAuth()
+  const isAdmin = user?.role === 'admin'
+  return <Navigate to={isAdmin ? '/dashboard' : '/members'} replace />
+}
+
 // Preload strategy hook
 const usePreloadStrategy = () => {
   useEffect(() => {
@@ -154,7 +162,7 @@ export const AppRoutes = () => {
         {/* Private routes */}
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/" element={<RoleBasedRedirect />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/members" element={<MembersPage />} />
             <Route path="/members/new" element={<NewMemberPage />} />

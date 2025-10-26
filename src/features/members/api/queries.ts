@@ -9,5 +9,4 @@ export {
   CreateMemberDocument as CREATE_MEMBER_MUTATION,
   UpdateMemberDocument as UPDATE_MEMBER_MUTATION,
   DeleteMemberDocument as DELETE_MEMBER_MUTATION,
-  ChangeMemberStatusDocument as CHANGE_MEMBER_STATUS_MUTATION,
 } from '@/graphql/generated/operations'

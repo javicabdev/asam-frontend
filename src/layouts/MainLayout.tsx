@@ -54,6 +54,7 @@ const navigationItems: NavItem[] = [
     text: 'menu.dashboard',
     icon: <DashboardIcon />,
     path: '/dashboard',
+    roles: ['admin'],
   },
   {
     text: 'menu.members',
@@ -64,6 +65,7 @@ const navigationItems: NavItem[] = [
     text: 'menu.users',
     icon: <UsersIcon />,
     path: '/users',
+    roles: ['admin'],
   },
   {
     text: 'menu.payments',
@@ -79,6 +81,7 @@ const navigationItems: NavItem[] = [
     text: 'menu.reports',
     icon: <AssessmentIcon />,
     path: '/reports',
+    roles: ['admin'],
   },
 ]
 
@@ -122,6 +125,11 @@ export const MainLayout: React.FC = () => {
     return user.username.substring(0, 2).toUpperCase()
   }
 
+  // Filter navigation items based on user role
+  const visibleNavigationItems = navigationItems.filter(
+    (item) => !item.roles || item.roles.includes(user?.role || '')
+  )
+
   const drawer = (
     <Box>
       <Toolbar>
@@ -131,7 +139,7 @@ export const MainLayout: React.FC = () => {
       </Toolbar>
       <Divider />
       <List>
-        {navigationItems.map((item) => (
+        {visibleNavigationItems.map((item) => (
           <ListItem key={item.path} disablePadding>
             <ListItemButton
               selected={location.pathname === item.path}

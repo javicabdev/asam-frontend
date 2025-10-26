@@ -1,3 +1,4 @@
+import React from 'react'
 import { Box, Typography, Button, Alert, Chip, Stack, Tooltip, useTheme } from '@mui/material'
 import {
   Add as AddIcon,
@@ -10,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 
 import { MembersTable } from '@/features/members/components/MembersTable'
 import { MembersFilters } from '@/features/members/components/MembersFilters'
+import { ConfirmDeactivateDialog } from '@/features/members/components/ConfirmDeactivateDialog'
 import { useMembersTable } from '@/features/members/hooks/useMembersTable'
 import type { Member } from '@/features/members/types'
 
@@ -19,6 +21,13 @@ export default function MembersPage() {
   const { t } = useTranslation('members')
   const { user } = useAuthStore()
   const isAdmin = user?.role === 'admin'
+  
+  // State for deactivate dialog
+  const [deactivateDialog, setDeactivateDialog] = React.useState<{
+    open: boolean
+    member: Member | null
+  }>({ open: false, member: null })
+  
   const {
     members,
     totalCount,
@@ -47,8 +56,7 @@ export default function MembersPage() {
   }
 
   const handleDeactivateClick = (member: Member) => {
-    // TODO: Implement deactivate confirmation dialog
-    console.log('Deactivate member:', member)
+    setDeactivateDialog({ open: true, member })
   }
 
   return (
@@ -151,6 +159,15 @@ export default function MembersPage() {
         onDeactivateClick={handleDeactivateClick}
         onSelectionChange={handleSelectionChange}
         selectable={true}
+        isAdmin={isAdmin}
+      />
+
+      {/* Deactivate Confirmation Dialog */}
+      <ConfirmDeactivateDialog
+        open={deactivateDialog.open}
+        member={deactivateDialog.member}
+        onClose={() => setDeactivateDialog({ open: false, member: null })}
+        onSuccess={() => void refetch()}
       />
     </Box>
   )

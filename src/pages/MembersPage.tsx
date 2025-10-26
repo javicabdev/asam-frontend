@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 import { MembersTable } from '@/features/members/components/MembersTable'
 import { MembersFilters } from '@/features/members/components/MembersFilters'
 import { useMembersTable } from '@/features/members/hooks/useMembersTable'
+import type { Member } from '@/features/members/types'
 
 export default function MembersPage() {
   const navigate = useNavigate()
@@ -39,6 +40,15 @@ export default function MembersPage() {
   const handleBulkDelete = () => {
     // TODO: Implement bulk delete
     console.log('Bulk delete:', selectedMembers)
+  }
+
+  const handleEditClick = (member: Member) => {
+    navigate(`/members/${member.miembro_id}/edit`)
+  }
+
+  const handleDeactivateClick = (member: Member) => {
+    // TODO: Implement deactivate confirmation dialog
+    console.log('Deactivate member:', member)
   }
 
   return (
@@ -137,6 +147,8 @@ export default function MembersPage() {
         onPageSizeChange={handlePageSizeChange}
         onSortChange={handleSortChange}
         onRowClick={handleRowClick}
+        onEditClick={handleEditClick}
+        onDeactivateClick={handleDeactivateClick}
         onSelectionChange={handleSelectionChange}
         selectable={true}
       />

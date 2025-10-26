@@ -694,11 +694,15 @@ export type UpdateFamilyInput = {
 };
 
 export type UpdateMemberInput = {
+  apellidos?: InputMaybe<Scalars['String']['input']>;
   calle_numero_piso?: InputMaybe<Scalars['String']['input']>;
   codigo_postal?: InputMaybe<Scalars['String']['input']>;
   correo_electronico?: InputMaybe<Scalars['String']['input']>;
   documento_identidad?: InputMaybe<Scalars['String']['input']>;
+  fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
   miembro_id: Scalars['ID']['input'];
+  nacionalidad?: InputMaybe<Scalars['String']['input']>;
+  nombre?: InputMaybe<Scalars['String']['input']>;
   observaciones?: InputMaybe<Scalars['String']['input']>;
   pais?: InputMaybe<Scalars['String']['input']>;
   poblacion?: InputMaybe<Scalars['String']['input']>;

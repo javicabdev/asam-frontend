@@ -5601,6 +5601,18 @@
         "fields": null,
         "inputFields": [
           {
+            "name": "apellidos",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "calle_numero_piso",
             "description": null,
             "type": {
@@ -5649,6 +5661,18 @@
             "deprecationReason": null
           },
           {
+            "name": "fecha_nacimiento",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Time",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "miembro_id",
             "description": null,
             "type": {
@@ -5659,6 +5683,30 @@
                 "name": "ID",
                 "ofType": null
               }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nacionalidad",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nombre",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,

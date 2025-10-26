@@ -31,6 +31,8 @@ import {
 } from '@mui/material'
 import {
   Visibility as VisibilityIcon,
+  Edit as EditIcon,
+  PersonRemove as PersonRemoveIcon,
   Email as EmailIcon,
   FileDownload as FileDownloadIcon,
   ExpandMore as ExpandMoreIcon,
@@ -55,6 +57,8 @@ interface MembersTableProps {
   onPageSizeChange: (pageSize: number) => void
   onSortChange: (field: string, direction: 'ASC' | 'DESC' | null) => void
   onRowClick: (member: Member) => void
+  onEditClick: (member: Member) => void
+  onDeactivateClick: (member: Member) => void
   onSelectionChange?: (selectedIds: string[]) => void
   selectable?: boolean
 }
@@ -185,6 +189,8 @@ export function MembersTable({
   onPageSizeChange,
   onSortChange,
   onRowClick,
+  onEditClick,
+  onDeactivateClick,
   onSelectionChange,
   selectable = false,
 }: MembersTableProps) {
@@ -390,12 +396,12 @@ export function MembersTable({
       {
         field: 'actions',
         headerName: 'Acciones',
-        width: 100,
+        width: 150,
         sortable: false,
         filterable: false,
         disableColumnMenu: true,
         renderCell: (params) => (
-          <Box>
+          <Box sx={{ display: 'flex', gap: 0.5 }}>
             <Tooltip title="Ver detalles">
               <IconButton
                 size="small"
@@ -409,11 +415,42 @@ export function MembersTable({
                 <VisibilityIcon fontSize="small" />
               </IconButton>
             </Tooltip>
+            
+            <Tooltip title="Editar">
+              <IconButton
+                size="small"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  if (params.row) {
+                    onEditClick(params.row)
+                  }
+                }}
+              >
+                <EditIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            
+            <Tooltip title="Dar de baja">
+              <span>
+                <IconButton
+                  size="small"
+                  disabled={params.row?.estado === MemberStatus.INACTIVE}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    if (params.row) {
+                      onDeactivateClick(params.row)
+                    }
+                  }}
+                >
+                  <PersonRemoveIcon fontSize="small" />
+                </IconButton>
+              </span>
+            </Tooltip>
           </Box>
         ),
       },
     ],
-    [onRowClick]
+    [onRowClick, onEditClick, onDeactivateClick]
   )
 
   const handlePaginationModelChange = (model: GridPaginationModel) => {

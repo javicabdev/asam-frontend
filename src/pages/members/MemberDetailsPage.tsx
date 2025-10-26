@@ -10,7 +10,6 @@ import {
   Stack,
   Divider,
   Paper,
-  Tooltip,
   Avatar,
 } from '@mui/material'
 import {
@@ -116,19 +115,13 @@ export function MemberDetailsPage() {
             Imprimir
           </Button>
           {isAdmin && (
-            <Tooltip title="Funcionalidad pendiente de implementación">
-              <span>
-                <Button
-                  variant="contained"
-                  startIcon={<EditIcon />}
-                  disabled
-                  // TODO: Implementar página de edición
-                  // onClick={() => navigate(`/members/${member.miembro_id}/edit`)}
-                >
-                  Editar
-                </Button>
-              </span>
-            </Tooltip>
+            <Button
+              variant="contained"
+              startIcon={<EditIcon />}
+              onClick={() => navigate(`/members/${member.miembro_id}/edit`)}
+            >
+              Editar
+            </Button>
           )}
         </Stack>
       </Box>

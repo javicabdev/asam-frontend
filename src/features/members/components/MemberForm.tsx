@@ -85,9 +85,12 @@ interface FieldError {
 }
 
 interface MemberFormProps {
+  mode?: 'create' | 'edit'
+  initialData?: any
   onCancel?: () => void
   onSubmit?: (data: MemberFormSubmitData) => void | Promise<void>
   externalErrors?: FieldError[]
+  disabledFields?: string[] // Campos que deben estar deshabilitados
 }
 
 const validationSchema = Yup.object({
@@ -134,7 +137,14 @@ const familyValidationSchema = validationSchema.shape({
   esposa_correo_electronico: Yup.string().email('Email inválido').nullable(),
 })
 
-export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, externalErrors }) => {
+export const MemberForm: React.FC<MemberFormProps> = ({ 
+  mode = 'create', 
+  initialData, 
+  onCancel, 
+  onSubmit, 
+  externalErrors,
+  disabledFields = [] 
+}) => {
   const { familyMembers, addFamilyMember, editFamilyMember, removeFamilyMember } = useFamilyForm()
   const [memberNumberManuallyEdited, setMemberNumberManuallyEdited] = React.useState(false)
   const { isValidating, isDuplicate, validateMemberNumber, clearValidation } =
@@ -163,11 +173,40 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, exte
     clearValidation: clearEsposaDocValidation,
   } = useDocumentValidation()
 
-  const form = useForm<MemberFormData>({
-    // @ts-expect-error - Schema dinámico de Yup con validación condicional no infiere tipos correctamente
-    resolver: yupResolver(familyValidationSchema),
-    defaultValues: {
-      numero_socio: '', // Will be set by useNextMemberNumber hook
+  // Get default values based on mode
+  const getDefaultValues = (): MemberFormData => {
+    if (mode === 'edit' && initialData) {
+      return {
+        numero_socio: initialData.numero_socio || '',
+        tipo_membresia: initialData.tipo_membresia || MembershipType.INDIVIDUAL,
+        nombre: initialData.nombre || '',
+        apellidos: initialData.apellidos || '',
+        calle_numero_piso: initialData.calle_numero_piso || '',
+        codigo_postal: initialData.codigo_postal || '',
+        poblacion: initialData.poblacion || '',
+        provincia: initialData.provincia || 'Barcelona',
+        pais: initialData.pais || 'España',
+        fecha_nacimiento: initialData.fecha_nacimiento ? new Date(initialData.fecha_nacimiento) : null,
+        documento_identidad: initialData.documento_identidad || '',
+        correo_electronico: initialData.correo_electronico || '',
+        profesion: initialData.profesion || '',
+        nacionalidad: initialData.nacionalidad || '',
+        observaciones: initialData.observaciones || '',
+        esposo_nombre: '',
+        esposo_apellidos: '',
+        esposo_fecha_nacimiento: null,
+        esposo_documento_identidad: '',
+        esposo_correo_electronico: '',
+        esposa_nombre: '',
+        esposa_apellidos: '',
+        esposa_fecha_nacimiento: null,
+        esposa_documento_identidad: '',
+        esposa_correo_electronico: '',
+      }
+    }
+
+    return {
+      numero_socio: '',
       tipo_membresia: MembershipType.INDIVIDUAL,
       nombre: '',
       apellidos: '',
@@ -182,7 +221,6 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, exte
       profesion: '',
       nacionalidad: 'Senegalesa',
       observaciones: '',
-      // Campos de familia
       esposo_nombre: '',
       esposo_apellidos: '',
       esposo_fecha_nacimiento: null,
@@ -193,7 +231,13 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, exte
       esposa_fecha_nacimiento: null,
       esposa_documento_identidad: '',
       esposa_correo_electronico: '',
-    },
+    }
+  }
+
+  const form = useForm<MemberFormData>({
+    // @ts-expect-error - Schema dinámico de Yup con validación condicional no infiere tipos correctamente
+    resolver: yupResolver(familyValidationSchema),
+    defaultValues: getDefaultValues(),
   })
 
   const {
@@ -217,13 +261,14 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, exte
   const documentoIdentidad = watch('documento_identidad')
   const correoElectronico = watch('correo_electronico')
 
-  // Use the hook to get the next member number
+  // Use the hook to get the next member number (skip in edit mode)
   const {
     memberNumber,
     loading: loadingMemberNumber,
     error: memberNumberError,
   } = useNextMemberNumber({
     isFamily,
+    skip: mode === 'edit',
   })
 
   // Set initial member number when it's loaded
@@ -257,9 +302,9 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, exte
     clearErrors('numero_socio')
   }, [isFamily, clearValidation, clearErrors])
 
-  // CAMBIO CRÍTICO 1: Auto-copia de datos del socio principal al esposo
+  // CAMBIO CRÍTICO 1: Auto-copia de datos del socio principal al esposo (solo en modo create)
   React.useEffect(() => {
-    if (isFamily) {
+    if (mode === 'create' && isFamily) {
       // Copiar datos automáticamente cuando se activa membresía familiar
       // El operario puede modificarlos libremente después
       setValue('esposo_nombre', nombre || '')
@@ -268,7 +313,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, exte
       setValue('esposo_documento_identidad', documentoIdentidad || '')
       setValue('esposo_correo_electronico', correoElectronico || '')
     }
-  }, [isFamily, nombre, apellidos, fechaNacimiento, documentoIdentidad, correoElectronico, setValue])
+  }, [mode, isFamily, nombre, apellidos, fechaNacimiento, documentoIdentidad, correoElectronico, setValue])
 
   // Limpiar validaciones de DNI de familia cuando se cambia a individual
   React.useEffect(() => {
@@ -390,7 +435,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, exte
                 render={({ field }) => (
                   <FormControl fullWidth required error={!!errors.tipo_membresia}>
                     <InputLabel id="tipo-membresia-label">Tipo de Membresía</InputLabel>
-                    <Select {...field} labelId="tipo-membresia-label" label="Tipo de Membresía">
+                    <Select {...field} labelId="tipo-membresia-label" label="Tipo de Membresía" disabled={mode === 'edit'}>
                       <MenuItem value={MembershipType.INDIVIDUAL}>Individual</MenuItem>
                       <MenuItem value={MembershipType.FAMILY}>Familiar</MenuItem>
                     </Select>
@@ -421,7 +466,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, exte
                         : 'Puede escribir solo el número (ej: 2) y se formateará automáticamente')
                     }
                     required
-                    disabled={loadingMemberNumber}
+                    disabled={mode === 'edit' || loadingMemberNumber}
                     onChange={(e) => {
                       // Mark as manually edited when user types
                       setMemberNumberManuallyEdited(true)
@@ -474,8 +519,9 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, exte
                     fullWidth
                     label="Nombre"
                     error={!!errors.nombre}
-                    helperText={errors.nombre?.message}
+                    helperText={errors.nombre?.message || (disabledFields.includes('nombre') ? 'Este campo no puede modificarse' : '')}
                     required
+                    disabled={disabledFields.includes('nombre')}
                   />
                 )}
               />
@@ -491,8 +537,9 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, exte
                     fullWidth
                     label="Apellidos"
                     error={!!errors.apellidos}
-                    helperText={errors.apellidos?.message}
+                    helperText={errors.apellidos?.message || (disabledFields.includes('apellidos') ? 'Este campo no puede modificarse' : '')}
                     required
+                    disabled={disabledFields.includes('apellidos')}
                   />
                 )}
               />
@@ -507,11 +554,12 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, exte
                     label="Fecha de Nacimiento"
                     value={field.value}
                     onChange={field.onChange}
+                    disabled={disabledFields.includes('fecha_nacimiento')}
                     slotProps={{
                       textField: {
                         fullWidth: true,
                         error: !!errors.fecha_nacimiento,
-                        helperText: errors.fecha_nacimiento?.message,
+                        helperText: errors.fecha_nacimiento?.message || (disabledFields.includes('fecha_nacimiento') ? 'Este campo no puede modificarse' : ''),
                       },
                     }}
                     maxDate={new Date()}
@@ -700,7 +748,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, exte
               <Controller
                 name="nacionalidad"
                 control={control}
-                render={({ field }) => <TextField {...field} fullWidth label="Nacionalidad" />}
+                render={({ field }) => <TextField {...field} fullWidth label="Nacionalidad" disabled={disabledFields.includes('nacionalidad')} />}
               />
             </Grid>
 
@@ -968,7 +1016,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, exte
               Cancelar
             </Button>
             <Button type="submit" variant="contained" size="large">
-              Continuar
+              {mode === 'edit' ? 'Guardar Cambios' : 'Continuar'}
             </Button>
           </Box>
         </Box>

@@ -1,5 +1,23 @@
 import { gql } from '@apollo/client'
 
+// Re-export member mutations from generated operations
+export {
+  useUpdateMemberMutation,
+  useDeleteMemberMutation,
+  useChangeMemberStatusMutation,
+  UpdateMemberDocument as UPDATE_MEMBER_MUTATION,
+  DeleteMemberDocument as DELETE_MEMBER_MUTATION,
+  ChangeMemberStatusDocument as CHANGE_MEMBER_STATUS_MUTATION,
+} from '@/graphql/generated/operations'
+
+// Export types
+export type {
+  UpdateMemberMutation,
+  UpdateMemberMutationVariables,
+  DeleteMemberMutation,
+  DeleteMemberMutationVariables,
+} from '@/graphql/generated/operations'
+
 export const CREATE_FAMILY_MUTATION = gql`
   mutation CreateFamily($input: CreateFamilyInput!) {
     createFamily(input: $input) {

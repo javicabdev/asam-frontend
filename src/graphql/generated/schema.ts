@@ -458,6 +458,25 @@ export type Payment = {
   status: PaymentStatus;
 };
 
+export type PaymentConnection = {
+  __typename?: 'PaymentConnection';
+  nodes: Array<Payment>;
+  pageInfo: PageInfo;
+};
+
+export type PaymentFilter = {
+  end_date?: InputMaybe<Scalars['Time']['input']>;
+  family_id?: InputMaybe<Scalars['ID']['input']>;
+  max_amount?: InputMaybe<Scalars['Float']['input']>;
+  member_id?: InputMaybe<Scalars['ID']['input']>;
+  min_amount?: InputMaybe<Scalars['Float']['input']>;
+  pagination?: InputMaybe<PaginationInput>;
+  payment_method?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<SortInput>;
+  start_date?: InputMaybe<Scalars['Time']['input']>;
+  status?: InputMaybe<PaymentStatus>;
+};
+
 export type PaymentInput = {
   amount: Scalars['Float']['input'];
   family_id?: InputMaybe<Scalars['ID']['input']>;
@@ -497,6 +516,7 @@ export type Query = {
   listFamilies: FamilyConnection;
   listMembers: MemberConnection;
   listMembershipFees: Array<MembershipFee>;
+  listPayments: PaymentConnection;
   listUsers: Array<User>;
   ping: Scalars['String']['output'];
   searchMembers: Array<Member>;
@@ -597,6 +617,11 @@ export type QueryListMembersArgs = {
 export type QueryListMembershipFeesArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   pageSize?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryListPaymentsArgs = {
+  filter?: InputMaybe<PaymentFilter>;
 };
 
 

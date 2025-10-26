@@ -461,6 +461,25 @@ export type Payment = {
   status: PaymentStatus;
 };
 
+export type PaymentConnection = {
+  __typename?: 'PaymentConnection';
+  nodes: Array<Payment>;
+  pageInfo: PageInfo;
+};
+
+export type PaymentFilter = {
+  end_date?: InputMaybe<Scalars['Time']['input']>;
+  family_id?: InputMaybe<Scalars['ID']['input']>;
+  max_amount?: InputMaybe<Scalars['Float']['input']>;
+  member_id?: InputMaybe<Scalars['ID']['input']>;
+  min_amount?: InputMaybe<Scalars['Float']['input']>;
+  pagination?: InputMaybe<PaginationInput>;
+  payment_method?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<SortInput>;
+  start_date?: InputMaybe<Scalars['Time']['input']>;
+  status?: InputMaybe<PaymentStatus>;
+};
+
 export type PaymentInput = {
   amount: Scalars['Float']['input'];
   family_id?: InputMaybe<Scalars['ID']['input']>;
@@ -500,6 +519,7 @@ export type Query = {
   listFamilies: FamilyConnection;
   listMembers: MemberConnection;
   listMembershipFees: Array<MembershipFee>;
+  listPayments: PaymentConnection;
   listUsers: Array<User>;
   ping: Scalars['String']['output'];
   searchMembers: Array<Member>;
@@ -600,6 +620,11 @@ export type QueryListMembersArgs = {
 export type QueryListMembershipFeesArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   pageSize?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryListPaymentsArgs = {
+  filter?: InputMaybe<PaymentFilter>;
 };
 
 
@@ -1049,6 +1074,13 @@ export type GetPaymentStatusQueryVariables = Exact<{
 
 
 export type GetPaymentStatusQuery = { __typename?: 'Query', getPaymentStatus: PaymentStatus };
+
+export type ListPaymentsQueryVariables = Exact<{
+  filter?: InputMaybe<PaymentFilter>;
+}>;
+
+
+export type ListPaymentsQuery = { __typename?: 'Query', listPayments: { __typename?: 'PaymentConnection', nodes: Array<{ __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null, membership_fee?: { __typename?: 'MembershipFee', id: string, year: number } | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
 
 export type RegisterPaymentMutationVariables = Exact<{
   input: PaymentInput;
@@ -3278,6 +3310,74 @@ export type GetPaymentStatusQueryHookResult = ReturnType<typeof useGetPaymentSta
 export type GetPaymentStatusLazyQueryHookResult = ReturnType<typeof useGetPaymentStatusLazyQuery>;
 export type GetPaymentStatusSuspenseQueryHookResult = ReturnType<typeof useGetPaymentStatusSuspenseQuery>;
 export type GetPaymentStatusQueryResult = Apollo.QueryResult<GetPaymentStatusQuery, GetPaymentStatusQueryVariables>;
+export const ListPaymentsDocument = gql`
+    query ListPayments($filter: PaymentFilter) {
+  listPayments(filter: $filter) {
+    nodes {
+      id
+      member {
+        miembro_id
+        numero_socio
+        nombre
+        apellidos
+      }
+      family {
+        id
+        numero_socio
+        esposo_nombre
+        esposa_nombre
+      }
+      amount
+      payment_date
+      status
+      payment_method
+      notes
+      membership_fee {
+        id
+        year
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      totalCount
+    }
+  }
+}
+    `;
+
+/**
+ * __useListPaymentsQuery__
+ *
+ * To run a query within a React component, call `useListPaymentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListPaymentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListPaymentsQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useListPaymentsQuery(baseOptions?: Apollo.QueryHookOptions<ListPaymentsQuery, ListPaymentsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListPaymentsQuery, ListPaymentsQueryVariables>(ListPaymentsDocument, options);
+      }
+export function useListPaymentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListPaymentsQuery, ListPaymentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListPaymentsQuery, ListPaymentsQueryVariables>(ListPaymentsDocument, options);
+        }
+export function useListPaymentsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ListPaymentsQuery, ListPaymentsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ListPaymentsQuery, ListPaymentsQueryVariables>(ListPaymentsDocument, options);
+        }
+export type ListPaymentsQueryHookResult = ReturnType<typeof useListPaymentsQuery>;
+export type ListPaymentsLazyQueryHookResult = ReturnType<typeof useListPaymentsLazyQuery>;
+export type ListPaymentsSuspenseQueryHookResult = ReturnType<typeof useListPaymentsSuspenseQuery>;
+export type ListPaymentsQueryResult = Apollo.QueryResult<ListPaymentsQuery, ListPaymentsQueryVariables>;
 export const RegisterPaymentDocument = gql`
     mutation RegisterPayment($input: PaymentInput!) {
   registerPayment(input: $input) {

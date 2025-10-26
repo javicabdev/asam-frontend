@@ -21,3 +21,31 @@ export const DEFAULT_INITIAL_PAYMENT_AMOUNT = 40
 
 // Maximum payment amount allowed without admin approval (€1000)
 export const MAX_PAYMENT_AMOUNT = 1000
+
+/**
+ * Payment filters state for list view
+ */
+export interface PaymentFiltersState {
+  status: 'ALL' | 'PENDING' | 'PAID' | 'CANCELLED'
+  paymentMethod: string
+  startDate: Date | null
+  endDate: Date | null
+  searchTerm: string
+  page: number
+  pageSize: number
+}
+
+/**
+ * Flattened payment data for table display
+ */
+export interface PaymentListItem {
+  id: string
+  memberName: string
+  memberNumber: string
+  familyName?: string
+  amount: number
+  paymentDate: string
+  status: 'PENDING' | 'PAID' | 'CANCELLED'
+  paymentMethod: string
+  notes?: string | null
+}

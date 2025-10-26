@@ -61,6 +61,41 @@ query GetPaymentStatus($id: ID!) {
   getPaymentStatus(id: $id)
 }
 
+# List all payments with filters and pagination
+query ListPayments($filter: PaymentFilter) {
+  listPayments(filter: $filter) {
+    nodes {
+      id
+      member {
+        miembro_id
+        numero_socio
+        nombre
+        apellidos
+      }
+      family {
+        id
+        numero_socio
+        esposo_nombre
+        esposa_nombre
+      }
+      amount
+      payment_date
+      status
+      payment_method
+      notes
+      membership_fee {
+        id
+        year
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      totalCount
+    }
+  }
+}
+
 mutation RegisterPayment($input: PaymentInput!) {
   registerPayment(input: $input) {
     id

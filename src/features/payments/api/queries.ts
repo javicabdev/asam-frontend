@@ -4,6 +4,7 @@ export {
   useGetMemberPaymentsQuery,
   useGetFamilyPaymentsQuery,
   useGetPaymentStatusQuery,
+  useListPaymentsQuery,
 } from '@/graphql/generated/operations'
 
 // Export query documents for direct use if needed
@@ -12,4 +13,5 @@ export {
   GetMemberPaymentsDocument,
   GetFamilyPaymentsDocument,
   GetPaymentStatusDocument,
+  ListPaymentsDocument,
 } from '@/graphql/generated/operations'

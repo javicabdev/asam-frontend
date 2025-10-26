@@ -142,6 +142,29 @@ mutation UpdatePayment($id: ID!, $input: PaymentInput!) {
   }
 }
 
+mutation ConfirmPayment($id: ID!) {
+  confirmPayment(id: $id) {
+    id
+    member {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    family {
+      id
+      numero_socio
+      esposo_nombre
+      esposa_nombre
+    }
+    amount
+    payment_date
+    status
+    payment_method
+    notes
+  }
+}
+
 mutation CancelPayment($id: ID!, $reason: String!) {
   cancelPayment(id: $id, reason: $reason) {
     success

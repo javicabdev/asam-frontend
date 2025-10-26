@@ -259,6 +259,7 @@ export type Mutation = {
   cancelPayment: MutationResponse;
   changeMemberStatus: Member;
   changePassword: MutationResponse;
+  confirmPayment: Payment;
   createFamily: Family;
   createMember: Member;
   createUser: User;
@@ -311,6 +312,11 @@ export type MutationChangeMemberStatusArgs = {
 
 export type MutationChangePasswordArgs = {
   input: ChangePasswordInput;
+};
+
+
+export type MutationConfirmPaymentArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -1096,6 +1102,13 @@ export type UpdatePaymentMutationVariables = Exact<{
 
 
 export type UpdatePaymentMutation = { __typename?: 'Mutation', updatePayment: { __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null } };
+
+export type ConfirmPaymentMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type ConfirmPaymentMutation = { __typename?: 'Mutation', confirmPayment: { __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null } };
 
 export type CancelPaymentMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -3479,6 +3492,56 @@ export function useUpdatePaymentMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdatePaymentMutationHookResult = ReturnType<typeof useUpdatePaymentMutation>;
 export type UpdatePaymentMutationResult = Apollo.MutationResult<UpdatePaymentMutation>;
 export type UpdatePaymentMutationOptions = Apollo.BaseMutationOptions<UpdatePaymentMutation, UpdatePaymentMutationVariables>;
+export const ConfirmPaymentDocument = gql`
+    mutation ConfirmPayment($id: ID!) {
+  confirmPayment(id: $id) {
+    id
+    member {
+      miembro_id
+      numero_socio
+      nombre
+      apellidos
+    }
+    family {
+      id
+      numero_socio
+      esposo_nombre
+      esposa_nombre
+    }
+    amount
+    payment_date
+    status
+    payment_method
+    notes
+  }
+}
+    `;
+export type ConfirmPaymentMutationFn = Apollo.MutationFunction<ConfirmPaymentMutation, ConfirmPaymentMutationVariables>;
+
+/**
+ * __useConfirmPaymentMutation__
+ *
+ * To run a mutation, you first call `useConfirmPaymentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConfirmPaymentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [confirmPaymentMutation, { data, loading, error }] = useConfirmPaymentMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useConfirmPaymentMutation(baseOptions?: Apollo.MutationHookOptions<ConfirmPaymentMutation, ConfirmPaymentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ConfirmPaymentMutation, ConfirmPaymentMutationVariables>(ConfirmPaymentDocument, options);
+      }
+export type ConfirmPaymentMutationHookResult = ReturnType<typeof useConfirmPaymentMutation>;
+export type ConfirmPaymentMutationResult = Apollo.MutationResult<ConfirmPaymentMutation>;
+export type ConfirmPaymentMutationOptions = Apollo.BaseMutationOptions<ConfirmPaymentMutation, ConfirmPaymentMutationVariables>;
 export const CancelPaymentDocument = gql`
     mutation CancelPayment($id: ID!, $reason: String!) {
   cancelPayment(id: $id, reason: $reason) {

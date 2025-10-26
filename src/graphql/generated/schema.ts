@@ -256,6 +256,7 @@ export type Mutation = {
   cancelPayment: MutationResponse;
   changeMemberStatus: Member;
   changePassword: MutationResponse;
+  confirmPayment: Payment;
   createFamily: Family;
   createMember: Member;
   createUser: User;
@@ -308,6 +309,11 @@ export type MutationChangeMemberStatusArgs = {
 
 export type MutationChangePasswordArgs = {
   input: ChangePasswordInput;
+};
+
+
+export type MutationConfirmPaymentArgs = {
+  id: Scalars['ID']['input'];
 };
 
 

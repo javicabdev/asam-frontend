@@ -2,6 +2,7 @@
 export {
   useRegisterPaymentMutation,
   useUpdatePaymentMutation,
+  useConfirmPaymentMutation,
   useCancelPaymentMutation,
   useRegisterFeeMutation,
 } from '@/graphql/generated/operations'
@@ -10,6 +11,7 @@ export {
 export {
   RegisterPaymentDocument,
   UpdatePaymentDocument,
+  ConfirmPaymentDocument,
   CancelPaymentDocument,
   RegisterFeeDocument,
 } from '@/graphql/generated/operations'
@@ -20,5 +22,7 @@ export type {
   RegisterPaymentMutationVariables,
   UpdatePaymentMutation,
   UpdatePaymentMutationVariables,
+  ConfirmPaymentMutation,
+  ConfirmPaymentMutationVariables,
   PaymentInput,
 } from '@/graphql/generated/operations'

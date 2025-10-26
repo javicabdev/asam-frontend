@@ -421,7 +421,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
 
       <DialogActions>
         <Button onClick={handleClose} disabled={loading}>
-          {t('form.cancel', { ns: 'common' })}
+          {t('common.cancel', { ns: 'common' })}
         </Button>
         <Button
           type="submit"

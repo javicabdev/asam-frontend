@@ -17,8 +17,8 @@ import { NavigateNext } from '@mui/icons-material'
 import { useAuthStore } from '@/stores/authStore'
 
 import { MemberForm } from '@/features/members/components/MemberForm'
-import { UPDATE_MEMBER_MUTATION } from '@/features/members/api/mutations'
-import { useGetMemberQuery } from '@/graphql/generated/operations'
+import { UPDATE_MEMBER_MUTATION, GET_FAMILY_QUERY } from '@/features/members/api/mutations'
+import { useGetMemberQuery, useQuery } from '@/graphql/generated/operations'
 import type {
   UpdateMemberMutation,
   UpdateMemberMutationVariables,

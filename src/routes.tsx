@@ -80,8 +80,9 @@ const ReportsPage = lazyWithPreload(() => import('@/pages/ReportsPage'))
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { MainLayout } from '@/layouts/MainLayout'
 
-// Auth guard component
+// Auth guard components
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
+import { AdminRoute } from '@/components/auth/AdminRoute'
 
 // Loading component
 const LoadingScreen = () => (
@@ -163,16 +164,22 @@ export const AppRoutes = () => {
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/" element={<RoleBasedRedirect />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
+            
+            {/* Admin-only routes */}
+            <Route element={<AdminRoute />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/users" element={<UsersPage />} />
+              <Route path="/reports" element={<ReportsPage />} />
+            </Route>
+            
+            {/* Routes accessible to all authenticated users */}
             <Route path="/members" element={<MembersPage />} />
             <Route path="/members/new" element={<NewMemberPage />} />
             <Route path="/members/:id" element={<MemberDetailsPage />} />
             <Route path="/members/:id/edit" element={<EditMemberPage />} />
-            <Route path="/users" element={<UsersPage />} />
             <Route path="/payments" element={<PaymentsPage />} />
             <Route path="/payments/initial/:memberId" element={<InitialPaymentPage />} />
             <Route path="/cash-flow" element={<CashFlowPage />} />
-            <Route path="/reports" element={<ReportsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
           </Route>

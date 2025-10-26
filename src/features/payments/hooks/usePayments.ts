@@ -1,125 +1,103 @@
-import { useState, useEffect, useMemo } from 'react'
-import { useListMembersQuery } from '@/graphql/generated/operations'
+import { useMemo } from 'react'
+import { useListPaymentsQuery } from '@/graphql/generated/operations'
 import type { PaymentFiltersState, PaymentListItem } from '../types'
+import type { PaymentStatus } from '@/graphql/generated/schema'
 
 /**
- * Temporary workaround: Aggregates member payments into a unified list
- * 
- * TODO: Replace with listPayments query when backend implements it
- * See: docs/backend-requirements/PAYMENTS-API-REQUIREMENTS.md
+ * Custom hook to fetch and manage payments list
+ * Uses the listPayments GraphQL query with server-side filtering and pagination
  */
 export const usePayments = (filters: PaymentFiltersState) => {
-  const [allPayments, setAllPayments] = useState<PaymentListItem[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  // Fetch all members (we'll get their payments)
-  const { data: membersData, loading: membersLoading } = useListMembersQuery({
-    variables: {
-      filter: {
-        pagination: { page: 1, pageSize: 1000 }, // Get all members for now
+  // Build GraphQL variables from filters
+  const variables = useMemo(() => {
+    const filter: Record<string, any> = {
+      pagination: {
+        page: filters.page,
+        pageSize: filters.pageSize,
       },
-    },
+    }
+
+    // Only include filters that have values
+    if (filters.status !== 'ALL') {
+      filter.status = filters.status as PaymentStatus
+    }
+
+    if (filters.paymentMethod && filters.paymentMethod !== 'ALL') {
+      filter.payment_method = filters.paymentMethod
+    }
+
+    if (filters.startDate) {
+      filter.start_date = filters.startDate.toISOString()
+    }
+
+    if (filters.endDate) {
+      filter.end_date = filters.endDate.toISOString()
+    }
+
+    // Note: searchTerm is handled by backend through member/family name search
+    // This might need to be implemented in backend if not available yet
+
+    return { filter }
+  }, [filters])
+
+  // Fetch payments from API
+  const { data, loading, error, refetch } = useListPaymentsQuery({
+    variables,
+    fetchPolicy: 'network-only', // Always fetch fresh data
   })
 
-  useEffect(() => {
-    const fetchAllPayments = async () => {
-      try {
-        setLoading(true)
-        setError(null)
-
-        // TODO: This is a temporary workaround
-        // In a real scenario, we would call a single listPayments query
-        // For now, we'll use the existing getMemberPayments for each member
-        
-        // Placeholder: For now, return empty array until backend is ready
-        // or we implement the aggregation logic
-        setAllPayments([])
-        
-      } catch (err) {
-        console.error('Error fetching payments:', err)
-        setError(err instanceof Error ? err.message : 'Error al cargar los pagos')
-      } finally {
-        setLoading(false)
-      }
+  // Transform GraphQL response to PaymentListItem format
+  const payments = useMemo<PaymentListItem[]>(() => {
+    if (!data?.listPayments?.nodes) {
+      return []
     }
 
-    if (!membersLoading) {
-      void fetchAllPayments()
-    }
-  }, [membersLoading, membersData])
+    return data.listPayments.nodes.map((payment) => {
+      // Determine member name and number (could be from member or family)
+      let memberName = ''
+      let memberNumber = ''
+      let familyName: string | undefined
 
-  // Apply client-side filtering
-  const filteredPayments = useMemo(() => {
-    return allPayments.filter((payment) => {
-      // Status filter
-      if (filters.status !== 'ALL' && payment.status !== filters.status) {
-        return false
+      if (payment.member) {
+        memberName = `${payment.member.nombre} ${payment.member.apellidos}`.trim()
+        memberNumber = payment.member.numero_socio
+      } else if (payment.family) {
+        // For family payments, show family info
+        const esposo = payment.family.esposo_nombre || ''
+        const esposa = payment.family.esposa_nombre || ''
+        familyName = `${esposo}${esposo && esposa ? ' / ' : ''}${esposa}`.trim()
+        memberName = familyName
+        memberNumber = payment.family.numero_socio
       }
 
-      // Payment method filter
-      if (filters.paymentMethod && filters.paymentMethod !== 'ALL') {
-        if (payment.paymentMethod !== filters.paymentMethod) {
-          return false
-        }
+      return {
+        id: payment.id,
+        memberName,
+        memberNumber,
+        familyName,
+        amount: payment.amount,
+        paymentDate: payment.payment_date,
+        status: payment.status as 'PENDING' | 'PAID' | 'CANCELLED',
+        paymentMethod: payment.payment_method,
+        notes: payment.notes,
       }
-
-      // Date range filter
-      if (filters.startDate) {
-        const paymentDate = new Date(payment.paymentDate)
-        if (paymentDate < filters.startDate) {
-          return false
-        }
-      }
-
-      if (filters.endDate) {
-        const paymentDate = new Date(payment.paymentDate)
-        if (paymentDate > filters.endDate) {
-          return false
-        }
-      }
-
-      // Search term filter (member name or number)
-      if (filters.searchTerm) {
-        const searchLower = filters.searchTerm.toLowerCase()
-        const memberName = payment.memberName.toLowerCase()
-        const memberNumber = payment.memberNumber.toLowerCase()
-        
-        if (!memberName.includes(searchLower) && !memberNumber.includes(searchLower)) {
-          return false
-        }
-      }
-
-      return true
     })
-  }, [allPayments, filters])
+  }, [data])
 
-  // Apply client-side pagination
-  const paginatedPayments = useMemo(() => {
-    const startIndex = (filters.page - 1) * filters.pageSize
-    const endIndex = startIndex + filters.pageSize
-    return filteredPayments.slice(startIndex, endIndex)
-  }, [filteredPayments, filters.page, filters.pageSize])
-
+  // Extract page info
   const pageInfo = useMemo(
     () => ({
-      totalCount: filteredPayments.length,
-      hasNextPage: filters.page * filters.pageSize < filteredPayments.length,
-      hasPreviousPage: filters.page > 1,
+      totalCount: data?.listPayments?.pageInfo?.totalCount || 0,
+      hasNextPage: data?.listPayments?.pageInfo?.hasNextPage || false,
+      hasPreviousPage: data?.listPayments?.pageInfo?.hasPreviousPage || false,
     }),
-    [filteredPayments.length, filters.page, filters.pageSize]
+    [data]
   )
 
-  const refetch = () => {
-    // Trigger re-fetch
-    setLoading(true)
-    // In the real implementation, this would refetch from the API
-  }
-
   return {
-    payments: paginatedPayments,
+    payments,
     pageInfo,
-    loading: loading || membersLoading,
+    loading,
     error,
     refetch,
   }

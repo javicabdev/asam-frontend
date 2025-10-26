@@ -1,7 +1,7 @@
 # 🗺️ Hoja de Ruta - ASAM Frontend
 
 **Fecha de creación**: 18 de octubre de 2025  
-**Última actualización**: 27 de octubre de 2025  
+**Última actualización**: 28 de octubre de 2025  
 **Versión actual**: 0.1.0  
 **Estado**: En desarrollo activo
 
@@ -17,7 +17,7 @@ PWA (Aplicación Web Progresiva) para la gestión de la Asociación ASAM, constr
 - React Router + Zustand
 - Workbox (PWA)
 
-### Progreso Global: ~65% completado ⬆️
+### Progreso Global: ~68% completado ⬆️
 
 ---
 
@@ -117,8 +117,26 @@ src/components/auth/AdminRoute.tsx (nuevo)
 - [ ] CRUD completo de usuarios
 - [ ] Gestión de roles y permisos
 
-### 6. ⚠️ Otros Módulos Pendientes (0-10%)
-- [ ] **Payments**: Página creada pero sin funcionalidad
+### 6. ⚠️ Módulo de Pagos (35%) 🆕
+- [x] Página de pago inicial tras alta de socio
+- [x] **Listado completo de pagos con filtros** 🆕
+- [x] **Confirmación de pagos pendientes (PENDING → PAID)** 🆕
+- [x] **Sistema de búsqueda unificado (socios/familias)** 🆕
+- [ ] Generación de recibos PDF
+- [ ] Cuotas masivas mensuales
+- [ ] Historial de pagos por socio
+
+**Archivos clave:**
+```
+src/pages/PaymentsPage.tsx
+src/features/payments/components/PaymentsTable.tsx
+src/features/payments/components/PaymentFilters.tsx
+src/features/payments/components/ConfirmPaymentDialog.tsx
+src/features/payments/hooks/usePayments.ts
+src/features/payments/hooks/useSearchMemberOrFamily.ts
+```
+
+### 7. ⚠️ Otros Módulos Pendientes (0-10%)
 - [ ] **CashFlow**: Página creada pero sin funcionalidad
 - [ ] **Reports**: Página creada pero sin funcionalidad
 - [ ] **Dashboard**: Página básica, faltan métricas y estadísticas
@@ -242,81 +260,122 @@ Estado: 🟡 OPCIONAL (para post-MVP)
 
 ### 🟡 FASE 2: Módulo de Pagos Completo (1 semana)
 
-#### **REQ-3.2: Sistema de Pagos** 🔴 CRÍTICO
+#### ✅ **SUB-FASE 2.1: Listado Básico de Pagos** - COMPLETADO 🎉
+```
+Estado: ✅ COMPLETADO (27/10/2025)
+Tiempo real: 1 día
+```
+
+**Implementado**:
+- ✅ DataGrid con pagos de todos los socios
+- ✅ Filtros avanzados: estado, fecha, método de pago, socio
+- ✅ Ordenamiento por columnas
+- ✅ Paginación del lado del servidor
+- ✅ Acciones por fila: ver detalle, confirmar
+- ✅ Hook `usePayments` con integración GraphQL
+- ✅ Hook `usePaymentFilters` para gestión de estado
+- ✅ Componentes `PaymentsTable` y `PaymentFilters`
+- ✅ Chips de estado con colores semánticos
+
+**Archivos creados**:
+```
+src/features/payments/components/PaymentsTable.tsx
+src/features/payments/components/PaymentFilters.tsx
+src/features/payments/components/PaymentStatusChip.tsx
+src/features/payments/hooks/usePayments.ts
+src/features/payments/hooks/usePaymentFilters.ts
+src/features/payments/types.ts
+```
+
+---
+
+#### ✅ **SUB-FASE 2.2: Confirmación de Pagos Pendientes** - COMPLETADO 🎉
+```
+Estado: ✅ COMPLETADO (27/10/2025)
+Tiempo real: 0.5 día
+```
+
+**Implementado**:
+- ✅ Diálogo de confirmación con todos los detalles del pago
+- ✅ Mutation GraphQL `ConfirmPayment`
+- ✅ Hook `useConfirmPayment` con manejo de errores
+- ✅ Integración completa en `PaymentsPage`
+- ✅ Refetch automático tras confirmación exitosa
+- ✅ Cambio de estado PENDING → PAID
+- ✅ Notificaciones de éxito/error con notistack
+- ✅ Prevención de múltiples clics durante confirmación
+- ✅ Hook `useSearchMemberOrFamily` para búsqueda unificada
+
+**Archivos creados**:
+```
+src/features/payments/components/ConfirmPaymentDialog.tsx
+src/features/payments/hooks/useConfirmPayment.ts
+src/features/payments/hooks/useSearchMemberOrFamily.ts
+```
+
+**Archivos modificados**:
+```
+src/pages/PaymentsPage.tsx (integración del diálogo)
+src/graphql/operations/payments.graphql (mutation ConfirmPayment)
+```
+
+---
+
+#### **SUB-FASE 2.3: Generación de Recibos PDF** 🔴 SIGUIENTE
 ```
 Prioridad: ALTA
-Tiempo estimado: 3-4 días
-Complejidad: Alta
+Tiempo estimado: 1 día
+Complejidad: Media
 Estado: 🔴 PENDIENTE
 ```
 
-**Objetivo**: Sistema completo de gestión de pagos y cuotas.
+**Objetivo**: Generar recibos profesionales en PDF descargables.
 
-**Componentes principales**:
+**Tareas**:
+- [ ] Librería de generación PDF (jsPDF o react-pdf)
+- [ ] Componente `ReceiptGenerator`
+- [ ] Template de recibo con logo ASAM
+- [ ] Datos del socio/familia
+- [ ] Detalles del pago (monto, fecha, método)
+- [ ] Número de recibo único
+- [ ] Botón "Descargar Recibo" en tabla
+- [ ] Generación automática al confirmar pago (opcional)
 
-1. **Listado de Pagos**
-   - [ ] DataGrid con pagos de todos los socios
-   - [ ] Filtros: estado, fecha, socio, tipo
-   - [ ] Ordenamiento por columnas
-   - [ ] Paginación
-   - [ ] Acciones: ver detalle, confirmar, eliminar
+---
 
-2. **Registro de Pagos Individuales**
-   - [ ] Formulario para registrar pago individual
-   - [ ] Selección de socio
-   - [ ] Tipo de pago (cuota mensual, inicial, extraordinaria)
-   - [ ] Método de pago (efectivo, transferencia)
-   - [ ] Monto y concepto
-   - [ ] Estado inicial: "Pendiente"
-
-3. **Cuotas Masivas Mensuales**
-   - [ ] Botón "Generar cuotas del mes"
-   - [ ] Crear pagos pendientes para todos los socios activos
-   - [ ] Confirmación antes de generar
-   - [ ] Progreso visual durante generación
-
-4. **Historial de Pagos por Socio**
-   - [ ] Tabla de pagos en vista de detalles del socio
-   - [ ] Filtros y búsqueda
-   - [ ] Total pagado
-
-5. **Confirmación de Pagos**
-   - [ ] Cambiar estado de "Pendiente" a "Confirmado"
-   - [ ] Registro de fecha de confirmación
-   - [ ] Generación automática de recibo
-
-6. **Generación de Recibos**
-   - [ ] PDF con datos del socio
-   - [ ] Detalles del pago
-   - [ ] Número de recibo único
-   - [ ] Logo de la asociación
-   - [ ] Descargar o enviar por email
-
-**Archivos a crear**:
+#### **SUB-FASE 2.4: Cuotas Masivas Mensuales**
 ```
-src/pages/PaymentsPage.tsx (rediseñar)
-src/features/payments/
-├── components/
-│   ├── PaymentsList.tsx
-│   ├── PaymentForm.tsx
-│   ├── MassQuotasDialog.tsx
-│   ├── ConfirmPaymentDialog.tsx
-│   └── ReceiptGenerator.tsx
-├── hooks/
-│   ├── usePayments.ts
-│   └── usePaymentMutations.ts
-├── api/
-│   ├── queries.ts
-│   └── mutations.ts
-└── types.ts
+Prioridad: MEDIA-ALTA
+Tiempo estimado: 1 día
+Complejidad: Media
+Estado: 🟡 PENDIENTE
 ```
 
-**Criterios de aceptación**:
-- ✅ Registro de pagos individuales funcional
-- ✅ Generación masiva de cuotas funcional
-- ✅ Confirmación de pagos pendientes
-- ✅ Generación de recibos en PDF
-- ✅ Historial completo por socio
+**Tareas**:
+- [ ] Botón "Generar Cuotas Mensuales" en PaymentsPage
+- [ ] Diálogo de confirmación con preview
+- [ ] Mutation GraphQL `GenerateMonthlyFees`
+- [ ] Crear pagos PENDING para todos los socios activos
+- [ ] Progreso visual durante generación
+- [ ] Resumen de cuotas generadas
+- [ ] Prevención de duplicados (verificar mes/año)
+
+---
+
+#### **SUB-FASE 2.5: Historial de Pagos por Socio**
+```
+Prioridad: MEDIA
+Tiempo estimado: 0.5 día
+Complejidad: Baja
+Estado: 🟡 PENDIENTE
+```
+
+**Tareas**:
+- [ ] Sección en MemberDetailsPage
+- [ ] Tabla compacta con últimos pagos
+- [ ] Total pagado acumulado
+- [ ] Filtro de periodo (año, mes)
+- [ ] Link a PaymentsPage con filtro pre-aplicado
 
 ---
 
@@ -666,18 +725,18 @@ Semana 6: Testing + Pulido Final
 
 ## 📈 Métricas de Progreso
 
-### Estado Actual (27/10/2025) ⬆️
+### Estado Actual (28/10/2025) ⬆️
 ```
 Infraestructura:     ████████████████████ 100%
 Autenticación:       ████████████████████ 100%
 Permisos y Roles:    ████████████████████ 100%
 Miembros:            ████████████████████ 100% ⬆️
-Pagos:               ████░░░░░░░░░░░░░░░░  20% ⬆️
+Pagos:               ███████░░░░░░░░░░░░░  35% ⬆️
 Dashboard:           ██░░░░░░░░░░░░░░░░░░  10%
 Flujo de Caja:       ░░░░░░░░░░░░░░░░░░░░   0%
 Reportes:            ░░░░░░░░░░░░░░░░░░░░   0%
 
-TOTAL:               █████████████░░░░░░░  65% ⬆️
+TOTAL:               █████████████░░░░░░░  68% ⬆️
 ```
 
 ### Meta MVP (Estimado: 1.5 semanas)
@@ -723,7 +782,28 @@ Tiempo estimado: 2-3 días
 
 ## 📝 Cambios Recientes (Log de Actualizaciones)
 
-### 27 de Octubre de 2025 🆕
+### 28 de Octubre de 2025 🆕
+
+#### Commits Realizados:
+1. `fix(payments): correct types in useSearchMemberOrFamily hook`
+2. `feat(payments): integrate payment confirmation in PaymentsPage`
+
+#### Funcionalidades Añadidas:
+- ✅ Completada SUB-FASE 2.1: Listado Básico de Pagos
+- ✅ Completada SUB-FASE 2.2: Confirmación de Pagos Pendientes
+- ✅ Hook unificado de búsqueda socios/familias
+- ✅ Sistema completo de filtros de pagos
+- ✅ Tabla de pagos con acciones por fila
+- ✅ Diálogo de confirmación totalmente funcional
+- ✅ Tipado correcto con tipos generados de GraphQL
+
+#### Progreso:
+- Módulo de Pagos: 20% → 35% ⬆️
+- **Total del Proyecto: 65% → 68%** ⬆️
+
+---
+
+### 27 de Octubre de 2025
 
 #### Commits Realizados:
 1. `feat(payments): improve type safety, validation and error handling`

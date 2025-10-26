@@ -29,7 +29,9 @@ export const PaymentSummary: React.FC<PaymentSummaryProps> = ({
         <Box>
           <Typography variant="h6">Pago Registrado Exitosamente</Typography>
           <Typography variant="body2" color="text.secondary">
-            El pago ha sido registrado y está pendiente de confirmación
+            {status === 'paid' || status === 'PAID'
+              ? 'El pago ha sido registrado y confirmado'
+              : 'El pago ha sido registrado y está pendiente de confirmación'}
           </Typography>
         </Box>
       </Box>

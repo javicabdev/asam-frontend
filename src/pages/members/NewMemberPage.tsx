@@ -76,9 +76,22 @@ export const NewMemberPage: React.FC = () => {
   const navigate = useNavigate()
   const [error, setError] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(false)
+  const [fieldErrors, setFieldErrors] = React.useState<Array<{field: string, message: string}>>([])
 
   // Get auth state for debugging
   const { user, isAuthenticated, accessToken } = useAuthStore()
+
+  // Helper function to extract field errors from GraphQL error
+  const extractFieldErrors = (graphQLError: any): Array<{field: string, message: string}> => {
+    if (graphQLError.extensions?.fields) {
+      const fields = graphQLError.extensions.fields as Record<string, string>
+      return Object.entries(fields).map(([field, message]) => ({
+        field,
+        message,
+      }))
+    }
+    return []
+  }
 
   const [createMember] = useMutation<
     CreateMemberMutation,
@@ -111,6 +124,7 @@ export const NewMemberPage: React.FC = () => {
   const handleSubmit = async (data: MemberFormSubmitData) => {
     setLoading(true)
     setError(null)
+    setFieldErrors([]) // Clear field errors from previous submit
 
     try {
       // Helper function to format date to RFC3339
@@ -149,7 +163,31 @@ export const NewMemberPage: React.FC = () => {
 
       console.log('Member creation result:', memberResult)
 
-      // Validate response with proper type checking
+      // Check for GraphQL errors first
+      if (memberResult.errors && memberResult.errors.length > 0) {
+        const graphQLError = memberResult.errors[0]
+        
+        // Extract field-specific errors
+        const extractedFieldErrors = extractFieldErrors(graphQLError)
+        setFieldErrors(extractedFieldErrors)
+        
+        // Set general error message
+        const errorMessage = graphQLError.message || 'Error al crear el socio'
+        if (graphQLError.extensions?.fields) {
+          const fields = graphQLError.extensions.fields as Record<string, string>
+          const fieldErrorsText = Object.entries(fields)
+            .map(([_field, msg]) => msg)
+            .join('. ')
+          setError(fieldErrorsText || errorMessage)
+        } else {
+          setError(errorMessage)
+        }
+        
+        setLoading(false)
+        return
+      }
+
+      // Validate response data
       if (!memberResult.data?.createMember?.miembro_id) {
         setError('No se recibió una respuesta válida del servidor')
         setLoading(false)
@@ -190,6 +228,31 @@ export const NewMemberPage: React.FC = () => {
 
         console.log('Family creation result:', familyResult)
 
+        // Check for GraphQL errors first
+        if (familyResult.errors && familyResult.errors.length > 0) {
+          const graphQLError = familyResult.errors[0]
+          
+          // Extract field-specific errors
+          const extractedFieldErrors = extractFieldErrors(graphQLError)
+          setFieldErrors(extractedFieldErrors)
+          
+          // Set general error message
+          const errorMessage = graphQLError.message || 'Error al crear la familia'
+          if (graphQLError.extensions?.fields) {
+            const fields = graphQLError.extensions.fields as Record<string, string>
+            const fieldErrorsText = Object.entries(fields)
+              .map(([_field, msg]) => msg)
+              .join('. ')
+            setError(fieldErrorsText || errorMessage)
+          } else {
+            setError(errorMessage)
+          }
+          
+          setLoading(false)
+          return
+        }
+
+        // Validate response data
         if (!familyResult.data?.createFamily?.id) {
           setError('No se pudo crear la familia')
           setLoading(false)
@@ -217,6 +280,36 @@ export const NewMemberPage: React.FC = () => {
           })
 
           console.log('Add family member result:', addMemberResult)
+
+          // Check for GraphQL errors
+          if (addMemberResult.errors && addMemberResult.errors.length > 0) {
+            const graphQLError = addMemberResult.errors[0]
+            
+            // Note: Family member errors don't map to main form fields,
+            // so we only show them in the general Snackbar error
+            
+            // Set general error message
+            const errorMessage = graphQLError.message || `Error al añadir familiar: ${familyMember.nombre} ${familyMember.apellidos}`
+            if (graphQLError.extensions?.fields) {
+              const fields = graphQLError.extensions.fields as Record<string, string>
+              const fieldErrorsText = Object.entries(fields)
+                .map(([_field, msg]) => msg)
+                .join('. ')
+              setError(fieldErrorsText || errorMessage)
+            } else {
+              setError(errorMessage)
+            }
+            
+            setLoading(false)
+            return
+          }
+
+          // Validate response data
+          if (!addMemberResult.data?.addFamilyMember) {
+            setError(`No se pudo añadir el familiar: ${familyMember.nombre} ${familyMember.apellidos}`)
+            setLoading(false)
+            return
+          }
         }
       }
 
@@ -325,7 +418,11 @@ export const NewMemberPage: React.FC = () => {
       </Card>
 
       {user?.role === 'admin' ? (
-        <MemberForm onCancel={handleCancel} onSubmit={(data) => void handleSubmit(data)} />
+        <MemberForm 
+          onCancel={handleCancel} 
+          onSubmit={(data) => void handleSubmit(data)}
+          externalErrors={fieldErrors}
+        />
       ) : (
         <Alert severity="error" sx={{ mt: 2 }}>
           {!isAuthenticated

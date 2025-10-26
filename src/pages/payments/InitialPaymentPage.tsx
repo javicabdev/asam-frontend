@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
   Container,
@@ -48,18 +48,51 @@ export const InitialPaymentPage: React.FC = () => {
       // Mark as registered and show summary
       setPaymentData(payment)
       setPaymentRegistered(true)
+      
+      // CRITICAL: Replace history entry to prevent going back to the form
+      // This prevents duplicate payments if user clicks browser back button
+      navigate(`/payments/initial/${memberId}`, { replace: true })
+      
+      // Persist payment state in sessionStorage to prevent re-submission on page reload
+      sessionStorage.setItem(`payment_registered_${memberId}`, 'true')
+      sessionStorage.setItem(`payment_data_${memberId}`, JSON.stringify(payment))
     },
   })
+
+  // Check if payment was already registered (prevents duplicates on page reload)
+  useEffect(() => {
+    const wasRegistered = sessionStorage.getItem(`payment_registered_${memberId}`)
+    const storedPaymentData = sessionStorage.getItem(`payment_data_${memberId}`)
+    
+    if (wasRegistered === 'true' && storedPaymentData) {
+      try {
+        const payment = JSON.parse(storedPaymentData)
+        setPaymentData(payment)
+        setPaymentRegistered(true)
+      } catch (error) {
+        console.error('Error parsing stored payment data:', error)
+        // Clear invalid data
+        sessionStorage.removeItem(`payment_registered_${memberId}`)
+        sessionStorage.removeItem(`payment_data_${memberId}`)
+      }
+    }
+  }, [memberId])
 
   const onPaymentSubmit = async (formData: InitialPaymentFormData) => {
     await handleSubmit(formData)
   }
 
   const handleGoToMembers = () => {
+    // Clear payment state when leaving the page
+    sessionStorage.removeItem(`payment_registered_${memberId}`)
+    sessionStorage.removeItem(`payment_data_${memberId}`)
     navigate('/members')
   }
 
   const handleGoToMemberDetails = () => {
+    // Clear payment state when leaving the page
+    sessionStorage.removeItem(`payment_registered_${memberId}`)
+    sessionStorage.removeItem(`payment_data_${memberId}`)
     navigate(`/members/${memberId}`)
   }
 

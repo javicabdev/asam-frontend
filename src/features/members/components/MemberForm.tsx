@@ -79,9 +79,15 @@ interface MemberFormSubmitData extends Omit<MemberFormData, 'fecha_nacimiento' |
   familyMembers: FamilyMember[]
 }
 
+interface FieldError {
+  field: string
+  message: string
+}
+
 interface MemberFormProps {
   onCancel?: () => void
   onSubmit?: (data: MemberFormSubmitData) => void | Promise<void>
+  externalErrors?: FieldError[]
 }
 
 const validationSchema = Yup.object({
@@ -128,7 +134,7 @@ const familyValidationSchema = validationSchema.shape({
   esposa_correo_electronico: Yup.string().email('Email inválido').nullable(),
 })
 
-export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) => {
+export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit, externalErrors }) => {
   const { familyMembers, addFamilyMember, editFamilyMember, removeFamilyMember } = useFamilyForm()
   const [memberNumberManuallyEdited, setMemberNumberManuallyEdited] = React.useState(false)
   const { isValidating, isDuplicate, validateMemberNumber, clearValidation } =
@@ -271,6 +277,18 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
       clearEsposaDocValidation()
     }
   }, [isFamily, clearEsposoDocValidation, clearEsposaDocValidation])
+
+  // Apply external errors from parent component (e.g., GraphQL validation errors)
+  React.useEffect(() => {
+    if (externalErrors && externalErrors.length > 0) {
+      externalErrors.forEach(({ field, message }) => {
+        setError(field as keyof MemberFormData, {
+          type: 'manual',
+          message,
+        })
+      })
+    }
+  }, [externalErrors, setError])
 
   // Función interna que maneja el submit
   const handleFormSubmit = React.useCallback(
@@ -525,6 +543,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                     }
                     required
                     onChange={(e) => {
+                      clearErrors('documento_identidad') // Clear external errors when user edits
                       field.onChange(e)
                       // Validate document when user types
                       if (e.target.value.length >= 8) {
@@ -786,6 +805,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                           'Se copia automáticamente'
                         }
                         onChange={(e) => {
+                          clearErrors('esposo_documento_identidad') // Clear external errors when user edits
                           field.onChange(e)
                           if (e.target.value.length >= 8) {
                             void validateEsposoDoc(e.target.value)
@@ -896,6 +916,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({ onCancel, onSubmit }) =>
                           (isValidatingEsposaDoc && 'Validando...')
                         }
                         onChange={(e) => {
+                          clearErrors('esposa_documento_identidad') // Clear external errors when user edits
                           field.onChange(e)
                           if (e.target.value.length >= 8) {
                             void validateEsposaDoc(e.target.value)

@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Box, Typography, Button, Alert, Stack, useTheme } from '@mui/material'
+import { Box, Typography, Button, Alert, Stack, useTheme, Snackbar } from '@mui/material'
 import { Add as AddIcon, Refresh as RefreshIcon } from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/stores/authStore'
 
 import { PaymentFilters } from '@/features/payments/components/PaymentFilters'
@@ -13,6 +14,7 @@ import type { PaymentListItem } from '@/features/payments/types'
 
 export default function PaymentsPage() {
   const theme = useTheme()
+  const navigate = useNavigate()
   const { user } = useAuthStore()
   const isAdmin = user?.role === 'admin'
 
@@ -21,6 +23,9 @@ export default function PaymentsPage() {
     open: boolean
     payment: PaymentListItem | null
   }>({ open: false, payment: null })
+
+  // State for family snackbar
+  const [familySnackbar, setFamilySnackbar] = useState(false)
 
   // Filter state management
   const { filters, updateFilters, resetFilters, setPage, setPageSize } = usePaymentFilters()
@@ -31,11 +36,15 @@ export default function PaymentsPage() {
   // Receipt generator hook
   const { generateReceipt, isGenerating: isGeneratingReceipt } = useReceiptGenerator()
 
-  // Handle row click - navigate to payment details (placeholder for now)
+  // Handle row click - navigate to member details
   const handleRowClick = (payment: PaymentListItem) => {
-    // TODO: Implement payment details page
-    console.log('View payment details:', payment.id)
-    // navigate(`/payments/${payment.id}`)
+    if (payment.memberId) {
+      // For individual payments, navigate to member details
+      navigate(`/members/${payment.memberId}`)
+    } else if (payment.familyId) {
+      // For family payments, show message that feature is not implemented yet
+      setFamilySnackbar(true)
+    }
   }
 
   // Handle confirm payment - open dialog
@@ -143,6 +152,22 @@ export default function PaymentsPage() {
         onClose={() => setConfirmDialog({ open: false, payment: null })}
         onSuccess={() => void refetch()}
       />
+
+      {/* Family feature not implemented snackbar */}
+      <Snackbar
+        open={familySnackbar}
+        autoHideDuration={4000}
+        onClose={() => setFamilySnackbar(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setFamilySnackbar(false)}
+          severity="info"
+          sx={{ width: '100%' }}
+        >
+          La página de detalles de familias estará disponible próximamente
+        </Alert>
+      </Snackbar>
     </Box>
   )
 }

@@ -40,6 +40,8 @@ export interface PaymentFiltersState {
  */
 export interface PaymentListItem {
   id: string
+  memberId?: string // ID of the member (for individual payments)
+  familyId?: string // ID of the family (for family payments)
   memberName: string
   memberNumber: string
   familyName?: string

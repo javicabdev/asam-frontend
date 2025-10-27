@@ -57,10 +57,13 @@ export const usePayments = (filters: PaymentFiltersState) => {
       let memberName = ''
       let memberNumber = ''
       let familyName: string | undefined
+      let memberId: string | undefined
+      let familyId: string | undefined
 
       if (payment.member) {
         memberName = `${payment.member.nombre} ${payment.member.apellidos}`.trim()
         memberNumber = payment.member.numero_socio
+        memberId = payment.member.miembro_id
       } else if (payment.family) {
         // For family payments, show family info
         const esposo = payment.family.esposo_nombre || ''
@@ -68,10 +71,13 @@ export const usePayments = (filters: PaymentFiltersState) => {
         familyName = `${esposo}${esposo && esposa ? ' / ' : ''}${esposa}`.trim()
         memberName = familyName
         memberNumber = payment.family.numero_socio
+        familyId = payment.family.id
       }
 
       return {
         id: payment.id,
+        memberId,
+        familyId,
         memberName,
         memberNumber,
         familyName,

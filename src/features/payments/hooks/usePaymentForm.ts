@@ -74,13 +74,13 @@ const parseErrorMessage = (error: unknown): string => {
 
 interface UsePaymentFormOptions {
   memberId: string
-  familyId?: string | null
+  getFamilyId: () => string | null | undefined // ← Changed: function instead of value
   isFamily: boolean
   onSuccess?: (payment: any) => void
 }
 
 export const usePaymentForm = (options: UsePaymentFormOptions) => {
-  const { memberId, familyId, isFamily, onSuccess } = options
+  const { memberId, getFamilyId, isFamily, onSuccess } = options
   const [error, setError] = useState<string | null>(null)
 
   const [registerPayment, { loading }] = useRegisterPaymentMutation()
@@ -89,6 +89,16 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
     setError(null)
 
     try {
+      // Get familyId DYNAMICALLY at submit time, not at hook initialization
+      const familyId = getFamilyId()
+      
+      console.log('💳 [usePaymentForm] Submitting payment:', {
+        memberId,
+        familyId,
+        isFamily,
+        formData,
+      })
+
       // Prepare the input based on membership type
       const input: PaymentInput = {
         amount: formData.amount,
@@ -97,6 +107,8 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
         // If it's a family, send family_id; otherwise, send member_id
         ...(isFamily && familyId ? { family_id: familyId } : { member_id: memberId }),
       }
+      
+      console.log('💳 [usePaymentForm] Payment input:', input)
 
       const result = await registerPayment({
         variables: { input },
@@ -107,6 +119,8 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
       if (!payment?.id) {
         throw new Error('No se recibió el ID del pago')
       }
+      
+      console.log('✅ [usePaymentForm] Payment registered:', payment)
 
       if (onSuccess) {
         onSuccess(payment)
@@ -114,7 +128,7 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
 
       return payment
     } catch (err) {
-      console.error('Error registering payment:', err)
+      console.error('❌ [usePaymentForm] Error registering payment:', err)
       const errorMessage = parseErrorMessage(err)
       setError(errorMessage)
       return null

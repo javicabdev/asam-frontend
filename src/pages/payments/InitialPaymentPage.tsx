@@ -42,7 +42,7 @@ export const InitialPaymentPage: React.FC = () => {
     error: paymentError,
   } = usePaymentForm({
     memberId: memberId || '',
-    familyId: family?.id,
+    getFamilyId: () => family?.id, // ← Function that gets the current value
     isFamily,
     onSuccess: (payment) => {
       // Mark as registered and show summary

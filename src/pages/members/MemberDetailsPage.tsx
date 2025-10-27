@@ -10,7 +10,6 @@ import {
   Stack,
   Divider,
   Paper,
-  Avatar,
 } from '@mui/material'
 import {
   ArrowBack as ArrowBackIcon,
@@ -22,8 +21,6 @@ import {
   Work as WorkIcon,
   Public as PublicIcon,
   Badge as BadgeIcon,
-  AttachMoney as AttachMoneyIcon,
-  History as HistoryIcon,
   Print as PrintIcon,
 } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
@@ -32,6 +29,7 @@ import { es } from 'date-fns/locale'
 
 import { useMemberDetails } from '@/features/members/hooks/useMemberDetails'
 import { MemberDetailsSkeleton } from '@/features/members/components'
+import { MemberPaymentHistory } from '@/features/payments/components'
 import { MemberStatus, MembershipType } from '@/features/members/types'
 import { useAuthStore } from '@/stores/authStore'
 
@@ -282,64 +280,14 @@ export function MemberDetailsPage() {
           </Grid>
         )}
 
-        {/* Recent Activity Section */}
+        {/* Payment History Section */}
         <Grid item xs={12}>
           <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" gutterBottom color="primary">
-              <HistoryIcon sx={{ mr: 1 }} />
-              Actividad Reciente
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
-
-            <Stack spacing={2}>
-              {/* Payment History */}
-              <Box>
-                <Box display="flex" justifyContent="space-between" alignItems="center">
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <Avatar sx={{ bgcolor: 'success.main' }}>
-                      <AttachMoneyIcon />
-                    </Avatar>
-                    <Box>
-                      <Typography variant="body1">Historial de Pagos</Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        Ver todos los pagos realizados
-                      </Typography>
-                    </Box>
-                  </Box>
-                  <Button
-                    size="small"
-                    onClick={() => navigate(`/payments?memberId=${member.miembro_id}`)}
-                  >
-                    Ver Pagos
-                  </Button>
-                </Box>
-              </Box>
-
-              {/* Family Information (if applicable) */}
-              {member.tipo_membresia === MembershipType.FAMILY && (
-                <Box>
-                  <Box display="flex" justifyContent="space-between" alignItems="center">
-                    <Box display="flex" alignItems="center" gap={2}>
-                      <Avatar sx={{ bgcolor: 'secondary.main' }}>
-                        <HomeIcon />
-                      </Avatar>
-                      <Box>
-                        <Typography variant="body1">Información Familiar</Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          Ver miembros de la familia
-                        </Typography>
-                      </Box>
-                    </Box>
-                    <Button
-                      size="small"
-                      onClick={() => navigate(`/families?memberId=${member.miembro_id}`)}
-                    >
-                      Ver Familia
-                    </Button>
-                  </Box>
-                </Box>
-              )}
-            </Stack>
+            <MemberPaymentHistory 
+              memberId={member.miembro_id} 
+              membershipType={member.tipo_membresia}
+              maxRows={5} 
+            />
           </Paper>
         </Grid>
       </Grid>

@@ -161,7 +161,7 @@ export function PaymentsTable({
             </IconButton>
           </Tooltip>
 
-          {params.row.status === 'PAID' && (
+          {params.row.status.toUpperCase() === 'PAID' && (
             <Tooltip title="Descargar recibo">
               <IconButton
                 size="small"
@@ -176,7 +176,7 @@ export function PaymentsTable({
             </Tooltip>
           )}
 
-          {isAdmin && params.row.status === 'PENDING' && (
+          {isAdmin && params.row.status.toUpperCase() === 'PENDING' && (
             <>
               <Tooltip title="Confirmar pago">
                 <IconButton

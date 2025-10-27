@@ -8,9 +8,9 @@ interface ReceiptHeaderProps {
 }
 
 export function ReceiptHeader({ receipt }: ReceiptHeaderProps) {
-  // Intentar cargar logo, si no existe usar texto
-  const logoPath = '/logo-asam.png'
-  const hasLogo = false // TODO: Implementar detección de logo existente
+  // Use existing logo from public/icons directory
+  const logoPath = '/icons/original-logo.png'
+  const hasLogo = true
 
   return (
     <View style={receiptStyles.header}>

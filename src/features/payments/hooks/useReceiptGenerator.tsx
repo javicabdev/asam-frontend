@@ -22,7 +22,7 @@ export function useReceiptGenerator(): UseReceiptGeneratorReturn {
   const generateReceipt = useCallback(
     async (payment: PaymentListItem, autoDownload = true) => {
       // Validate payment status
-      if (payment.status !== 'PAID') {
+      if (payment.status.toUpperCase() !== 'PAID') {
         setError(new Error('Solo se pueden generar recibos para pagos confirmados'))
         return
       }

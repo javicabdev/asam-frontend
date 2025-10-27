@@ -50,8 +50,8 @@ export function ReceiptBody({ receipt }: ReceiptBodyProps) {
         </View>
 
         <View style={receiptStyles.row}>
-          <Text style={receiptStyles.label}>ID de Transacción:</Text>
-          <Text style={receiptStyles.value}>{receipt.paymentId.slice(0, 8)}</Text>
+          <Text style={receiptStyles.label}>Número de Recibo:</Text>
+          <Text style={receiptStyles.value}>{receipt.receiptNumber}</Text>
         </View>
 
         {/* Caja de importe */}

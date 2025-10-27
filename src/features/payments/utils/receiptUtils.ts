@@ -1,64 +1,6 @@
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-
-/**
- * Format a payment amount with currency symbol
- */
-export const formatAmount = (amount: number): string => {
-  return `${amount.toFixed(2)} €`
-}
-
-/**
- * Format a date to Spanish locale
- */
-export const formatPaymentDate = (dateString: string): string => {
-  try {
-    return format(new Date(dateString), "d 'de' MMMM 'de' yyyy", { locale: es })
-  } catch (error) {
-    console.error('Error formatting date:', error)
-    return dateString
-  }
-}
-
-/**
- * Get payment status color for MUI components
- */
-export const getPaymentStatusColor = (
-  status: string
-): 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' => {
-  switch (status) {
-    case 'PAID':
-      return 'success'
-    case 'PENDING':
-      return 'warning'
-    case 'CANCELLED':
-      return 'error'
-    default:
-      return 'default'
-  }
-}
-
-/**
- * Get payment status label in Spanish
- */
-export const getPaymentStatusLabel = (status: string): string => {
-  switch (status) {
-    case 'PAID':
-      return 'Pagado'
-    case 'PENDING':
-      return 'Pendiente'
-    case 'CANCELLED':
-      return 'Cancelado'
-    default:
-      return status
-  }
-}
-
-// ============================
-// Receipt PDF Utilities
-// ============================
-
-import type { PaymentListItem, ReceiptData } from './types'
+import type { PaymentListItem, ReceiptData } from '../types'
 
 /**
  * Generates a unique receipt number in format: ASAM-YYYY-NNNNN
@@ -75,7 +17,7 @@ export function generateReceiptNumber(paymentId: string, paymentDate: string): s
 }
 
 /**
- * Formats currency amount to EUR (for PDF receipts)
+ * Formats currency amount to EUR
  */
 export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('es-ES', {
@@ -85,7 +27,7 @@ export function formatCurrency(amount: number): string {
 }
 
 /**
- * Formats date for receipt display (long format)
+ * Formats date for receipt display
  */
 export function formatReceiptDate(dateString: string): string {
   const date = new Date(dateString)
@@ -93,7 +35,7 @@ export function formatReceiptDate(dateString: string): string {
 }
 
 /**
- * Translates payment method code to Spanish (full name)
+ * Translates payment method code to Spanish
  */
 export function translatePaymentMethod(method: string): string {
   const translations: Record<string, string> = {

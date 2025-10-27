@@ -49,3 +49,27 @@ export interface PaymentListItem {
   paymentMethod: string
   notes?: string | null
 }
+
+/**
+ * Receipt data for PDF generation
+ */
+export interface ReceiptData {
+  receiptNumber: string
+  paymentId: string
+  memberName: string
+  memberNumber: string
+  familyName?: string | null
+  amount: number
+  paymentDate: string
+  paymentMethod: string
+  notes?: string | null
+  generatedAt: string
+}
+
+/**
+ * Options for receipt generator
+ */
+export interface ReceiptGeneratorOptions {
+  payment: PaymentListItem
+  autoDownload?: boolean
+}

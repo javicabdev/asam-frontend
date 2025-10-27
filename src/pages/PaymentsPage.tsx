@@ -1,9 +1,6 @@
 import { useState } from 'react'
 import { Box, Typography, Button, Alert, Stack, useTheme } from '@mui/material'
-import {
-  Add as AddIcon,
-  Refresh as RefreshIcon,
-} from '@mui/icons-material'
+import { Add as AddIcon, Refresh as RefreshIcon } from '@mui/icons-material'
 import { useAuthStore } from '@/stores/authStore'
 
 import { PaymentFilters } from '@/features/payments/components/PaymentFilters'
@@ -11,6 +8,7 @@ import { PaymentsTable } from '@/features/payments/components/PaymentsTable'
 import { ConfirmPaymentDialog } from '@/features/payments/components/ConfirmPaymentDialog'
 import { usePaymentFilters } from '@/features/payments/hooks/usePaymentFilters'
 import { usePayments } from '@/features/payments/hooks/usePayments'
+import { useReceiptGenerator } from '@/features/payments/hooks/useReceiptGenerator'
 import type { PaymentListItem } from '@/features/payments/types'
 
 export default function PaymentsPage() {
@@ -30,6 +28,9 @@ export default function PaymentsPage() {
   // Fetch payments with current filters
   const { payments, pageInfo, loading, error, refetch } = usePayments(filters)
 
+  // Receipt generator hook
+  const { generateReceipt, isGenerating: isGeneratingReceipt } = useReceiptGenerator()
+
   // Handle row click - navigate to payment details (placeholder for now)
   const handleRowClick = (payment: PaymentListItem) => {
     // TODO: Implement payment details page
@@ -46,6 +47,15 @@ export default function PaymentsPage() {
   const handleCancelClick = (payment: PaymentListItem) => {
     // TODO: Implement cancel payment dialog
     console.log('Cancel payment:', payment.id)
+  }
+
+  // Handle download receipt
+  const handleDownloadReceipt = async (payment: PaymentListItem) => {
+    try {
+      await generateReceipt(payment, true)
+    } catch (error) {
+      console.error('Error downloading receipt:', error)
+    }
   }
 
   // Handle new payment button (future implementation)
@@ -101,11 +111,7 @@ export default function PaymentsPage() {
       </Box>
 
       {/* Filters */}
-      <PaymentFilters
-        filters={filters}
-        onFilterChange={updateFilters}
-        onReset={resetFilters}
-      />
+      <PaymentFilters filters={filters} onFilterChange={updateFilters} onReset={resetFilters} />
 
       {/* Error Alert */}
       {error && (
@@ -118,7 +124,7 @@ export default function PaymentsPage() {
       <PaymentsTable
         payments={payments}
         totalCount={pageInfo.totalCount}
-        loading={loading}
+        loading={loading || isGeneratingReceipt}
         page={filters.page}
         pageSize={filters.pageSize}
         onPageChange={setPage}
@@ -126,6 +132,7 @@ export default function PaymentsPage() {
         onRowClick={handleRowClick}
         onConfirmClick={handleConfirmClick}
         onCancelClick={handleCancelClick}
+        onDownloadReceipt={handleDownloadReceipt}
         isAdmin={isAdmin}
       />
 

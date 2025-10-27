@@ -4,6 +4,7 @@ import {
   Visibility as VisibilityIcon,
   CheckCircleOutline as ConfirmIcon,
   CancelOutlined as CancelIcon,
+  Receipt as ReceiptIcon,
 } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -23,6 +24,7 @@ interface PaymentsTableProps {
   onRowClick?: (payment: PaymentListItem) => void
   onConfirmClick?: (payment: PaymentListItem) => void
   onCancelClick?: (payment: PaymentListItem) => void
+  onDownloadReceipt?: (payment: PaymentListItem) => void
   isAdmin?: boolean
 }
 
@@ -41,6 +43,7 @@ export function PaymentsTable({
   onRowClick,
   onConfirmClick,
   onCancelClick,
+  onDownloadReceipt,
   isAdmin = false,
 }: PaymentsTableProps) {
   const theme = useTheme()
@@ -140,7 +143,7 @@ export function PaymentsTable({
     {
       field: 'actions',
       headerName: 'Acciones',
-      width: isAdmin ? 140 : 70,
+      width: isAdmin ? 180 : 110,
       sortable: false,
       align: 'center',
       headerAlign: 'center',
@@ -157,6 +160,21 @@ export function PaymentsTable({
               <VisibilityIcon fontSize="small" />
             </IconButton>
           </Tooltip>
+
+          {params.row.status === 'PAID' && (
+            <Tooltip title="Descargar recibo">
+              <IconButton
+                size="small"
+                color="primary"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onDownloadReceipt?.(params.row)
+                }}
+              >
+                <ReceiptIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          )}
 
           {isAdmin && params.row.status === 'PENDING' && (
             <>

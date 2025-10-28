@@ -28,7 +28,7 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 
 import { useMemberDetails } from '@/features/members/hooks/useMemberDetails'
-import { MemberDetailsSkeleton } from '@/features/members/components'
+import { MemberDetailsSkeleton, FamilyMembersDisplay } from '@/features/members/components'
 import { MemberPaymentHistory } from '@/features/payments/components'
 import { MemberStatus, MembershipType } from '@/features/members/types'
 import { useAuthStore } from '@/stores/authStore'
@@ -275,6 +275,24 @@ export function MemberDetailsPage() {
                 <Typography variant="body1" style={{ whiteSpace: 'pre-wrap' }}>
                   {member.observaciones}
                 </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
+
+        {/* Family Members Section - Only for FAMILY membership type */}
+        {member.tipo_membresia === MembershipType.FAMILY && (
+          <Grid item xs={12}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" gutterBottom color="primary">
+                  Miembros de la Familia
+                </Typography>
+                <Divider sx={{ mb: 2 }} />
+                <FamilyMembersDisplay
+                  memberId={member.miembro_id}
+                  membershipType={member.tipo_membresia}
+                />
               </CardContent>
             </Card>
           </Grid>

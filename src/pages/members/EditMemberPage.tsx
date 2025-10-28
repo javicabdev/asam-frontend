@@ -17,8 +17,10 @@ import { NavigateNext } from '@mui/icons-material'
 import { useAuthStore } from '@/stores/authStore'
 
 import { MemberForm } from '@/features/members/components/MemberForm'
+import { FamilyMembersDisplay } from '@/features/members/components'
 import { UPDATE_MEMBER_MUTATION } from '@/features/members/api/mutations'
 import { useGetMemberQuery } from '@/graphql/generated/operations'
+import { MembershipType } from '@/features/members/types'
 import type {
   UpdateMemberMutation,
   UpdateMemberMutationVariables,
@@ -267,14 +269,35 @@ export const EditMemberPage: React.FC = () => {
       </Box>
 
       {user?.role === 'admin' ? (
-        <MemberForm
-          mode="edit"
-          initialData={member}
-          onCancel={handleCancel}
-          onSubmit={(data) => void handleSubmit(data)}
-          externalErrors={fieldErrors}
-          disabledFields={[]}
-        />
+        <>
+          <MemberForm
+            mode="edit"
+            initialData={member}
+            onCancel={handleCancel}
+            onSubmit={(data) => void handleSubmit(data)}
+            externalErrors={fieldErrors}
+            disabledFields={[]}
+          />
+
+          {/* Family Members Section - Only for FAMILY membership type */}
+          {member.tipo_membresia === MembershipType.FAMILY && (
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="h6" gutterBottom color="primary">
+                Miembros de la Familia
+              </Typography>
+              <Alert severity="info" sx={{ mb: 2 }}>
+                La visualización de los miembros de la familia es solo de lectura. Para editar
+                familiares, utilice el formulario de gestión de familias.
+              </Alert>
+              <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, border: 1, borderColor: 'divider' }}>
+                <FamilyMembersDisplay
+                  memberId={member.miembro_id}
+                  membershipType={member.tipo_membresia}
+                />
+              </Box>
+            </Box>
+          )}
+        </>
       ) : (
         <Alert severity="error" sx={{ mt: 2 }}>
           {!isAuthenticated

@@ -17,7 +17,7 @@ PWA (Aplicación Web Progresiva) para la gestión de la Asociación ASAM, constr
 - React Router + Zustand
 - Workbox (PWA)
 
-### Progreso Global: ~68% completado ⬆️
+### Progreso Global: ~67% completado ⬇️
 
 ---
 
@@ -52,7 +52,7 @@ src/components/auth/AdminRoute.tsx (nuevo)
 src/pages/auth/*
 ```
 
-### 3. ✅ Módulo de Miembros (95%) ⬆️
+### 3. ⚠️ Módulo de Miembros (90%) ⬇️
 - [x] Listado con DataGrid avanzado (paginación, ordenamiento, filtros)
 - [x] Creación de socios individuales
 - [x] Creación de socios familiares (con cónyuge y familiares dinámicos)
@@ -60,12 +60,14 @@ src/pages/auth/*
 - [x] Control de permisos (solo admin)
 - [x] Exportación a CSV (todos/filtrados/seleccionados)
 - [x] Vista de detalles de socio
-- [x] **Edición de socios existentes** ✅ 🆕
-- [x] **Acciones en tabla (Ver, Editar, Dar de baja)** ✅ 🆕
-- [x] **Diálogo de confirmación para dar de baja** ✅ 🆕
-- [x] **Restricción de acciones por rol** ✅ 🆕
+- [x] **Edición de socios existentes** ✅
+- [x] **Acciones en tabla (Ver, Editar, Dar de baja)** ✅
+- [x] **Diálogo de confirmación para dar de baja** ✅
+- [x] **Restricción de acciones por rol** ✅
+- [ ] 🔴 **CRÍTICO: Visualización de miembros de familia en página de detalles** - Ver bug identificado
+- [ ] 🔴 **CRÍTICO: Visualización de miembros de familia en página de edición** - Ver bug identificado
 - [ ] Eliminación definitiva de socios (individual y masiva)
-- [x] **Página de pago inicial tras alta** ✅ 🆕
+- [x] **Página de pago inicial tras alta** ✅
 - [ ] Gestión completa de familias (CRUD)
 
 **Archivos clave:**
@@ -117,14 +119,17 @@ src/components/auth/AdminRoute.tsx (nuevo)
 - [ ] CRUD completo de usuarios
 - [ ] Gestión de roles y permisos
 
-### 6. ⚠️ Módulo de Pagos (35%) 🆕
+### 6. ⚠️ Módulo de Pagos (40%) ⬆️
 - [x] Página de pago inicial tras alta de socio
-- [x] **Listado completo de pagos con filtros** 🆕
-- [x] **Confirmación de pagos pendientes (PENDING → PAID)** 🆕
-- [x] **Sistema de búsqueda unificado (socios/familias)** 🆕
+- [x] **Listado completo de pagos con filtros** ✅
+- [x] **Confirmación de pagos pendientes (PENDING → PAID)** ✅
+- [x] **Sistema de búsqueda unificado (socios/familias)** ✅
+- [x] **Navegación a detalles de socio desde pagos individuales** ✅ 🆕
+- [x] **Mensaje informativo para pagos de familia (página no implementada)** ✅ 🆕
 - [ ] Generación de recibos PDF
 - [ ] Cuotas masivas mensuales
 - [ ] Historial de pagos por socio
+- [ ] Navegación a detalles de familia desde pagos de familia
 
 **Archivos clave:**
 ```
@@ -145,7 +150,7 @@ src/features/payments/hooks/useSearchMemberOrFamily.ts
 
 ## 🎯 Roadmap para Primera Versión Útil (MVP)
 
-### 🔴 FASE 1: Completar Módulo de Socios (~2 días restantes) ⬆️
+### 🔴 FASE 1: Completar Módulo de Socios (~2-3 días restantes) ⬆️
 
 #### ✅ **Edición de Socios** - COMPLETADO 🎉
 ```
@@ -258,6 +263,107 @@ Estado: 🟡 OPCIONAL (para post-MVP)
 
 ---
 
+#### 🔴 **Visualización de Miembros de Familia** - BUG CRÍTICO IDENTIFICADO
+```
+Prioridad: CRÍTICA
+Tiempo estimado: 1-2 días
+Complejidad: Media-Alta
+Estado: 🔴 PENDIENTE
+Impacto: ALTO - Funcionalidad core no operativa
+```
+
+**Problema identificado (28/10/2025)**:
+Cuando se accede desde la **Gestión de Socios** a las páginas de **Detalles del Socio** o **Editar Socio** de un miembro de tipo FAMILY:
+
+**Lo que SÍ funciona:**
+- ✅ Navegación desde la tabla de socios a detalles
+- ✅ Navegación desde la tabla de socios a edición
+- ✅ Se cargan los datos del titular (esposo/esposa)
+- ✅ Los formularios funcionan correctamente
+
+**Lo que NO funciona (BUG CRÍTICO):**
+- ❌ **NO se muestran los miembros de la familia** (familiares adicionales) en página de detalles
+- ❌ **NO se muestran los miembros de la familia** en página de edición
+- ❌ No hay sección visible para los familiares vinculados
+- ❌ Información crítica completamente invisible para el usuario
+- ❌ Imposible verificar qué familiares están asociados a una familia
+- ❌ Imposible editar datos de familiares desde la interfaz
+
+**Impacto en el sistema:**
+- Los usuarios no pueden ver la composición completa de las familias
+- No pueden verificar si los datos de los familiares son correctos
+- La funcionalidad de familias queda incompleta e inutilizable
+- Bloquea casos de uso críticos del negocio
+
+**Tareas de implementación**:
+1. [ ] **Investigación Backend**
+   - Revisar estructura de datos de Family en GraphQL schema
+   - Verificar query para obtener familiares asociados
+   - Confirmar relación entre Member, Family y FamilyMember
+
+2. [ ] **Crear Componente de Visualización**
+   - Crear `FamilyMembersList.tsx` para mostrar tabla de familiares
+   - Diseño consistente con Material-UI DataGrid
+   - Columnas: Nombre, Apellidos, Fecha Nacimiento, DNI/NIE, Email, Relación
+   - Estado de carga y manejo de errores
+
+3. [ ] **Integración en MemberDetailsPage**
+   - Añadir sección "Miembros de la Familia" condicionalmente (solo FAMILY)
+   - Query GraphQL para cargar familiares
+   - Mostrar mensaje si no hay familiares asociados
+   - Card separada con título claro
+
+4. [ ] **Integración en EditMemberPage**
+   - Añadir misma sección de visualización
+   - Considerar funcionalidad de edición inline (futuro)
+   - Por ahora solo visualización en modo lectura
+
+5. [ ] **Testing**
+   - Probar con familias con múltiples miembros
+   - Probar con familias sin miembros adicionales
+   - Verificar que no aparece para socios individuales
+   - Testing de errores de red
+
+**Archivos a crear/modificar**:
+```
+src/pages/members/MemberDetailsPage.tsx (modificar)
+src/pages/members/EditMemberPage.tsx (modificar)
+src/features/members/components/FamilyMembersList.tsx (NUEVO)
+src/features/members/hooks/useFamilyMembers.ts (NUEVO - si es necesario)
+src/graphql/operations/families.graphql (modificar/crear)
+```
+
+**Queries GraphQL necesarias**:
+```graphql
+query GetFamilyMembers($familyId: ID!) {
+  family(id: $familyId) {
+    id
+    familyMembers {
+      id
+      firstName
+      lastName
+      dateOfBirth
+      idNumber
+      email
+      relationship
+    }
+  }
+}
+```
+
+**Criterios de aceptación**:
+- [ ] En MemberDetailsPage de un socio FAMILY se ven todos los familiares asociados
+- [ ] En EditMemberPage de un socio FAMILY se ven todos los familiares asociados
+- [ ] La tabla de familiares es clara y fácil de leer
+- [ ] Se muestra un mensaje apropiado si no hay familiares
+- [ ] No aparece la sección para socios INDIVIDUAL
+- [ ] Manejo correcto de estados de carga y error
+- [ ] Diseño coherente con el resto de la aplicación
+
+**Nota**: Este es un **BUG CRÍTICO** que impide el uso completo del módulo de familias, que es una funcionalidad core del sistema. Debe priorizarse inmediatamente después de completar el módulo de pagos básico.
+
+---
+
 ### 🟡 FASE 2: Módulo de Pagos Completo (1 semana)
 
 #### ✅ **SUB-FASE 2.1: Listado Básico de Pagos** - COMPLETADO 🎉
@@ -286,6 +392,36 @@ src/features/payments/hooks/usePayments.ts
 src/features/payments/hooks/usePaymentFilters.ts
 src/features/payments/types.ts
 ```
+
+---
+
+#### ✅ **SUB-FASE 2.2.5: Navegación desde Pagos** - COMPLETADO 🎉
+```
+Estado: ✅ COMPLETADO (28/10/2025)
+Tiempo real: 0.5 día
+```
+
+**Implementado**:
+- ✅ Botón "Ver detalles" funcional en tabla de pagos
+- ✅ Navegación a `/members/{memberId}` para pagos individuales
+- ✅ Snackbar informativo para pagos de familia (página no implementada)
+- ✅ Añadidos `memberId` y `familyId` a `PaymentListItem`
+- ✅ Actualizado hook `usePayments` para incluir IDs
+- ✅ Manejo diferenciado de pagos individuales vs familiares
+
+**Problema solucionado**:
+El botón "Ver detalles" en la tabla de pagos no hacía nada visible. Ahora:
+- Para **pagos individuales** → Navega correctamente a detalles del socio
+- Para **pagos de familia** → Muestra mensaje: "La página de detalles de familias estará disponible próximamente"
+
+**Archivos modificados**:
+```
+src/pages/PaymentsPage.tsx
+src/features/payments/types.ts
+src/features/payments/hooks/usePayments.ts
+```
+
+**Próximo paso**: Implementar página de detalles de familias para completar la navegación.
 
 ---
 
@@ -730,13 +866,13 @@ Semana 6: Testing + Pulido Final
 Infraestructura:     ████████████████████ 100%
 Autenticación:       ████████████████████ 100%
 Permisos y Roles:    ████████████████████ 100%
-Miembros:            ████████████████████ 100% ⬆️
-Pagos:               ███████░░░░░░░░░░░░░  35% ⬆️
+Miembros:            ██████████████████░░  90% ⬇️
+Pagos:               ████████░░░░░░░░░░░░  40% ⬆️
 Dashboard:           ██░░░░░░░░░░░░░░░░░░  10%
 Flujo de Caja:       ░░░░░░░░░░░░░░░░░░░░   0%
 Reportes:            ░░░░░░░░░░░░░░░░░░░░   0%
 
-TOTAL:               █████████████░░░░░░░  68% ⬆️
+TOTAL:               █████████████░░░░░░░  67% ⬇️
 ```
 
 ### Meta MVP (Estimado: 1.5 semanas)
@@ -757,32 +893,105 @@ TOTAL:               ██████████████░░░░░�
 
 ## 🚀 Recomendación de Inicio Inmediato
 
-### ⚡ Próxima Tarea Prioritaria
+### ⚡ Próximas Tareas Prioritarias
 
-**REQ-2.5: Página de Pago Inicial** 🔴
+#### 1. **BUG CRÍTICO: Visualización de Miembros de Familia** 🔴
 ```
-Prioridad: CRÍTICA
+Prioridad: CRÍTICA (BLOQUEANTE)
 Impacto: ALTO
-Complejidad: MEDIA
-Tiempo estimado: 2-3 días
+Complejidad: MEDIA-ALTA
+Tiempo estimado: 1-2 días
 ```
 
 **¿Por qué es crítico?**
-- Completa el flujo de alta de socios
-- Bloquea el resto del módulo de pagos
-- Es el siguiente paso lógico tras implementar edición
+- Impide visualizar información completa de familias
+- Bloquea casos de uso core del sistema
+- Los usuarios no pueden verificar composición familiar
+- Funcionalidad de familias incompleta e inutilizable
 
 **¿Qué implica?**
-- Crear página `/payments/initial/:memberId`
-- Formulario de registro de pago
-- Integración con mutation GraphQL
-- Generación de recibo básico
+- Investigar queries GraphQL de familias
+- Crear componente `FamilyMembersList`
+- Integrar en MemberDetailsPage
+- Integrar en EditMemberPage
+- Testing exhaustivo
+
+**Ubicación en Roadmap**: Ver sección detallada en FASE 1
+
+---
+
+#### 2. **SUB-FASE 2.3: Generación de Recibos PDF** 🟡
+```
+Prioridad: ALTA
+Impacto: ALTO
+Complejidad: MEDIA
+Tiempo estimado: 1 día
+```
+
+**¿Por qué es importante?**
+- Completa el flujo de pagos básico
+- Genera documentación oficial para socios
+- Requisito legal/administrativo
+
+**¿Qué implica?**
+- Integrar librería de PDF (jsPDF/react-pdf)
+- Crear template de recibo profesional
+- Botón de descarga en tabla de pagos
+- Generación automática opcional tras confirmación
+
+**Nota**: Se puede avanzar con el listado de pagos en paralelo mientras se soluciona el bug de familias.
 
 ---
 
 ## 📝 Cambios Recientes (Log de Actualizaciones)
 
-### 28 de Octubre de 2025 🆕
+### 28 de Octubre de 2025 (Noche) 🆕
+
+#### Bugs Críticos Identificados:
+- 🔴 **BUG CRÍTICO DOCUMENTADO**: Visualización de miembros de familia
+  - **Contexto**: Desde "Gestión de Socios" se puede acceder a "Detalles del Socio" y "Editar Socio"
+  - **Problema 1**: En MemberDetailsPage NO se muestran los miembros de la familia
+  - **Problema 2**: En EditMemberPage NO se muestran los miembros de la familia
+  - **Impacto**: Imposible visualizar o gestionar la composición de las familias
+  - **Estado**: Documentado detalladamente en FASE 1 del Roadmap
+  - **Prioridad**: CRÍTICA - debe abordarse inmediatamente tras completar pagos básicos
+
+#### Documentación Actualizada:
+- ✅ Sección de "Visualización de Miembros de Familia" expandida con:
+  - Descripción detallada del problema
+  - Impacto en el sistema
+  - Plan de implementación completo con 5 fases
+  - Queries GraphQL necesarias
+  - Criterios de aceptación claros
+  - Lista de archivos a crear/modificar
+
+#### Progreso:
+- Módulo de Miembros: Se mantiene en 90% (bug no rompe funcionalidad existente, pero bloquea uso completo)
+- **Nota**: La regresión es "técnica" - la funcionalidad implementada funciona, pero falta una pieza crítica
+
+---
+
+### 28 de Octubre de 2025 (Tarde)
+
+#### Funcionalidades Añadidas:
+- ✅ **Navegación desde Gestión de Pagos funcionando correctamente**
+  - Botón "Ver detalles" navega a detalles del socio para pagos individuales
+  - Snackbar informativo para pagos de familia
+  - IDs de miembro/familia incluidos en tipos de Payment
+
+#### Problemas Identificados:
+- 🔴 **CRÍTICO**: Miembros de familia no visibles en página de detalles
+- 🔴 **CRÍTICO**: Miembros de familia no visibles en página de edición
+- Ambos problemas documentados extensamente en FASE 1
+
+#### Progreso:
+- Módulo de Pagos: 35% → 40% ⬆️
+- Módulo de Miembros: 100% → 90% ⬇️ (regresión por bugs críticos identificados)
+- **Total del Proyecto: 68% → 67%** ⬇️
+
+---
+
+### 28 de Octubre de 2025 (Mañana)
 
 #### Commits Realizados:
 1. `fix(payments): correct types in useSearchMemberOrFamily hook`
@@ -894,5 +1103,5 @@ Tiempo estimado: 2-3 días
 
 ---
 
-**Última actualización**: 27 de octubre de 2025  
+**Última actualización**: 28 de octubre de 2025  
 **Mantenido por**: Equipo de desarrollo ASAM Frontend

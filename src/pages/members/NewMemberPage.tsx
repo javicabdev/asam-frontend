@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useMutation, ApolloError, FetchResult } from '@apollo/client'
+import { useMutation, useLazyQuery, ApolloError, FetchResult } from '@apollo/client'
 import {
   Container,
   Typography,
@@ -19,19 +19,16 @@ import { NavigateNext } from '@mui/icons-material'
 import { useAuthStore } from '@/stores/authStore'
 
 import { MemberForm } from '@/features/members/components/MemberForm'
-import { CREATE_MEMBER_MUTATION } from '@/features/members/api/queries'
-import {
-  CREATE_FAMILY_MUTATION,
-  ADD_FAMILY_MEMBER_MUTATION,
-} from '@/features/members/api/mutations'
+import { CREATE_MEMBER_MUTATION, SEARCH_MEMBERS_QUERY } from '@/features/members/api/queries'
+import { CREATE_FAMILY_MUTATION } from '@/features/members/api/mutations'
 import { MembershipType } from '@/features/members/types'
 import type {
   CreateMemberMutation,
   CreateMemberMutationVariables,
   CreateFamilyMutation,
   CreateFamilyMutationVariables,
-  AddFamilyMemberMutation,
-  AddFamilyMemberMutationVariables,
+  SearchMembersQuery,
+  SearchMembersQueryVariables,
   MembershipType as GraphQLMembershipType,
 } from '@/graphql/generated/operations'
 
@@ -103,10 +100,10 @@ export const NewMemberPage: React.FC = () => {
     CreateFamilyMutationVariables
   >(CREATE_FAMILY_MUTATION)
   
-  const [addFamilyMember] = useMutation<
-    AddFamilyMemberMutation,
-    AddFamilyMemberMutationVariables
-  >(ADD_FAMILY_MEMBER_MUTATION)
+  const [searchMembers] = useLazyQuery<
+    SearchMembersQuery,
+    SearchMembersQueryVariables
+  >(SEARCH_MEMBERS_QUERY)
 
   const handleCancel = () => {
     navigate('/members')
@@ -136,108 +133,44 @@ export const NewMemberPage: React.FC = () => {
         return `${dateString}T00:00:00Z`
       }
 
-      // Step 1: Create the main member
-      const memberInput = {
-        numero_socio: data.numero_socio, // Use the number from the form
-        tipo_membresia: data.tipo_membresia as GraphQLMembershipType,
-        nombre: data.nombre,
-        apellidos: data.apellidos,
-        calle_numero_piso: data.calle_numero_piso,
-        codigo_postal: data.codigo_postal,
-        poblacion: data.poblacion,
-        provincia: data.provincia,
-        pais: data.pais || 'España',
-        fecha_nacimiento: formatDateToRFC3339(data.fecha_nacimiento),
-        documento_identidad: data.documento_identidad,
-        correo_electronico: data.correo_electronico,
-        profesion: data.profesion || null,
-        nacionalidad: data.nacionalidad || null,
-        observaciones: data.observaciones || null,
-      }
-
-      console.log('Creating member with input:', memberInput)
-
-      const memberResult: FetchResult<CreateMemberMutation> = await createMember({
-        variables: { input: memberInput },
-      })
-
-      console.log('Member creation result:', memberResult)
-
-      // Check for GraphQL errors first
-      if (memberResult.errors && memberResult.errors.length > 0) {
-        const graphQLError = memberResult.errors[0]
-        
-        // Extract field-specific errors
-        const extractedFieldErrors = extractFieldErrors(graphQLError)
-        setFieldErrors(extractedFieldErrors)
-        
-        // Set general error message
-        const errorMessage = graphQLError.message || 'Error al crear el socio'
-        if (graphQLError.extensions?.fields) {
-          const fields = graphQLError.extensions.fields as Record<string, string>
-          const fieldErrorsText = Object.entries(fields)
-            .map(([_field, msg]) => msg)
-            .join('. ')
-          setError(fieldErrorsText || errorMessage)
-        } else {
-          setError(errorMessage)
-        }
-        
-        setLoading(false)
-        return
-      }
-
-      // Validate response data
-      if (!memberResult.data?.createMember?.miembro_id) {
-        setError('No se recibió una respuesta válida del servidor')
-        setLoading(false)
-        return
-      }
-
-      const newMemberId = memberResult.data.createMember.miembro_id
-
-      // Step 2: If it's a family membership, create the family
-      if (data.tipo_membresia === MembershipType.FAMILY) {
-        // Validate required fields for family creation
-        if (!data.esposo_nombre || !data.esposo_apellidos) {
-          setError('Para crear una familia, los campos "Nombre del Esposo" y "Apellidos del Esposo" son obligatorios')
-          setLoading(false)
-          return
+      // ✅ IF NOT FAMILY: Use existing flow with createMember
+      if (data.tipo_membresia !== MembershipType.FAMILY) {
+        const memberInput = {
+          numero_socio: data.numero_socio,
+          tipo_membresia: data.tipo_membresia as GraphQLMembershipType,
+          nombre: data.nombre,
+          apellidos: data.apellidos,
+          calle_numero_piso: data.calle_numero_piso,
+          codigo_postal: data.codigo_postal,
+          poblacion: data.poblacion,
+          provincia: data.provincia,
+          pais: data.pais || 'España',
+          fecha_nacimiento: formatDateToRFC3339(data.fecha_nacimiento),
+          documento_identidad: data.documento_identidad,
+          correo_electronico: data.correo_electronico,
+          profesion: data.profesion || null,
+          nacionalidad: data.nacionalidad || null,
+          observaciones: data.observaciones || null,
         }
 
-        const familyInput = {
-          numero_socio: data.numero_socio, // Use the same number as the main member
-          miembro_origen_id: newMemberId,
-          esposo_nombre: data.esposo_nombre,
-          esposo_apellidos: data.esposo_apellidos,
-          esposo_fecha_nacimiento: formatDateToRFC3339(data.esposo_fecha_nacimiento),
-          esposo_documento_identidad: data.esposo_documento_identidad || undefined,
-          esposo_correo_electronico: data.esposo_correo_electronico || undefined,
-          esposa_nombre: data.esposa_nombre || undefined,
-          esposa_apellidos: data.esposa_apellidos || undefined,
-          esposa_fecha_nacimiento: formatDateToRFC3339(data.esposa_fecha_nacimiento),
-          esposa_documento_identidad: data.esposa_documento_identidad || undefined,
-          esposa_correo_electronico: data.esposa_correo_electronico || undefined,
-        }
+        console.log('Creating individual member with input:', memberInput)
 
-        console.log('Creating family with input:', familyInput)
-
-        const familyResult: FetchResult<CreateFamilyMutation> = await createFamily({
-          variables: { input: familyInput },
+        const memberResult: FetchResult<CreateMemberMutation> = await createMember({
+          variables: { input: memberInput },
         })
 
-        console.log('Family creation result:', familyResult)
+        console.log('Individual member creation result:', memberResult)
 
-        // Check for GraphQL errors first
-        if (familyResult.errors && familyResult.errors.length > 0) {
-          const graphQLError = familyResult.errors[0]
+        // Check for GraphQL errors
+        if (memberResult.errors && memberResult.errors.length > 0) {
+          const graphQLError = memberResult.errors[0]
           
           // Extract field-specific errors
           const extractedFieldErrors = extractFieldErrors(graphQLError)
           setFieldErrors(extractedFieldErrors)
           
           // Set general error message
-          const errorMessage = graphQLError.message || 'Error al crear la familia'
+          const errorMessage = graphQLError.message || 'Error al crear el socio'
           if (graphQLError.extensions?.fields) {
             const fields = graphQLError.extensions.fields as Record<string, string>
             const fieldErrorsText = Object.entries(fields)
@@ -253,68 +186,147 @@ export const NewMemberPage: React.FC = () => {
         }
 
         // Validate response data
-        if (!familyResult.data?.createFamily?.id) {
-          setError('No se pudo crear la familia')
+        if (!memberResult.data?.createMember?.miembro_id) {
+          setError('No se recibió una respuesta válida del servidor')
           setLoading(false)
           return
         }
 
-        const familyId = familyResult.data.createFamily.id
+        const newMemberId = memberResult.data.createMember.miembro_id
+        console.log('Individual member created successfully, navigating to payment page')
+        navigate(`/payments/initial/${newMemberId}`)
+        return
+      }
 
-        // Step 3: Add family members
-        for (const familyMember of data.familyMembers || []) {
-          console.log('Adding family member:', familyMember)
+      // ✅ IF FAMILY: Use ONE ATOMIC call to createFamily
+      const familyInput = {
+        numero_socio: data.numero_socio,
+        // DO NOT pass miembro_origen_id - let backend create it automatically
+        
+        // Husband data (using main form fields)
+        esposo_nombre: data.nombre,
+        esposo_apellidos: data.apellidos,
+        esposo_fecha_nacimiento: formatDateToRFC3339(data.fecha_nacimiento),
+        esposo_documento_identidad: data.documento_identidad || undefined,
+        esposo_correo_electronico: data.correo_electronico || undefined,
+        
+        // Wife data (optional)
+        esposa_nombre: data.esposa_nombre || undefined,
+        esposa_apellidos: data.esposa_apellidos || undefined,
+        esposa_fecha_nacimiento: formatDateToRFC3339(data.esposa_fecha_nacimiento),
+        esposa_documento_identidad: data.esposa_documento_identidad || undefined,
+        esposa_correo_electronico: data.esposa_correo_electronico || undefined,
+        
+        // 🔑 ARRAY OF CHILDREN - ALL IN ONE CALL
+        familiares: (data.familyMembers || []).map(fm => ({
+          nombre: fm.nombre,
+          apellidos: fm.apellidos,
+          fecha_nacimiento: formatDateToRFC3339(fm.fecha_nacimiento),
+          dni_nie: fm.dni_nie || null,
+          correo_electronico: fm.correo_electronico || null,
+          parentesco: fm.parentesco || 'Hijo/a', // Required field
+        })),
+        
+        // Address data to create member automatically
+        direccion: data.calle_numero_piso,
+        codigo_postal: data.codigo_postal,
+        poblacion: data.poblacion,
+        provincia: data.provincia || 'Barcelona',
+        pais: data.pais || 'España',
+      }
 
-          const addMemberResult: FetchResult<AddFamilyMemberMutation> = await addFamilyMember({
-            variables: {
-              family_id: familyId,
-              familiar: {
-                nombre: familyMember.nombre,
-                apellidos: familyMember.apellidos,
-                fecha_nacimiento: formatDateToRFC3339(familyMember.fecha_nacimiento),
-                dni_nie: familyMember.dni_nie || null,
-                correo_electronico: familyMember.correo_electronico || null,
-                parentesco: familyMember.parentesco || 'Otro',
-              },
-            },
+      console.log('Creating family atomically with input:', familyInput)
+
+      // 🎯 ONE ATOMIC CALL
+      const familyResult: FetchResult<CreateFamilyMutation> = await createFamily({
+        variables: { input: familyInput },
+      })
+
+      console.log('Family creation result:', familyResult)
+
+      // Check for GraphQL errors
+      if (familyResult.errors && familyResult.errors.length > 0) {
+        const graphQLError = familyResult.errors[0]
+        
+        // Extract field-specific errors
+        const extractedFieldErrors = extractFieldErrors(graphQLError)
+        setFieldErrors(extractedFieldErrors)
+        
+        // Set general error message
+        const errorMessage = graphQLError.message || 'Error al crear la familia'
+        if (graphQLError.extensions?.fields) {
+          const fields = graphQLError.extensions.fields as Record<string, string>
+          const fieldErrorsText = Object.entries(fields)
+            .map(([_field, msg]) => msg)
+            .join('. ')
+          setError(fieldErrorsText || errorMessage)
+        } else {
+          setError(errorMessage)
+        }
+        
+        setLoading(false)
+        return
+      }
+
+      // Validate response data
+      if (!familyResult.data?.createFamily?.id) {
+        setError('No se recibió una respuesta válida del servidor')
+        setLoading(false)
+        return
+      }
+
+      // Success - miembro_origen is already created within the family
+      const newFamily = familyResult.data.createFamily
+      
+      console.log('Family created successfully:', {
+        familyId: newFamily.id,
+        numeroSocio: newFamily.numero_socio,
+        miembroOrigen: newFamily.miembro_origen,
+        hasMiembroOrigen: !!newFamily.miembro_origen,
+        miembroOrigenId: newFamily.miembro_origen?.miembro_id
+      })
+      
+      let newMemberId = newFamily.miembro_origen?.miembro_id
+      
+      if (!newMemberId) {
+        // Backend created the family but didn't return miembro_origen populated
+        // FALLBACK: Search for the member by numero_socio
+        console.warn('Backend did not return miembro_origen, searching by numero_socio...')
+        
+        try {
+          const searchResult = await searchMembers({
+            variables: { criteria: newFamily.numero_socio }
           })
-
-          console.log('Add family member result:', addMemberResult)
-
-          // Check for GraphQL errors
-          if (addMemberResult.errors && addMemberResult.errors.length > 0) {
-            const graphQLError = addMemberResult.errors[0]
-            
-            // Note: Family member errors don't map to main form fields,
-            // so we only show them in the general Snackbar error
-            
-            // Set general error message
-            const errorMessage = graphQLError.message || `Error al añadir familiar: ${familyMember.nombre} ${familyMember.apellidos}`
-            if (graphQLError.extensions?.fields) {
-              const fields = graphQLError.extensions.fields as Record<string, string>
-              const fieldErrorsText = Object.entries(fields)
-                .map(([_field, msg]) => msg)
-                .join('. ')
-              setError(fieldErrorsText || errorMessage)
-            } else {
-              setError(errorMessage)
-            }
-            
+          
+          const foundMembers = searchResult.data?.searchMembers || []
+          const matchingMember = foundMembers.find(
+            m => m.numero_socio === newFamily.numero_socio
+          )
+          
+          if (matchingMember) {
+            console.log('Found member via search fallback:', matchingMember.miembro_id)
+            newMemberId = matchingMember.miembro_id
+          } else {
+            console.error('Could not find member after search fallback')
+            setError(
+              `La familia se creó correctamente (Número: ${newFamily.numero_socio}), ` +
+              'pero no se pudo localizar el socio. Por favor, búscalo manualmente en la lista de socios.'
+            )
             setLoading(false)
             return
           }
-
-          // Validate response data
-          if (!addMemberResult.data?.addFamilyMember) {
-            setError(`No se pudo añadir el familiar: ${familyMember.nombre} ${familyMember.apellidos}`)
-            setLoading(false)
-            return
-          }
+        } catch (searchError) {
+          console.error('Error searching for member:', searchError)
+          setError(
+            `La familia se creó correctamente (Número: ${newFamily.numero_socio}), ` +
+            'pero hubo un error al buscar el socio. Por favor, búscalo manualmente.'
+          )
+          setLoading(false)
+          return
         }
       }
 
-      // Navigate to payment page with member ID
-      console.log('Member created successfully, navigating to payment page')
+      console.log('Family created successfully, navigating to payment page')
       navigate(`/payments/initial/${newMemberId}`)
     } catch (err) {
       console.error('Error creating member:', err)

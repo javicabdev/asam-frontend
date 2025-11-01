@@ -34,14 +34,23 @@ export const CREATE_FAMILY_MUTATION = gql`
     createFamily(input: $input) {
       id
       numero_socio
+      miembro_origen {
+        miembro_id
+        numero_socio
+        nombre
+        apellidos
+      }
       esposo_nombre
       esposo_apellidos
       esposa_nombre
       esposa_apellidos
-      miembro_origen {
-        miembro_id
+      familiares {
+        id
         nombre
         apellidos
+        fecha_nacimiento
+        dni_nie
+        correo_electronico
       }
     }
   }

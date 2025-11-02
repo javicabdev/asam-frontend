@@ -23,6 +23,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import { MembershipType } from '../types'
 import { FamilyMembersList } from './FamilyMembersList'
+import { EMAIL_REGEX } from '@/utils/validation'
 import {
   useFamilyForm,
   useNextMemberNumber,
@@ -106,7 +107,9 @@ const validationSchema = Yup.object({
   provincia: Yup.string().required('La provincia es obligatoria'),
   pais: Yup.string().required('El país es obligatorio'),
   documento_identidad: Yup.string().required('El documento de identidad es obligatorio'),
-  correo_electronico: Yup.string().email('Email inválido').required('El email es obligatorio'),
+  correo_electronico: Yup.string()
+    .matches(EMAIL_REGEX, 'Email inválido. Formato esperado: usuario@dominio.com')
+    .required('El email es obligatorio'),
   // Campos opcionales
   fecha_nacimiento: Yup.date().nullable(),
   profesion: Yup.string().nullable(),
@@ -120,7 +123,9 @@ const familyValidationSchema = validationSchema.shape({
   esposa_apellidos: Yup.string().nullable(),
   esposa_fecha_nacimiento: Yup.date().nullable(),
   esposa_documento_identidad: Yup.string().nullable(),
-  esposa_correo_electronico: Yup.string().email('Email inválido').nullable(),
+  esposa_correo_electronico: Yup.string()
+    .matches(EMAIL_REGEX, 'Email inválido. Formato esperado: usuario@dominio.com')
+    .nullable(),
 })
 
 export const MemberForm: React.FC<MemberFormProps> = ({ 

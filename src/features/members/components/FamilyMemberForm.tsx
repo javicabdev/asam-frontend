@@ -15,6 +15,7 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { FamilyMember } from '../types'
 import { useDocumentValidation } from '../hooks'
+import { isValidEmail } from '@/utils/validation'
 
 interface FamilyMemberFormProps {
   open: boolean
@@ -52,6 +53,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
   })
 
   const [fechaNacimiento, setFechaNacimiento] = React.useState<Date | null>(null)
+  const [emailError, setEmailError] = React.useState<string>('')
 
   // Validación de DNI
   const {
@@ -71,6 +73,12 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
       if (member.dni_nie) {
         void validateDocument(member.dni_nie)
       }
+      // Validar email si existe
+      if (member.correo_electronico && !isValidEmail(member.correo_electronico)) {
+        setEmailError('Email inválido. Formato esperado: usuario@dominio.com')
+      } else {
+        setEmailError('')
+      }
     } else {
       setFormData({
         nombre: '',
@@ -82,6 +90,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
       })
       setFechaNacimiento(null)
       clearValidation()
+      setEmailError('')
     }
   }, [member, open, validateDocument, clearValidation])
 
@@ -130,6 +139,21 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
     }
   }
 
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+    setFormData((prev) => ({
+      ...prev,
+      correo_electronico: value,
+    }))
+
+    // Validar email si no está vacío
+    if (value && !isValidEmail(value)) {
+      setEmailError('Email inválido. Formato esperado: usuario@dominio.com')
+    } else {
+      setEmailError('')
+    }
+  }
+
   const handleSubmit = () => {
     // Validaciones básicas
     if (!formData.nombre || !formData.apellidos || !formData.parentesco) {
@@ -158,6 +182,8 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
     !formData.parentesco ||
     // Si hay DNI, debe ser válido
     (formData.dni_nie !== '' && documentValidation !== null && !documentValidation.isValid) ||
+    // Si hay email, debe ser válido
+    !!emailError ||
     // Si está validando, deshabilitar
     isValidatingDocument
 
@@ -225,7 +251,9 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
                 label="Correo Electrónico"
                 type="email"
                 value={formData.correo_electronico || ''}
-                onChange={handleChange('correo_electronico')}
+                onChange={handleEmailChange}
+                error={!!emailError}
+                helperText={emailError || 'Formato: usuario@dominio.com'}
               />
             </Grid>
             <Grid item xs={12} sm={6}>

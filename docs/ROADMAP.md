@@ -1,9 +1,9 @@
 # 🗺️ Hoja de Ruta - ASAM Frontend
 
 **Fecha de creación**: 18 de octubre de 2025
-**Última actualización**: 2 de noviembre de 2025
-**Versión actual**: 0.1.0
-**Estado**: En desarrollo activo
+**Última actualización**: 2 de noviembre de 2025 (ACTUALIZACIÓN MAYOR - Flujo de Caja Definido)
+**Versión actual**: 0.2.0
+**Estado**: En desarrollo activo - Listo para Flujo de Caja
 
 ---
 
@@ -17,11 +17,11 @@ PWA (Aplicación Web Progresiva) para la gestión de la Asociación ASAM, constr
 - React Router + Zustand
 - Workbox (PWA)
 
-### Progreso Global: ~67% completado ⬇️
+### Progreso Global: ~80% completado ⬆️
 
 ---
 
-## ✅ Funcionalidades Implementadas (65%)
+## ✅ Funcionalidades Implementadas (80%)
 
 ### 1. ✅ Infraestructura Base (100%)
 - [x] Configuración del proyecto (React 18 + TypeScript + Vite)
@@ -33,14 +33,23 @@ PWA (Aplicación Web Progresiva) para la gestión de la Asociación ASAM, constr
 - [x] GraphQL Code Generator para tipado automático
 - [x] Scripts de CI/CD (build, lint, testing)
 
-### 2. ✅ Sistema de Autenticación (100%) ⬆️
+**Archivos clave:**
+```
+vite.config.ts
+src/lib/apollo-client.ts
+src/routes.tsx
+```
+
+---
+
+### 2. ✅ Sistema de Autenticación (100%)
 - [x] Login con credenciales
 - [x] Logout
 - [x] Refresh automático de tokens
 - [x] Rutas protegidas (`ProtectedRoute`)
 - [x] Control de roles (admin/user)
-- [x] **Protección de rutas admin-only (`AdminRoute`)** 🆕
-- [x] **Redirección basada en roles** 🆕
+- [x] Protección de rutas admin-only (`AdminRoute`)
+- [x] Redirección basada en roles
 - [x] Páginas de verificación de email
 - [x] Páginas de reset de contraseña
 
@@ -48,11 +57,13 @@ PWA (Aplicación Web Progresiva) para la gestión de la Asociación ASAM, constr
 ```
 src/stores/authStore.ts
 src/components/auth/ProtectedRoute.tsx
-src/components/auth/AdminRoute.tsx (nuevo)
+src/components/auth/AdminRoute.tsx
 src/pages/auth/*
 ```
 
-### 3. ⚠️ Módulo de Miembros (90%) ⬇️
+---
+
+### 3. ✅ Módulo de Miembros (100%) 🎉
 - [x] Listado con DataGrid avanzado (paginación, ordenamiento, filtros)
 - [x] Creación de socios individuales
 - [x] Creación de socios familiares (con cónyuge y familiares dinámicos)
@@ -60,14 +71,21 @@ src/pages/auth/*
 - [x] Control de permisos (solo admin)
 - [x] Exportación a CSV (todos/filtrados/seleccionados)
 - [x] Vista de detalles de socio
-- [x] **Edición de socios existentes** ✅
-- [x] **Acciones en tabla (Ver, Editar, Dar de baja)** ✅
-- [x] **Diálogo de confirmación para dar de baja** ✅
-- [x] **Restricción de acciones por rol** ✅
-- [x] **Validación de email unificada (frontend-backend)** ✅ 🆕
-- [x] 🔴 **CRÍTICO: Visualización de miembros de familia en página de detalles** - Ver bug identificado
-- [x] 🔴 **CRÍTICO: Visualización de miembros de familia en página de edición** - Ver bug identificado
-- [x] **Página de pago inicial tras alta** ✅
+- [x] **Visualización completa de miembros de familia** ✅
+- [x] Edición de socios existentes
+- [x] Acciones en tabla (Ver, Editar, Dar de baja)
+- [x] Diálogo de confirmación para dar de baja
+- [x] Restricción de acciones por rol
+- [x] Validación de email unificada (frontend-backend)
+- [x] Página de pago inicial tras alta
+
+**Componentes de Familias Implementados:**
+- ✅ Sección "Miembros de la Familia" en MemberDetailsPage
+- ✅ Visualización de cónyuges con chips
+- ✅ Tabla de familiares adicionales con todos los datos
+- ✅ Modal "Editar Familiar" funcional en EditMemberPage
+- ✅ Botones de editar/eliminar por familiar
+- ✅ Botón "+ Añadir Familiar"
 
 **Archivos clave:**
 ```
@@ -75,23 +93,19 @@ src/features/members/*
 src/pages/MembersPage.tsx
 src/pages/members/NewMemberPage.tsx
 src/pages/members/MemberDetailsPage.tsx
-src/pages/members/EditMemberPage.tsx (nuevo)
-src/features/members/components/MembersTable.tsx (actualizado)
-src/features/members/components/ConfirmDeactivateDialog.tsx (nuevo)
+src/pages/members/EditMemberPage.tsx
+src/features/members/components/MembersTable.tsx
+src/features/members/components/ConfirmDeactivateDialog.tsx
+src/features/members/components/FamilyMembersList.tsx
 ```
 
-**Cambios recientes (26/10/2025)**:
-- ✅ Implementada página de edición de socios con validación completa
-- ✅ Añadidas tres acciones en la tabla: Ver detalles, Editar, Dar de baja
-- ✅ Creado diálogo de confirmación para cambio de estado a INACTIVE
-- ✅ Botón "Dar de baja" se deshabilita automáticamente para socios inactivos
-- ✅ Acciones de editar y dar de baja solo visibles para administradores
+---
 
-### 4. ✅ Sistema de Permisos y Navegación (100%) 🆕
-- [x] **Navegación adaptada por roles** 🆕
-- [x] **Filtrado de menú según permisos** 🆕
-- [x] **Protección de rutas admin-only** 🆕
-- [x] **Redirección inteligente según rol** 🆕
+### 4. ✅ Sistema de Permisos y Navegación (100%)
+- [x] Navegación adaptada por roles
+- [x] Filtrado de menú según permisos
+- [x] Protección de rutas admin-only
+- [x] Redirección inteligente según rol
 
 **Estructura de permisos**:
 
@@ -107,10 +121,12 @@ src/features/members/components/ConfirmDeactivateDialog.tsx (nuevo)
 
 **Archivos clave:**
 ```
-src/layouts/MainLayout.tsx (actualizado)
-src/routes.tsx (actualizado)
-src/components/auth/AdminRoute.tsx (nuevo)
+src/layouts/MainLayout.tsx
+src/routes.tsx
+src/components/auth/AdminRoute.tsx
 ```
+
+---
 
 ### 5. ⚠️ Módulo de Usuarios (30%)
 - [x] Página básica creada (`UsersPage.tsx`)
@@ -118,400 +134,760 @@ src/components/auth/AdminRoute.tsx (nuevo)
 - [ ] CRUD completo de usuarios
 - [ ] Gestión de roles y permisos
 
-### 6. ⚠️ Módulo de Pagos (50%) ⬆️
+---
+
+### 6. ✅ Módulo de Pagos (100%) 🎉
 - [x] Página de pago inicial tras alta de socio
-- [x] **Listado completo de pagos con filtros** ✅
-- [x] **Confirmación de pagos pendientes (PENDING → PAID)** ✅
-- [x] **Confirmación con fecha y notas personalizables** ✅ 🆕
-- [x] **Polling para pagos creados asincrónicamente** ✅ 🆕
-- [x] **Sistema de búsqueda unificado (socios/familias)** ✅
-- [x] **Navegación a detalles de socio desde pagos individuales** ✅
-- [x] **Mensaje informativo para pagos de familia (página no implementada)** ✅
-- [x] Generación de recibos PDF
-- [x] Historial de pagos por socio
+- [x] Listado completo de pagos con filtros avanzados
+- [x] Confirmación de pagos pendientes (PENDING → PAID)
+- [x] Confirmación con fecha y notas personalizables
+- [x] Polling para pagos creados asincrónicamente
+- [x] Sistema de búsqueda unificado (socios/familias)
+- [x] Navegación a detalles de socio desde pagos individuales
 - [x] Navegación a detalles de familia desde pagos de familia
+- [x] **Generación de recibos PDF profesionales** ✅
+- [x] **Historial de pagos por socio** ✅
+
+**Funcionalidades de Recibos PDF:**
+- ✅ Template profesional con logo ASAM
+- ✅ Número de recibo único (formato: ASAM-YYYY-N)
+- ✅ Datos completos del socio/familia
+- ✅ Detalles del pago (fecha, método, importe)
+- ✅ Pie de página con firma digital
+- ✅ Botón "Recibo" en tabla de pagos
+- ✅ Descarga automática del PDF
+
+**Historial de Pagos:**
+- ✅ Sección en MemberDetailsPage
+- ✅ Tabla con todos los pagos del socio
+- ✅ Total pagado acumulado
+- ✅ Link "Ver Todos" a página de pagos filtrada
 
 **Archivos clave:**
 ```
 src/pages/PaymentsPage.tsx
-src/features/payments/components/PaymentsTable.tsx
-src/features/payments/components/PaymentFilters.tsx
-src/features/payments/components/ConfirmPaymentDialog.tsx
-src/features/payments/hooks/usePayments.ts
-src/features/payments/hooks/useSearchMemberOrFamily.ts
-```
-
-### 7. ⚠️ Otros Módulos Pendientes (0-10%)
-- [ ] **CashFlow**: Página creada pero sin funcionalidad
-- [ ] **Reports**: Página creada pero sin funcionalidad
-- [ ] **Dashboard**: Página básica, faltan métricas y estadísticas
-
----
-
-## 🎯 Roadmap para Primera Versión Útil (MVP)
-
-### 🔴 FASE 1: Completar Módulo de Socios (~2-3 días restantes) ⬆️
-
-#### ✅ **Edición de Socios** - COMPLETADO 🎉
-```
-Estado: ✅ COMPLETADO (26/10/2025)
-Tiempo real: 2 días
-```
-
-**Implementado**:
-- ✅ Página `/members/:id/edit` con formulario completo
-- ✅ Carga de datos existentes del socio
-- ✅ Validación completa de campos
-- ✅ Mutation GraphQL `UpdateMember`
-- ✅ Manejo de errores detallado
-- ✅ Breadcrumbs de navegación
-- ✅ Feedback visual (success/error)
-
----
-
-#### ✅ **Sistema de Acciones en Tabla** - COMPLETADO 🎉
-```
-Estado: ✅ COMPLETADO (26/10/2025)
-Tiempo real: 1 día
-```
-
-**Implementado**:
-- ✅ Tres acciones en columna "Acciones": Ver, Editar, Dar de baja
-- ✅ Permisos por rol (editar y dar de baja solo para admin)
-- ✅ Ancho de columna dinámico según rol
-- ✅ Tooltips descriptivos en cada acción
-- ✅ Navegación a página de edición funcional
-
----
-
-#### ✅ **Diálogo de Confirmación para Baja** - COMPLETADO 🎉
-```
-Estado: ✅ COMPLETADO (26/10/2025)
-Tiempo real: 1 día
-```
-
-**Implementado**:
-- ✅ Componente `ConfirmDeactivateDialog`
-- ✅ Muestra datos del socio (nombre, número)
-- ✅ Mensaje de advertencia claro
-- ✅ Mutation GraphQL `ChangeMemberStatus`
-- ✅ Actualización automática de lista tras operación
-- ✅ Notificaciones con notistack
-- ✅ Prevención de cierre durante operación
-- ✅ Botón deshabilitado para socios ya inactivos
-
----
-
-#### ✅ **REQ-2.5: Página de Pago Inicial** - COMPLETADO 🎉
-```
-Estado: ✅ COMPLETADO (27/10/2025)
-Tiempo real: 1 día
-```
-
-**Implementado**:
-- ✅ Página `/payments/initial/:memberId` con flujo completo
-- ✅ Formulario de registro de pago con validación
-- ✅ Mutation GraphQL `RegisterPayment` integrada
-- ✅ Estado inicial: PENDING (pendiente de confirmación)
-- ✅ Redirección automática tras alta de socio
-- ✅ Prevención de pagos duplicados (sessionStorage)
-- ✅ Resumen visual tras registro exitoso
-- ✅ Manejo robusto de errores con mensajes específicos
-- ✅ Validación de monto máximo (€1000)
-- ✅ Type safety con PaymentStatus enum
-- ✅ Integración con datos de familia/socio individual
-
-**Mejoras Críticas Implementadas (27/10/2025)** 🆕:
-- ✅ Constante MAX_PAYMENT_AMOUNT centralizada
-- ✅ Validación HTML5 + Yup Schema para monto máximo
-- ✅ Error handling avanzado (network, auth, validation)
-- ✅ Mensajes de error accionables en español
-- ✅ Tipado estricto con PaymentStatus
-
-**Archivos clave**:
-```
 src/pages/payments/InitialPaymentPage.tsx
-src/features/payments/components/InitialPaymentForm.tsx
-src/features/payments/components/PaymentSummary.tsx
-src/features/payments/hooks/usePaymentForm.ts
-src/features/payments/hooks/useMemberData.ts
-src/features/payments/types.ts
-src/features/payments/utils.ts
-src/graphql/operations/payments.graphql
-```
-
-**Nota**: Confirmación manual por admin y generación de recibos PDF se implementarán en FASE 2 (Módulo de Pagos Completo) junto con el listado general de pagos.
-
----
-
-#### **Eliminación Definitiva de Socios**
-```
-Prioridad: MEDIA-BAJA
-Tiempo estimado: 1 día
-Complejidad: Baja
-Estado: 🟡 OPCIONAL (para post-MVP)
-```
-
-**Nota**: Con el sistema de dar de baja (cambiar a INACTIVE) implementado, la eliminación definitiva puede posponerse. Los socios inactivos quedan en el sistema para mantener historial.
-
-**Tareas** (si se decide implementar):
-- [ ] Botón de eliminar definitivamente en vista de detalles
-- [ ] Diálogo de confirmación con múltiples advertencias
-- [ ] Mutation GraphQL `DeleteMember`
-- [ ] Eliminación masiva desde tabla (checkboxes)
-- [ ] Verificación de dependencias (pagos, familias)
-
----
-
-#### 🔴 **Visualización de Miembros de Familia** - BUG CRÍTICO IDENTIFICADO
-```
-Prioridad: CRÍTICA
-Tiempo estimado: 1-2 días
-Complejidad: Media-Alta
-Estado: 🔴 PENDIENTE
-Impacto: ALTO - Funcionalidad core no operativa
-```
-
-**Problema identificado (28/10/2025)**:
-Cuando se accede desde la **Gestión de Socios** a las páginas de **Detalles del Socio** o **Editar Socio** de un miembro de tipo FAMILY:
-
-**Lo que SÍ funciona:**
-- ✅ Navegación desde la tabla de socios a detalles
-- ✅ Navegación desde la tabla de socios a edición
-- ✅ Se cargan los datos del titular (esposo/esposa)
-- ✅ Los formularios funcionan correctamente
-
-**Lo que NO funciona (BUG CRÍTICO):**
-- ❌ **NO se muestran los miembros de la familia** (familiares adicionales) en página de detalles
-- ❌ **NO se muestran los miembros de la familia** en página de edición
-- ❌ No hay sección visible para los familiares vinculados
-- ❌ Información crítica completamente invisible para el usuario
-- ❌ Imposible verificar qué familiares están asociados a una familia
-- ❌ Imposible editar datos de familiares desde la interfaz
-
-**Impacto en el sistema:**
-- Los usuarios no pueden ver la composición completa de las familias
-- No pueden verificar si los datos de los familiares son correctos
-- La funcionalidad de familias queda incompleta e inutilizable
-- Bloquea casos de uso críticos del negocio
-
-**Tareas de implementación**:
-1. [ ] **Investigación Backend**
-   - Revisar estructura de datos de Family en GraphQL schema
-   - Verificar query para obtener familiares asociados
-   - Confirmar relación entre Member, Family y FamilyMember
-
-2. [ ] **Crear Componente de Visualización**
-   - Crear `FamilyMembersList.tsx` para mostrar tabla de familiares
-   - Diseño consistente con Material-UI DataGrid
-   - Columnas: Nombre, Apellidos, Fecha Nacimiento, DNI/NIE, Email, Relación
-   - Estado de carga y manejo de errores
-
-3. [ ] **Integración en MemberDetailsPage**
-   - Añadir sección "Miembros de la Familia" condicionalmente (solo FAMILY)
-   - Query GraphQL para cargar familiares
-   - Mostrar mensaje si no hay familiares asociados
-   - Card separada con título claro
-
-4. [ ] **Integración en EditMemberPage**
-   - Añadir misma sección de visualización
-   - Considerar funcionalidad de edición inline (futuro)
-   - Por ahora solo visualización en modo lectura
-
-5. [ ] **Testing**
-   - Probar con familias con múltiples miembros
-   - Probar con familias sin miembros adicionales
-   - Verificar que no aparece para socios individuales
-   - Testing de errores de red
-
-**Archivos a crear/modificar**:
-```
-src/pages/members/MemberDetailsPage.tsx (modificar)
-src/pages/members/EditMemberPage.tsx (modificar)
-src/features/members/components/FamilyMembersList.tsx (NUEVO)
-src/features/members/hooks/useFamilyMembers.ts (NUEVO - si es necesario)
-src/graphql/operations/families.graphql (modificar/crear)
-```
-
-**Queries GraphQL necesarias**:
-```graphql
-query GetFamilyMembers($familyId: ID!) {
-  family(id: $familyId) {
-    id
-    familyMembers {
-      id
-      firstName
-      lastName
-      dateOfBirth
-      idNumber
-      email
-      relationship
-    }
-  }
-}
-```
-
-**Criterios de aceptación**:
-- [ ] En MemberDetailsPage de un socio FAMILY se ven todos los familiares asociados
-- [ ] En EditMemberPage de un socio FAMILY se ven todos los familiares asociados
-- [ ] La tabla de familiares es clara y fácil de leer
-- [ ] Se muestra un mensaje apropiado si no hay familiares
-- [ ] No aparece la sección para socios INDIVIDUAL
-- [ ] Manejo correcto de estados de carga y error
-- [ ] Diseño coherente con el resto de la aplicación
-
-**Nota**: Este es un **BUG CRÍTICO** que impide el uso completo del módulo de familias, que es una funcionalidad core del sistema. Debe priorizarse inmediatamente después de completar el módulo de pagos básico.
-
----
-
-### 🟡 FASE 2: Módulo de Pagos Completo (1 semana)
-
-#### ✅ **SUB-FASE 2.1: Listado Básico de Pagos** - COMPLETADO 🎉
-```
-Estado: ✅ COMPLETADO (27/10/2025)
-Tiempo real: 1 día
-```
-
-**Implementado**:
-- ✅ DataGrid con pagos de todos los socios
-- ✅ Filtros avanzados: estado, fecha, método de pago, socio
-- ✅ Ordenamiento por columnas
-- ✅ Paginación del lado del servidor
-- ✅ Acciones por fila: ver detalle, confirmar
-- ✅ Hook `usePayments` con integración GraphQL
-- ✅ Hook `usePaymentFilters` para gestión de estado
-- ✅ Componentes `PaymentsTable` y `PaymentFilters`
-- ✅ Chips de estado con colores semánticos
-
-**Archivos creados**:
-```
 src/features/payments/components/PaymentsTable.tsx
 src/features/payments/components/PaymentFilters.tsx
-src/features/payments/components/PaymentStatusChip.tsx
-src/features/payments/hooks/usePayments.ts
-src/features/payments/hooks/usePaymentFilters.ts
-src/features/payments/types.ts
-```
-
----
-
-#### ✅ **SUB-FASE 2.2.5: Navegación desde Pagos** - COMPLETADO 🎉
-```
-Estado: ✅ COMPLETADO (28/10/2025)
-Tiempo real: 0.5 día
-```
-
-**Implementado**:
-- ✅ Botón "Ver detalles" funcional en tabla de pagos
-- ✅ Navegación a `/members/{memberId}` para pagos individuales
-- ✅ Snackbar informativo para pagos de familia (página no implementada)
-- ✅ Añadidos `memberId` y `familyId` a `PaymentListItem`
-- ✅ Actualizado hook `usePayments` para incluir IDs
-- ✅ Manejo diferenciado de pagos individuales vs familiares
-
-**Problema solucionado**:
-El botón "Ver detalles" en la tabla de pagos no hacía nada visible. Ahora:
-- Para **pagos individuales** → Navega correctamente a detalles del socio
-- Para **pagos de familia** → Muestra mensaje: "La página de detalles de familias estará disponible próximamente"
-
-**Archivos modificados**:
-```
-src/pages/PaymentsPage.tsx
-src/features/payments/types.ts
-src/features/payments/hooks/usePayments.ts
-```
-
-**Próximo paso**: Implementar página de detalles de familias para completar la navegación.
-
----
-
-#### ✅ **SUB-FASE 2.2: Confirmación de Pagos Pendientes** - COMPLETADO 🎉
-```
-Estado: ✅ COMPLETADO (27/10/2025)
-Tiempo real: 0.5 día
-```
-
-**Implementado**:
-- ✅ Diálogo de confirmación con todos los detalles del pago
-- ✅ Mutation GraphQL `ConfirmPayment`
-- ✅ Hook `useConfirmPayment` con manejo de errores
-- ✅ Integración completa en `PaymentsPage`
-- ✅ Refetch automático tras confirmación exitosa
-- ✅ Cambio de estado PENDING → PAID
-- ✅ Notificaciones de éxito/error con notistack
-- ✅ Prevención de múltiples clics durante confirmación
-- ✅ Hook `useSearchMemberOrFamily` para búsqueda unificada
-
-**Archivos creados**:
-```
 src/features/payments/components/ConfirmPaymentDialog.tsx
+src/features/payments/components/ReceiptGenerator.tsx (PDF)
+src/features/payments/hooks/usePayments.ts
 src/features/payments/hooks/useConfirmPayment.ts
 src/features/payments/hooks/useSearchMemberOrFamily.ts
 ```
 
-**Archivos modificados**:
-```
-src/pages/PaymentsPage.tsx (integración del diálogo)
-src/graphql/operations/payments.graphql (mutation ConfirmPayment)
-```
+**Nota Importante sobre Cuotas:**
+- ❌ **NO existe "Generación de Cuotas Masivas Mensuales"**
+- ✅ Las cuotas son **anuales** según el modelo de negocio
+- ✅ Los pagos se registran individualmente (PENDING/PAID)
+- ✅ No se requiere generación automática masiva
 
 ---
 
-#### **SUB-FASE 2.3: Generación de Recibos PDF** 🔴 SIGUIENTE
+### 7. ⚠️ Otros Módulos Pendientes (0-10%)
+- [ ] **CashFlow**: Requisitos definidos, pendiente de implementación
+- [ ] **Reports**: Página creada pero sin funcionalidad  
+- [ ] **Dashboard**: Página básica, faltan métricas y estadísticas
+
+---
+
+## 🎯 Roadmap para Completar MVP
+
+### 🔴 FASE 4: Flujo de Caja (4 días) ⬅️ **EN CURSO - REQUISITOS DEFINIDOS** ✅
+
+#### **REQ-3.3: Módulo de Cash Flow**
 ```
-Prioridad: ALTA
-Tiempo estimado: 1 día
+Prioridad: ALTA (siguiente fase del roadmap)
+Tiempo estimado: 4 días
 Complejidad: Media
-Estado: 🔴 PENDIENTE
+Estado: 🔴 EN DEFINICIÓN → LISTO PARA IMPLEMENTAR
 ```
-
-**Objetivo**: Generar recibos profesionales en PDF descargables.
-
-**Tareas**:
-- [ ] Librería de generación PDF (jsPDF o react-pdf)
-- [ ] Componente `ReceiptGenerator`
-- [ ] Template de recibo con logo ASAM
-- [ ] Datos del socio/familia
-- [ ] Detalles del pago (monto, fecha, método)
-- [ ] Número de recibo único
-- [ ] Botón "Descargar Recibo" en tabla
-- [ ] Generación automática al confirmar pago (opcional)
 
 ---
 
-#### **SUB-FASE 2.4: Cuotas Masivas Mensuales**
+#### 📋 **Requisitos Confirmados del Negocio**
+
+**Basado en análisis del Excel actual de la asociación:**
+
+**Sistema Actual (Excel):**
 ```
-Prioridad: MEDIA-ALTA
-Tiempo estimado: 1 día
-Complejidad: Media
-Estado: 🟡 PENDIENTE
+GASTOS
+├── FECHA (vacía en algunos casos)
+├── CONCEPTO (texto libre)
+└── CANTIDAD (importe en euros)
 ```
 
-**Tareas**:
-- [ ] Botón "Generar Cuotas Mensuales" en PaymentsPage
-- [ ] Diálogo de confirmación con preview
-- [ ] Mutation GraphQL `GenerateMonthlyFees`
-- [ ] Crear pagos PENDING para todos los socios activos
-- [ ] Progreso visual durante generación
-- [ ] Resumen de cuotas generadas
-- [ ] Prevención de duplicados (verificar mes/año)
+**Categorías Identificadas en el Excel:**
+1. **Repatriaciones**: 1.500,00 € (PAPA NDAO, AS MANIJAK SBD, etc.)
+2. **Gastos Administrativos**: Tasas Generalitat, Sellos, Copistería, Tarjetas
+3. **Gastos Bancarios**: LA CAIXA ANUAL (48,00 €)
+4. **Ayudas Sociales**: MANDIAYE DIAW AJUDA (300,00 €)
 
 ---
 
-#### **SUB-FASE 2.5: Historial de Pagos por Socio**
-```
-Prioridad: MEDIA
-Tiempo estimado: 0.5 día
-Complejidad: Baja
-Estado: 🟡 PENDIENTE
+#### 🗄️ **Estructura de Base de Datos Existente**
+
+```sql
+cash_flows
+├── id (PK) - integer (autoincrement)
+├── member_id (FK) - integer (nullable)
+├── family_id (FK) - integer (nullable)
+├── payment_id (FK) - integer (nullable)
+├── operation_type - varchar(20)
+├── amount - numeric(10,2)
+├── date - timestamp (NOT NULL)
+├── detail - varchar(255)
+├── created_at - timestamp
+├── updated_at - timestamp
+└── deleted_at - timestamp (soft delete)
 ```
 
-**Tareas**:
-- [ ] Sección en MemberDetailsPage
-- [ ] Tabla compacta con últimos pagos
-- [ ] Total pagado acumulado
-- [ ] Filtro de periodo (año, mes)
-- [ ] Link a PaymentsPage con filtro pre-aplicado
+**Reglas de Negocio Confirmadas:**
+
+1. **Repatriaciones**:
+   - ✅ Importe por defecto: **1.500€** (editable)
+   - ✅ **Obligatorio asociar a socio** (member_id)
+   - 🔮 Comprobantes: Nice to have (futuro)
+
+2. **Integración con Pagos**:
+   - ✅ **Automática**: Pagos confirmados → Ingresos automáticos en cash_flow
+   - ✅ Campo `payment_id` vincula con tabla payments
+
+3. **Fechas**:
+   - ✅ **Obligatorias** (NOT NULL en BD)
+
+4. **Permisos**:
+   - 👨‍💼 **Admin**: Registra gastos/ingresos y ve todo
+   - 👤 **User**: Solo ve sus movimientos (filtrado por member_id)
+
+5. **Tipo de Movimiento**:
+   - ➕ **Ingresos**: `amount` positivo
+   - ➖ **Gastos**: `amount` negativo
+   - 📝 **operation_type**: Identifica categoría (ej: "ingreso_cuota", "gasto_repatriacion")
+
+---
+
+#### 📊 **Categorías de operation_type Definidas**
+
+```typescript
+export enum OperationType {
+  // INGRESOS (amount > 0)
+  INGRESO_CUOTA = 'INGRESO_CUOTA',           // Automático desde pagos
+  INGRESO_DONACION = 'INGRESO_DONACION',     // Manual
+  INGRESO_OTRO = 'INGRESO_OTRO',             // Manual
+  
+  // GASTOS (amount < 0)
+  GASTO_REPATRIACION = 'GASTO_REPATRIACION', // Asociado a socio
+  GASTO_ADMINISTRATIVO = 'GASTO_ADMINISTRATIVO', // Tasas, sellos, copistería
+  GASTO_BANCARIO = 'GASTO_BANCARIO',         // Comisiones bancarias
+  GASTO_AYUDA = 'GASTO_AYUDA',               // Ayudas sociales
+  GASTO_OTRO = 'GASTO_OTRO',                 // Otros gastos
+}
+
+export const OPERATION_TYPES = {
+  INGRESO_CUOTA: {
+    label: 'Cuota de Socio',
+    category: 'INGRESO',
+    color: '#4caf50',
+    autoGenerated: true, // No se crea manualmente
+  },
+  INGRESO_DONACION: {
+    label: 'Donación',
+    category: 'INGRESO',
+    color: '#4caf50',
+  },
+  INGRESO_OTRO: {
+    label: 'Otro Ingreso',
+    category: 'INGRESO',
+    color: '#4caf50',
+  },
+  GASTO_REPATRIACION: {
+    label: 'Repatriación',
+    category: 'GASTO',
+    color: '#f44336',
+    defaultAmount: -1500, // Negativo, editable
+    requiresMember: true, // Obligatorio asociar a socio
+  },
+  GASTO_ADMINISTRATIVO: {
+    label: 'Gasto Administrativo',
+    category: 'GASTO',
+    color: '#f44336',
+    examples: ['Tasas Generalitat', 'Sellos', 'Copistería', 'Imprenta'],
+  },
+  GASTO_BANCARIO: {
+    label: 'Gasto Bancario',
+    category: 'GASTO',
+    color: '#f44336',
+    examples: ['Comisión anual', 'Mantenimiento cuenta'],
+  },
+  GASTO_AYUDA: {
+    label: 'Ayuda Social',
+    category: 'GASTO',
+    color: '#f44336',
+  },
+  GASTO_OTRO: {
+    label: 'Otro Gasto',
+    category: 'GASTO',
+    color: '#f44336',
+  },
+};
+```
+
+---
+
+#### 🏗️ **Plan de Implementación Detallado**
+
+### **SUB-FASE 4.1: Backend - GraphQL Schema y Resolvers** (1 día)
+
+**Queries GraphQL:**
+```graphql
+# Listar transacciones (filtrado automático por rol)
+query GetCashFlows(
+  $filters: CashFlowFilters
+  $pagination: PaginationInput
+) {
+  cashFlows(filters: $filters, pagination: $pagination) {
+    edges {
+      id
+      date
+      operationType
+      amount
+      detail
+      member { id, firstName, lastName, memberNumber }
+      family { id, primaryMemberName }
+      payment { id, receiptNumber }
+      createdAt
+    }
+    totalCount
+    pageInfo { hasNextPage, hasPreviousPage }
+  }
+}
+
+# Balance actual
+query GetBalance {
+  cashFlowBalance {
+    totalIncome
+    totalExpenses
+    currentBalance
+  }
+}
+
+# Estadísticas por periodo
+query GetCashFlowStats($startDate: Date!, $endDate: Date!) {
+  cashFlowStats(startDate: $startDate, endDate: $endDate) {
+    incomeByCategory
+    expensesByCategory
+    monthlyTrend
+  }
+}
+```
+
+**Mutations GraphQL:**
+```graphql
+# Crear transacción manual
+mutation CreateCashFlow($input: CreateCashFlowInput!) {
+  createCashFlow(input: $input) {
+    id
+    date
+    operationType
+    amount
+    detail
+    member { id, firstName, lastName }
+  }
+}
+
+# Actualizar transacción
+mutation UpdateCashFlow($id: ID!, $input: UpdateCashFlowInput!) {
+  updateCashFlow(id: $id, input: $input) {
+    id
+    date
+    operationType
+    amount
+    detail
+  }
+}
+
+# Eliminar (soft delete)
+mutation DeleteCashFlow($id: ID!) {
+  deleteCashFlow(id: $id) {
+    success
+    message
+  }
+}
+```
+
+**Tipos GraphQL:**
+```graphql
+input CreateCashFlowInput {
+  date: Date!
+  operationType: OperationType!
+  amount: Float!
+  detail: String!
+  memberId: ID
+  familyId: ID
+}
+
+input CashFlowFilters {
+  startDate: Date
+  endDate: Date
+  operationType: OperationType
+  memberId: ID
+}
+
+enum OperationType {
+  INGRESO_CUOTA
+  INGRESO_DONACION
+  INGRESO_OTRO
+  GASTO_REPATRIACION
+  GASTO_ADMINISTRATIVO
+  GASTO_BANCARIO
+  GASTO_AYUDA
+  GASTO_OTRO
+}
+```
+
+**Lógica de Backend Crítica:**
+```go
+// En el resolver GetCashFlows:
+func (r *queryResolver) CashFlows(ctx context.Context, filters *CashFlowFilters) ([]*CashFlow, error) {
+    user := middleware.GetUserFromContext(ctx)
+    
+    // FILTRADO AUTOMÁTICO POR ROL
+    if user.Role != "admin" {
+        // Usuario normal: solo ve sus movimientos
+        filters.MemberID = &user.MemberID
+    }
+    // Admin: ve todo (no se filtra)
+    
+    return r.cashFlowService.List(ctx, filters)
+}
+```
+
+---
+
+### **SUB-FASE 4.2: Frontend - Tipos y Utilidades** (0.5 día)
+
+**Estructura de Archivos:**
+```
+src/features/cashflow/
+├── components/
+│   ├── CashFlowTable.tsx          # DataGrid principal
+│   ├── CashFlowFilters.tsx        # Filtros avanzados
+│   ├── BalanceCard.tsx            # Card con balance actual
+│   ├── BalanceChart.tsx           # Gráfico de evolución (Recharts)
+│   ├── TransactionForm.tsx        # Formulario unificado
+│   ├── IncomeFormFields.tsx       # Campos específicos ingresos
+│   ├── ExpenseFormFields.tsx      # Campos específicos gastos
+│   ├── RepatriationForm.tsx       # Formulario especializado
+│   └── ConfirmDeleteDialog.tsx    # Confirmación eliminación
+├── hooks/
+│   ├── useCashFlows.ts            # Query listado + filtros
+│   ├── useBalance.ts              # Query balance y stats
+│   ├── useCreateCashFlow.ts       # Mutation crear
+│   ├── useUpdateCashFlow.ts       # Mutation actualizar
+│   └── useDeleteCashFlow.ts       # Mutation eliminar
+├── utils/
+│   ├── operationTypes.ts          # Constantes y labels
+│   ├── formatters.ts              # Formato montos y fechas
+│   └── validation.ts              # Schemas de validación
+└── types.ts
+```
+
+**Tipos TypeScript:**
+```typescript
+// src/features/cashflow/types.ts
+
+export enum OperationType {
+  INGRESO_CUOTA = 'INGRESO_CUOTA',
+  INGRESO_DONACION = 'INGRESO_DONACION',
+  INGRESO_OTRO = 'INGRESO_OTRO',
+  GASTO_REPATRIACION = 'GASTO_REPATRIACION',
+  GASTO_ADMINISTRATIVO = 'GASTO_ADMINISTRATIVO',
+  GASTO_BANCARIO = 'GASTO_BANCARIO',
+  GASTO_AYUDA = 'GASTO_AYUDA',
+  GASTO_OTRO = 'GASTO_OTRO',
+}
+
+export interface CashFlowTransaction {
+  id: string;
+  date: Date;
+  operationType: OperationType;
+  amount: number; // Positivo = ingreso, Negativo = gasto
+  detail: string;
+  member?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    memberNumber: string;
+  };
+  family?: {
+    id: string;
+    primaryMemberName: string;
+  };
+  payment?: {
+    id: string;
+    receiptNumber: string;
+  };
+  createdAt: Date;
+}
+
+export interface CashFlowBalance {
+  totalIncome: number;
+  totalExpenses: number;
+  currentBalance: number;
+}
+
+export interface CashFlowFilters {
+  startDate?: Date;
+  endDate?: Date;
+  operationType?: OperationType;
+  memberId?: string;
+}
+```
+
+---
+
+### **SUB-FASE 4.3: Frontend - Componentes Core** (1 día)
+
+#### 4.3.1 CashFlowTable.tsx
+```typescript
+// DataGrid con Material-UI
+// Columnas: Fecha, Tipo, Categoría, Concepto, Socio, Importe
+// Acciones por fila: Ver, Editar (admin), Eliminar (admin)
+// Paginación del lado del servidor
+// Ordenamiento por columnas
+// Row coloring: Verde (ingresos), Rojo (gastos)
+```
+
+#### 4.3.2 BalanceCard.tsx
+```typescript
+// Card grande con 3 métricas:
+// - Total Ingresos (verde)
+// - Total Gastos (rojo)
+// - Balance Actual (negro/verde/rojo según valor)
+// Icono de tendencia (↑ ↓)
+```
+
+#### 4.3.3 TransactionForm.tsx
+```typescript
+// Formulario inteligente con dos modos:
+// - Modo "Ingreso": amount positivo, categorías de ingreso
+// - Modo "Gasto": amount negativo, categorías de gasto
+// 
+// Campos:
+// - Fecha (DatePicker, obligatorio)
+// - Categoría (Select, obligatorio)
+// - Importe (TextField, validación > 0)
+// - Concepto (TextField, obligatorio)
+// - Socio (Autocomplete, condicional)
+// - Notas (TextField, opcional)
+//
+// Validación con Yup Schema
+// Submit con useCreateCashFlow
+```
+
+#### 4.3.4 RepatriationForm.tsx
+```typescript
+// Formulario especializado para repatriaciones:
+// - Fecha (DatePicker)
+// - Socio (Autocomplete con búsqueda, obligatorio)
+// - Importe (TextField, default: 1500€, editable)
+// - Concepto (auto-rellenado: "Repatriación [nombre socio]")
+// - Notas (TextField, opcional)
+//
+// Al seleccionar socio:
+// - Pre-rellena concepto automáticamente
+// - Valida que el socio exista y esté activo
+```
+
+---
+
+### **SUB-FASE 4.4: Frontend - Vista Principal** (1 día)
+
+#### 4.4.1 CashFlowPage.tsx
+```typescript
+// Layout completo:
+// 
+// [Header]
+//   "Flujo de Caja"
+//   
+// [Balance Card] (ancho completo, arriba)
+//   ├── Total Ingresos: +X.XXX,XX €
+//   ├── Total Gastos: -X.XXX,XX €
+//   └── Balance Actual: X.XXX,XX €
+//
+// [Botones de Acción] (solo admin)
+//   [+ Ingreso] [+ Gasto] [+ Repatriación] [Exportar CSV]
+//
+// [Filtros] (lateral izquierdo)
+//   ├── Rango de fechas
+//   ├── Tipo de operación
+//   └── Socio (Autocomplete)
+//
+// [Tabla de Transacciones] (centro-derecha)
+//   └── DataGrid con paginación
+//
+// Permisos:
+// - Si admin: Botones visibles, tabla sin filtrar
+// - Si user: Sin botones, tabla filtrada por member_id
+```
+
+#### 4.4.2 Hooks Principales
+```typescript
+// useCashFlows.ts
+const useCashFlows = (filters: CashFlowFilters) => {
+  const { user } = useAuth();
+  
+  // Si no es admin, forzar filtro por member_id
+  const effectiveFilters = user.role !== 'admin' 
+    ? { ...filters, memberId: user.memberId }
+    : filters;
+  
+  return useQuery(GET_CASH_FLOWS, {
+    variables: { filters: effectiveFilters },
+  });
+};
+
+// useBalance.ts
+const useBalance = () => {
+  return useQuery(GET_BALANCE);
+};
+
+// useCreateCashFlow.ts
+const useCreateCashFlow = () => {
+  return useMutation(CREATE_CASH_FLOW, {
+    refetchQueries: ['GetCashFlows', 'GetBalance'],
+    onCompleted: () => {
+      enqueueSnackbar('Transacción registrada', { variant: 'success' });
+    },
+  });
+};
+```
+
+---
+
+### **SUB-FASE 4.5: Integración Automática con Pagos** (0.5 día)
+
+**Backend - Trigger en ConfirmPayment:**
+```go
+// En el servicio de pagos, al confirmar:
+func (s *service) ConfirmPayment(ctx context.Context, paymentID string, input ConfirmPaymentInput) error {
+    // 1. Confirmar pago (PENDING → PAID)
+    payment, err := s.repo.ConfirmPayment(ctx, paymentID, input)
+    if err != nil {
+        return err
+    }
+    
+    // 2. Crear registro automático en cash_flows
+    cashFlow := &CashFlow{
+        PaymentID:     &payment.ID,
+        MemberID:      payment.MemberID,
+        FamilyID:      payment.FamilyID,
+        OperationType: "INGRESO_CUOTA",
+        Amount:        payment.Amount, // Positivo
+        Date:          payment.PaymentDate,
+        Detail:        fmt.Sprintf("Cuota - %s", payment.ReceiptNumber),
+    }
+    
+    if err := s.cashFlowRepo.Create(ctx, cashFlow); err != nil {
+        // Log error pero no fallar la confirmación
+        log.Errorf("Failed to create cash flow entry: %v", err)
+    }
+    
+    return nil
+}
+```
+
+**Frontend - Notificación:**
+```typescript
+// En ConfirmPaymentDialog, tras éxito:
+onCompleted: (data) => {
+  enqueueSnackbar(
+    'Pago confirmado y registrado en flujo de caja',
+    { variant: 'success' }
+  );
+}
+```
+
+---
+
+### **SUB-FASE 4.6: Exportación y Gráficos** (0.5 día)
+
+#### 4.6.1 Exportación a CSV
+```typescript
+// Botón "Exportar CSV" en CashFlowPage
+// Exporta transacciones filtradas actuales
+// Formato:
+// Fecha,Tipo,Categoría,Concepto,Socio,Importe
+// 26/10/2025,GASTO,Repatriación,PAPA NDAO,A00015,-1500.00
+```
+
+#### 4.6.2 Gráfico de Evolución
+```typescript
+// Componente BalanceChart.tsx (Recharts)
+// Gráfico de líneas con:
+// - Eje X: Meses
+// - Eje Y: Euros
+// - 2 líneas: Ingresos (verde) vs Gastos (rojo)
+// - Tooltip con valores detallados
+```
+
+---
+
+#### 🎨 **Mockups Visuales**
+
+**Vista de Listado Completa:**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  FLUJO DE CAJA                                                  │
+├─────────────────────────────────────────────────────────────────┤
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │  💰 Balance Actual                                        │  │
+│  │  Total Ingresos: +15.320,00 €                            │  │
+│  │  Total Gastos: -8.450,00 €                               │  │
+│  │  Balance: +6.870,00 € ↑                                   │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                                                                  │
+│  [+ Ingreso]  [+ Gasto]  [+ Repatriación]  [Exportar CSV]      │
+│                                                                  │
+│  ┌──────────┬──────────┬────────────────┬─────────────┬─────────┐
+│  │  Fecha   │ Tipo     │ Categoría      │ Concepto    │ Importe │
+│  ├──────────┼──────────┼────────────────┼─────────────┼─────────┤
+│  │ 26/10/25 │ 🔴 GASTO │ Repatriación   │ PAPA NDAO   │-1.500€  │
+│  │ 25/10/25 │ 🔴 GASTO │ Administrativo │ TASA GEN... │ -18,93€ │
+│  │ 24/10/25 │ 🟢 INGRE │ Cuota          │ Pago A00001 │ +40,00€ │
+│  │ 23/10/25 │ 🔴 GASTO │ Bancario       │ LA CAIXA... │ -48,00€ │
+│  │ ...      │ ...      │ ...            │ ...         │ ...     │
+│  └──────────┴──────────┴────────────────┴─────────────┴─────────┘
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Formulario de Repatriación:**
+```
+┌────────────────────────────────────────┐
+│  Registrar Gasto - Repatriación        │
+├────────────────────────────────────────┤
+│  Fecha *                               │
+│  [26/10/2025]                          │
+│                                         │
+│  Socio * (obligatorio)                 │
+│  [Buscar socio...]                     │
+│  └─> ☑ PAPA NDAO - A00015             │
+│                                         │
+│  Importe *                             │
+│  [1.500,00 €]  (editable)             │
+│                                         │
+│  Concepto *                            │
+│  [Repatriación PAPA NDAO]              │
+│  (auto-rellenado)                      │
+│                                         │
+│  Notas                                 │
+│  [..............................]      │
+│                                         │
+│  [Cancelar]  [Registrar Gasto]        │
+└────────────────────────────────────────┘
+```
+
+---
+
+#### ⏱️ **Estimación de Tiempo Detallada**
+
+```
+SUB-FASE 4.1: Backend (GraphQL)                → 1 día
+SUB-FASE 4.2: Frontend (Tipos/Utils)           → 0.5 día
+SUB-FASE 4.3: Frontend (Componentes Core)      → 1 día
+SUB-FASE 4.4: Frontend (Vista Principal)       → 1 día
+SUB-FASE 4.5: Integración con Pagos            → 0.5 día
+SUB-FASE 4.6: Exportación y Gráficos           → 0.5 día
+───────────────────────────────────────────────────────
+TOTAL:                                           4 días
+```
+
+---
+
+#### 📝 **Archivos a Crear/Modificar**
+
+**Backend:**
+```
+internal/graphql/
+├── schema/
+│   └── cashflow.graphql (nuevo)
+├── resolvers/
+│   └── cashflow.resolvers.go (nuevo)
+└── models/
+    └── cashflow.go (actualizar)
+
+internal/services/
+└── cashflow/
+    ├── service.go (nuevo)
+    ├── filters.go (nuevo)
+    └── stats.go (nuevo)
+
+internal/services/payment/
+└── service.go (modificar - añadir trigger)
+```
+
+**Frontend:**
+```
+src/features/cashflow/ (todo nuevo)
+├── components/
+│   ├── CashFlowTable.tsx
+│   ├── CashFlowFilters.tsx
+│   ├── BalanceCard.tsx
+│   ├── BalanceChart.tsx
+│   ├── TransactionForm.tsx
+│   ├── IncomeFormFields.tsx
+│   ├── ExpenseFormFields.tsx
+│   ├── RepatriationForm.tsx
+│   └── ConfirmDeleteDialog.tsx
+├── hooks/
+│   ├── useCashFlows.ts
+│   ├── useBalance.ts
+│   ├── useCreateCashFlow.ts
+│   ├── useUpdateCashFlow.ts
+│   └── useDeleteCashFlow.ts
+├── utils/
+│   ├── operationTypes.ts
+│   ├── formatters.ts
+│   └── validation.ts
+└── types.ts
+
+src/pages/
+└── CashFlowPage.tsx (rediseñar)
+
+src/graphql/operations/
+└── cashflow.graphql (nuevo)
+```
+
+---
+
+#### 🎯 **Criterios de Aceptación**
+
+**Funcionalidad:**
+- [ ] Admin puede registrar ingresos manualmente
+- [ ] Admin puede registrar gastos manualmente
+- [ ] Admin puede registrar repatriaciones con socio asociado
+- [ ] Repatriaciones tienen 1.500€ por defecto (editable)
+- [ ] Fechas son obligatorias en todos los formularios
+- [ ] User solo ve sus propios movimientos
+- [ ] Admin ve todos los movimientos
+- [ ] Pagos confirmados se registran automáticamente como ingresos
+- [ ] Balance se calcula correctamente (ingresos - gastos)
+- [ ] Exportación a CSV funciona con filtros aplicados
+
+**UX:**
+- [ ] Tabla con colores semánticos (verde/rojo)
+- [ ] Formularios con validación en tiempo real
+- [ ] Mensajes de éxito/error claros
+- [ ] Confirmación antes de eliminar
+- [ ] Filtros persisten al cambiar de página
+
+**Técnico:**
+- [ ] Queries optimizadas con paginación
+- [ ] Filtrado automático por rol en backend
+- [ ] Soft delete (deleted_at)
+- [ ] Refetch automático tras operaciones
+- [ ] Manejo de errores robusto
 
 ---
 
@@ -522,7 +898,7 @@ Estado: 🟡 PENDIENTE
 Prioridad: MEDIA-ALTA
 Tiempo estimado: 2 días
 Complejidad: Media
-Estado: 🟡 PENDIENTE
+Estado: 🟡 PENDIENTE (tras Flujo de Caja)
 ```
 
 **Métricas principales**:
@@ -557,6 +933,7 @@ Estado: 🟡 PENDIENTE
 ```
 
 **Reportes a implementar**:
+
 1. **Listado de Morosos**
    - [ ] Socios con cuotas vencidas
    - [ ] Deuda total por socio
@@ -589,59 +966,9 @@ src/features/reports/
 
 ---
 
-### 🟢 FASE 4: Flujo de Caja (3-4 días)
+### 🔵 FASE 5: Mejoras de PWA y UX (Post-MVP)
 
-#### **REQ-3.3: Módulo de Cash Flow**
-```
-Prioridad: MEDIA
-Tiempo estimado: 3 días
-Complejidad: Media
-Estado: 🟡 PENDIENTE
-```
-
-**Funcionalidades**:
-1. **Registro de Transacciones**
-   - [ ] Formulario para ingresos
-   - [ ] Formulario para gastos
-   - [ ] Categorización (cuotas, donaciones, gastos operativos, etc)
-   - [ ] Fecha y concepto
-   - [ ] Adjuntar comprobante (opcional)
-
-2. **Visualización de Balance**
-   - [ ] Balance actual
-   - [ ] Gráfico de evolución
-   - [ ] Filtros por periodo y categoría
-   - [ ] Exportar a CSV/PDF
-
-3. **Listado de Transacciones**
-   - [ ] Tabla con todas las transacciones
-   - [ ] Filtros avanzados
-   - [ ] Edición y eliminación
-   - [ ] Búsqueda
-
-**Archivos a crear**:
-```
-src/pages/CashFlowPage.tsx (rediseñar)
-src/features/cashflow/
-├── components/
-│   ├── TransactionForm.tsx
-│   ├── TransactionsList.tsx
-│   ├── BalanceCard.tsx
-│   └── BalanceChart.tsx
-├── hooks/
-│   └── useCashFlow.ts
-└── api/
-    ├── queries.ts
-    └── mutations.ts
-```
-
-**Nota Importante**: El backend debe filtrar automáticamente por usuario cuando `role !== 'admin'`
-
----
-
-### 🔵 FASE 5: Mejoras de PWA y UX (Post-MVP) 🆕
-
-#### **REQ-5.1: Setup Básico de PWA**
+#### **REQ-5.1: Setup Completo de PWA**
 ```
 Prioridad: MEDIA-ALTA
 Tiempo estimado: 2-3 días
@@ -649,12 +976,13 @@ Complejidad: Media
 Estado: 🟡 PENDIENTE
 ```
 
-**Objetivo**: Convertir la app en una verdadera PWA con funcionalidad offline básica.
+**Objetivo**: Convertir la app en una verdadera PWA con funcionalidad offline.
 
 **Tareas**:
+
 1. **Manifest.json Optimizado**
    - [ ] Configurar manifest con todos los campos requeridos
-   - [ ] Generar iconos en todos los tamaños necesarios (192x192, 512x512)
+   - [ ] Generar iconos en todos los tamaños (192x192, 512x512)
    - [ ] Añadir iconos maskables para Android
    - [ ] Configurar colores de tema (theme_color, background_color)
    - [ ] Definir start_url optimizada según rol
@@ -697,6 +1025,7 @@ Estado: 🟡 PENDIENTE
 ```
 
 **Tareas**:
+
 1. **Auditoría de Accesibilidad**
    - [ ] Ejecutar Lighthouse audit
    - [ ] Revisar con WAVE tool
@@ -725,6 +1054,7 @@ Estado: 🟡 PENDIENTE
 ```
 
 **Tareas**:
+
 1. **Presupuesto de Rendimiento**
    - [ ] Definir métricas objetivo (TTI < 5s, FCP < 2s)
    - [ ] Setup de monitoreo continuo
@@ -806,28 +1136,47 @@ Estado: 🟡 PENDIENTE
 
 ---
 
+#### **Mejoras Futuras en Flujo de Caja (Nice to Have)**
+```
+Prioridad: BAJA
+Estado: 🔮 FUTURO
+```
+
+- [ ] Adjuntar comprobantes (facturas, recibos)
+- [ ] Sistema de aprobación de gastos
+- [ ] Notificaciones de gastos grandes
+- [ ] Presupuestos por categoría
+- [ ] Alertas de saldo bajo
+
+---
+
 ## 📅 Timeline Actualizado
 
-### MVP Mínimo (1.5 semanas restantes) ⬆️
+### Estado Actual (2 de Noviembre de 2025)
 ```
-Sprint Actual (Semana en curso): Finalizar Módulo de Socios
-├── ✅ Edición de socios - COMPLETADO
-├── ✅ Sistema de acciones en tabla - COMPLETADO
-├── ✅ Diálogo de confirmación baja - COMPLETADO
-└── 🔴 Día 1-2: Página de pago inicial (REQ-2.5) - PENDIENTE
-
-Sprint 2 (Semana siguiente): Módulo de Pagos Básico
-├── Día 1-2: Listado y registro de pagos
-├── Día 3: Confirmación y cuotas masivas
-└── Día 4-5: Generación de recibos
+✅ FASE 1: Módulo de Socios - COMPLETADO 100%
+✅ FASE 2: Módulo de Pagos - COMPLETADO 100%
+🔴 FASE 4: Flujo de Caja - LISTO PARA IMPLEMENTAR (4 días)
+🟡 FASE 3: Dashboard y Reportes - PENDIENTE (3-4 días)
+🟡 FASE 5: PWA y UX - PENDIENTE (Post-MVP)
 ```
 
-### Versión Completa (3-4 semanas restantes)
+### Plan de Desarrollo Propuesto
 ```
-Semana 3: Dashboard y Reportes
-Semana 4: Flujo de Caja + PWA Setup Básico
-Semana 5: Accesibilidad + Optimización
-Semana 6: Testing + Pulido Final
+📅 Semana Actual (4 días)
+└── 🔴 FLUJO DE CAJA (REQUISITOS DEFINIDOS ✅)
+    ├── Día 1: Backend (GraphQL schema/resolvers)
+    ├── Día 2: Frontend (Tipos, utils, componentes core)
+    ├── Día 3: Frontend (Vista principal, formularios)
+    └── Día 4: Integración pagos + Exportación
+
+📅 Semana Siguiente (3-4 días)
+└── 🟡 DASHBOARD Y REPORTES
+    ├── Día 1-2: Dashboard con métricas
+    └── Día 3-4: Reportes básicos
+
+📅 Semanas Posteriores
+└── 🟡 PWA + Optimización + Testing
 ```
 
 ---
@@ -839,8 +1188,10 @@ Semana 6: Testing + Pulido Final
 - ✅ Edición de socios existentes
 - ✅ Dar de baja socios (cambio a INACTIVE)
 - ✅ Sistema de permisos por roles
-- [ ] Registro de pago inicial
-- [ ] Sistema básico de pagos (registro, confirmación, recibos)
+- ✅ Registro y confirmación de pagos
+- ✅ Generación de recibos PDF
+- ✅ Historial de pagos por socio
+- [ ] **Sistema de flujo de caja** ⬅️ SIGUIENTE
 - [ ] Dashboard con métricas principales
 
 ### Técnico
@@ -861,18 +1212,18 @@ Semana 6: Testing + Pulido Final
 
 ## 📈 Métricas de Progreso
 
-### Estado Actual (2/11/2025) ⬆️
+### Estado Actual (2/11/2025) ⬆️⬆️
 ```
 Infraestructura:     ████████████████████ 100%
 Autenticación:       ████████████████████ 100%
 Permisos y Roles:    ████████████████████ 100%
-Miembros:            ██████████████████░░  90%
-Pagos:               ██████████░░░░░░░░░░  50% ⬆️
+Miembros:            ████████████████████ 100% ⬆️
+Pagos:               ████████████████████ 100% ⬆️
 Dashboard:           ██░░░░░░░░░░░░░░░░░░  10%
-Flujo de Caja:       ░░░░░░░░░░░░░░░░░░░░   0%
+Flujo de Caja:       ░░░░░░░░░░░░░░░░░░░░   0% (requisitos definidos ✅)
 Reportes:            ░░░░░░░░░░░░░░░░░░░░   0%
 
-TOTAL:               █████████████░░░░░░░  69% ⬆️
+TOTAL:               ████████████████░░░░  80% ⬆️⬆️
 ```
 
 ### Meta MVP (Estimado: 1.5 semanas)
@@ -881,196 +1232,112 @@ Infraestructura:     ███████████████████�
 Autenticación:       ████████████████████ 100%
 Permisos y Roles:    ████████████████████ 100%
 Miembros:            ████████████████████ 100%
-Pagos:               ████████████████░░░░  80%
+Pagos:               ████████████████████ 100%
 Dashboard:           ████████████░░░░░░░░  60%
-Flujo de Caja:       ░░░░░░░░░░░░░░░░░░░░   0%
-Reportes:            ████░░░░░░░░░░░░░░░░  20%
+Flujo de Caja:       ████████████████████ 100%
+Reportes:            ████████░░░░░░░░░░░░  40%
 
-TOTAL:               ██████████████░░░░░░  70%
+TOTAL:               ███████████████████░  95%
 ```
-
----
-
-## 🚀 Recomendación de Inicio Inmediato
-
-### ⚡ Próximas Tareas Prioritarias
-
-#### 1. **BUG CRÍTICO: Visualización de Miembros de Familia** 🔴
-```
-Prioridad: CRÍTICA (BLOQUEANTE)
-Impacto: ALTO
-Complejidad: MEDIA-ALTA
-Tiempo estimado: 1-2 días
-```
-
-**¿Por qué es crítico?**
-- Impide visualizar información completa de familias
-- Bloquea casos de uso core del sistema
-- Los usuarios no pueden verificar composición familiar
-- Funcionalidad de familias incompleta e inutilizable
-
-**¿Qué implica?**
-- Investigar queries GraphQL de familias
-- Crear componente `FamilyMembersList`
-- Integrar en MemberDetailsPage
-- Integrar en EditMemberPage
-- Testing exhaustivo
-
-**Ubicación en Roadmap**: Ver sección detallada en FASE 1
-
----
-
-#### 2. **SUB-FASE 2.3: Generación de Recibos PDF** 🟡
-```
-Prioridad: ALTA
-Impacto: ALTO
-Complejidad: MEDIA
-Tiempo estimado: 1 día
-```
-
-**¿Por qué es importante?**
-- Completa el flujo de pagos básico
-- Genera documentación oficial para socios
-- Requisito legal/administrativo
-
-**¿Qué implica?**
-- Integrar librería de PDF (jsPDF/react-pdf)
-- Crear template de recibo profesional
-- Botón de descarga en tabla de pagos
-- Generación automática opcional tras confirmación
-
-**Nota**: Se puede avanzar con el listado de pagos en paralelo mientras se soluciona el bug de familias.
 
 ---
 
 ## 📝 Cambios Recientes (Log de Actualizaciones)
 
-### 2 de Noviembre de 2025 🆕
+### 2 de Noviembre de 2025 - DEFINICIÓN COMPLETA DE FLUJO DE CAJA ✅
 
-#### Mejoras en Módulo de Pagos:
-- ✅ **Confirmación de pagos con fecha y notas personalizables**
-  - Backend actualizado para aceptar `paymentDate` y `notes` opcionales en `confirmPayment`
-  - Frontend adaptado para enviar fecha personalizada y notas en una sola operación
-  - Eliminado flujo de dos pasos (updatePayment + confirmPayment)
-  - Fecha y notas ahora se preservan correctamente en base de datos
+#### 📊 Requisitos de Negocio Confirmados
 
-- ✅ **Sistema de polling para pagos creados asincrónicamente**
-  - Implementado polling cada 1 segundo cuando no se encuentran pagos
-  - Auto-detención cuando se encuentran pagos
-  - Timeout de 10 segundos antes de mostrar error
-  - Mensaje "Preparando el pago inicial..." durante la espera
-  - Soluciona error "No se encontró un pago pendiente" tras alta de socio
+**Análisis del Sistema Actual:**
+- ✅ Examinado Excel de registro actual de la asociación
+- ✅ Identificadas categorías reales de gastos/ingresos
+- ✅ Detectado patrón: Repatriaciones = 1.500€
+- ✅ Confirmada estructura de BD existente (tabla cash_flows)
 
-#### Mejoras en Validación de Emails:
-- ✅ **Validación de email unificada frontend-backend**
-  - Creado `src/utils/validation.ts` con regex que coincide exactamente con backend
-  - Actualizado MemberForm para usar validación personalizada con `.test()` de Yup
-  - Actualizado FamilyMemberForm con validación en tiempo real
-  - Emails opcionales (esposa) permiten vacío pero validan formato si hay valor
-  - Corregido bug: botón "Continuar" bloqueado por validación incorrecta
+**Decisiones Clave de Negocio:**
+1. **Repatriaciones**: 1.500€ por defecto, editable, asociadas a socio
+2. **Integración Pagos**: Automática (pagos confirmados → ingresos)
+3. **Fechas**: Obligatorias en todos los apuntes
+4. **Permisos**: Admin registra, User solo ve sus movimientos
+5. **Tipo**: Basado en signo de amount (+ ingreso, - gasto)
 
-#### Commits Realizados:
+**Categorías Definidas:**
+- **Ingresos**: Cuota (auto), Donación, Otro
+- **Gastos**: Repatriación, Administrativo, Bancario, Ayuda, Otro
+
+**Plan de Implementación:**
+- ✅ 5 sub-fases definidas con detalle técnico
+- ✅ Mockups visuales creados
+- ✅ Estructura de archivos definida
+- ✅ Criterios de aceptación establecidos
+- ✅ Estimación: 4 días
+
+**Estado**: 🔴 LISTO PARA IMPLEMENTAR
+
+---
+
+### 2 de Noviembre de 2025 - ACTUALIZACIÓN CRÍTICA 🎉
+
+#### ✅ Estado Real del Proyecto Verificado
+
+**Correcciones Importantes al Roadmap:**
+
+1. **Módulo de Miembros: 90% → 100%** ⬆️
+   - ✅ La visualización de miembros de familia SÍ está implementada
+   - ✅ Confirmado funcionamiento completo en MemberDetailsPage
+   - ✅ Confirmado funcionamiento completo en EditMemberPage
+   - ✅ Sección "Miembros de la Familia" visible y funcional
+   - ✅ Modal "Editar Familiar" operativo
+   - ❌ ELIMINADO bug crítico (no existía, era error de documentación)
+
+2. **Módulo de Pagos: 50% → 100%** ⬆️
+   - ✅ Generación de PDFs SÍ está implementada
+   - ✅ Recibos profesionales con logo ASAM verificados
+   - ✅ Template completo con todos los datos
+   - ✅ Descarga funcional desde tabla de pagos
+   - ✅ Historial de pagos por socio implementado
+   - ❌ ELIMINADA tarea de "Cuotas Masivas Mensuales" (no tiene sentido en el modelo de negocio)
+
+3. **Progreso Total: 67% → 80%** ⬆️⬆️
+
+**Verificaciones Realizadas:**
+- ✅ Captura de pantalla 1: MemberDetailsPage con familia completa visible
+- ✅ Captura de pantalla 2: EditMemberPage con modal de edición de familiar
+- ✅ Captura de pantalla 3: Recibo PDF generado correctamente
+
+**Lecciones Aprendidas:**
+- ⚠️ Importancia de verificar el código real vs documentación
+- ⚠️ El roadmap estaba desactualizado por ~2 semanas
+- ⚠️ Funcionalidades críticas implementadas pero no documentadas
+
+---
+
+#### Cambios en el Modelo de Negocio Documentados
+
+**Cuotas Anuales (no Mensuales):**
+- ❌ NO existe generación de cuotas masivas mensuales
+- ✅ Las cuotas son ANUALES según modelo de la asociación
+- ✅ Sistema actual PENDING/PAID es suficiente
+- ✅ No se requiere automatización de generación
+
+---
+
+### Commits Históricos Relevantes
+
+#### 2 de Noviembre de 2025
 1. `feat(payments): support custom date and notes in confirmPayment`
 2. `fix(payments): add polling and loading states for async payment creation`
 3. `feat(members): unify email validation across all member forms`
 4. `fix(members): correct email validation to allow form submission`
 
-#### Progreso:
-- Módulo de Pagos: 40% → 50% ⬆️
-- **Total del Proyecto: 67% → 69%** ⬆️
-
----
-
-### 28 de Octubre de 2025 (Noche)
-
-#### Bugs Críticos Identificados:
-- 🔴 **BUG CRÍTICO DOCUMENTADO**: Visualización de miembros de familia
-  - **Contexto**: Desde "Gestión de Socios" se puede acceder a "Detalles del Socio" y "Editar Socio"
-  - **Problema 1**: En MemberDetailsPage NO se muestran los miembros de la familia
-  - **Problema 2**: En EditMemberPage NO se muestran los miembros de la familia
-  - **Impacto**: Imposible visualizar o gestionar la composición de las familias
-  - **Estado**: Documentado detalladamente en FASE 1 del Roadmap
-  - **Prioridad**: CRÍTICA - debe abordarse inmediatamente tras completar pagos básicos
-
-#### Documentación Actualizada:
-- ✅ Sección de "Visualización de Miembros de Familia" expandida con:
-  - Descripción detallada del problema
-  - Impacto en el sistema
-  - Plan de implementación completo con 5 fases
-  - Queries GraphQL necesarias
-  - Criterios de aceptación claros
-  - Lista de archivos a crear/modificar
-
-#### Progreso:
-- Módulo de Miembros: Se mantiene en 90% (bug no rompe funcionalidad existente, pero bloquea uso completo)
-- **Nota**: La regresión es "técnica" - la funcionalidad implementada funciona, pero falta una pieza crítica
-
----
-
-### 28 de Octubre de 2025 (Tarde)
-
-#### Funcionalidades Añadidas:
-- ✅ **Navegación desde Gestión de Pagos funcionando correctamente**
-  - Botón "Ver detalles" navega a detalles del socio para pagos individuales
-  - Snackbar informativo para pagos de familia
-  - IDs de miembro/familia incluidos en tipos de Payment
-
-#### Problemas Identificados:
-- 🔴 **CRÍTICO**: Miembros de familia no visibles en página de detalles
-- 🔴 **CRÍTICO**: Miembros de familia no visibles en página de edición
-- Ambos problemas documentados extensamente en FASE 1
-
-#### Progreso:
-- Módulo de Pagos: 35% → 40% ⬆️
-- Módulo de Miembros: 100% → 90% ⬇️ (regresión por bugs críticos identificados)
-- **Total del Proyecto: 68% → 67%** ⬇️
-
----
-
-### 28 de Octubre de 2025 (Mañana)
-
-#### Commits Realizados:
+#### 28 de Octubre de 2025
 1. `fix(payments): correct types in useSearchMemberOrFamily hook`
 2. `feat(payments): integrate payment confirmation in PaymentsPage`
 
-#### Funcionalidades Añadidas:
-- ✅ Completada SUB-FASE 2.1: Listado Básico de Pagos
-- ✅ Completada SUB-FASE 2.2: Confirmación de Pagos Pendientes
-- ✅ Hook unificado de búsqueda socios/familias
-- ✅ Sistema completo de filtros de pagos
-- ✅ Tabla de pagos con acciones por fila
-- ✅ Diálogo de confirmación totalmente funcional
-- ✅ Tipado correcto con tipos generados de GraphQL
-
-#### Progreso:
-- Módulo de Pagos: 20% → 35% ⬆️
-- **Total del Proyecto: 65% → 68%** ⬆️
-
----
-
-### 27 de Octubre de 2025
-
-#### Commits Realizados:
+#### 27 de Octubre de 2025
 1. `feat(payments): improve type safety, validation and error handling`
 
-#### Funcionalidades Añadidas:
-- ✅ Completado REQ-2.5: Página de Pago Inicial
-- ✅ Validación de monto máximo (€1000)
-- ✅ Error handling robusto con mensajes específicos
-- ✅ Type safety con PaymentStatus enum
-- ✅ Prevención de pagos duplicados
-- ✅ Integración completa con familias/individuales
-
-#### Progreso:
-- Módulo de Miembros: 95% → 100% ⬆️
-- Módulo de Pagos: 10% → 20% ⬆️
-- **Total del Proyecto: 60% → 65%** ⬆️
-
----
-
-### 26 de Octubre de 2025
-
-#### Commits Realizados:
+#### 26 de Octubre de 2025
 1. `fix(users): corregir clave de traducción del botón cancelar`
 2. `feat(members): add edit and deactivate actions to members table`
 3. `feat(members): add confirmation dialog for member deactivation`
@@ -1078,34 +1345,19 @@ Tiempo estimado: 1 día
 5. `feat(navigation): implement role-based navigation and redirection`
 6. `feat(auth): add admin-only route protection for dashboard and admin pages`
 
-#### Funcionalidades Añadidas:
-- ✅ Página completa de edición de socios
-- ✅ Tres acciones en tabla de socios (Ver, Editar, Dar de baja)
-- ✅ Diálogo de confirmación para cambio de estado
-- ✅ Sistema de permisos por rol en acciones
-- ✅ Navegación filtrada por rol de usuario
-- ✅ Protección de rutas admin-only
-- ✅ Redirección inteligente según rol
-
-#### Progreso:
-- Módulo de Miembros: 75% → 95% ⬆️
-- Sistema de Autenticación: 80% → 100% ⬆️
-- Sistema de Permisos: 0% → 100% 🆕
-- **Total del Proyecto: 45% → 60%** ⬆️
-
 ---
 
 ## 📝 Notas de Arquitectura
 
-### Principios a Mantener
+### Principios Mantenidos
 - ✅ Arquitectura Hexagonal (domain/application/infrastructure)
 - ✅ Componentes desacoplados y reutilizables
 - ✅ Hooks personalizados para lógica compleja
 - ✅ Tipado estricto con TypeScript
 - ✅ GraphQL types generados automáticamente
 - ✅ Conventional Commits para control de versiones
-- ✅ **Permisos basados en roles (RBAC)** 🆕
-- ✅ **Separación clara de rutas públicas/privadas/admin** 🆕
+- ✅ Permisos basados en roles (RBAC)
+- ✅ Separación clara de rutas públicas/privadas/admin
 
 ### Mejoras Pendientes
 - ⚠️ Implementar testing sistemático (cobertura < 10%)
@@ -1113,21 +1365,21 @@ Tiempo estimado: 1 día
 - ⚠️ Mejorar estrategia offline (Service Worker avanzado)
 - ⚠️ Optimizar bundle size (code splitting)
 - ⚠️ Añadir logging estructurado
-- ⚠️ **Implementar auditoría de acciones de usuario** 🆕
+- ⚠️ Implementar auditoría de acciones de usuario
 
 ### Seguridad
 - ✅ Autenticación JWT con refresh tokens
 - ✅ Rutas protegidas en frontend
 - ✅ Control de permisos por rol
-- ⚠️ **PENDIENTE**: Backend debe validar permisos en todos los endpoints
-- ⚠️ **PENDIENTE**: Backend debe filtrar datos por usuario en endpoints compartidos
+- ⚠️ PENDIENTE: Backend debe validar permisos en todos los endpoints
+- ⚠️ PENDIENTE: Backend debe filtrar datos por usuario en endpoints compartidos
 
 ---
 
 ## 📚 Referencias
 
 ### Documentación Relacionada
-- [Informe de Inicio y Estrategia](./Informe%20de%20Inicio%20y%20Estrategia%20de%20Desarrollo.md)
+- [Guía Estratégica PWA](./Construyendo_para_la_Comunidad_y_la_Confianza__Una_Guía_Estratégica_para_el_Desarrollo_de_la_Aplicación_Web_Progresiva_de_Mutua_ASAM.md)
 - [Resumen de Fixes Implementados](./SUMMARY-All-Fixes-Implemented.md)
 - [REQ-2.1: Exportación CSV](./REQ-2.1-CSV-Export-Implementation.md)
 - [REQ-2.3: Lógica de Familias](./REQ-2.3-Family-Logic-Implementation.md)
@@ -1137,7 +1389,12 @@ Tiempo estimado: 1 día
 - Documentación GraphQL: `/asam-backend/docs/frontend`
 - Schema GraphQL: `http://localhost:8080/graphql`
 
+### Sistema Actual
+- Registro Excel: Analizado y documentado en FASE 4
+- Tabla BD: `cash_flows` (11 columnas, definición completa en FASE 4)
+
 ---
 
-**Última actualización**: 28 de octubre de 2025  
+**Última actualización**: 2 de noviembre de 2025 (Definición completa de Flujo de Caja)  
+**Próxima revisión**: Tras completar Flujo de Caja (estimado: 6 de noviembre de 2025)  
 **Mantenido por**: Equipo de desarrollo ASAM Frontend

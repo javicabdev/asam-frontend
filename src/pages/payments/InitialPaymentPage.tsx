@@ -27,6 +27,7 @@ export const InitialPaymentPage: React.FC = () => {
   const navigate = useNavigate()
   const [paymentRegistered, setPaymentRegistered] = useState(false)
   const [paymentData, setPaymentData] = useState<any>(null)
+  const [hasWaitedEnough, setHasWaitedEnough] = useState(false)
 
   // Get member data
   const {
@@ -50,16 +51,30 @@ export const InitialPaymentPage: React.FC = () => {
 
   // Find the PENDING payment
   const pendingPayment = React.useMemo(() => {
-    const pending = payments.filter(p => p.status.toUpperCase() === 'PENDING')
+    console.log('🔍 [InitialPaymentPage] Buscando pago pendiente...')
+    console.log('   Total payments:', payments.length)
+    console.log('   Payments:', payments.map(p => ({ id: p.id, status: p.status, raw_status: p.status })))
+
+    const pending = payments.filter(p => {
+      const statusUpper = p.status.toUpperCase()
+      console.log(`   Checking payment ${p.id}: status="${p.status}" -> uppercase="${statusUpper}" -> isPending=${statusUpper === 'PENDING'}`)
+      return statusUpper === 'PENDING'
+    })
+
+    console.log('   Pending payments found:', pending.length)
     if (pending.length > 1) {
-      console.warn('Multiple pending payments found, using most recent:', pending)
+      console.warn('   Multiple pending payments found, using most recent:', pending)
     }
+
     // Return most recent if multiple exist (handle null payment_date)
-    return pending.sort((a, b) => {
+    const result = pending.sort((a, b) => {
       const dateA = a.payment_date ? new Date(a.payment_date).getTime() : 0
       const dateB = b.payment_date ? new Date(b.payment_date).getTime() : 0
       return dateB - dateA
     })[0]
+
+    console.log('   Selected pending payment:', result)
+    return result
   }, [payments])
 
   // Check if payment is already PAID
@@ -137,7 +152,7 @@ export const InitialPaymentPage: React.FC = () => {
   useEffect(() => {
     const wasRegistered = sessionStorage.getItem(`payment_registered_${memberId}`)
     const storedPaymentData = sessionStorage.getItem(`payment_data_${memberId}`)
-    
+
     if (wasRegistered === 'true' && storedPaymentData) {
       try {
         const payment = JSON.parse(storedPaymentData)
@@ -151,6 +166,16 @@ export const InitialPaymentPage: React.FC = () => {
       }
     }
   }, [memberId])
+
+  // Wait 10 seconds before showing "payment not found" error
+  // This handles the race condition where backend creates payment asynchronously
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setHasWaitedEnough(true)
+    }, 10000) // 10 seconds
+
+    return () => clearTimeout(timer)
+  }, [])
 
   const onPaymentSubmit = async (formData: InitialPaymentFormData) => {
     await handleSubmit(formData)
@@ -207,8 +232,23 @@ export const InitialPaymentPage: React.FC = () => {
     )
   }
 
-  // Only show "no pending payment" error if we finished loading and there's no payment
-  if (!paymentsLoading && member && !pendingPayment) {
+  // Show loading while waiting for payment to be created by backend
+  if (!paymentsLoading && member && !pendingPayment && !hasWaitedEnough) {
+    return (
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+          <CircularProgress />
+          <Typography variant="body1" color="text.secondary">
+            Preparando el pago inicial...
+          </Typography>
+        </Box>
+      </Container>
+    )
+  }
+
+  // Only show "no pending payment" error if we finished loading, there's no payment, AND we've waited enough time
+  // This prevents showing the error during backend async payment creation
+  if (!paymentsLoading && member && !pendingPayment && hasWaitedEnough) {
     return (
       <Container maxWidth="md" sx={{ py: 4 }}>
         <Alert severity="error">
@@ -218,6 +258,17 @@ export const InitialPaymentPage: React.FC = () => {
         <Button onClick={handleGoToMembers} sx={{ mt: 2 }}>
           Volver a Socios
         </Button>
+      </Container>
+    )
+  }
+
+  // Don't render form if pendingPayment is not available yet
+  if (!pendingPayment) {
+    return (
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Box display="flex" justifyContent="center">
+          <CircularProgress />
+        </Box>
       </Container>
     )
   }

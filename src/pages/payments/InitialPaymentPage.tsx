@@ -37,26 +37,29 @@ export const InitialPaymentPage: React.FC = () => {
     error: memberError,
   } = useMemberData(memberId || '')
 
-  // Load payments to find the PENDING payment created by backend
+  // Load member payments
   const {
     payments,
     loading: paymentsLoading,
     error: paymentsError
   } = useMemberPayments(
     memberId || '',
-    member?.tipo_membresia || 'INDIVIDUAL'
+    member?.tipo_membresia || 'INDIVIDUAL',
+    !member // skip if member not loaded yet
   )
 
-  // Find the PENDING payment (automatically created by backend)
+  // Find the PENDING payment
   const pendingPayment = React.useMemo(() => {
     const pending = payments.filter(p => p.status.toUpperCase() === 'PENDING')
     if (pending.length > 1) {
       console.warn('Multiple pending payments found, using most recent:', pending)
     }
-    // Return most recent if multiple exist
-    return pending.sort((a, b) => 
-      new Date(b.payment_date).getTime() - new Date(a.payment_date).getTime()
-    )[0]
+    // Return most recent if multiple exist (handle null payment_date)
+    return pending.sort((a, b) => {
+      const dateA = a.payment_date ? new Date(a.payment_date).getTime() : 0
+      const dateB = b.payment_date ? new Date(b.payment_date).getTime() : 0
+      return dateB - dateA
+    })[0]
   }, [payments])
 
   // Check if payment is already PAID
@@ -204,12 +207,12 @@ export const InitialPaymentPage: React.FC = () => {
     )
   }
 
-  if (!pendingPayment) {
+  // Only show "no pending payment" error if we finished loading and there's no payment
+  if (!paymentsLoading && member && !pendingPayment) {
     return (
       <Container maxWidth="md" sx={{ py: 4 }}>
         <Alert severity="error">
-          No se encontró un pago pendiente para este socio. 
-          El pago debe crearse automáticamente al registrar el socio.
+          No se encontró un pago pendiente para este socio.
           Por favor, contacte al administrador del sistema.
         </Alert>
         <Button onClick={handleGoToMembers} sx={{ mt: 2 }}>

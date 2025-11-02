@@ -50,23 +50,31 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
   }
 
   // Format date to DD/MM/YYYY
-  const formatDate = (dateString: string): string => {
+  const formatDate = (dateString: string | null | undefined): string => {
+    if (!dateString) return 'Pendiente'
+    
     try {
       const date = new Date(dateString)
+      // Check if date is valid (not 0001-01-01 or other invalid dates)
+      if (date.getFullYear() < 1900 || isNaN(date.getTime())) {
+        return 'Pendiente'
+      }
       return format(date, 'dd/MM/yyyy', { locale: es })
     } catch {
-      return dateString
+      return 'Pendiente'
     }
   }
 
   // Translate payment method
-  const translateMethod = (method: string): string => {
+  const translateMethod = (method: string | null | undefined): string => {
+    if (!method) return 'Por definir'
+    
     const translations: Record<string, string> = {
       CASH: 'Efectivo',
       TRANSFER: 'Transferencia',
       CARD: 'Tarjeta',
     }
-    return translations[method] || method
+    return translations[method.toUpperCase()] || method
   }
 
   // Handle download receipt

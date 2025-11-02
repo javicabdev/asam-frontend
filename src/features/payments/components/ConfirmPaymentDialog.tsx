@@ -47,7 +47,8 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
   }
 
   // Format date
-  const formatDate = (dateString: string): string => {
+  const formatDate = (dateString: string | null): string => {
+    if (!dateString) return 'Pendiente'
     try {
       const date = new Date(dateString)
       return format(date, 'dd/MM/yyyy', { locale: es })
@@ -57,7 +58,8 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
   }
 
   // Translate payment method
-  const translateMethod = (method: string): string => {
+  const translateMethod = (method: string | null): string => {
+    if (!method) return 'Pendiente'
     const methods: Record<string, string> = {
       CASH: 'Efectivo',
       TRANSFER: 'Transferencia',

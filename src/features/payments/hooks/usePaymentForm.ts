@@ -98,8 +98,7 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
         formData,
       })
 
-      // Step 1: Update payment details (method and notes)
-      // Note: payment_date is not updatable via PaymentInput - it's set by the backend
+      // Step 1: Update payment details (method, date, and notes)
       const updateResult = await updatePayment({
         variables: {
           id: pendingPaymentId,
@@ -107,6 +106,10 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
             payment_method: 'CASH', // Hardcoded - only cash payments
             notes: formData.notes || null,
             amount: 0, // Required field - will be set by backend based on membership type
+            // TODO: Uncomment when backend supports payment_date in PaymentInput
+            // payment_date: formData.payment_date
+            //   ? `${formData.payment_date}T00:00:00Z`
+            //   : new Date().toISOString(),
           }
         }
       })

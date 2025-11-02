@@ -423,8 +423,8 @@ export const NewMemberPage: React.FC = () => {
       <Card sx={{ mb: 3, bgcolor: 'info.lighter' }}>
         <CardContent>
           <Typography variant="body1">
-            <strong>Importante:</strong> Después de completar el registro, deberá realizar el pago
-            de la cuota inicial para activar la membresía.
+            <strong>Importante:</strong> Después de completar el registro, podrá confirmar
+            el pago de la cuota inicial en efectivo.
           </Typography>
         </CardContent>
       </Card>

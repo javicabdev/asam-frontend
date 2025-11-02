@@ -47,9 +47,9 @@ export interface PaymentListItem {
   memberNumber: string
   familyName?: string
   amount: number
-  paymentDate: string
+  paymentDate: string | null  // Can be null or invalid for pending payments
   status: 'PENDING' | 'PAID' | 'CANCELLED'
-  paymentMethod: string
+  paymentMethod: string | null  // Can be null for pending payments
   notes?: string | null
 }
 
@@ -63,8 +63,8 @@ export interface ReceiptData {
   memberNumber: string
   familyName?: string | null
   amount: number
-  paymentDate: string
-  paymentMethod: string
+  paymentDate: string | null  // Can be null for pending payments
+  paymentMethod: string | null  // Can be null for pending payments
   notes?: string | null
   generatedAt: string
 }

@@ -1,52 +1,9 @@
 import { useQuery } from '@apollo/client'
-import { gql } from '@apollo/client'
-
-const GET_MEMBER_PAYMENTS = gql`
-  query GetMemberPayments($memberId: ID!) {
-    getMemberPayments(memberId: $memberId) {
-      id
-      member {
-        miembro_id
-        numero_socio
-        nombre
-        apellidos
-      }
-      amount
-      payment_date
-      status
-      payment_method
-      notes
-    }
-  }
-`
-
-const GET_FAMILY_BY_ORIGIN_MEMBER = gql`
-  query GetFamilyByOriginMember($memberId: ID!) {
-    getFamilyByOriginMember(memberId: $memberId) {
-      id
-      numero_socio
-    }
-  }
-`
-
-const GET_FAMILY_PAYMENTS = gql`
-  query GetFamilyPayments($familyId: ID!) {
-    getFamilyPayments(familyId: $familyId) {
-      id
-      family {
-        id
-        numero_socio
-        esposo_nombre
-        esposa_nombre
-      }
-      amount
-      payment_date
-      status
-      payment_method
-      notes
-    }
-  }
-`
+import { 
+  GetMemberPaymentsDocument,
+  GetFamilyByOriginMemberDocument,
+  GetFamilyPaymentsDocument,
+} from '@/graphql/generated/operations'
 
 export interface MemberPayment {
   id: string
@@ -63,9 +20,9 @@ export interface MemberPayment {
     esposa_nombre: string
   }
   amount: number
-  payment_date: string
+  payment_date: string | null  // Can be null or invalid for pending payments
   status: string
-  payment_method: string
+  payment_method: string | null  // Can be null for pending payments
   notes?: string | null
 }
 
@@ -83,21 +40,25 @@ interface UseMemberPaymentsResult {
  */
 export function useMemberPayments(
   memberId: string,
-  membershipType: 'INDIVIDUAL' | 'FAMILY'
+  membershipType: 'INDIVIDUAL' | 'FAMILY',
+  skip: boolean = false
 ): UseMemberPaymentsResult {
-  console.log('🔬 [useMemberPayments] Init with:', { memberId, membershipType })
-  
+  console.log('🔬 [useMemberPayments] Init with:', { memberId, membershipType, skip })
+
   // For INDIVIDUAL members: fetch payments directly
   const {
     data: individualData,
     loading: individualLoading,
     error: individualError,
     refetch: refetchIndividual,
-  } = useQuery(GET_MEMBER_PAYMENTS, {
+  } = useQuery(GetMemberPaymentsDocument, {
     variables: { memberId },
-    skip: !memberId || membershipType !== 'INDIVIDUAL',
+    skip: skip || !memberId || membershipType !== 'INDIVIDUAL',
     onCompleted: (data) => {
       console.log('✅ [useMemberPayments] Individual payments loaded:', data)
+    },
+    onError: (error) => {
+      console.error('❌ [useMemberPayments] Error loading individual payments:', error)
     },
   })
 
@@ -106,11 +67,14 @@ export function useMemberPayments(
     data: familyData,
     loading: familyLoading,
     error: familyError,
-  } = useQuery(GET_FAMILY_BY_ORIGIN_MEMBER, {
+  } = useQuery(GetFamilyByOriginMemberDocument, {
     variables: { memberId },
-    skip: !memberId || membershipType !== 'FAMILY',
+    skip: skip || !memberId || membershipType !== 'FAMILY',
     onCompleted: (data) => {
       console.log('✅ [useMemberPayments] Family data loaded:', data)
+    },
+    onError: (error) => {
+      console.error('❌ [useMemberPayments] Error loading family data:', error)
     },
   })
 
@@ -123,11 +87,14 @@ export function useMemberPayments(
     loading: familyPaymentsLoading,
     error: familyPaymentsError,
     refetch: refetchFamily,
-  } = useQuery(GET_FAMILY_PAYMENTS, {
-    variables: { familyId },
-    skip: !familyId || membershipType !== 'FAMILY',
+  } = useQuery(GetFamilyPaymentsDocument, {
+    variables: { familyId: familyId || '' },
+    skip: skip || !familyId || membershipType !== 'FAMILY',
     onCompleted: (data) => {
       console.log('✅ [useMemberPayments] Family payments loaded:', data)
+    },
+    onError: (error) => {
+      console.error('❌ [useMemberPayments] Error loading family payments:', error)
     },
   })
 

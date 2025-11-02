@@ -170,11 +170,11 @@ export const MemberForm: React.FC<MemberFormProps> = ({
         profesion: initialData.profesion || '',
         nacionalidad: initialData.nacionalidad || '',
         observaciones: initialData.observaciones || '',
-        esposa_nombre: '',
-        esposa_apellidos: '',
-        esposa_fecha_nacimiento: null,
-        esposa_documento_identidad: '',
-        esposa_correo_electronico: '',
+        esposa_nombre: initialData.esposa_nombre || '',
+        esposa_apellidos: initialData.esposa_apellidos || '',
+        esposa_fecha_nacimiento: initialData.esposa_fecha_nacimiento ? new Date(initialData.esposa_fecha_nacimiento) : null,
+        esposa_documento_identidad: initialData.esposa_documento_identidad || '',
+        esposa_correo_electronico: initialData.esposa_correo_electronico || '',
       }
     }
 
@@ -221,6 +221,28 @@ export const MemberForm: React.FC<MemberFormProps> = ({
   const tipoMembresia = watch('tipo_membresia')
   const isFamily = tipoMembresia === MembershipType.FAMILY
   const numeroSocio = watch('numero_socio')
+
+  // Track whether family members have been initialized
+  const familyMembersInitialized = React.useRef(false)
+
+  // Initialize family members from initialData in edit mode
+  React.useEffect(() => {
+    if (mode === 'edit' && initialData?.familyMembers && !familyMembersInitialized.current) {
+      familyMembersInitialized.current = true
+      // Load existing family members
+      initialData.familyMembers.forEach((familiar: any) => {
+        addFamilyMember({
+          id: familiar.id,
+          nombre: familiar.nombre,
+          apellidos: familiar.apellidos,
+          fecha_nacimiento: familiar.fecha_nacimiento || undefined,
+          dni_nie: familiar.dni_nie || undefined,
+          correo_electronico: familiar.correo_electronico || undefined,
+          parentesco: familiar.parentesco || undefined
+        })
+      })
+    }
+  }, [mode, initialData, addFamilyMember])
 
   // Use the hook to get the next member number (skip in edit mode)
   const {

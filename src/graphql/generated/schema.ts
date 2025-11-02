@@ -134,6 +134,7 @@ export type Familiar = {
   fecha_nacimiento?: Maybe<Scalars['Time']['output']>;
   id: Scalars['ID']['output'];
   nombre: Scalars['String']['output'];
+  parentesco: Scalars['String']['output'];
 };
 
 export type FamiliarInput = {
@@ -148,8 +149,14 @@ export type FamiliarInput = {
 export type Family = {
   __typename?: 'Family';
   esposa_apellidos: Scalars['String']['output'];
+  esposa_correo_electronico?: Maybe<Scalars['String']['output']>;
+  esposa_documento_identidad?: Maybe<Scalars['String']['output']>;
+  esposa_fecha_nacimiento?: Maybe<Scalars['Time']['output']>;
   esposa_nombre: Scalars['String']['output'];
   esposo_apellidos: Scalars['String']['output'];
+  esposo_correo_electronico?: Maybe<Scalars['String']['output']>;
+  esposo_documento_identidad?: Maybe<Scalars['String']['output']>;
+  esposo_fecha_nacimiento?: Maybe<Scalars['Time']['output']>;
   esposo_nombre: Scalars['String']['output'];
   familiares?: Maybe<Array<Familiar>>;
   id: Scalars['ID']['output'];

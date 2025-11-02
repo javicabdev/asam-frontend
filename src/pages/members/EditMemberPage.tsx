@@ -21,6 +21,7 @@ import { FamilyMembersDisplay } from '@/features/members/components'
 import { UPDATE_MEMBER_MUTATION } from '@/features/members/api/mutations'
 import { useGetMemberQuery } from '@/graphql/generated/operations'
 import { MembershipType } from '@/features/members/types'
+import { useFamilyData } from '@/features/members/hooks'
 import type {
   UpdateMemberMutation,
   UpdateMemberMutationVariables,
@@ -65,6 +66,28 @@ export const EditMemberPage: React.FC = () => {
   })
 
   const member = memberData?.getMember
+
+  // Load family data if member is FAMILY type
+  const { family, familiares, loading: loadingFamily } = useFamilyData(
+    member?.miembro_id || '',
+    member?.tipo_membresia || MembershipType.INDIVIDUAL
+  )
+
+  // Combine member data with family data for the form
+  const memberWithFamily = React.useMemo(() => {
+    if (!member) return null
+    if (member.tipo_membresia !== MembershipType.FAMILY || !family) return member
+
+    return {
+      ...member,
+      esposa_nombre: family.esposa_nombre,
+      esposa_apellidos: family.esposa_apellidos,
+      esposa_fecha_nacimiento: family.esposa_fecha_nacimiento,
+      esposa_documento_identidad: family.esposa_documento_identidad,
+      esposa_correo_electronico: family.esposa_correo_electronico,
+      familyMembers: familiares || []
+    }
+  }, [member, family, familiares])
 
   // Helper to extract field errors
   const extractFieldErrors = (graphQLError: any): Array<{field: string, message: string}> => {
@@ -186,7 +209,7 @@ export const EditMemberPage: React.FC = () => {
     )
   }
 
-  if (loadingMember) {
+  if (loadingMember || loadingFamily) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box display="flex" justifyContent="center">
@@ -272,7 +295,7 @@ export const EditMemberPage: React.FC = () => {
         <>
           <MemberForm
             mode="edit"
-            initialData={member}
+            initialData={memberWithFamily}
             onCancel={handleCancel}
             onSubmit={(data) => void handleSubmit(data)}
             externalErrors={fieldErrors}

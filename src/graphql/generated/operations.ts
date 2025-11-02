@@ -137,6 +137,7 @@ export type Familiar = {
   fecha_nacimiento?: Maybe<Scalars['Time']['output']>;
   id: Scalars['ID']['output'];
   nombre: Scalars['String']['output'];
+  parentesco: Scalars['String']['output'];
 };
 
 export type FamiliarInput = {
@@ -151,8 +152,14 @@ export type FamiliarInput = {
 export type Family = {
   __typename?: 'Family';
   esposa_apellidos: Scalars['String']['output'];
+  esposa_correo_electronico?: Maybe<Scalars['String']['output']>;
+  esposa_documento_identidad?: Maybe<Scalars['String']['output']>;
+  esposa_fecha_nacimiento?: Maybe<Scalars['Time']['output']>;
   esposa_nombre: Scalars['String']['output'];
   esposo_apellidos: Scalars['String']['output'];
+  esposo_correo_electronico?: Maybe<Scalars['String']['output']>;
+  esposo_documento_identidad?: Maybe<Scalars['String']['output']>;
+  esposo_fecha_nacimiento?: Maybe<Scalars['Time']['output']>;
   esposo_nombre: Scalars['String']['output'];
   familiares?: Maybe<Array<Familiar>>;
   id: Scalars['ID']['output'];
@@ -920,7 +927,7 @@ export type GetFamilyByOriginMemberQueryVariables = Exact<{
 }>;
 
 
-export type GetFamilyByOriginMemberQuery = { __typename?: 'Query', getFamilyByOriginMember?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> | null } | null };
+export type GetFamilyByOriginMemberQuery = { __typename?: 'Query', getFamilyByOriginMember?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, esposa_fecha_nacimiento?: string | null, esposa_documento_identidad?: string | null, esposa_correo_electronico?: string | null, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> | null } | null };
 
 export type ListFamiliesQueryVariables = Exact<{
   filter?: InputMaybe<FamilyFilter>;
@@ -2170,6 +2177,9 @@ export const GetFamilyByOriginMemberDocument = gql`
     esposo_apellidos
     esposa_nombre
     esposa_apellidos
+    esposa_fecha_nacimiento
+    esposa_documento_identidad
+    esposa_correo_electronico
     familiares {
       id
       nombre

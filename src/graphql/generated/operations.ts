@@ -324,6 +324,7 @@ export type MutationChangePasswordArgs = {
 
 export type MutationConfirmPaymentArgs = {
   id: Scalars['ID']['input'];
+  paymentMethod: Scalars['String']['input'];
 };
 
 
@@ -469,7 +470,7 @@ export type Payment = {
   member?: Maybe<Member>;
   membership_fee?: Maybe<MembershipFee>;
   notes?: Maybe<Scalars['String']['output']>;
-  payment_date: Scalars['Time']['output'];
+  payment_date?: Maybe<Scalars['Time']['output']>;
   payment_method: Scalars['String']['output'];
   status: PaymentStatus;
 };
@@ -788,7 +789,7 @@ export type FamiliarInfoFragment = { __typename?: 'Familiar', id: string, nombre
 
 export type UserInfoFragment = { __typename?: 'User', id: string, username: string, email: string, role: UserRole, isActive: boolean, lastLogin?: string | null, emailVerified: boolean, emailVerifiedAt?: string | null };
 
-export type PaymentInfoFragment = { __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string, notes?: string | null };
+export type PaymentInfoFragment = { __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string, notes?: string | null };
 
 export type CashFlowInfoFragment = { __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string };
 
@@ -866,7 +867,7 @@ export type GetCashFlowQueryVariables = Exact<{
 }>;
 
 
-export type GetCashFlowQuery = { __typename?: 'Query', getCashFlow?: { __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null, payment?: { __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string } | null } | null };
+export type GetCashFlowQuery = { __typename?: 'Query', getCashFlow?: { __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null, payment?: { __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string } | null } | null };
 
 export type GetBalanceQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -878,14 +879,14 @@ export type GetTransactionsQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactionsQuery = { __typename?: 'Query', getTransactions: { __typename?: 'TransactionConnection', nodes: Array<{ __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null, payment?: { __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string } | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
+export type GetTransactionsQuery = { __typename?: 'Query', getTransactions: { __typename?: 'TransactionConnection', nodes: Array<{ __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null, payment?: { __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string } | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
 
 export type RegisterTransactionMutationVariables = Exact<{
   input: TransactionInput;
 }>;
 
 
-export type RegisterTransactionMutation = { __typename?: 'Mutation', registerTransaction: { __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null, payment?: { __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string } | null } };
+export type RegisterTransactionMutation = { __typename?: 'Mutation', registerTransaction: { __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null, payment?: { __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string } | null } };
 
 export type UpdateTransactionMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -893,7 +894,7 @@ export type UpdateTransactionMutationVariables = Exact<{
 }>;
 
 
-export type UpdateTransactionMutation = { __typename?: 'Mutation', updateTransaction: { __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null, payment?: { __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string } | null } };
+export type UpdateTransactionMutation = { __typename?: 'Mutation', updateTransaction: { __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null, payment?: { __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string } | null } };
 
 export type AdjustBalanceMutationVariables = Exact<{
   amount: Scalars['Float']['input'];
@@ -1065,21 +1066,21 @@ export type GetPaymentQueryVariables = Exact<{
 }>;
 
 
-export type GetPaymentQuery = { __typename?: 'Query', getPayment?: { __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null } | null };
+export type GetPaymentQuery = { __typename?: 'Query', getPayment?: { __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null } | null };
 
 export type GetMemberPaymentsQueryVariables = Exact<{
   memberId: Scalars['ID']['input'];
 }>;
 
 
-export type GetMemberPaymentsQuery = { __typename?: 'Query', getMemberPayments: Array<{ __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null }> };
+export type GetMemberPaymentsQuery = { __typename?: 'Query', getMemberPayments: Array<{ __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null }> };
 
 export type GetFamilyPaymentsQueryVariables = Exact<{
   familyId: Scalars['ID']['input'];
 }>;
 
 
-export type GetFamilyPaymentsQuery = { __typename?: 'Query', getFamilyPayments: Array<{ __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string, notes?: string | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null }> };
+export type GetFamilyPaymentsQuery = { __typename?: 'Query', getFamilyPayments: Array<{ __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string, notes?: string | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null }> };
 
 export type GetPaymentStatusQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1093,14 +1094,14 @@ export type ListPaymentsQueryVariables = Exact<{
 }>;
 
 
-export type ListPaymentsQuery = { __typename?: 'Query', listPayments: { __typename?: 'PaymentConnection', nodes: Array<{ __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null, membership_fee?: { __typename?: 'MembershipFee', id: string, year: number } | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
+export type ListPaymentsQuery = { __typename?: 'Query', listPayments: { __typename?: 'PaymentConnection', nodes: Array<{ __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null, membership_fee?: { __typename?: 'MembershipFee', id: string, year: number } | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
 
 export type RegisterPaymentMutationVariables = Exact<{
   input: PaymentInput;
 }>;
 
 
-export type RegisterPaymentMutation = { __typename?: 'Mutation', registerPayment: { __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null } };
+export type RegisterPaymentMutation = { __typename?: 'Mutation', registerPayment: { __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null } };
 
 export type UpdatePaymentMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1108,14 +1109,15 @@ export type UpdatePaymentMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePaymentMutation = { __typename?: 'Mutation', updatePayment: { __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null } };
+export type UpdatePaymentMutation = { __typename?: 'Mutation', updatePayment: { __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null } };
 
 export type ConfirmPaymentMutationVariables = Exact<{
   id: Scalars['ID']['input'];
+  paymentMethod: Scalars['String']['input'];
 }>;
 
 
-export type ConfirmPaymentMutation = { __typename?: 'Mutation', confirmPayment: { __typename?: 'Payment', id: string, amount: number, payment_date: string, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null } };
+export type ConfirmPaymentMutation = { __typename?: 'Mutation', confirmPayment: { __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string, notes?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, family?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposa_nombre: string } | null } };
 
 export type CancelPaymentMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -3503,8 +3505,8 @@ export type UpdatePaymentMutationHookResult = ReturnType<typeof useUpdatePayment
 export type UpdatePaymentMutationResult = Apollo.MutationResult<UpdatePaymentMutation>;
 export type UpdatePaymentMutationOptions = Apollo.BaseMutationOptions<UpdatePaymentMutation, UpdatePaymentMutationVariables>;
 export const ConfirmPaymentDocument = gql`
-    mutation ConfirmPayment($id: ID!) {
-  confirmPayment(id: $id) {
+    mutation ConfirmPayment($id: ID!, $paymentMethod: String!) {
+  confirmPayment(id: $id, paymentMethod: $paymentMethod) {
     id
     member {
       miembro_id
@@ -3542,6 +3544,7 @@ export type ConfirmPaymentMutationFn = Apollo.MutationFunction<ConfirmPaymentMut
  * const [confirmPaymentMutation, { data, loading, error }] = useConfirmPaymentMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      paymentMethod: // value for 'paymentMethod'
  *   },
  * });
  */

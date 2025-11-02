@@ -3,7 +3,6 @@ import { Box, Chip, IconButton, Tooltip, useTheme } from '@mui/material'
 import {
   Visibility as VisibilityIcon,
   CheckCircleOutline as ConfirmIcon,
-  CancelOutlined as CancelIcon,
   Receipt as ReceiptIcon,
 } from '@mui/icons-material'
 import { format } from 'date-fns'
@@ -23,7 +22,6 @@ interface PaymentsTableProps {
   onSortChange?: (field: string, direction: 'ASC' | 'DESC' | null) => void
   onRowClick?: (payment: PaymentListItem) => void
   onConfirmClick?: (payment: PaymentListItem) => void
-  onCancelClick?: (payment: PaymentListItem) => void
   onDownloadReceipt?: (payment: PaymentListItem) => void
   isAdmin?: boolean
 }
@@ -42,7 +40,6 @@ export function PaymentsTable({
   onSortChange,
   onRowClick,
   onConfirmClick,
-  onCancelClick,
   onDownloadReceipt,
   isAdmin = false,
 }: PaymentsTableProps) {
@@ -57,12 +54,15 @@ export function PaymentsTable({
   }
 
   // Format date to DD/MM/YYYY
-  const formatDate = (dateString: string): string => {
+  const formatDate = (dateString: string | null): string => {
+    if (!dateString) return ''
     try {
       const date = new Date(dateString)
+      // Check if date is valid
+      if (isNaN(date.getTime())) return ''
       return format(date, 'dd/MM/yyyy', { locale: es })
     } catch {
-      return dateString
+      return ''
     }
   }
 
@@ -121,10 +121,11 @@ export function PaymentsTable({
     },
     {
       field: 'paymentMethod',
-      headerName: 'Método',
+      headerName: 'Forma de pago',
       width: 130,
       sortable: true,
       renderCell: (params) => {
+        if (!params.value) return ''
         const methodLabels: Record<string, string> = {
           CASH: 'Efectivo',
           TRANSFER: 'Transferencia',
@@ -177,33 +178,18 @@ export function PaymentsTable({
           )}
 
           {isAdmin && params.row.status.toUpperCase() === 'PENDING' && (
-            <>
-              <Tooltip title="Confirmar pago">
-                <IconButton
-                  size="small"
-                  color="success"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onConfirmClick?.(params.row)
-                  }}
-                >
-                  <ConfirmIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-
-              <Tooltip title="Cancelar pago">
-                <IconButton
-                  size="small"
-                  color="error"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onCancelClick?.(params.row)
-                  }}
-                >
-                  <CancelIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            </>
+            <Tooltip title="Confirmar pago">
+              <IconButton
+                size="small"
+                color="success"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onConfirmClick?.(params.row)
+                }}
+              >
+                <ConfirmIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
           )}
         </Box>
       ),

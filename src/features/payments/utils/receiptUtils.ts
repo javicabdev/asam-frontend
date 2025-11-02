@@ -30,7 +30,7 @@ export function formatCurrency(amount: number): string {
  * Formats date for receipt display
  */
 export function formatReceiptDate(dateString: string | null): string {
-  if (!dateString) return 'Pendiente'
+  if (!dateString) return ''
   const date = new Date(dateString)
   return format(date, "d 'de' MMMM 'de' yyyy", { locale: es })
 }
@@ -39,7 +39,7 @@ export function formatReceiptDate(dateString: string | null): string {
  * Translates payment method code to Spanish
  */
 export function translatePaymentMethod(method: string | null): string {
-  if (!method) return 'Pendiente'
+  if (!method) return ''
   const translations: Record<string, string> = {
     CASH: 'Efectivo',
     TRANSFER: 'Transferencia Bancaria',

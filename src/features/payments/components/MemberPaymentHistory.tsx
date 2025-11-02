@@ -17,12 +17,14 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { Receipt as ReceiptIcon, Launch as LaunchIcon } from '@mui/icons-material'
+import { Receipt as ReceiptIcon, Launch as LaunchIcon, CheckCircleOutline as ConfirmIcon } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
+import { useState } from 'react'
 
 import { useMemberPayments, MemberPayment } from '../hooks/useMemberPayments'
 import { PaymentStatusChip } from './PaymentStatusChip'
 import { useReceiptGenerator } from '../hooks/useReceiptGenerator'
+import { ConfirmPaymentDialog } from './ConfirmPaymentDialog'
 import type { PaymentListItem } from '../types'
 
 interface MemberPaymentHistoryProps {
@@ -40,6 +42,10 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
   const { enqueueSnackbar } = useSnackbar()
   const { payments, loading, error, totalPaid } = useMemberPayments(memberId, membershipType)
   const { generateReceipt, isGenerating } = useReceiptGenerator()
+  const [confirmDialog, setConfirmDialog] = useState<{ open: boolean; payment: PaymentListItem | null }>({
+    open: false,
+    payment: null,
+  })
 
   // Format currency to EUR
   const formatCurrency = (amount: number): string => {
@@ -51,24 +57,24 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
 
   // Format date to DD/MM/YYYY
   const formatDate = (dateString: string | null | undefined): string => {
-    if (!dateString) return 'Pendiente'
-    
+    if (!dateString) return ''
+
     try {
       const date = new Date(dateString)
       // Check if date is valid (not 0001-01-01 or other invalid dates)
       if (date.getFullYear() < 1900 || isNaN(date.getTime())) {
-        return 'Pendiente'
+        return ''
       }
       return format(date, 'dd/MM/yyyy', { locale: es })
     } catch {
-      return 'Pendiente'
+      return ''
     }
   }
 
   // Translate payment method
   const translateMethod = (method: string | null | undefined): string => {
-    if (!method) return 'Por definir'
-    
+    if (!method) return ''
+
     const translations: Record<string, string> = {
       CASH: 'Efectivo',
       TRANSFER: 'Transferencia',
@@ -88,10 +94,12 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
         )
         return
       }
-      
+
       // Transform MemberPayment (nested GraphQL structure) to PaymentListItem (flat structure)
       const paymentListItem: PaymentListItem = {
         id: payment.id,
+        memberId: payment.member?.miembro_id,
+        familyId: payment.family?.id,
         memberName: payment.member
           ? `${payment.member.nombre} ${payment.member.apellidos}`
           : `${payment.family!.esposo_nombre} ${payment.family!.esposa_nombre}`,
@@ -118,6 +126,39 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
         { variant: 'error' }
       )
     }
+  }
+
+  // Handle confirm payment - open dialog
+  const handleConfirmPayment = (payment: MemberPayment) => {
+    // Transform MemberPayment to PaymentListItem for the dialog
+    const paymentListItem: PaymentListItem = {
+      id: payment.id,
+      memberId: payment.member?.miembro_id,
+      familyId: payment.family?.id,
+      memberName: payment.member
+        ? `${payment.member.nombre} ${payment.member.apellidos}`
+        : `${payment.family!.esposo_nombre} ${payment.family!.esposa_nombre}`,
+      memberNumber: payment.member
+        ? payment.member.numero_socio
+        : payment.family!.numero_socio,
+      familyName: payment.family
+        ? `${payment.family.esposo_nombre} ${payment.family.esposa_nombre}`
+        : undefined,
+      amount: payment.amount,
+      paymentDate: payment.payment_date,
+      status: payment.status as 'PENDING' | 'PAID' | 'CANCELLED',
+      paymentMethod: payment.payment_method,
+      notes: payment.notes,
+    }
+
+    setConfirmDialog({ open: true, payment: paymentListItem })
+  }
+
+  // Handle dialog success - reload page to show updated data
+  const handleDialogSuccess = () => {
+    setConfirmDialog({ open: false, payment: null })
+    // Reload page to refresh payment data
+    window.location.reload()
   }
 
   if (loading) {
@@ -184,7 +225,7 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
               <TableHead>
                 <TableRow>
                   <TableCell>Fecha</TableCell>
-                  <TableCell>Método</TableCell>
+                  <TableCell>Forma de pago</TableCell>
                   <TableCell align="right">Importe</TableCell>
                   <TableCell align="center">Estado</TableCell>
                   <TableCell align="center">Acciones</TableCell>
@@ -225,6 +266,17 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
                           Recibo
                         </Button>
                       )}
+                      {payment.status.toUpperCase() === 'PENDING' && (
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="success"
+                          startIcon={<ConfirmIcon />}
+                          onClick={() => handleConfirmPayment(payment)}
+                        >
+                          Confirmar
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -245,6 +297,14 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
           )}
         </>
       )}
+
+      {/* Confirm Payment Dialog */}
+      <ConfirmPaymentDialog
+        open={confirmDialog.open}
+        payment={confirmDialog.payment}
+        onClose={() => setConfirmDialog({ open: false, payment: null })}
+        onSuccess={handleDialogSuccess}
+      />
     </Box>
   )
 }

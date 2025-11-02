@@ -82,10 +82,10 @@ export const usePayments = (filters: PaymentFiltersState) => {
         memberNumber,
         familyName,
         amount: payment.amount,
-        paymentDate: payment.payment_date,
+        paymentDate: payment.payment_date ?? null,
         status: payment.status as 'PENDING' | 'PAID' | 'CANCELLED',
-        paymentMethod: payment.payment_method,
-        notes: payment.notes,
+        paymentMethod: payment.payment_method ?? null,
+        notes: payment.notes ?? null,
       }
     })
   }, [data])

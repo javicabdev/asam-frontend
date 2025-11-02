@@ -93,45 +93,44 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
     setIsLoading(true)
 
     try {
-      console.log('💳 [usePaymentForm] Updating and confirming payment:', {
+      console.log('💳 [usePaymentForm] Confirming payment:', {
         pendingPaymentId,
         formData,
       })
 
-      // Step 1: Update payment details (method, date, and notes)
-      const updateResult = await updatePayment({
-        variables: {
-          id: pendingPaymentId,
-          input: {
-            payment_method: 'CASH', // Hardcoded - only cash payments
-            notes: formData.notes || null,
-            amount: 0, // Required field - will be set by backend based on membership type
-            // TODO: Uncomment when backend supports payment_date in PaymentInput
-            // payment_date: formData.payment_date
-            //   ? `${formData.payment_date}T00:00:00Z`
-            //   : new Date().toISOString(),
+      // Step 1: Update notes if provided
+      let payment = null
+      if (formData.notes && formData.notes.trim() !== '') {
+        const updateResult = await updatePayment({
+          variables: {
+            id: pendingPaymentId,
+            input: {
+              notes: formData.notes,
+              amount: 0, // Required field - will be set by backend based on membership type
+              payment_method: 'CASH', // Required field
+            }
           }
-        }
-      })
+        })
 
-      if (updateResult.errors && updateResult.errors.length > 0) {
-        throw new Error(updateResult.errors[0].message || 'Error al actualizar el pago')
+        if (updateResult.errors && updateResult.errors.length > 0) {
+          throw new Error(updateResult.errors[0].message || 'Error al actualizar las notas')
+        }
+
+        payment = updateResult.data?.updatePayment
       }
 
-      console.log('✅ [usePaymentForm] Payment updated successfully')
+      // Step 2: Confirm payment with payment method (PENDING → PAID)
+      // Backend now sets payment_method and payment_date when confirming
+      const confirmed = await confirmPayment(pendingPaymentId, 'CASH')
 
-      // Step 2: Confirm payment (PENDING → PAID)
-      const confirmed = await confirmPayment(pendingPaymentId)
-      
       if (!confirmed) {
         throw new Error('Error al confirmar el pago')
       }
 
-      console.log('✅ [usePaymentForm] Payment confirmed successfully')
+      console.log('✅ [usePaymentForm] Payment confirmed successfully with CASH method')
 
       // Success callback
-      const payment = updateResult.data?.updatePayment
-      if (onSuccess && payment) {
+      if (onSuccess) {
         onSuccess(payment)
       }
 

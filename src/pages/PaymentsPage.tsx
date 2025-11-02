@@ -52,12 +52,6 @@ export default function PaymentsPage() {
     setConfirmDialog({ open: true, payment })
   }
 
-  // Handle cancel payment (admin only, future implementation)
-  const handleCancelClick = (payment: PaymentListItem) => {
-    // TODO: Implement cancel payment dialog
-    console.log('Cancel payment:', payment.id)
-  }
-
   // Handle download receipt
   const handleDownloadReceipt = async (payment: PaymentListItem) => {
     try {
@@ -140,7 +134,6 @@ export default function PaymentsPage() {
         onPageSizeChange={setPageSize}
         onRowClick={handleRowClick}
         onConfirmClick={handleConfirmClick}
-        onCancelClick={handleCancelClick}
         onDownloadReceipt={handleDownloadReceipt}
         isAdmin={isAdmin}
       />

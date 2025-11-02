@@ -321,6 +321,7 @@ export type MutationChangePasswordArgs = {
 
 export type MutationConfirmPaymentArgs = {
   id: Scalars['ID']['input'];
+  paymentMethod: Scalars['String']['input'];
 };
 
 
@@ -466,7 +467,7 @@ export type Payment = {
   member?: Maybe<Member>;
   membership_fee?: Maybe<MembershipFee>;
   notes?: Maybe<Scalars['String']['output']>;
-  payment_date: Scalars['Time']['output'];
+  payment_date?: Maybe<Scalars['Time']['output']>;
   payment_method: Scalars['String']['output'];
   status: PaymentStatus;
 };

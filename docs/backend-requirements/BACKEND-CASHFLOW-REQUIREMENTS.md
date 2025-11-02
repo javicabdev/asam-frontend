@@ -109,8 +109,7 @@ Del análisis del Excel, se han identificado estas categorías reales:
 ```sql
 CREATE TABLE cash_flows (
     id SERIAL PRIMARY KEY,
-    member_id INTEGER REFERENCES members(id),      -- Nullable, FK al socio
-    family_id INTEGER REFERENCES families(id),     -- Nullable, FK a familia
+    member_id INTEGER REFERENCES members(id),      -- Nullable, FK al socio (para familias usar miembro_origen_id)
     payment_id INTEGER REFERENCES payments(id),    -- Nullable, FK al pago que generó el ingreso
     operation_type VARCHAR(20) NOT NULL,           -- Tipo de operación (ver enum)
     amount NUMERIC(10,2) NOT NULL,                 -- Importe (+ ingreso, - gasto)
@@ -133,8 +132,7 @@ CREATE INDEX idx_cashflows_payment ON cash_flows(payment_id) WHERE deleted_at IS
 | Campo | Tipo | Nullable | Descripción |
 |-------|------|----------|-------------|
 | `id` | SERIAL | No | PK autoincremental |
-| `member_id` | INTEGER | **Sí** | FK opcional al socio (obligatorio en repatriaciones) |
-| `family_id` | INTEGER | Sí | FK opcional a familia |
+| `member_id` | INTEGER | **Sí** | FK opcional al socio (obligatorio en repatriaciones, para familias usar miembro_origen_id) |
 | `payment_id` | INTEGER | Sí | FK al pago si el ingreso viene de pago confirmado |
 | `operation_type` | VARCHAR(20) | No | Categoría del movimiento (ver enum) |
 | `amount` | NUMERIC(10,2) | No | **Positivo** = ingreso, **Negativo** = gasto |
@@ -183,7 +181,6 @@ type CashFlow {
   amount: Float!
   detail: String!
   member: Member
-  family: Family
   payment: Payment
   createdAt: Time!
   updatedAt: Time!
@@ -252,8 +249,7 @@ input CreateCashFlowInput {
   operationType: OperationType!
   amount: Float!
   detail: String!
-  memberId: ID
-  familyId: ID
+  memberId: ID  # Para familias usar family.miembro_origen_id
 }
 
 input UpdateCashFlowInput {
@@ -428,13 +424,12 @@ func (s *service) CreateCashFlow(ctx context.Context, input CreateCashFlowInput)
     // 7. Crear registro
     cashFlow := &CashFlow{
         MemberID:      input.MemberID,
-        FamilyID:      input.FamilyID,
         OperationType: input.OperationType,
         Amount:        input.Amount,
         Date:          input.Date,
         Detail:        input.Detail,
     }
-    
+
     return s.repo.Create(ctx, cashFlow)
 }
 ```
@@ -565,8 +560,7 @@ func (s *paymentService) ConfirmPayment(ctx context.Context, paymentID string, i
     // 2. Crear registro automático en cash_flows
     cashFlow := &CashFlow{
         PaymentID:     &payment.ID,
-        MemberID:      payment.MemberID,
-        FamilyID:      payment.FamilyID,
+        MemberID:      &payment.MemberID, // Siempre usa member_id (para familias es miembro_origen_id)
         OperationType: "INGRESO_CUOTA",
         Amount:        payment.Amount, // Ya es positivo
         Date:          payment.PaymentDate,
@@ -669,8 +663,7 @@ import (
 
 type CashFlow struct {
     ID            int64      `json:"id" db:"id"`
-    MemberID      *int64     `json:"member_id" db:"member_id"`
-    FamilyID      *int64     `json:"family_id" db:"family_id"`
+    MemberID      *int64     `json:"member_id" db:"member_id"` // Para familias usar miembro_origen_id
     PaymentID     *int64     `json:"payment_id" db:"payment_id"`
     OperationType string     `json:"operation_type" db:"operation_type"`
     Amount        float64    `json:"amount" db:"amount"`
@@ -777,46 +770,46 @@ func NewCashFlowRepository(db *sql.DB) cashflow.Repository {
 func (r *cashFlowRepository) Create(ctx context.Context, cf *cashflow.CashFlow) (*cashflow.CashFlow, error) {
     query := `
         INSERT INTO cash_flows (
-            member_id, family_id, payment_id, operation_type,
+            member_id, payment_id, operation_type,
             amount, date, detail, created_at, updated_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
+        ) VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
         RETURNING id, created_at, updated_at
     `
-    
+
     err := r.db.QueryRowContext(
         ctx, query,
-        cf.MemberID, cf.FamilyID, cf.PaymentID, cf.OperationType,
+        cf.MemberID, cf.PaymentID, cf.OperationType,
         cf.Amount, cf.Date, cf.Detail,
     ).Scan(&cf.ID, &cf.CreatedAt, &cf.UpdatedAt)
-    
+
     if err != nil {
         return nil, fmt.Errorf("failed to create cash flow: %w", err)
     }
-    
+
     return cf, nil
 }
 
 func (r *cashFlowRepository) GetByID(ctx context.Context, id int64) (*cashflow.CashFlow, error) {
     query := `
-        SELECT id, member_id, family_id, payment_id, operation_type,
+        SELECT id, member_id, payment_id, operation_type,
                amount, date, detail, created_at, updated_at, deleted_at
         FROM cash_flows
         WHERE id = $1 AND deleted_at IS NULL
     `
-    
+
     var cf cashflow.CashFlow
     err := r.db.QueryRowContext(ctx, query, id).Scan(
-        &cf.ID, &cf.MemberID, &cf.FamilyID, &cf.PaymentID, &cf.OperationType,
+        &cf.ID, &cf.MemberID, &cf.PaymentID, &cf.OperationType,
         &cf.Amount, &cf.Date, &cf.Detail, &cf.CreatedAt, &cf.UpdatedAt, &cf.DeletedAt,
     )
-    
+
     if err == sql.ErrNoRows {
         return nil, fmt.Errorf("cash flow not found")
     }
     if err != nil {
         return nil, fmt.Errorf("failed to get cash flow: %w", err)
     }
-    
+
     return &cf, nil
 }
 
@@ -865,27 +858,27 @@ func (r *cashFlowRepository) List(
     
     // Query principal
     query := fmt.Sprintf(`
-        SELECT id, member_id, family_id, payment_id, operation_type,
+        SELECT id, member_id, payment_id, operation_type,
                amount, date, detail, created_at, updated_at, deleted_at
         FROM cash_flows
         WHERE %s
         ORDER BY %s
         LIMIT $%d OFFSET $%d
     `, whereClause, orderBy, argPos, argPos+1)
-    
+
     args = append(args, limit, offset)
-    
+
     rows, err := r.db.QueryContext(ctx, query, args...)
     if err != nil {
         return nil, 0, fmt.Errorf("failed to list cash flows: %w", err)
     }
     defer rows.Close()
-    
+
     var cashFlows []*cashflow.CashFlow
     for rows.Next() {
         var cf cashflow.CashFlow
         if err := rows.Scan(
-            &cf.ID, &cf.MemberID, &cf.FamilyID, &cf.PaymentID, &cf.OperationType,
+            &cf.ID, &cf.MemberID, &cf.PaymentID, &cf.OperationType,
             &cf.Amount, &cf.Date, &cf.Detail, &cf.CreatedAt, &cf.UpdatedAt, &cf.DeletedAt,
         ); err != nil {
             return nil, 0, fmt.Errorf("failed to scan cash flow: %w", err)
@@ -1227,8 +1220,7 @@ type CreateInput struct {
     OperationType string
     Amount        float64
     Detail        string
-    MemberID      *int64
-    FamilyID      *int64
+    MemberID      *int64  // Para familias usar family.miembro_origen_id
 }
 
 type UpdateInput struct {
@@ -1302,13 +1294,12 @@ func (s *service) Create(ctx context.Context, input *cashflow.CreateInput) (*cas
     // 4. Crear
     cf := &cashflow.CashFlow{
         MemberID:      input.MemberID,
-        FamilyID:      input.FamilyID,
         OperationType: input.OperationType,
         Amount:        input.Amount,
         Date:          input.Date,
         Detail:        input.Detail,
     }
-    
+
     return s.repo.Create(ctx, cf)
 }
 

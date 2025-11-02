@@ -3,7 +3,12 @@ import { useConfirmPaymentMutation } from '../api/mutations'
 import type { ApolloError } from '@apollo/client'
 
 interface UseConfirmPaymentResult {
-  confirmPayment: (paymentId: string, paymentMethod: string) => Promise<boolean>
+  confirmPayment: (
+    paymentId: string,
+    paymentMethod: string,
+    paymentDate?: string | null,
+    notes?: string | null
+  ) => Promise<boolean>
   loading: boolean
   error: ApolloError | undefined
 }
@@ -18,7 +23,12 @@ interface UseConfirmPaymentResult {
  * const { confirmPayment, loading, error } = useConfirmPayment()
  *
  * const handleConfirm = async () => {
- *   const success = await confirmPayment(payment.id, 'CASH')
+ *   const success = await confirmPayment(
+ *     payment.id,
+ *     'CASH',
+ *     '2025-11-02T10:30:00Z', // Optional: custom date
+ *     'Pago recibido en efectivo' // Optional: notes
+ *   )
  *   if (success) {
  *     // Show success notification
  *     // Close dialog
@@ -35,15 +45,24 @@ export function useConfirmPayment(): UseConfirmPaymentResult {
    *
    * @param paymentId - The ID of the payment to confirm
    * @param paymentMethod - The payment method (CASH, TRANSFER, CARD)
+   * @param paymentDate - Optional: custom payment date (ISO 8601 string), uses NOW if not provided
+   * @param notes - Optional: payment notes
    * @returns Promise<boolean> - true if successful, false otherwise
    */
   const confirmPayment = useCallback(
-    async (paymentId: string, paymentMethod: string): Promise<boolean> => {
+    async (
+      paymentId: string,
+      paymentMethod: string,
+      paymentDate?: string | null,
+      notes?: string | null
+    ): Promise<boolean> => {
       try {
         const result = await confirmPaymentMutation({
           variables: {
             id: paymentId,
             paymentMethod: paymentMethod,
+            paymentDate: paymentDate || undefined,
+            notes: notes || undefined,
           },
         })
 

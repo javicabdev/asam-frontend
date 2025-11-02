@@ -321,6 +321,8 @@ export type MutationChangePasswordArgs = {
 
 export type MutationConfirmPaymentArgs = {
   id: Scalars['ID']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
+  paymentDate?: InputMaybe<Scalars['Time']['input']>;
   paymentMethod: Scalars['String']['input'];
 };
 

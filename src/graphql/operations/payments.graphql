@@ -142,8 +142,8 @@ mutation UpdatePayment($id: ID!, $input: PaymentInput!) {
   }
 }
 
-mutation ConfirmPayment($id: ID!, $paymentMethod: String!) {
-  confirmPayment(id: $id, paymentMethod: $paymentMethod) {
+mutation ConfirmPayment($id: ID!, $paymentMethod: String!, $paymentDate: Time, $notes: String) {
+  confirmPayment(id: $id, paymentMethod: $paymentMethod, paymentDate: $paymentDate, notes: $notes) {
     id
     member {
       miembro_id

@@ -20,7 +20,6 @@ import { useSnackbar } from 'notistack'
 import { format } from 'date-fns'
 
 import { useConfirmPayment } from '../hooks/useConfirmPayment'
-import { useUpdatePaymentMutation } from '../api/mutations'
 import type { PaymentListItem } from '../types'
 
 interface ConfirmPaymentDialogProps {
@@ -40,15 +39,12 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
   onSuccess,
 }) => {
   const { enqueueSnackbar } = useSnackbar()
-  const { confirmPayment, loading: confirmLoading, error } = useConfirmPayment()
-  const [updatePayment, { loading: updateLoading }] = useUpdatePaymentMutation()
+  const { confirmPayment, loading, error } = useConfirmPayment()
 
   // Form state
   const [paymentDate, setPaymentDate] = useState<string>('')
   const [paymentMethod, setPaymentMethod] = useState<string>('CASH')
   const [notes, setNotes] = useState<string>('')
-
-  const loading = confirmLoading || updateLoading
 
   // Initialize form when dialog opens or payment changes
   useEffect(() => {
@@ -73,29 +69,19 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
     if (!payment) return
 
     try {
-      // Step 1: Update notes if provided
-      if (notes && notes.trim() !== '') {
-        const updateResult = await updatePayment({
-          variables: {
-            id: payment.id,
-            input: {
-              notes: notes,
-              amount: payment.amount, // Required field
-              payment_method: paymentMethod, // Required field
-              member_id: payment.memberId || null,
-              family_id: payment.familyId || null,
-            }
-          }
-        })
+      // Format date to ISO 8601 if provided
+      const formattedDate = paymentDate
+        ? new Date(paymentDate).toISOString()
+        : undefined
 
-        if (updateResult.errors && updateResult.errors.length > 0) {
-          throw new Error(updateResult.errors[0].message || 'Error al actualizar las notas')
-        }
-      }
-
-      // Step 2: Confirm payment with payment method (PENDING → PAID)
-      // Backend now sets payment_method and payment_date when confirming
-      const success = await confirmPayment(payment.id, paymentMethod)
+      // Confirm payment with all data in a single operation
+      // Backend will update: status, payment_method, payment_date, and notes
+      const success = await confirmPayment(
+        payment.id,
+        paymentMethod,
+        formattedDate,
+        notes.trim() || undefined
+      )
 
       if (success) {
         enqueueSnackbar('Pago confirmado correctamente', { variant: 'success' })
@@ -172,11 +158,10 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
             value={paymentDate}
             onChange={(e) => setPaymentDate(e.target.value)}
             fullWidth
-            disabled
             InputLabelProps={{
               shrink: true,
             }}
-            helperText="La fecha se establece automáticamente al confirmar el pago"
+            helperText="Fecha en la que se realizó el pago"
           />
 
           {/* Payment Method */}

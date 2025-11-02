@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { ApolloError } from '@apollo/client'
-import { useUpdatePaymentMutation } from '../api/mutations'
 import { useConfirmPayment } from './useConfirmPayment'
 import type { InitialPaymentFormData } from '../types'
 
@@ -85,7 +84,6 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  const [updatePayment] = useUpdatePaymentMutation()
   const { confirmPayment, loading: confirmLoading } = useConfirmPayment()
 
   const handleSubmit = async (formData: InitialPaymentFormData) => {
@@ -98,30 +96,14 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
         formData,
       })
 
-      // Step 1: Update notes if provided
-      let payment = null
-      if (formData.notes && formData.notes.trim() !== '') {
-        const updateResult = await updatePayment({
-          variables: {
-            id: pendingPaymentId,
-            input: {
-              notes: formData.notes,
-              amount: 0, // Required field - will be set by backend based on membership type
-              payment_method: 'CASH', // Required field
-            }
-          }
-        })
-
-        if (updateResult.errors && updateResult.errors.length > 0) {
-          throw new Error(updateResult.errors[0].message || 'Error al actualizar las notas')
-        }
-
-        payment = updateResult.data?.updatePayment
-      }
-
-      // Step 2: Confirm payment with payment method (PENDING → PAID)
-      // Backend now sets payment_method and payment_date when confirming
-      const confirmed = await confirmPayment(pendingPaymentId, 'CASH')
+      // Confirm payment with all data in a single operation
+      // Backend will update: status, payment_method, payment_date, and notes
+      const confirmed = await confirmPayment(
+        pendingPaymentId,
+        'CASH', // Always CASH for initial payments
+        undefined, // Use current date/time
+        formData.notes?.trim() || undefined
+      )
 
       if (!confirmed) {
         throw new Error('Error al confirmar el pago')
@@ -131,10 +113,10 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
 
       // Success callback
       if (onSuccess) {
-        onSuccess(payment)
+        onSuccess(null)
       }
 
-      return payment
+      return null
     } catch (err) {
       console.error('❌ [usePaymentForm] Error processing payment:', err)
       const errorMessage = parseErrorMessage(err)

@@ -108,8 +108,11 @@ const validationSchema = Yup.object({
   pais: Yup.string().required('El país es obligatorio'),
   documento_identidad: Yup.string().required('El documento de identidad es obligatorio'),
   correo_electronico: Yup.string()
-    .matches(EMAIL_REGEX, 'Email inválido. Formato esperado: usuario@dominio.com')
-    .required('El email es obligatorio'),
+    .required('El email es obligatorio')
+    .test('email-format', 'Email inválido. Formato esperado: usuario@dominio.com', (value) => {
+      if (!value) return false // Required ya maneja esto
+      return EMAIL_REGEX.test(value)
+    }),
   // Campos opcionales
   fecha_nacimiento: Yup.date().nullable(),
   profesion: Yup.string().nullable(),
@@ -124,8 +127,13 @@ const familyValidationSchema = validationSchema.shape({
   esposa_fecha_nacimiento: Yup.date().nullable(),
   esposa_documento_identidad: Yup.string().nullable(),
   esposa_correo_electronico: Yup.string()
-    .matches(EMAIL_REGEX, 'Email inválido. Formato esperado: usuario@dominio.com')
-    .nullable(),
+    .nullable()
+    .test('email-format', 'Email inválido. Formato esperado: usuario@dominio.com', (value) => {
+      // Si está vacío o null, es válido (campo opcional)
+      if (!value) return true
+      // Si tiene valor, debe cumplir el formato
+      return EMAIL_REGEX.test(value)
+    }),
 })
 
 export const MemberForm: React.FC<MemberFormProps> = ({ 

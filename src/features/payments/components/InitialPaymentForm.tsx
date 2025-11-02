@@ -4,41 +4,20 @@ import {
   Typography,
   Box,
   Button,
-  Grid,
   TextField,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Select,
-  InputAdornment,
   Alert,
+  CircularProgress,
 } from '@mui/material'
-import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as Yup from 'yup'
-import {
-  InitialPaymentFormData,
-  PAYMENT_METHODS,
-  DEFAULT_INITIAL_PAYMENT_AMOUNT,
-  MAX_PAYMENT_AMOUNT,
-} from '../types'
-
-// Schema de validación explícitamente tipado
-const validationSchema: Yup.ObjectSchema<InitialPaymentFormData> = Yup.object({
-  amount: Yup.number()
-    .required('El monto es obligatorio')
-    .positive('El monto debe ser positivo')
-    .min(1, 'El monto mínimo es 1€')
-    .max(
-      MAX_PAYMENT_AMOUNT,
-      `El monto máximo es €${MAX_PAYMENT_AMOUNT}. Para montos superiores, contacte con un administrador`
-    ),
-  payment_method: Yup.string().required('El método de pago es obligatorio'),
-  notes: Yup.string().nullable().optional(),
-}).required()
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
+import type { InitialPaymentFormData } from '../types'
+import type { MemberPayment } from '../hooks/useMemberPayments'
 
 interface InitialPaymentFormComponentProps {
   memberId: string
+  pendingPayment: MemberPayment
   onSubmit: (data: InitialPaymentFormData) => void | Promise<void>
   onCancel?: () => void
   loading: boolean
@@ -46,38 +25,38 @@ interface InitialPaymentFormComponentProps {
 }
 
 export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
+  pendingPayment,
   onSubmit,
   onCancel,
   loading,
   error,
 }) => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<InitialPaymentFormData>({
-    resolver: yupResolver(validationSchema),
-    defaultValues: {
-      amount: DEFAULT_INITIAL_PAYMENT_AMOUNT,
-      payment_method: 'Efectivo',
-      notes: null,
-    },
-  })
+  const [paymentDate, setPaymentDate] = React.useState<Date>(new Date())
+  const [notes, setNotes] = React.useState('')
 
-  const handleFormSubmit = (data: InitialPaymentFormData) => {
-    onSubmit(data)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    await onSubmit({
+      payment_date: format(paymentDate, 'yyyy-MM-dd'),
+      notes: notes.trim() || undefined,
+    })
   }
 
   return (
     <Paper elevation={2} sx={{ p: 3 }}>
       <Typography variant="h6" gutterBottom>
-        Registrar Pago Inicial
+        Confirmar Pago en Efectivo
       </Typography>
 
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        El pago se registrará como <strong>PENDIENTE</strong> hasta que sea confirmado
-        manualmente.
-      </Typography>
+      <Alert severity="info" sx={{ mb: 3 }}>
+        <Typography variant="body2">
+          <strong>Monto a pagar:</strong> {pendingPayment.amount.toFixed(2)} €
+        </Typography>
+        <Typography variant="body2" sx={{ mt: 1 }}>
+          <strong>Método de pago:</strong> Efectivo
+        </Typography>
+      </Alert>
 
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
@@ -85,78 +64,45 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
         </Alert>
       )}
 
-      <Box component="form" onSubmit={handleSubmit(handleFormSubmit)}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <Controller
-              name="amount"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  fullWidth
-                  label="Monto"
-                  type="number"
-                  required
-                  error={!!errors.amount}
-                  helperText={errors.amount?.message}
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">€</InputAdornment>,
-                  }}
-                  inputProps={{
-                    min: 1,
-                    max: MAX_PAYMENT_AMOUNT,
-                    step: 0.01,
-                  }}
-                />
-              )}
-            />
-          </Grid>
+      <Box component="form" onSubmit={handleSubmit}>
+        <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
+          <DatePicker
+            label="Fecha del Pago"
+            value={paymentDate}
+            onChange={(date) => date && setPaymentDate(date)}
+            maxDate={new Date()}
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                margin: 'normal',
+                helperText: 'Fecha en que se recibió el pago en efectivo'
+              }
+            }}
+          />
+        </LocalizationProvider>
 
-          <Grid item xs={12} sm={6}>
-            <Controller
-              name="payment_method"
-              control={control}
-              render={({ field }) => (
-                <FormControl fullWidth required error={!!errors.payment_method}>
-                  <InputLabel>Método de Pago</InputLabel>
-                  <Select {...field} label="Método de Pago">
-                    {Object.entries(PAYMENT_METHODS).map(([key, label]) => (
-                      <MenuItem key={key} value={label}>
-                        {label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <Controller
-              name="notes"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  value={field.value || ''}
-                  fullWidth
-                  multiline
-                  rows={3}
-                  label="Notas (opcional)"
-                  placeholder="Ej: Pago realizado en efectivo, recibido por..."
-                />
-              )}
-            />
-          </Grid>
-        </Grid>
+        <TextField
+          label="Notas (opcional)"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          multiline
+          rows={3}
+          fullWidth
+          margin="normal"
+          placeholder="Ej: Recibido por [nombre], número de recibo, etc."
+        />
 
         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', mt: 3 }}>
           <Button variant="outlined" onClick={onCancel} disabled={loading}>
-            Registrar Más Tarde
+            Cancelar
           </Button>
-          <Button type="submit" variant="contained" disabled={loading}>
-            {loading ? 'Registrando...' : 'Registrar Pago'}
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={loading}
+            startIcon={loading && <CircularProgress size={20} />}
+          >
+            {loading ? 'Confirmando...' : 'Confirmar Pago'}
           </Button>
         </Box>
       </Box>

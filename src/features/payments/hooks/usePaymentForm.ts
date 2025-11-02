@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { ApolloError } from '@apollo/client'
-import { useRegisterPaymentMutation } from '../api/mutations'
+import { useUpdatePaymentMutation } from '../api/mutations'
+import { useConfirmPayment } from './useConfirmPayment'
 import type { InitialPaymentFormData } from '../types'
-import type { PaymentInput } from '@/graphql/generated/operations'
 
 /**
  * Parse and extract meaningful error messages from various error types
@@ -74,70 +74,78 @@ const parseErrorMessage = (error: unknown): string => {
 
 interface UsePaymentFormOptions {
   memberId: string
-  getFamilyId: () => string | null | undefined // ← Changed: function instead of value
+  pendingPaymentId: string
+  getFamilyId?: () => string | null | undefined
   isFamily: boolean
   onSuccess?: (payment: any) => void
 }
 
 export const usePaymentForm = (options: UsePaymentFormOptions) => {
-  const { memberId, getFamilyId, isFamily, onSuccess } = options
+  const { pendingPaymentId, onSuccess } = options
   const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const [registerPayment, { loading }] = useRegisterPaymentMutation()
+  const [updatePayment] = useUpdatePaymentMutation()
+  const { confirmPayment, loading: confirmLoading } = useConfirmPayment()
 
   const handleSubmit = async (formData: InitialPaymentFormData) => {
     setError(null)
+    setIsLoading(true)
 
     try {
-      // Get familyId DYNAMICALLY at submit time, not at hook initialization
-      const familyId = getFamilyId()
-      
-      console.log('💳 [usePaymentForm] Submitting payment:', {
-        memberId,
-        familyId,
-        isFamily,
+      console.log('💳 [usePaymentForm] Updating and confirming payment:', {
+        pendingPaymentId,
         formData,
       })
 
-      // Prepare the input based on membership type
-      const input: PaymentInput = {
-        amount: formData.amount,
-        payment_method: formData.payment_method,
-        notes: formData.notes || null,
-        // If it's a family, send family_id; otherwise, send member_id
-        ...(isFamily && familyId ? { family_id: familyId } : { member_id: memberId }),
-      }
-      
-      console.log('💳 [usePaymentForm] Payment input:', input)
-
-      const result = await registerPayment({
-        variables: { input },
+      // Step 1: Update payment details (method and notes)
+      // Note: payment_date is not updatable via PaymentInput - it's set by the backend
+      const updateResult = await updatePayment({
+        variables: {
+          id: pendingPaymentId,
+          input: {
+            payment_method: 'CASH', // Hardcoded - only cash payments
+            notes: formData.notes || null,
+            amount: 0, // Required field - will be set by backend based on membership type
+          }
+        }
       })
 
-      const payment = result.data?.registerPayment
-
-      if (!payment?.id) {
-        throw new Error('No se recibió el ID del pago')
+      if (updateResult.errors && updateResult.errors.length > 0) {
+        throw new Error(updateResult.errors[0].message || 'Error al actualizar el pago')
       }
-      
-      console.log('✅ [usePaymentForm] Payment registered:', payment)
 
-      if (onSuccess) {
+      console.log('✅ [usePaymentForm] Payment updated successfully')
+
+      // Step 2: Confirm payment (PENDING → PAID)
+      const confirmed = await confirmPayment(pendingPaymentId)
+      
+      if (!confirmed) {
+        throw new Error('Error al confirmar el pago')
+      }
+
+      console.log('✅ [usePaymentForm] Payment confirmed successfully')
+
+      // Success callback
+      const payment = updateResult.data?.updatePayment
+      if (onSuccess && payment) {
         onSuccess(payment)
       }
 
       return payment
     } catch (err) {
-      console.error('❌ [usePaymentForm] Error registering payment:', err)
+      console.error('❌ [usePaymentForm] Error processing payment:', err)
       const errorMessage = parseErrorMessage(err)
       setError(errorMessage)
       return null
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return {
     handleSubmit,
-    loading,
+    loading: isLoading || confirmLoading,
     error,
     setError,
   }

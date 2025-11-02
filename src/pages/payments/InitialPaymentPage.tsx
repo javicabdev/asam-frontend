@@ -12,13 +12,15 @@ import {
   CircularProgress,
   Button,
 } from '@mui/material'
-import { NavigateNext, ArrowForward } from '@mui/icons-material'
+import { NavigateNext } from '@mui/icons-material'
 
 import { InitialPaymentForm } from '@/features/payments/components/InitialPaymentForm'
 import { PaymentSummary } from '@/features/payments/components/PaymentSummary'
 import { useMemberData } from '@/features/payments/hooks/useMemberData'
+import { useMemberPayments } from '@/features/payments/hooks/useMemberPayments'
 import { usePaymentForm } from '@/features/payments/hooks/usePaymentForm'
-import type { InitialPaymentFormData } from '@/features/payments/types'
+import { useReceiptGenerator } from '@/features/payments/hooks/useReceiptGenerator'
+import type { InitialPaymentFormData, PaymentListItem } from '@/features/payments/types'
 
 export const InitialPaymentPage: React.FC = () => {
   const { memberId } = useParams<{ memberId: string }>()
@@ -35,6 +37,44 @@ export const InitialPaymentPage: React.FC = () => {
     error: memberError,
   } = useMemberData(memberId || '')
 
+  // Load payments to find the PENDING payment created by backend
+  const {
+    payments,
+    loading: paymentsLoading,
+    error: paymentsError
+  } = useMemberPayments(
+    memberId || '',
+    member?.tipo_membresia || 'INDIVIDUAL'
+  )
+
+  // Find the PENDING payment (automatically created by backend)
+  const pendingPayment = React.useMemo(() => {
+    const pending = payments.filter(p => p.status.toUpperCase() === 'PENDING')
+    if (pending.length > 1) {
+      console.warn('Multiple pending payments found, using most recent:', pending)
+    }
+    // Return most recent if multiple exist
+    return pending.sort((a, b) => 
+      new Date(b.payment_date).getTime() - new Date(a.payment_date).getTime()
+    )[0]
+  }, [payments])
+
+  // Check if payment is already PAID
+  const isPaid = React.useMemo(() => {
+    return payments.some(p => p.status.toUpperCase() === 'PAID')
+  }, [payments])
+
+  // Redirect if payment is already confirmed
+  React.useEffect(() => {
+    if (!paymentsLoading && isPaid && member) {
+      console.log('Payment already confirmed, redirecting to member details')
+      navigate(`/members/${memberId}`, { replace: true })
+    }
+  }, [isPaid, paymentsLoading, navigate, memberId, member])
+
+  // Hook for receipt generation
+  const { generateReceipt } = useReceiptGenerator()
+
   // Hook to handle payment form
   const {
     handleSubmit,
@@ -42,20 +82,51 @@ export const InitialPaymentPage: React.FC = () => {
     error: paymentError,
   } = usePaymentForm({
     memberId: memberId || '',
-    getFamilyId: () => family?.id, // ← Function that gets the current value
+    pendingPaymentId: pendingPayment?.id || '',
+    getFamilyId: () => family?.id,
     isFamily,
-    onSuccess: (payment) => {
+    onSuccess: async (payment) => {
+      console.log('✅ Payment confirmed, generating receipt...')
+      
       // Mark as registered and show summary
       setPaymentData(payment)
       setPaymentRegistered(true)
       
-      // CRITICAL: Replace history entry to prevent going back to the form
-      // This prevents duplicate payments if user clicks browser back button
-      navigate(`/payments/initial/${memberId}`, { replace: true })
+      // Transform payment to PaymentListItem for receipt generation
+      try {
+        const paymentForReceipt: PaymentListItem = {
+          id: payment.id,
+          memberId: payment.member?.miembro_id,
+          familyId: payment.family?.id,
+          memberName: payment.member 
+            ? `${payment.member.nombre} ${payment.member.apellidos}` 
+            : '',
+          memberNumber: payment.member?.numero_socio || payment.family?.numero_socio || '',
+          familyName: payment.family 
+            ? `${payment.family.esposo_nombre} y ${payment.family.esposa_nombre}` 
+            : undefined,
+          amount: payment.amount,
+          paymentDate: payment.payment_date,
+          status: 'PAID',
+          paymentMethod: payment.payment_method,
+          notes: payment.notes,
+        }
+
+        await generateReceipt(paymentForReceipt, true)
+        console.log('✅ Receipt generated successfully')
+      } catch (error) {
+        console.error('❌ Error generating receipt:', error)
+        // Don't fail the whole flow if receipt generation fails
+      }
       
-      // Persist payment state in sessionStorage to prevent re-submission on page reload
-      sessionStorage.setItem(`payment_registered_${memberId}`, 'true')
-      sessionStorage.setItem(`payment_data_${memberId}`, JSON.stringify(payment))
+      // Clear session storage
+      sessionStorage.removeItem(`payment_registered_${memberId}`)
+      sessionStorage.removeItem(`payment_data_${memberId}`)
+      
+      // Show success message briefly, then redirect
+      setTimeout(() => {
+        navigate(`/members/${memberId}`, { replace: true })
+      }, 2000)
     },
   })
 
@@ -89,13 +160,6 @@ export const InitialPaymentPage: React.FC = () => {
     navigate('/members')
   }
 
-  const handleGoToMemberDetails = () => {
-    // Clear payment state when leaving the page
-    sessionStorage.removeItem(`payment_registered_${memberId}`)
-    sessionStorage.removeItem(`payment_data_${memberId}`)
-    navigate(`/members/${memberId}`)
-  }
-
   if (!memberId) {
     return (
       <Container maxWidth="md" sx={{ py: 4 }}>
@@ -104,7 +168,7 @@ export const InitialPaymentPage: React.FC = () => {
     )
   }
 
-  if (memberLoading) {
+  if (memberLoading || paymentsLoading) {
     return (
       <Container maxWidth="md" sx={{ py: 4 }}>
         <Box display="flex" justifyContent="center">
@@ -119,6 +183,34 @@ export const InitialPaymentPage: React.FC = () => {
       <Container maxWidth="md" sx={{ py: 4 }}>
         <Alert severity="error">
           No se pudo cargar la información del socio. Por favor, verifica que el ID sea correcto.
+        </Alert>
+        <Button onClick={handleGoToMembers} sx={{ mt: 2 }}>
+          Volver a Socios
+        </Button>
+      </Container>
+    )
+  }
+
+  if (paymentsError) {
+    return (
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Alert severity="error">
+          Error al cargar los pagos del socio. Por favor, intente nuevamente.
+        </Alert>
+        <Button onClick={handleGoToMembers} sx={{ mt: 2 }}>
+          Volver a Socios
+        </Button>
+      </Container>
+    )
+  }
+
+  if (!pendingPayment) {
+    return (
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Alert severity="error">
+          No se encontró un pago pendiente para este socio. 
+          El pago debe crearse automáticamente al registrar el socio.
+          Por favor, contacte al administrador del sistema.
         </Alert>
         <Button onClick={handleGoToMembers} sx={{ mt: 2 }}>
           Volver a Socios
@@ -189,13 +281,14 @@ export const InitialPaymentPage: React.FC = () => {
         <>
           <Alert severity="info" sx={{ mb: 3 }}>
             <Typography variant="body2">
-              <strong>Importante:</strong> Registre el pago inicial de la cuota de alta. El pago
-              se marcará como PENDIENTE hasta que sea confirmado manualmente.
+              <strong>Pago en efectivo:</strong> Confirme que ha recibido el pago de la cuota inicial en efectivo.
+              El pago se marcará como PAGADO tras la confirmación.
             </Typography>
           </Alert>
 
           <InitialPaymentForm
             memberId={memberId}
+            pendingPayment={pendingPayment}
             onSubmit={onPaymentSubmit}
             onCancel={handleGoToMembers}
             loading={paymentLoading}
@@ -204,6 +297,22 @@ export const InitialPaymentPage: React.FC = () => {
         </>
       ) : (
         <>
+          <Alert severity="success" sx={{ mb: 3 }}>
+            <Typography variant="h6">
+              ✓ Pago Confirmado
+            </Typography>
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              El pago en efectivo ha sido registrado correctamente.
+              {paymentData && ` Monto: ${paymentData.amount.toFixed(2)} €`}
+            </Typography>
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              El recibo se ha generado automáticamente.
+            </Typography>
+            <Typography variant="body2" sx={{ mt: 1, fontWeight: 'bold' }}>
+              Redirigiendo al detalle del socio...
+            </Typography>
+          </Alert>
+
           {paymentData && (
             <PaymentSummary
               amount={paymentData.amount}
@@ -213,19 +322,6 @@ export const InitialPaymentPage: React.FC = () => {
               notes={paymentData.notes}
             />
           )}
-
-          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', mt: 3 }}>
-            <Button variant="outlined" onClick={handleGoToMembers}>
-              Ir a Lista de Socios
-            </Button>
-            <Button
-              variant="contained"
-              endIcon={<ArrowForward />}
-              onClick={handleGoToMemberDetails}
-            >
-              Ver Detalles del Socio
-            </Button>
-          </Box>
         </>
       )}
     </Container>

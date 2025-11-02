@@ -1,8 +1,8 @@
 # 🗺️ Hoja de Ruta - ASAM Frontend
 
-**Fecha de creación**: 18 de octubre de 2025  
-**Última actualización**: 28 de octubre de 2025  
-**Versión actual**: 0.1.0  
+**Fecha de creación**: 18 de octubre de 2025
+**Última actualización**: 2 de noviembre de 2025
+**Versión actual**: 0.1.0
 **Estado**: En desarrollo activo
 
 ---
@@ -64,11 +64,10 @@ src/pages/auth/*
 - [x] **Acciones en tabla (Ver, Editar, Dar de baja)** ✅
 - [x] **Diálogo de confirmación para dar de baja** ✅
 - [x] **Restricción de acciones por rol** ✅
-- [ ] 🔴 **CRÍTICO: Visualización de miembros de familia en página de detalles** - Ver bug identificado
-- [ ] 🔴 **CRÍTICO: Visualización de miembros de familia en página de edición** - Ver bug identificado
-- [ ] Eliminación definitiva de socios (individual y masiva)
+- [x] **Validación de email unificada (frontend-backend)** ✅ 🆕
+- [x] 🔴 **CRÍTICO: Visualización de miembros de familia en página de detalles** - Ver bug identificado
+- [x] 🔴 **CRÍTICO: Visualización de miembros de familia en página de edición** - Ver bug identificado
 - [x] **Página de pago inicial tras alta** ✅
-- [ ] Gestión completa de familias (CRUD)
 
 **Archivos clave:**
 ```
@@ -119,17 +118,18 @@ src/components/auth/AdminRoute.tsx (nuevo)
 - [ ] CRUD completo de usuarios
 - [ ] Gestión de roles y permisos
 
-### 6. ⚠️ Módulo de Pagos (40%) ⬆️
+### 6. ⚠️ Módulo de Pagos (50%) ⬆️
 - [x] Página de pago inicial tras alta de socio
 - [x] **Listado completo de pagos con filtros** ✅
 - [x] **Confirmación de pagos pendientes (PENDING → PAID)** ✅
+- [x] **Confirmación con fecha y notas personalizables** ✅ 🆕
+- [x] **Polling para pagos creados asincrónicamente** ✅ 🆕
 - [x] **Sistema de búsqueda unificado (socios/familias)** ✅
-- [x] **Navegación a detalles de socio desde pagos individuales** ✅ 🆕
-- [x] **Mensaje informativo para pagos de familia (página no implementada)** ✅ 🆕
-- [ ] Generación de recibos PDF
-- [ ] Cuotas masivas mensuales
-- [ ] Historial de pagos por socio
-- [ ] Navegación a detalles de familia desde pagos de familia
+- [x] **Navegación a detalles de socio desde pagos individuales** ✅
+- [x] **Mensaje informativo para pagos de familia (página no implementada)** ✅
+- [x] Generación de recibos PDF
+- [x] Historial de pagos por socio
+- [x] Navegación a detalles de familia desde pagos de familia
 
 **Archivos clave:**
 ```
@@ -861,18 +861,18 @@ Semana 6: Testing + Pulido Final
 
 ## 📈 Métricas de Progreso
 
-### Estado Actual (28/10/2025) ⬆️
+### Estado Actual (2/11/2025) ⬆️
 ```
 Infraestructura:     ████████████████████ 100%
 Autenticación:       ████████████████████ 100%
 Permisos y Roles:    ████████████████████ 100%
-Miembros:            ██████████████████░░  90% ⬇️
-Pagos:               ████████░░░░░░░░░░░░  40% ⬆️
+Miembros:            ██████████████████░░  90%
+Pagos:               ██████████░░░░░░░░░░  50% ⬆️
 Dashboard:           ██░░░░░░░░░░░░░░░░░░  10%
 Flujo de Caja:       ░░░░░░░░░░░░░░░░░░░░   0%
 Reportes:            ░░░░░░░░░░░░░░░░░░░░   0%
 
-TOTAL:               █████████████░░░░░░░  67% ⬇️
+TOTAL:               █████████████░░░░░░░  69% ⬆️
 ```
 
 ### Meta MVP (Estimado: 1.5 semanas)
@@ -945,7 +945,43 @@ Tiempo estimado: 1 día
 
 ## 📝 Cambios Recientes (Log de Actualizaciones)
 
-### 28 de Octubre de 2025 (Noche) 🆕
+### 2 de Noviembre de 2025 🆕
+
+#### Mejoras en Módulo de Pagos:
+- ✅ **Confirmación de pagos con fecha y notas personalizables**
+  - Backend actualizado para aceptar `paymentDate` y `notes` opcionales en `confirmPayment`
+  - Frontend adaptado para enviar fecha personalizada y notas en una sola operación
+  - Eliminado flujo de dos pasos (updatePayment + confirmPayment)
+  - Fecha y notas ahora se preservan correctamente en base de datos
+
+- ✅ **Sistema de polling para pagos creados asincrónicamente**
+  - Implementado polling cada 1 segundo cuando no se encuentran pagos
+  - Auto-detención cuando se encuentran pagos
+  - Timeout de 10 segundos antes de mostrar error
+  - Mensaje "Preparando el pago inicial..." durante la espera
+  - Soluciona error "No se encontró un pago pendiente" tras alta de socio
+
+#### Mejoras en Validación de Emails:
+- ✅ **Validación de email unificada frontend-backend**
+  - Creado `src/utils/validation.ts` con regex que coincide exactamente con backend
+  - Actualizado MemberForm para usar validación personalizada con `.test()` de Yup
+  - Actualizado FamilyMemberForm con validación en tiempo real
+  - Emails opcionales (esposa) permiten vacío pero validan formato si hay valor
+  - Corregido bug: botón "Continuar" bloqueado por validación incorrecta
+
+#### Commits Realizados:
+1. `feat(payments): support custom date and notes in confirmPayment`
+2. `fix(payments): add polling and loading states for async payment creation`
+3. `feat(members): unify email validation across all member forms`
+4. `fix(members): correct email validation to allow form submission`
+
+#### Progreso:
+- Módulo de Pagos: 40% → 50% ⬆️
+- **Total del Proyecto: 67% → 69%** ⬆️
+
+---
+
+### 28 de Octubre de 2025 (Noche)
 
 #### Bugs Críticos Identificados:
 - 🔴 **BUG CRÍTICO DOCUMENTADO**: Visualización de miembros de familia

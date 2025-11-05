@@ -6,7 +6,7 @@ export const createCashFlowSchema = yup.object().shape({
   date: yup
     .date()
     .required('La fecha es obligatoria')
-    .max(new Date(), 'La fecha no puede ser futura'),
+    .max(new Date(new Date().setHours(23, 59, 59, 999)), 'La fecha no puede ser futura'),
 
   operationType: yup
     .string()
@@ -43,7 +43,7 @@ export const repatriationSchema = yup.object().shape({
   date: yup
     .date()
     .required('La fecha es obligatoria')
-    .max(new Date(), 'La fecha no puede ser futura'),
+    .max(new Date(new Date().setHours(23, 59, 59, 999)), 'La fecha no puede ser futura'),
 
   memberId: yup
     .string()

@@ -74,15 +74,20 @@ export const TransactionFormDialog = ({
   }
 
   const onSubmit = async (data: any) => {
-    await createCashFlow({
-      date: data.date.toISOString(),
-      operationType: data.operationType,
-      amount: data.amount,
-      detail: data.detail,
-      memberId: data.memberId,
-    })
-    reset()
-    onClose()
+    try {
+      await createCashFlow({
+        date: data.date.toISOString(),
+        operationType: data.operationType,
+        amount: data.amount,
+        detail: data.detail,
+        memberId: data.memberId,
+      })
+      reset()
+      onClose()
+    } catch (error) {
+      // Error ya manejado por el hook useCreateCashFlow
+      console.error('Error al crear transacción:', error)
+    }
   }
 
   const availableTypes =

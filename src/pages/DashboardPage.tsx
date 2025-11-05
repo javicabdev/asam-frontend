@@ -1,6 +1,5 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { ApolloError } from '@apollo/client'
 import type { DashboardStats, RecentActivityType, MonthlyStats } from '../features/dashboard'
 import {
   Grid,
@@ -12,8 +11,6 @@ import {
   AlertTitle,
   Button,
   CircularProgress,
-  Switch,
-  FormControlLabel,
 } from '@mui/material'
 import {
   People,
@@ -32,43 +29,26 @@ import {
   RecentActivity,
   QuickActions,
   useDashboardStats,
-  useMockDashboardData,
 } from '../features/dashboard'
 
 export default function DashboardPage() {
   const { t } = useTranslation('dashboard')
-  const [useMockData, setUseMockData] = React.useState(false)
 
   // Hook para datos reales con estructura del backend
   const {
-    stats: realBackendStats,
-    recentActivity: realActivity,
-    monthlyStats: realMonthlyData,
-    loading: realLoading,
-    error: realError,
-    refetch: realRefetch,
-  } = useDashboardStats({ skip: useMockData })
-
-  // Hook para datos mock
-  const mockData = useMockDashboardData()
-
-  // Seleccionar datos según el switch con tipos explícitos
-  const backendStats: DashboardStats | null | undefined = useMockData ? mockData.backendStats : realBackendStats
-  const monthlyData: MonthlyStats[] | undefined = useMockData ? mockData.monthlyData : realMonthlyData
-  const recentActivity: RecentActivityType[] | undefined = useMockData ? mockData.recentActivity : realActivity
-  const loading: boolean = useMockData ? mockData.loading : realLoading
-  const error: ApolloError | undefined = useMockData ? mockData.error : realError
+    stats: backendStats,
+    recentActivity,
+    monthlyStats: monthlyData,
+    loading,
+    error,
+    refetch,
+  } = useDashboardStats()
 
   const [isRefreshing, setIsRefreshing] = React.useState(false)
 
   const handleRefresh = async (): Promise<void> => {
     setIsRefreshing(true)
-    if (!useMockData) {
-      await realRefetch()
-    } else {
-      // Simular refresh con un delay para mock data
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-    }
+    await refetch()
     setIsRefreshing(false)
   }
 
@@ -87,8 +67,8 @@ export default function DashboardPage() {
           <AlertTitle>{t('error.title')}</AlertTitle>
           {error?.message || 'Unknown error'}
           <Box mt={2}>
-            <Button variant="outlined" size="small" onClick={() => setUseMockData(true)}>
-              {t('error.useMockData')}
+            <Button variant="outlined" size="small" onClick={() => void refetch()}>
+              {t('error.retry')}
             </Button>
           </Box>
         </Alert>
@@ -104,26 +84,14 @@ export default function DashboardPage() {
           <Typography variant="h4" component="h1">
             {t('title')}
           </Typography>
-          <Box display="flex" gap={2} alignItems="center">
-            {/* Toggle para datos mock */}
-            {import.meta.env.DEV && (
-              <FormControlLabel
-                control={
-                  <Switch checked={useMockData} onChange={(e) => setUseMockData(e.target.checked)} />
-                }
-                label={t('header.toggleMockData')}
-              />
-            )}
-
-            <Button
-              variant="outlined"
-              startIcon={<Refresh />}
-              onClick={() => void handleRefresh()}
-              disabled={isRefreshing}
-            >
-              {isRefreshing ? <CircularProgress size={20} /> : t('header.refresh')}
-            </Button>
-          </Box>
+          <Button
+            variant="outlined"
+            startIcon={<Refresh />}
+            onClick={() => void handleRefresh()}
+            disabled={isRefreshing}
+          >
+            {isRefreshing ? <CircularProgress size={20} /> : t('header.refresh')}
+          </Button>
         </Box>
 
         {/* Mensaje de última actualización */}
@@ -133,14 +101,6 @@ export default function DashboardPage() {
           </Typography>
         )}
       </Box>
-
-      {/* Alert for Mock Data */}
-      {useMockData && (
-        <Alert severity="info" sx={{ mb: 3 }}>
-          <AlertTitle>{t('devMode.title')}</AlertTitle>
-          {t('devMode.message')}
-        </Alert>
-      )}
 
       {/* Acciones rápidas - Priorizadas en la parte superior */}
       <Grid container spacing={3} mb={4}>

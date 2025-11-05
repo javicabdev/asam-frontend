@@ -41,18 +41,12 @@
   "loading": "Di yeb tablo...",
   "error": {
     "title": "Njuumte ci yeb tablo bi",
-    "useMockData": "Jëfandikoo ay done test",
     "retry": "Jéemaat"
   },
   "header": {
     "welcome": "Dalal jamm ci Tablo Kontrole",
     "lastUpdate": "Yeesal bu mujj",
-    "refresh": "Yeesal",
-    "toggleMockData": "Jëfandikoo ay done test"
-  },
-  "devMode": {
-    "title": "Anu developpment",
-    "message": "Yaa ngi xool ay done test. Coppite yi duñu aar."
+    "refresh": "Yeesal"
   },
   "months": {
     "january": "Janwiye",

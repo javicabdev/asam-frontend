@@ -22,6 +22,7 @@ export const useCashFlow = (id: string): UseCashFlowResult => {
         operationType: data.getCashFlow.operation_type as any,
         amount: data.getCashFlow.amount,
         detail: data.getCashFlow.detail,
+        runningBalance: 0, // TODO: Obtener del backend cuando exponga el campo
         member: data.getCashFlow.member
           ? ({
               id: data.getCashFlow.member.miembro_id,

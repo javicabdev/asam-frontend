@@ -7,7 +7,7 @@ export const exportToCSV = (
   filename: string = 'flujo_caja'
 ) => {
   // Cabeceras CSV
-  const headers = ['Fecha', 'Tipo', 'Categoría', 'Concepto', 'Socio', 'Importe']
+  const headers = ['Fecha', 'Tipo', 'Categoría', 'Concepto', 'Socio', 'Importe', 'Saldo']
 
   // Convertir transacciones a filas
   const rows = transactions.map((transaction) => {
@@ -23,6 +23,7 @@ export const exportToCSV = (
       transaction.detail,
       memberName,
       formatCurrency(transaction.amount),
+      formatCurrency(transaction.runningBalance),
     ]
   })
 

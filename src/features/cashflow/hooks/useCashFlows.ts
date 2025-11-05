@@ -29,14 +29,21 @@ export const useCashFlows = (
     fetchPolicy: 'cache-and-network',
   })
 
-  // Transformar datos del backend a nuestro tipo
-  const cashFlows: CashFlowTransaction[] =
-    data?.getTransactions?.nodes?.map((node) => ({
+  // Transformar datos del backend a nuestro tipo y calcular runningBalance
+  // TODO: Cuando el backend exponga running_balance en schema, usarlo directamente
+  const nodes = data?.getTransactions?.nodes || []
+  let runningBalance = 0
+
+  const cashFlows: CashFlowTransaction[] = nodes.map((node) => {
+    runningBalance += node.amount
+
+    return {
       id: node.id,
       date: node.date,
       operationType: node.operation_type as any,
       amount: node.amount,
       detail: node.detail,
+      runningBalance, // Calculado en frontend temporalmente
       member: node.member
         ? ({
             id: node.member.miembro_id,
@@ -48,11 +55,12 @@ export const useCashFlows = (
       payment: node.payment
         ? {
             id: node.payment.id,
-            receiptNumber: node.payment.id, // TODO: Verificar si existe receiptNumber en schema
+            receiptNumber: node.payment.id,
           }
         : null,
       createdAt: node.created_at,
-    })) || []
+    }
+  })
 
   return {
     cashFlows,

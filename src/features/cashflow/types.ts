@@ -36,6 +36,7 @@ export interface CashFlowTransaction {
   operationType: OperationType
   amount: number // + ingreso, - gasto
   detail: string
+  runningBalance: number // Saldo acumulado después de esta transacción
   member?: MemberRef | null
   payment?: PaymentRef | null
   createdAt: string

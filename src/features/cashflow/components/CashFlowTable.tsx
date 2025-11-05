@@ -12,7 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { CashFlowTransaction } from '../types'
-import { formatTransactionDate, formatAmount } from '../utils/formatters'
+import { formatTransactionDate, formatAmount, formatCurrency } from '../utils/formatters'
 import { getOperationTypeConfig } from '../utils/operationTypes'
 import { ConfirmDeleteDialog } from './ConfirmDeleteDialog'
 
@@ -112,7 +112,7 @@ export const CashFlowTable = ({
     {
       field: 'amount',
       headerName: 'Importe',
-      width: 140,
+      width: 130,
       type: 'number',
       align: 'right',
       headerAlign: 'right',
@@ -126,6 +126,32 @@ export const CashFlowTable = ({
             }}
           >
             {formatAmount(amount)}
+          </Box>
+        )
+      },
+    },
+    {
+      field: 'runningBalance',
+      headerName: 'Saldo',
+      width: 140,
+      type: 'number',
+      align: 'right',
+      headerAlign: 'right',
+      renderCell: (params) => {
+        const balance = params.value as number
+        return (
+          <Box
+            sx={{
+              color: balance >= 0 ? '#2e7d32' : '#d32f2f',
+              fontWeight: 'bold',
+              fontSize: '0.95rem',
+              bgcolor: balance >= 0 ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)',
+              px: 1,
+              py: 0.5,
+              borderRadius: 1,
+            }}
+          >
+            {formatCurrency(balance)}
           </Box>
         )
       },

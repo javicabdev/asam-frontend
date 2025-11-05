@@ -41,18 +41,12 @@
   "loading": "Chargement du tableau de bord...",
   "error": {
     "title": "Erreur lors du chargement du tableau de bord",
-    "useMockData": "Utiliser des données de test",
     "retry": "Réessayer"
   },
   "header": {
     "welcome": "Bienvenue au Tableau de Bord",
     "lastUpdate": "Dernière mise à jour",
-    "refresh": "Actualiser",
-    "toggleMockData": "Utiliser des données de test"
-  },
-  "devMode": {
-    "title": "Mode développement",
-    "message": "Vous consultez des données de test. Les modifications ne seront pas enregistrées."
+    "refresh": "Actualiser"
   },
   "months": {
     "january": "Janvier",

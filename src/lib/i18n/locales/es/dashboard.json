@@ -41,18 +41,12 @@
   "loading": "Cargando dashboard...",
   "error": {
     "title": "Error al cargar el dashboard",
-    "useMockData": "Usar datos de prueba",
     "retry": "Reintentar"
   },
   "header": {
     "welcome": "Bienvenido al Panel de Control",
     "lastUpdate": "Última actualización",
-    "refresh": "Actualizar",
-    "toggleMockData": "Usar datos de prueba"
-  },
-  "devMode": {
-    "title": "Modo de desarrollo",
-    "message": "Estás viendo datos de prueba. Los cambios no se guardarán."
+    "refresh": "Actualizar"
   },
   "months": {
     "january": "Enero",

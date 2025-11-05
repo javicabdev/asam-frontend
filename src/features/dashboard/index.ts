@@ -6,7 +6,6 @@ export { default as RecentActivity } from './components/RecentActivity'
 export { default as QuickActions } from './components/QuickActions'
 
 export { useDashboardStats } from './hooks/useDashboardStats'
-export { useMockDashboardData } from './hooks/useMockDashboardData'
 
 export type {
   DashboardStats,

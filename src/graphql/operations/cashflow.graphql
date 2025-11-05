@@ -1,55 +1,29 @@
 # CashFlow queries and mutations
 
-query GetCashFlow($id: ID!) {
-  getCashFlow(id: $id) {
+# Fragment para datos de transacción
+fragment CashFlowTransactionFields on CashFlow {
+  id
+  date
+  operation_type
+  amount
+  detail
+  created_at
+  member {
+    miembro_id
+    numero_socio
+    nombre
+    apellidos
+  }
+  payment {
     id
-    amount
-    date
-    operation_type
-    detail
-    member {
-      miembro_id
-      numero_socio
-      nombre
-      apellidos
-      tipo_membresia
-    }
-    payment {
-      id
-      amount
-      payment_date
-      status
-      payment_method
-    }
   }
 }
 
-query GetBalance {
-  getBalance
-}
-
-query GetTransactions($filter: TransactionFilter) {
+# Query: Listar transacciones con filtros y paginación
+query GetCashFlows($filter: TransactionFilter) {
   getTransactions(filter: $filter) {
     nodes {
-      id
-      amount
-      date
-      operation_type
-      detail
-      member {
-        miembro_id
-        numero_socio
-        nombre
-        apellidos
-        tipo_membresia
-      }
-      payment {
-        id
-        amount
-        payment_date
-        status
-        payment_method
-      }
+      ...CashFlowTransactionFields
     }
     pageInfo {
       hasNextPage
@@ -59,6 +33,45 @@ query GetTransactions($filter: TransactionFilter) {
   }
 }
 
+# Query: Balance actual
+query GetCashFlowBalance {
+  cashFlowBalance {
+    totalIncome
+    totalExpenses
+    currentBalance
+  }
+}
+
+# Query: Una transacción específica
+query GetCashFlow($id: ID!) {
+  getCashFlow(id: $id) {
+    ...CashFlowTransactionFields
+  }
+}
+
+# Mutation: Crear transacción
+mutation CreateCashFlow($input: CreateCashFlowInput!) {
+  createCashFlow(input: $input) {
+    ...CashFlowTransactionFields
+  }
+}
+
+# Mutation: Actualizar transacción
+mutation UpdateCashFlow($id: ID!, $input: UpdateCashFlowInput!) {
+  updateCashFlow(id: $id, input: $input) {
+    ...CashFlowTransactionFields
+  }
+}
+
+# Mutation: Eliminar transacción
+mutation DeleteCashFlow($id: ID!) {
+  deleteCashFlow(id: $id) {
+    success
+    message
+  }
+}
+
+# Legacy mutations (mantener por compatibilidad)
 mutation RegisterTransaction($input: TransactionInput!) {
   registerTransaction(input: $input) {
     id

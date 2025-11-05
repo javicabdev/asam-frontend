@@ -937,24 +937,48 @@ export type ResetPasswordWithTokenMutationVariables = Exact<{
 
 export type ResetPasswordWithTokenMutation = { __typename?: 'Mutation', resetPasswordWithToken: { __typename?: 'MutationResponse', success: boolean, message?: string | null, error?: string | null } };
 
+export type CashFlowTransactionFieldsFragment = { __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null };
+
+export type GetCashFlowsQueryVariables = Exact<{
+  filter?: InputMaybe<TransactionFilter>;
+}>;
+
+
+export type GetCashFlowsQuery = { __typename?: 'Query', getTransactions: { __typename?: 'TransactionConnection', nodes: Array<{ __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
+
+export type GetCashFlowBalanceQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCashFlowBalanceQuery = { __typename?: 'Query', cashFlowBalance: { __typename?: 'CashFlowBalance', totalIncome: number, totalExpenses: number, currentBalance: number } };
+
 export type GetCashFlowQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetCashFlowQuery = { __typename?: 'Query', getCashFlow?: { __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string, tipo_membresia: MembershipType } | null, payment?: { __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string } | null } | null };
+export type GetCashFlowQuery = { __typename?: 'Query', getCashFlow?: { __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null } | null };
 
-export type GetBalanceQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetBalanceQuery = { __typename?: 'Query', getBalance: number };
-
-export type GetTransactionsQueryVariables = Exact<{
-  filter?: InputMaybe<TransactionFilter>;
+export type CreateCashFlowMutationVariables = Exact<{
+  input: CreateCashFlowInput;
 }>;
 
 
-export type GetTransactionsQuery = { __typename?: 'Query', getTransactions: { __typename?: 'TransactionConnection', nodes: Array<{ __typename?: 'CashFlow', id: string, amount: number, date: string, operation_type: OperationType, detail: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string, tipo_membresia: MembershipType } | null, payment?: { __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string } | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
+export type CreateCashFlowMutation = { __typename?: 'Mutation', createCashFlow: { __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null } };
+
+export type UpdateCashFlowMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  input: UpdateCashFlowInput;
+}>;
+
+
+export type UpdateCashFlowMutation = { __typename?: 'Mutation', updateCashFlow: { __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null } };
+
+export type DeleteCashFlowMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteCashFlowMutation = { __typename?: 'Mutation', deleteCashFlow: { __typename?: 'MutationResponse', success: boolean, message?: string | null } };
 
 export type RegisterTransactionMutationVariables = Exact<{
   input: TransactionInput;
@@ -1359,6 +1383,25 @@ export const MutationResultFragmentDoc = gql`
   error
 }
     `;
+export const CashFlowTransactionFieldsFragmentDoc = gql`
+    fragment CashFlowTransactionFields on CashFlow {
+  id
+  date
+  operation_type
+  amount
+  detail
+  created_at
+  member {
+    miembro_id
+    numero_socio
+    nombre
+    apellidos
+  }
+  payment {
+    id
+  }
+}
+    `;
 export const GetCurrentUserDocument = gql`
     query GetCurrentUser {
   getCurrentUser {
@@ -1743,31 +1786,101 @@ export function useResetPasswordWithTokenMutation(baseOptions?: Apollo.MutationH
 export type ResetPasswordWithTokenMutationHookResult = ReturnType<typeof useResetPasswordWithTokenMutation>;
 export type ResetPasswordWithTokenMutationResult = Apollo.MutationResult<ResetPasswordWithTokenMutation>;
 export type ResetPasswordWithTokenMutationOptions = Apollo.BaseMutationOptions<ResetPasswordWithTokenMutation, ResetPasswordWithTokenMutationVariables>;
-export const GetCashFlowDocument = gql`
-    query GetCashFlow($id: ID!) {
-  getCashFlow(id: $id) {
-    id
-    amount
-    date
-    operation_type
-    detail
-    member {
-      miembro_id
-      numero_socio
-      nombre
-      apellidos
-      tipo_membresia
+export const GetCashFlowsDocument = gql`
+    query GetCashFlows($filter: TransactionFilter) {
+  getTransactions(filter: $filter) {
+    nodes {
+      ...CashFlowTransactionFields
     }
-    payment {
-      id
-      amount
-      payment_date
-      status
-      payment_method
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      totalCount
     }
   }
 }
+    ${CashFlowTransactionFieldsFragmentDoc}`;
+
+/**
+ * __useGetCashFlowsQuery__
+ *
+ * To run a query within a React component, call `useGetCashFlowsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCashFlowsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCashFlowsQuery({
+ *   variables: {
+ *      filter: // value for 'filter'
+ *   },
+ * });
+ */
+export function useGetCashFlowsQuery(baseOptions?: Apollo.QueryHookOptions<GetCashFlowsQuery, GetCashFlowsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCashFlowsQuery, GetCashFlowsQueryVariables>(GetCashFlowsDocument, options);
+      }
+export function useGetCashFlowsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCashFlowsQuery, GetCashFlowsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCashFlowsQuery, GetCashFlowsQueryVariables>(GetCashFlowsDocument, options);
+        }
+export function useGetCashFlowsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCashFlowsQuery, GetCashFlowsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCashFlowsQuery, GetCashFlowsQueryVariables>(GetCashFlowsDocument, options);
+        }
+export type GetCashFlowsQueryHookResult = ReturnType<typeof useGetCashFlowsQuery>;
+export type GetCashFlowsLazyQueryHookResult = ReturnType<typeof useGetCashFlowsLazyQuery>;
+export type GetCashFlowsSuspenseQueryHookResult = ReturnType<typeof useGetCashFlowsSuspenseQuery>;
+export type GetCashFlowsQueryResult = Apollo.QueryResult<GetCashFlowsQuery, GetCashFlowsQueryVariables>;
+export const GetCashFlowBalanceDocument = gql`
+    query GetCashFlowBalance {
+  cashFlowBalance {
+    totalIncome
+    totalExpenses
+    currentBalance
+  }
+}
     `;
+
+/**
+ * __useGetCashFlowBalanceQuery__
+ *
+ * To run a query within a React component, call `useGetCashFlowBalanceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCashFlowBalanceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCashFlowBalanceQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCashFlowBalanceQuery(baseOptions?: Apollo.QueryHookOptions<GetCashFlowBalanceQuery, GetCashFlowBalanceQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCashFlowBalanceQuery, GetCashFlowBalanceQueryVariables>(GetCashFlowBalanceDocument, options);
+      }
+export function useGetCashFlowBalanceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCashFlowBalanceQuery, GetCashFlowBalanceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCashFlowBalanceQuery, GetCashFlowBalanceQueryVariables>(GetCashFlowBalanceDocument, options);
+        }
+export function useGetCashFlowBalanceSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCashFlowBalanceQuery, GetCashFlowBalanceQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCashFlowBalanceQuery, GetCashFlowBalanceQueryVariables>(GetCashFlowBalanceDocument, options);
+        }
+export type GetCashFlowBalanceQueryHookResult = ReturnType<typeof useGetCashFlowBalanceQuery>;
+export type GetCashFlowBalanceLazyQueryHookResult = ReturnType<typeof useGetCashFlowBalanceLazyQuery>;
+export type GetCashFlowBalanceSuspenseQueryHookResult = ReturnType<typeof useGetCashFlowBalanceSuspenseQuery>;
+export type GetCashFlowBalanceQueryResult = Apollo.QueryResult<GetCashFlowBalanceQuery, GetCashFlowBalanceQueryVariables>;
+export const GetCashFlowDocument = gql`
+    query GetCashFlow($id: ID!) {
+  getCashFlow(id: $id) {
+    ...CashFlowTransactionFields
+  }
+}
+    ${CashFlowTransactionFieldsFragmentDoc}`;
 
 /**
  * __useGetCashFlowQuery__
@@ -1801,108 +1914,107 @@ export type GetCashFlowQueryHookResult = ReturnType<typeof useGetCashFlowQuery>;
 export type GetCashFlowLazyQueryHookResult = ReturnType<typeof useGetCashFlowLazyQuery>;
 export type GetCashFlowSuspenseQueryHookResult = ReturnType<typeof useGetCashFlowSuspenseQuery>;
 export type GetCashFlowQueryResult = Apollo.QueryResult<GetCashFlowQuery, GetCashFlowQueryVariables>;
-export const GetBalanceDocument = gql`
-    query GetBalance {
-  getBalance
+export const CreateCashFlowDocument = gql`
+    mutation CreateCashFlow($input: CreateCashFlowInput!) {
+  createCashFlow(input: $input) {
+    ...CashFlowTransactionFields
+  }
 }
-    `;
+    ${CashFlowTransactionFieldsFragmentDoc}`;
+export type CreateCashFlowMutationFn = Apollo.MutationFunction<CreateCashFlowMutation, CreateCashFlowMutationVariables>;
 
 /**
- * __useGetBalanceQuery__
+ * __useCreateCashFlowMutation__
  *
- * To run a query within a React component, call `useGetBalanceQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetBalanceQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
+ * To run a mutation, you first call `useCreateCashFlowMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCashFlowMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = useGetBalanceQuery({
+ * const [createCashFlowMutation, { data, loading, error }] = useCreateCashFlowMutation({
  *   variables: {
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetBalanceQuery(baseOptions?: Apollo.QueryHookOptions<GetBalanceQuery, GetBalanceQueryVariables>) {
+export function useCreateCashFlowMutation(baseOptions?: Apollo.MutationHookOptions<CreateCashFlowMutation, CreateCashFlowMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetBalanceQuery, GetBalanceQueryVariables>(GetBalanceDocument, options);
+        return Apollo.useMutation<CreateCashFlowMutation, CreateCashFlowMutationVariables>(CreateCashFlowDocument, options);
       }
-export function useGetBalanceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBalanceQuery, GetBalanceQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetBalanceQuery, GetBalanceQueryVariables>(GetBalanceDocument, options);
-        }
-export function useGetBalanceSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetBalanceQuery, GetBalanceQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetBalanceQuery, GetBalanceQueryVariables>(GetBalanceDocument, options);
-        }
-export type GetBalanceQueryHookResult = ReturnType<typeof useGetBalanceQuery>;
-export type GetBalanceLazyQueryHookResult = ReturnType<typeof useGetBalanceLazyQuery>;
-export type GetBalanceSuspenseQueryHookResult = ReturnType<typeof useGetBalanceSuspenseQuery>;
-export type GetBalanceQueryResult = Apollo.QueryResult<GetBalanceQuery, GetBalanceQueryVariables>;
-export const GetTransactionsDocument = gql`
-    query GetTransactions($filter: TransactionFilter) {
-  getTransactions(filter: $filter) {
-    nodes {
-      id
-      amount
-      date
-      operation_type
-      detail
-      member {
-        miembro_id
-        numero_socio
-        nombre
-        apellidos
-        tipo_membresia
+export type CreateCashFlowMutationHookResult = ReturnType<typeof useCreateCashFlowMutation>;
+export type CreateCashFlowMutationResult = Apollo.MutationResult<CreateCashFlowMutation>;
+export type CreateCashFlowMutationOptions = Apollo.BaseMutationOptions<CreateCashFlowMutation, CreateCashFlowMutationVariables>;
+export const UpdateCashFlowDocument = gql`
+    mutation UpdateCashFlow($id: ID!, $input: UpdateCashFlowInput!) {
+  updateCashFlow(id: $id, input: $input) {
+    ...CashFlowTransactionFields
+  }
+}
+    ${CashFlowTransactionFieldsFragmentDoc}`;
+export type UpdateCashFlowMutationFn = Apollo.MutationFunction<UpdateCashFlowMutation, UpdateCashFlowMutationVariables>;
+
+/**
+ * __useUpdateCashFlowMutation__
+ *
+ * To run a mutation, you first call `useUpdateCashFlowMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCashFlowMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCashFlowMutation, { data, loading, error }] = useUpdateCashFlowMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateCashFlowMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCashFlowMutation, UpdateCashFlowMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCashFlowMutation, UpdateCashFlowMutationVariables>(UpdateCashFlowDocument, options);
       }
-      payment {
-        id
-        amount
-        payment_date
-        status
-        payment_method
-      }
-    }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      totalCount
-    }
+export type UpdateCashFlowMutationHookResult = ReturnType<typeof useUpdateCashFlowMutation>;
+export type UpdateCashFlowMutationResult = Apollo.MutationResult<UpdateCashFlowMutation>;
+export type UpdateCashFlowMutationOptions = Apollo.BaseMutationOptions<UpdateCashFlowMutation, UpdateCashFlowMutationVariables>;
+export const DeleteCashFlowDocument = gql`
+    mutation DeleteCashFlow($id: ID!) {
+  deleteCashFlow(id: $id) {
+    success
+    message
   }
 }
     `;
+export type DeleteCashFlowMutationFn = Apollo.MutationFunction<DeleteCashFlowMutation, DeleteCashFlowMutationVariables>;
 
 /**
- * __useGetTransactionsQuery__
+ * __useDeleteCashFlowMutation__
  *
- * To run a query within a React component, call `useGetTransactionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTransactionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
+ * To run a mutation, you first call `useDeleteCashFlowMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCashFlowMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = useGetTransactionsQuery({
+ * const [deleteCashFlowMutation, { data, loading, error }] = useDeleteCashFlowMutation({
  *   variables: {
- *      filter: // value for 'filter'
+ *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetTransactionsQuery(baseOptions?: Apollo.QueryHookOptions<GetTransactionsQuery, GetTransactionsQueryVariables>) {
+export function useDeleteCashFlowMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCashFlowMutation, DeleteCashFlowMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetTransactionsQuery, GetTransactionsQueryVariables>(GetTransactionsDocument, options);
+        return Apollo.useMutation<DeleteCashFlowMutation, DeleteCashFlowMutationVariables>(DeleteCashFlowDocument, options);
       }
-export function useGetTransactionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTransactionsQuery, GetTransactionsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetTransactionsQuery, GetTransactionsQueryVariables>(GetTransactionsDocument, options);
-        }
-export function useGetTransactionsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetTransactionsQuery, GetTransactionsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetTransactionsQuery, GetTransactionsQueryVariables>(GetTransactionsDocument, options);
-        }
-export type GetTransactionsQueryHookResult = ReturnType<typeof useGetTransactionsQuery>;
-export type GetTransactionsLazyQueryHookResult = ReturnType<typeof useGetTransactionsLazyQuery>;
-export type GetTransactionsSuspenseQueryHookResult = ReturnType<typeof useGetTransactionsSuspenseQuery>;
-export type GetTransactionsQueryResult = Apollo.QueryResult<GetTransactionsQuery, GetTransactionsQueryVariables>;
+export type DeleteCashFlowMutationHookResult = ReturnType<typeof useDeleteCashFlowMutation>;
+export type DeleteCashFlowMutationResult = Apollo.MutationResult<DeleteCashFlowMutation>;
+export type DeleteCashFlowMutationOptions = Apollo.BaseMutationOptions<DeleteCashFlowMutation, DeleteCashFlowMutationVariables>;
 export const RegisterTransactionDocument = gql`
     mutation RegisterTransaction($input: TransactionInput!) {
   registerTransaction(input: $input) {

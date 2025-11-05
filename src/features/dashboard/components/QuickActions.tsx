@@ -5,7 +5,6 @@ import {
   PersonAdd,
   Payment,
   Assessment,
-  Group,
   People,
   AccountBalance,
   ArrowForward,
@@ -46,13 +45,6 @@ export default function QuickActions() {
       icon: <People />,
       path: '/members',
       color: 'info',
-    },
-    {
-      title: t('quickActions.manageFamily'),
-      description: t('recentActivity.familyAdded'),
-      icon: <Group />,
-      path: '/families',
-      color: 'secondary',
     },
     {
       title: t('quickActions.viewReports'),

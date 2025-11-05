@@ -65,8 +65,7 @@ export interface FamilyMember {
 
 export interface Payment {
   id: string
-  member?: Member
-  family?: Family
+  member: Member
   amount: number
   payment_date: string
   status: PaymentStatus
@@ -81,7 +80,6 @@ export interface Transaction {
   operation_type: OperationType
   detail: string
   member?: Member
-  family?: Family
   payment?: Payment
 }
 
@@ -169,8 +167,7 @@ export interface UpdateMemberInput {
 }
 
 export interface PaymentInput {
-  member_id?: string
-  family_id?: string
+  member_id: string
   amount: number
   payment_method?: string
   notes?: string
@@ -182,6 +179,5 @@ export interface TransactionInput {
   operation_type: OperationType
   detail: string
   member_id?: string
-  family_id?: string
   payment_id?: string
 }

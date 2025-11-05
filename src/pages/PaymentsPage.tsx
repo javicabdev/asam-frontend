@@ -38,13 +38,8 @@ export default function PaymentsPage() {
 
   // Handle row click - navigate to member details
   const handleRowClick = (payment: PaymentListItem) => {
-    if (payment.memberId) {
-      // For individual payments, navigate to member details
-      navigate(`/members/${payment.memberId}`)
-    } else if (payment.familyId) {
-      // For family payments, show message that feature is not implemented yet
-      setFamilySnackbar(true)
-    }
+    // All payments now have memberId (origin member for families)
+    navigate(`/members/${payment.memberId}`)
   }
 
   // Handle confirm payment - open dialog

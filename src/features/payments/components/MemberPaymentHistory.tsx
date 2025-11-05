@@ -86,29 +86,23 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
   // Handle download receipt
   const handleDownloadReceipt = async (payment: MemberPayment) => {
     try {
-      // Validate that we have either member or family data
-      if (!payment.member && !payment.family) {
+      // Validate that we have member data
+      if (!payment.member) {
         enqueueSnackbar(
-          'Error: El pago no tiene datos de socio o familia asociados. Por favor, contacte con soporte.',
+          'Error: El pago no tiene datos de socio asociados. Por favor, contacte con soporte.',
           { variant: 'error' }
         )
         return
       }
 
       // Transform MemberPayment (nested GraphQL structure) to PaymentListItem (flat structure)
+      const isFamilyPayment = payment.member.tipo_membresia === 'FAMILY'
       const paymentListItem: PaymentListItem = {
         id: payment.id,
-        memberId: payment.member?.miembro_id,
-        familyId: payment.family?.id,
-        memberName: payment.member
-          ? `${payment.member.nombre} ${payment.member.apellidos}`
-          : `${payment.family!.esposo_nombre} ${payment.family!.esposa_nombre}`,
-        memberNumber: payment.member
-          ? payment.member.numero_socio
-          : payment.family!.numero_socio,
-        familyName: payment.family
-          ? `${payment.family.esposo_nombre} ${payment.family.esposa_nombre}`
-          : undefined,
+        memberId: payment.member.miembro_id,
+        memberName: `${payment.member.nombre} ${payment.member.apellidos}`,
+        memberNumber: payment.member.numero_socio,
+        familyName: isFamilyPayment ? `Familia ${payment.member.numero_socio}` : undefined,
         amount: payment.amount,
         paymentDate: payment.payment_date,
         status: payment.status as 'PENDING' | 'PAID' | 'CANCELLED',
@@ -117,7 +111,7 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
       }
 
       await generateReceipt(paymentListItem, true)
-      
+
       enqueueSnackbar('Recibo generado exitosamente', { variant: 'success' })
     } catch (error) {
       console.error('Error downloading receipt:', error)
@@ -131,19 +125,13 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
   // Handle confirm payment - open dialog
   const handleConfirmPayment = (payment: MemberPayment) => {
     // Transform MemberPayment to PaymentListItem for the dialog
+    const isFamilyPayment = payment.member.tipo_membresia === 'FAMILY'
     const paymentListItem: PaymentListItem = {
       id: payment.id,
-      memberId: payment.member?.miembro_id,
-      familyId: payment.family?.id,
-      memberName: payment.member
-        ? `${payment.member.nombre} ${payment.member.apellidos}`
-        : `${payment.family!.esposo_nombre} ${payment.family!.esposa_nombre}`,
-      memberNumber: payment.member
-        ? payment.member.numero_socio
-        : payment.family!.numero_socio,
-      familyName: payment.family
-        ? `${payment.family.esposo_nombre} ${payment.family.esposa_nombre}`
-        : undefined,
+      memberId: payment.member.miembro_id,
+      memberName: `${payment.member.nombre} ${payment.member.apellidos}`,
+      memberNumber: payment.member.numero_socio,
+      familyName: isFamilyPayment ? `Familia ${payment.member.numero_socio}` : undefined,
       amount: payment.amount,
       paymentDate: payment.payment_date,
       status: payment.status as 'PENDING' | 'PAID' | 'CANCELLED',

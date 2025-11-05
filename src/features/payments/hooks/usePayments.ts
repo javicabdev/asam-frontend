@@ -52,42 +52,38 @@ export const usePayments = (filters: PaymentFiltersState) => {
       return []
     }
 
-    return data.listPayments.nodes.map((payment) => {
-      // Determine member name and number (could be from member or family)
-      let memberName = ''
-      let memberNumber = ''
-      let familyName: string | undefined
-      let memberId: string | undefined
-      let familyId: string | undefined
+    return data.listPayments.nodes
+      .filter((payment) => {
+        // Filter out any payments without member data (shouldn't happen but be defensive)
+        if (!payment.member) {
+          console.warn('Payment without member data found:', payment.id)
+          return false
+        }
+        return true
+      })
+      .map((payment) => {
+        // All payments now have a member (origin member for families)
+        const memberName = `${payment.member.nombre} ${payment.member.apellidos}`.trim()
+        const memberNumber = payment.member.numero_socio
+        const memberId = payment.member.miembro_id
 
-      if (payment.member) {
-        memberName = `${payment.member.nombre} ${payment.member.apellidos}`.trim()
-        memberNumber = payment.member.numero_socio
-        memberId = payment.member.miembro_id
-      } else if (payment.family) {
-        // For family payments, show family info
-        const esposo = payment.family.esposo_nombre || ''
-        const esposa = payment.family.esposa_nombre || ''
-        familyName = `${esposo}${esposo && esposa ? ' / ' : ''}${esposa}`.trim()
-        memberName = familyName
-        memberNumber = payment.family.numero_socio
-        familyId = payment.family.id
-      }
+        // Determine if this is a family payment by checking membership type
+        const isFamilyPayment = payment.member.tipo_membresia === 'FAMILY'
+        const familyName = isFamilyPayment ? `Familia ${memberNumber}` : undefined
 
-      return {
-        id: payment.id,
-        memberId,
-        familyId,
-        memberName,
-        memberNumber,
-        familyName,
-        amount: payment.amount,
-        paymentDate: payment.payment_date ?? null,
-        status: payment.status as 'PENDING' | 'PAID' | 'CANCELLED',
-        paymentMethod: payment.payment_method ?? null,
-        notes: payment.notes ?? null,
-      }
-    })
+        return {
+          id: payment.id,
+          memberId,
+          memberName,
+          memberNumber,
+          familyName,
+          amount: payment.amount,
+          paymentDate: payment.payment_date ?? null,
+          status: payment.status as 'PENDING' | 'PAID' | 'CANCELLED',
+          paymentMethod: payment.payment_method ?? null,
+          notes: payment.notes ?? null,
+        }
+      })
   }, [data])
 
   // Extract page info

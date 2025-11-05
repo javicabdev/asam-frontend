@@ -12,12 +12,7 @@ query GetCashFlow($id: ID!) {
       numero_socio
       nombre
       apellidos
-    }
-    family {
-      id
-      numero_socio
-      esposo_nombre
-      esposa_nombre
+      tipo_membresia
     }
     payment {
       id
@@ -46,12 +41,7 @@ query GetTransactions($filter: TransactionFilter) {
         numero_socio
         nombre
         apellidos
-      }
-      family {
-        id
-        numero_socio
-        esposo_nombre
-        esposa_nombre
+        tipo_membresia
       }
       payment {
         id
@@ -81,12 +71,7 @@ mutation RegisterTransaction($input: TransactionInput!) {
       numero_socio
       nombre
       apellidos
-    }
-    family {
-      id
-      numero_socio
-      esposo_nombre
-      esposa_nombre
+      tipo_membresia
     }
     payment {
       id
@@ -110,12 +95,7 @@ mutation UpdateTransaction($id: ID!, $input: TransactionInput!) {
       numero_socio
       nombre
       apellidos
-    }
-    family {
-      id
-      numero_socio
-      esposo_nombre
-      esposa_nombre
+      tipo_membresia
     }
     payment {
       id

@@ -8,12 +8,7 @@ query GetPayment($id: ID!) {
       numero_socio
       nombre
       apellidos
-    }
-    family {
-      id
-      numero_socio
-      esposo_nombre
-      esposa_nombre
+      tipo_membresia
     }
     amount
     payment_date
@@ -31,6 +26,7 @@ query GetMemberPayments($memberId: ID!) {
       numero_socio
       nombre
       apellidos
+      tipo_membresia
     }
     amount
     payment_date
@@ -43,11 +39,12 @@ query GetMemberPayments($memberId: ID!) {
 query GetFamilyPayments($familyId: ID!) {
   getFamilyPayments(familyId: $familyId) {
     id
-    family {
-      id
+    member {
+      miembro_id
       numero_socio
-      esposo_nombre
-      esposa_nombre
+      nombre
+      apellidos
+      tipo_membresia
     }
     amount
     payment_date
@@ -71,12 +68,7 @@ query ListPayments($filter: PaymentFilter) {
         numero_socio
         nombre
         apellidos
-      }
-      family {
-        id
-        numero_socio
-        esposo_nombre
-        esposa_nombre
+        tipo_membresia
       }
       amount
       payment_date
@@ -104,12 +96,7 @@ mutation RegisterPayment($input: PaymentInput!) {
       numero_socio
       nombre
       apellidos
-    }
-    family {
-      id
-      numero_socio
-      esposo_nombre
-      esposa_nombre
+      tipo_membresia
     }
     amount
     payment_date
@@ -127,12 +114,7 @@ mutation UpdatePayment($id: ID!, $input: PaymentInput!) {
       numero_socio
       nombre
       apellidos
-    }
-    family {
-      id
-      numero_socio
-      esposo_nombre
-      esposa_nombre
+      tipo_membresia
     }
     amount
     payment_date
@@ -150,12 +132,7 @@ mutation ConfirmPayment($id: ID!, $paymentMethod: String!, $paymentDate: Time, $
       numero_socio
       nombre
       apellidos
-    }
-    family {
-      id
-      numero_socio
-      esposo_nombre
-      esposa_nombre
+      tipo_membresia
     }
     amount
     payment_date

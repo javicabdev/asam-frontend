@@ -101,27 +101,26 @@ export const InitialPaymentPage: React.FC = () => {
   } = usePaymentForm({
     memberId: memberId || '',
     pendingPaymentId: pendingPayment?.id || '',
-    getFamilyId: () => family?.id,
     isFamily,
     onSuccess: async (payment) => {
       console.log('✅ Payment confirmed, generating receipt...')
-      
+
       // Mark as registered and show summary
       setPaymentData(payment)
       setPaymentRegistered(true)
-      
+
       // Transform payment to PaymentListItem for receipt generation
       try {
+        const isFamilyPayment = payment.member?.tipo_membresia === 'FAMILY'
         const paymentForReceipt: PaymentListItem = {
           id: payment.id,
-          memberId: payment.member?.miembro_id,
-          familyId: payment.family?.id,
-          memberName: payment.member 
-            ? `${payment.member.nombre} ${payment.member.apellidos}` 
+          memberId: payment.member?.miembro_id || '',
+          memberName: payment.member
+            ? `${payment.member.nombre} ${payment.member.apellidos}`
             : '',
-          memberNumber: payment.member?.numero_socio || payment.family?.numero_socio || '',
-          familyName: payment.family 
-            ? `${payment.family.esposo_nombre} y ${payment.family.esposa_nombre}` 
+          memberNumber: payment.member?.numero_socio || '',
+          familyName: isFamilyPayment
+            ? `Familia ${payment.member?.numero_socio}`
             : undefined,
           amount: payment.amount,
           paymentDate: payment.payment_date,
@@ -136,11 +135,11 @@ export const InitialPaymentPage: React.FC = () => {
         console.error('❌ Error generating receipt:', error)
         // Don't fail the whole flow if receipt generation fails
       }
-      
+
       // Clear session storage
       sessionStorage.removeItem(`payment_registered_${memberId}`)
       sessionStorage.removeItem(`payment_data_${memberId}`)
-      
+
       // Show success message briefly, then redirect
       setTimeout(() => {
         navigate(`/members/${memberId}`, { replace: true })

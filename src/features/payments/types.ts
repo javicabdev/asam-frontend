@@ -41,11 +41,10 @@ export interface PaymentFiltersState {
  */
 export interface PaymentListItem {
   id: string
-  memberId?: string // ID of the member (for individual payments)
-  familyId?: string // ID of the family (for family payments)
+  memberId: string // ID of the member (always present - origin member for families)
   memberName: string
   memberNumber: string
-  familyName?: string
+  familyName?: string // Display name for family payments (derived from member's family)
   amount: number
   paymentDate: string | null  // Can be null or invalid for pending payments
   status: 'PENDING' | 'PAID' | 'CANCELLED'

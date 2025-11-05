@@ -8,17 +8,12 @@ import {
 
 export interface MemberPayment {
   id: string
-  member?: {
+  member: {
     miembro_id: string
     numero_socio: string
     nombre: string
     apellidos: string
-  }
-  family?: {
-    id: string
-    numero_socio: string
-    esposo_nombre: string
-    esposa_nombre: string
+    tipo_membresia: string
   }
   amount: number
   payment_date: string | null  // Can be null or invalid for pending payments

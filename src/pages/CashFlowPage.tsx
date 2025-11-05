@@ -7,10 +7,17 @@ import {
   Stack,
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
+import FlightTakeoffIcon from '@mui/icons-material/FlightTakeoff'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import { useAuth } from '@/hooks/useAuth'
 import { useCashFlows, useBalance } from '@/features/cashflow/hooks'
-import { BalanceCard, CashFlowFilters, CashFlowTable } from '@/features/cashflow/components'
+import {
+  BalanceCard,
+  CashFlowFilters,
+  CashFlowTable,
+  TransactionFormDialog,
+  RepatriationFormDialog,
+} from '@/features/cashflow/components'
 import { exportToCSV } from '@/features/cashflow/utils/exportCSV'
 import type { CashFlowFilters as CashFlowFiltersType } from '@/features/cashflow/types'
 
@@ -18,8 +25,10 @@ export default function CashFlowPage() {
   const { user } = useAuth()
   const isAdmin = user?.role === 'admin'
 
-  // Estados para filtros
+  // Estados para filtros y diálogos
   const [filters, setFilters] = useState<CashFlowFiltersType>({})
+  const [openTransactionForm, setOpenTransactionForm] = useState(false)
+  const [openRepatriationForm, setOpenRepatriationForm] = useState(false)
 
   // Queries
   const { balance, loading: balanceLoading } = useBalance()
@@ -43,12 +52,17 @@ export default function CashFlowPage() {
             <Button
               variant="contained"
               startIcon={<AddIcon />}
-              onClick={() => {
-                // TODO: Abrir formulario de transacción (Commit 5)
-                console.log('Abrir formulario de transacción')
-              }}
+              onClick={() => setOpenTransactionForm(true)}
             >
               Registrar Transacción
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              startIcon={<FlightTakeoffIcon />}
+              onClick={() => setOpenRepatriationForm(true)}
+            >
+              Repatriación
             </Button>
             <Button
               variant="outlined"
@@ -83,11 +97,22 @@ export default function CashFlowPage() {
           loading={cashFlowsLoading}
           totalCount={totalCount}
           onEditClick={(transaction) => {
-            // TODO: Abrir formulario de edición (Commit 5)
+            // TODO: Implementar edición de transacciones
             console.log('Editar transacción:', transaction)
           }}
         />
       </Paper>
+
+      {/* Diálogos */}
+      <TransactionFormDialog
+        open={openTransactionForm}
+        onClose={() => setOpenTransactionForm(false)}
+      />
+
+      <RepatriationFormDialog
+        open={openRepatriationForm}
+        onClose={() => setOpenRepatriationForm(false)}
+      />
     </Box>
   )
 }

@@ -29,6 +29,7 @@ export default function CashFlowPage() {
   const [filters, setFilters] = useState<CashFlowFiltersType>({})
   const [openTransactionForm, setOpenTransactionForm] = useState(false)
   const [openRepatriationForm, setOpenRepatriationForm] = useState(false)
+  const [transactionToEdit, setTransactionToEdit] = useState<any>(null)
 
   // Queries
   const { balance, loading: balanceLoading } = useBalance()
@@ -97,8 +98,8 @@ export default function CashFlowPage() {
           loading={cashFlowsLoading}
           totalCount={totalCount}
           onEditClick={(transaction) => {
-            // TODO: Implementar edición de transacciones
-            console.log('Editar transacción:', transaction)
+            setTransactionToEdit(transaction)
+            setOpenTransactionForm(true)
           }}
         />
       </Paper>
@@ -106,7 +107,11 @@ export default function CashFlowPage() {
       {/* Diálogos */}
       <TransactionFormDialog
         open={openTransactionForm}
-        onClose={() => setOpenTransactionForm(false)}
+        onClose={() => {
+          setOpenTransactionForm(false)
+          setTransactionToEdit(null)
+        }}
+        transaction={transactionToEdit}
       />
 
       <RepatriationFormDialog

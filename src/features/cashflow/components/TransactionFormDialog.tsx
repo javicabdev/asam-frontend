@@ -18,22 +18,28 @@ import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove'
 import { createCashFlowSchema } from '../utils/validation'
 import { useCreateCashFlow } from '../hooks/useCreateCashFlow'
+import { useUpdateCashFlow } from '../hooks/useUpdateCashFlow'
 import { getIncomeTypes, getExpenseTypes, getOperationTypeConfig } from '../utils/operationTypes'
-import { OperationCategory, OperationType } from '../types'
+import { OperationCategory, OperationType, CashFlowTransaction } from '../types'
 import { MemberAutocomplete } from '@/features/users/components/MemberAutocomplete'
 import type { Member } from '@/graphql/generated/operations'
 
 interface TransactionFormDialogProps {
   open: boolean
   onClose: () => void
+  transaction?: CashFlowTransaction | null
 }
 
 export const TransactionFormDialog = ({
   open,
   onClose,
+  transaction,
 }: TransactionFormDialogProps) => {
+  const isEdit = !!transaction
   const [category, setCategory] = useState<OperationCategory>('INGRESO')
-  const { createCashFlow, loading } = useCreateCashFlow()
+  const { createCashFlow, loading: createLoading } = useCreateCashFlow()
+  const { updateCashFlow, loading: updateLoading } = useUpdateCashFlow()
+  const loading = createLoading || updateLoading
 
   const {
     control,
@@ -56,6 +62,31 @@ export const TransactionFormDialog = ({
   const selectedType = watch('operationType')
   const currentAmount = watch('amount')
 
+  // Inicializar formulario cuando se abre en modo edición
+  useEffect(() => {
+    if (open && transaction) {
+      const config = getOperationTypeConfig(transaction.operationType)
+      setCategory(config.category)
+      reset({
+        date: new Date(transaction.date),
+        operationType: transaction.operationType,
+        amount: transaction.amount,
+        detail: transaction.detail,
+        memberId: transaction.member?.id || null,
+      })
+    } else if (open && !transaction) {
+      // Reset al abrir para crear
+      setCategory('INGRESO')
+      reset({
+        date: new Date(),
+        operationType: '' as OperationType,
+        amount: 0,
+        detail: '',
+        memberId: null,
+      })
+    }
+  }, [open, transaction, reset])
+
   // Cambiar signo del amount según categoría
   useEffect(() => {
     if (category === 'GASTO' && currentAmount > 0) {
@@ -75,18 +106,28 @@ export const TransactionFormDialog = ({
 
   const onSubmit = async (data: any) => {
     try {
-      await createCashFlow({
+      const payload = {
         date: data.date.toISOString(),
         operationType: data.operationType,
         amount: data.amount,
         detail: data.detail,
         memberId: data.memberId,
-      })
+      }
+
+      if (isEdit && transaction) {
+        await updateCashFlow({
+          id: transaction.id,
+          ...payload,
+        })
+      } else {
+        await createCashFlow(payload)
+      }
+
       reset()
       onClose()
     } catch (error) {
-      // Error ya manejado por el hook useCreateCashFlow
-      console.error('Error al crear transacción:', error)
+      // Error ya manejado por los hooks
+      console.error('Error al guardar transacción:', error)
     }
   }
 
@@ -95,7 +136,7 @@ export const TransactionFormDialog = ({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>Registrar Transacción</DialogTitle>
+      <DialogTitle>{isEdit ? 'Editar Transacción' : 'Registrar Transacción'}</DialogTitle>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
@@ -249,7 +290,13 @@ export const TransactionFormDialog = ({
             variant="contained"
             disabled={loading}
           >
-            {loading ? 'Registrando...' : 'Registrar'}
+            {loading
+              ? isEdit
+                ? 'Actualizando...'
+                : 'Registrando...'
+              : isEdit
+                ? 'Actualizar'
+                : 'Registrar'}
           </Button>
         </DialogActions>
       </form>

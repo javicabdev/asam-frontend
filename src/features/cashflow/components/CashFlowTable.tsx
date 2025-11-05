@@ -15,6 +15,7 @@ import { CashFlowTransaction } from '../types'
 import { formatTransactionDate, formatAmount, formatCurrency } from '../utils/formatters'
 import { getOperationTypeConfig } from '../utils/operationTypes'
 import { ConfirmDeleteDialog } from './ConfirmDeleteDialog'
+import { TransactionDetailsDialog } from './TransactionDetailsDialog'
 
 interface CashFlowTableProps {
   cashFlows: CashFlowTransaction[]
@@ -38,6 +39,15 @@ export const CashFlowTable = ({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [transactionToDelete, setTransactionToDelete] =
     useState<CashFlowTransaction | null>(null)
+
+  const [detailsDialogOpen, setDetailsDialogOpen] = useState(false)
+  const [transactionToView, setTransactionToView] =
+    useState<CashFlowTransaction | null>(null)
+
+  const handleViewClick = (transaction: CashFlowTransaction) => {
+    setTransactionToView(transaction)
+    setDetailsDialogOpen(true)
+  }
 
   const handleDeleteClick = (transaction: CashFlowTransaction) => {
     setTransactionToDelete(transaction)
@@ -167,10 +177,7 @@ export const CashFlowTable = ({
             key="view"
             icon={<VisibilityIcon />}
             label="Ver"
-            onClick={() => {
-              // TODO: Abrir modal de detalles
-              console.log('Ver transacción:', params.row.id)
-            }}
+            onClick={() => handleViewClick(params.row)}
           />,
         ]
 
@@ -219,6 +226,12 @@ export const CashFlowTable = ({
             bgcolor: 'rgba(244, 67, 54, 0.08)',
           },
         }}
+      />
+
+      <TransactionDetailsDialog
+        open={detailsDialogOpen}
+        transaction={transactionToView}
+        onClose={() => setDetailsDialogOpen(false)}
       />
 
       <ConfirmDeleteDialog

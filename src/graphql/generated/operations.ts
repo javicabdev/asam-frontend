@@ -44,6 +44,7 @@ export type CashFlow = {
   member?: Maybe<Member>;
   operation_type: OperationType;
   payment?: Maybe<Payment>;
+  running_balance: Scalars['Float']['output'];
   updated_at: Scalars['Time']['output'];
 };
 
@@ -150,6 +151,108 @@ export type DashboardStats = {
   totalMembers: Scalars['Int']['output'];
   totalRevenue: Scalars['Float']['output'];
   totalTransactions: Scalars['Int']['output'];
+};
+
+/** Representa un deudor (socio o familia) */
+export type Debtor = {
+  __typename?: 'Debtor';
+  /** Información de la familia (si es familiar) */
+  family?: Maybe<DebtorFamilyInfo>;
+  /** ID de la familia (si es deuda familiar) */
+  familyId?: Maybe<Scalars['ID']['output']>;
+  /** Importe del último pago realizado */
+  lastPaymentAmount?: Maybe<Scalars['Float']['output']>;
+  /** Última fecha en que este socio/familia realizó un pago exitoso */
+  lastPaymentDate?: Maybe<Scalars['Time']['output']>;
+  /** Información del socio (si es individual) */
+  member?: Maybe<DebtorMemberInfo>;
+  /** ID del socio (si es deuda individual) */
+  memberId?: Maybe<Scalars['ID']['output']>;
+  /** Fecha del pago pendiente más antiguo */
+  oldestDebtDate: Scalars['Time']['output'];
+  /** Días de atraso del pago más antiguo */
+  oldestDebtDays: Scalars['Int']['output'];
+  /** Lista de pagos pendientes */
+  pendingPayments: Array<PendingPayment>;
+  /** Importe total pendiente (suma de todos los pagos pendientes) */
+  totalDebt: Scalars['Float']['output'];
+  /** Tipo de deudor: "INDIVIDUAL" o "FAMILY" */
+  type: Scalars['String']['output'];
+};
+
+/** Información básica de la familia para el informe */
+export type DebtorFamilyInfo = {
+  __typename?: 'DebtorFamilyInfo';
+  familyName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  primaryMember: DebtorMemberInfo;
+  totalMembers: Scalars['Int']['output'];
+};
+
+/** Información básica del socio para el informe */
+export type DebtorMemberInfo = {
+  __typename?: 'DebtorMemberInfo';
+  email?: Maybe<Scalars['String']['output']>;
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  lastName: Scalars['String']['output'];
+  memberNumber: Scalars['String']['output'];
+  phone?: Maybe<Scalars['String']['output']>;
+  status: Scalars['String']['output'];
+};
+
+/** Parámetros de entrada para el informe de morosos */
+export type DelinquentReportInput = {
+  /**
+   * Fecha de corte para calcular la antigüedad de la deuda.
+   * Si no se proporciona, se usa la fecha actual.
+   */
+  cutoffDate?: InputMaybe<Scalars['Time']['input']>;
+  /**
+   * Filtrar solo por socios individuales o familias
+   * Valores: "INDIVIDUAL" | "FAMILY" | null (ambos)
+   */
+  debtorType?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * Importe mínimo de deuda para incluir en el informe.
+   * Útil para filtrar deudas pequeñas.
+   * Default: 0
+   */
+  minAmount?: InputMaybe<Scalars['Float']['input']>;
+  /**
+   * Ordenamiento de resultados
+   * Valores: "AMOUNT_DESC" | "AMOUNT_ASC" | "DAYS_DESC" | "DAYS_ASC" | "NAME_ASC"
+   * Default: "DAYS_DESC" (más antiguas primero)
+   */
+  sortBy?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Respuesta del informe de morosos */
+export type DelinquentReportResponse = {
+  __typename?: 'DelinquentReportResponse';
+  /** Lista de deudores (socios o familias) */
+  debtors: Array<Debtor>;
+  /** Fecha en que se generó el informe */
+  generatedAt: Scalars['Time']['output'];
+  /** Estadísticas generales del informe */
+  summary: DelinquentSummary;
+};
+
+/** Resumen estadístico del informe */
+export type DelinquentSummary = {
+  __typename?: 'DelinquentSummary';
+  /** Promedio de días de atraso */
+  averageDaysOverdue: Scalars['Int']['output'];
+  /** Deuda promedio por deudor */
+  averageDebtPerDebtor: Scalars['Float']['output'];
+  /** Número de familias con deuda */
+  familyDebtors: Scalars['Int']['output'];
+  /** Número de socios individuales con deuda */
+  individualDebtors: Scalars['Int']['output'];
+  /** Importe total de todas las deudas */
+  totalDebtAmount: Scalars['Float']['output'];
+  /** Número total de deudores */
+  totalDebtors: Scalars['Int']['output'];
 };
 
 export type DocumentValidationResult = {
@@ -565,6 +668,16 @@ export type PaymentStatus =
   | 'PAID'
   | 'PENDING';
 
+/** Información de un pago pendiente */
+export type PendingPayment = {
+  __typename?: 'PendingPayment';
+  amount: Scalars['Float']['output'];
+  createdAt: Scalars['Time']['output'];
+  daysOverdue: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   cashFlowBalance: CashFlowBalance;
@@ -575,6 +688,7 @@ export type Query = {
   getCashFlow?: Maybe<CashFlow>;
   getCurrentUser: User;
   getDashboardStats: DashboardStats;
+  getDelinquentReport: DelinquentReportResponse;
   getFamily?: Maybe<Family>;
   getFamilyByOriginMember?: Maybe<Family>;
   getFamilyMembers: Array<Familiar>;
@@ -619,6 +733,11 @@ export type QueryCheckMemberNumberExistsArgs = {
 
 export type QueryGetCashFlowArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetDelinquentReportArgs = {
+  input?: InputMaybe<DelinquentReportInput>;
 };
 
 

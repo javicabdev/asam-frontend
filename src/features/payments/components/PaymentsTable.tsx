@@ -245,7 +245,9 @@ export function PaymentsTable({
           MuiTablePagination: {
             labelRowsPerPage: t('table.rowsPerPage'),
             labelDisplayedRows: ({ from, to, count }) =>
-              t('table.displayedRows', { from, to, count: count !== -1 ? count : `más de ${to}` }),
+              count !== -1
+                ? t('table.displayedRows', { from, to, count })
+                : `${from}–${to} de más de ${to}`,
           },
         }}
         sx={{

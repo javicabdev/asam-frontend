@@ -1,6 +1,5 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import type { DashboardStats, RecentActivityType, MonthlyStats } from '../features/dashboard'
 import {
   Grid,
   Box,

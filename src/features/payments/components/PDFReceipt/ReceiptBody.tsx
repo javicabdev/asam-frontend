@@ -1,10 +1,6 @@
 import { View, Text } from '@react-pdf/renderer'
 import { receiptStyles } from './styles'
-import {
-  formatCurrency,
-  formatReceiptDate,
-  translatePaymentMethod,
-} from '../../utils/receiptUtils'
+import { formatCurrency, formatReceiptDate } from '../../utils/receiptUtils'
 import type { ReceiptData } from '../../types'
 import type { ReceiptTranslations } from '../../hooks/useReceiptGenerator'
 
@@ -47,7 +43,7 @@ export function ReceiptBody({ receipt, translations }: ReceiptBodyProps) {
         <View style={receiptStyles.row}>
           <Text style={receiptStyles.label}>{translations.paymentMethod}:</Text>
           <Text style={receiptStyles.value}>
-            {translatePaymentMethod(receipt.paymentMethod)}
+            {translations.paymentMethodValue}
           </Text>
         </View>
 

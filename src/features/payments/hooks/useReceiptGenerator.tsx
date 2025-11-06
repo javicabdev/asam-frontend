@@ -18,6 +18,7 @@ export interface ReceiptTranslations {
   paymentDetails: string
   paymentDate: string
   paymentMethod: string
+  paymentMethodValue: string // Translated value of the payment method
   totalAmount: string
   notes: string
   signature: string
@@ -55,6 +56,22 @@ export function useReceiptGenerator(): UseReceiptGeneratorReturn {
         // Convert payment to receipt data
         const receiptData: ReceiptData = paymentToReceiptData(payment)
 
+        // Translate payment method
+        const getPaymentMethodTranslation = (method: string | null): string => {
+          if (!method) return ''
+          const methodUpper = method.toUpperCase()
+          switch (methodUpper) {
+            case 'CASH':
+              return t('methods.cash')
+            case 'TRANSFER':
+              return t('methods.transfer')
+            case 'CARD':
+              return t('methods.card')
+            default:
+              return method
+          }
+        }
+
         // Prepare translations for PDF
         const translations: ReceiptTranslations = {
           title: t('receipt.title'),
@@ -69,6 +86,7 @@ export function useReceiptGenerator(): UseReceiptGeneratorReturn {
           paymentDetails: t('receipt.paymentDetails'),
           paymentDate: t('receipt.date'),
           paymentMethod: t('receipt.method'),
+          paymentMethodValue: getPaymentMethodTranslation(receiptData.paymentMethod),
           totalAmount: t('receipt.amount'),
           notes: t('receipt.notes'),
           signature: t('receipt.signature'),

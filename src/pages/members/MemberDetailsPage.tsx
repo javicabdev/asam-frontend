@@ -26,6 +26,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
+import { useTranslation } from 'react-i18next'
 
 import { useMemberDetails } from '@/features/members/hooks/useMemberDetails'
 import { MemberDetailsSkeleton, FamilyMembersDisplay } from '@/features/members/components'
@@ -34,6 +35,7 @@ import { MemberStatus, MembershipType } from '@/features/members/types'
 import { useAuthStore } from '@/stores/authStore'
 
 export function MemberDetailsPage() {
+  const { t } = useTranslation('members')
   const navigate = useNavigate()
   const { user } = useAuthStore()
   const isAdmin = user?.role === 'admin'
@@ -47,9 +49,9 @@ export function MemberDetailsPage() {
     return (
       <Box>
         <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/members')} sx={{ mb: 2 }}>
-          Volver a la lista
+          {t('details.backToList')}
         </Button>
-        <Alert severity="error">Error al cargar los detalles del socio: {error.message}</Alert>
+        <Alert severity="error">{t('details.errorLoading')} {error.message}</Alert>
       </Box>
     )
   }
@@ -58,9 +60,9 @@ export function MemberDetailsPage() {
     return (
       <Box>
         <Button startIcon={<ArrowBackIcon />} onClick={() => navigate('/members')} sx={{ mb: 2 }}>
-          Volver a la lista
+          {t('details.backToList')}
         </Button>
-        <Alert severity="warning">No se encontró el socio solicitado.</Alert>
+        <Alert severity="warning">{t('details.notFound')}</Alert>
       </Box>
     )
   }
@@ -78,7 +80,7 @@ export function MemberDetailsPage() {
       member.provincia,
       member.pais,
     ].filter(Boolean)
-    return parts.length > 0 ? parts.join(', ') : 'No especificada'
+    return parts.length > 0 ? parts.join(', ') : t('details.notSpecified')
   }
 
   return (
@@ -87,14 +89,14 @@ export function MemberDetailsPage() {
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Box>
           <Typography variant="h4" component="h1" gutterBottom>
-            Detalles del Socio
+            {t('details.title')}
           </Typography>
           <Stack direction="row" spacing={2} alignItems="center">
             <Typography variant="h6" color="text.secondary">
               {member.nombre} {member.apellidos}
             </Typography>
             <Chip
-              label={member.estado === MemberStatus.ACTIVE ? 'Activo' : 'Inactivo'}
+              label={member.estado === MemberStatus.ACTIVE ? t('details.statusActive') : t('details.statusInactive')}
               color={member.estado === MemberStatus.ACTIVE ? 'success' : 'default'}
               size="small"
               variant={member.estado === MemberStatus.ACTIVE ? 'filled' : 'outlined'}
@@ -107,10 +109,10 @@ export function MemberDetailsPage() {
             startIcon={<ArrowBackIcon />}
             onClick={() => navigate('/members')}
           >
-            Volver
+            {t('details.back')}
           </Button>
           <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => window.print()}>
-            Imprimir
+            {t('details.print')}
           </Button>
           {isAdmin && (
             <Button
@@ -118,7 +120,7 @@ export function MemberDetailsPage() {
               startIcon={<EditIcon />}
               onClick={() => navigate(`/members/${member.miembro_id}/edit`)}
             >
-              Editar
+              {t('details.edit')}
             </Button>
           )}
         </Stack>
@@ -130,14 +132,14 @@ export function MemberDetailsPage() {
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom color="primary">
-                Información Básica
+                {t('details.basicInfo')}
               </Typography>
               <Divider sx={{ mb: 2 }} />
 
               <Stack spacing={2}>
                 <Box>
                   <Typography variant="caption" color="text.secondary">
-                    Número de Socio
+                    {t('details.memberNumber')}
                   </Typography>
                   <Typography variant="body1" fontWeight="medium">
                     {member.numero_socio}
@@ -146,14 +148,14 @@ export function MemberDetailsPage() {
 
                 <Box>
                   <Typography variant="caption" color="text.secondary">
-                    Tipo de Membresía
+                    {t('details.membershipType')}
                   </Typography>
                   <Box>
                     <Chip
                       label={
                         member.tipo_membresia === MembershipType.INDIVIDUAL
-                          ? 'Individual'
-                          : 'Familiar'
+                          ? t('details.typeIndividual')
+                          : t('details.typeFamily')
                       }
                       color={
                         member.tipo_membresia === MembershipType.INDIVIDUAL
@@ -168,17 +170,17 @@ export function MemberDetailsPage() {
                 <Box>
                   <Typography variant="caption" color="text.secondary">
                     <BadgeIcon sx={{ fontSize: 14, mr: 0.5 }} />
-                    Documento de Identidad
+                    {t('details.idDocument')}
                   </Typography>
                   <Typography variant="body1">
-                    {member.documento_identidad || 'No especificado'}
+                    {member.documento_identidad || t('details.notSpecified')}
                   </Typography>
                 </Box>
 
                 <Box>
                   <Typography variant="caption" color="text.secondary">
                     <CakeIcon sx={{ fontSize: 14, mr: 0.5 }} />
-                    Fecha de Nacimiento
+                    {t('details.birthDate')}
                   </Typography>
                   <Typography variant="body1">{formatDate(member.fecha_nacimiento)}</Typography>
                 </Box>
@@ -186,7 +188,7 @@ export function MemberDetailsPage() {
                 <Box>
                   <Typography variant="caption" color="text.secondary">
                     <EventIcon sx={{ fontSize: 14, mr: 0.5 }} />
-                    Fecha de Alta
+                    {t('details.joinDate')}
                   </Typography>
                   <Typography variant="body1">{formatDate(member.fecha_alta)}</Typography>
                 </Box>
@@ -195,7 +197,7 @@ export function MemberDetailsPage() {
                   <Box>
                     <Typography variant="caption" color="text.secondary">
                       <EventIcon sx={{ fontSize: 14, mr: 0.5 }} />
-                      Fecha de Baja
+                      {t('details.leaveDate')}
                     </Typography>
                     <Typography variant="body1" color="error">
                       {formatDate(member.fecha_baja)}
@@ -212,7 +214,7 @@ export function MemberDetailsPage() {
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom color="primary">
-                Información de Contacto
+                {t('details.contactInfo')}
               </Typography>
               <Divider sx={{ mb: 2 }} />
 
@@ -220,7 +222,7 @@ export function MemberDetailsPage() {
                 <Box>
                   <Typography variant="caption" color="text.secondary">
                     <EmailIcon sx={{ fontSize: 14, mr: 0.5 }} />
-                    Correo Electrónico
+                    {t('details.email')}
                   </Typography>
                   <Typography variant="body1">
                     {member.correo_electronico ? (
@@ -228,7 +230,7 @@ export function MemberDetailsPage() {
                         {member.correo_electronico}
                       </a>
                     ) : (
-                      'No especificado'
+                      t('details.notSpecified')
                     )}
                   </Typography>
                 </Box>
@@ -236,7 +238,7 @@ export function MemberDetailsPage() {
                 <Box>
                   <Typography variant="caption" color="text.secondary">
                     <HomeIcon sx={{ fontSize: 14, mr: 0.5 }} />
-                    Dirección Completa
+                    {t('details.fullAddress')}
                   </Typography>
                   <Typography variant="body1">{getFullAddress()}</Typography>
                 </Box>
@@ -244,18 +246,18 @@ export function MemberDetailsPage() {
                 <Box>
                   <Typography variant="caption" color="text.secondary">
                     <WorkIcon sx={{ fontSize: 14, mr: 0.5 }} />
-                    Profesión
+                    {t('details.profession')}
                   </Typography>
-                  <Typography variant="body1">{member.profesion || 'No especificada'}</Typography>
+                  <Typography variant="body1">{member.profesion || t('details.notSpecified')}</Typography>
                 </Box>
 
                 <Box>
                   <Typography variant="caption" color="text.secondary">
                     <PublicIcon sx={{ fontSize: 14, mr: 0.5 }} />
-                    Nacionalidad
+                    {t('details.nationality')}
                   </Typography>
                   <Typography variant="body1">
-                    {member.nacionalidad || 'No especificada'}
+                    {member.nacionalidad || t('details.notSpecified')}
                   </Typography>
                 </Box>
               </Stack>
@@ -269,7 +271,7 @@ export function MemberDetailsPage() {
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom color="primary">
-                  Observaciones
+                  {t('details.observations')}
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
                 <Typography variant="body1" style={{ whiteSpace: 'pre-wrap' }}>
@@ -286,7 +288,7 @@ export function MemberDetailsPage() {
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom color="primary">
-                  Miembros de la Familia
+                  {t('details.familyMembers')}
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
                 <FamilyMembersDisplay

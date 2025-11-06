@@ -379,5 +379,33 @@
       "continue": "Continuar",
       "saveChanges": "Guardar Cambios"
     }
+  },
+  "details": {
+    "title": "Detalles del Socio",
+    "backToList": "Volver a la lista",
+    "back": "Volver",
+    "print": "Imprimir",
+    "edit": "Editar",
+    "errorLoading": "Error al cargar los detalles del socio:",
+    "notFound": "No se encontró el socio solicitado.",
+    "notSpecified": "No especificado",
+    "statusActive": "Activo",
+    "statusInactive": "Inactivo",
+    "basicInfo": "Información Básica",
+    "memberNumber": "Número de Socio",
+    "membershipType": "Tipo de Membresía",
+    "typeIndividual": "Individual",
+    "typeFamily": "Familiar",
+    "idDocument": "Documento de Identidad",
+    "birthDate": "Fecha de Nacimiento",
+    "joinDate": "Fecha de Alta",
+    "leaveDate": "Fecha de Baja",
+    "contactInfo": "Información de Contacto",
+    "email": "Correo Electrónico",
+    "fullAddress": "Dirección Completa",
+    "profession": "Profesión",
+    "nationality": "Nacionalidad",
+    "observations": "Observaciones",
+    "familyMembers": "Miembros de la Familia"
   }
 }

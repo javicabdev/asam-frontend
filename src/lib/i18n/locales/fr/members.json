@@ -379,5 +379,33 @@
       "continue": "Continuer",
       "saveChanges": "Enregistrer les Modifications"
     }
+  },
+  "details": {
+    "title": "Détails du Membre",
+    "backToList": "Retour à la liste",
+    "back": "Retour",
+    "print": "Imprimer",
+    "edit": "Modifier",
+    "errorLoading": "Erreur lors du chargement des détails du membre :",
+    "notFound": "Le membre demandé n'a pas été trouvé.",
+    "notSpecified": "Non spécifié",
+    "statusActive": "Actif",
+    "statusInactive": "Inactif",
+    "basicInfo": "Informations de Base",
+    "memberNumber": "Numéro de Membre",
+    "membershipType": "Type d'Adhésion",
+    "typeIndividual": "Individuel",
+    "typeFamily": "Familial",
+    "idDocument": "Document d'Identité",
+    "birthDate": "Date de Naissance",
+    "joinDate": "Date d'Adhésion",
+    "leaveDate": "Date de Départ",
+    "contactInfo": "Informations de Contact",
+    "email": "Adresse Email",
+    "fullAddress": "Adresse Complète",
+    "profession": "Profession",
+    "nationality": "Nationalité",
+    "observations": "Observations",
+    "familyMembers": "Membres de la Famille"
   }
 }

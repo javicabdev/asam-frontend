@@ -379,5 +379,33 @@
       "continue": "Jëkk",
       "saveChanges": "Dakk Soppi Yi"
     }
+  },
+  "details": {
+    "title": "Faramfacce Mbooloo",
+    "backToList": "Dellu ci limu",
+    "back": "Dellu",
+    "print": "Móol",
+    "edit": "Soppi",
+    "errorLoading": "Njuumte ci yab faramfacce mbooloo:",
+    "notFound": "Gisuwul mbooloo bu ñu laaj.",
+    "notSpecified": "Tëruluwul",
+    "statusActive": "Dafa doxe",
+    "statusInactive": "Doxul",
+    "basicInfo": "Xibaar Bu Njëkk",
+    "memberNumber": "Nimero Mbooloo",
+    "membershipType": "Anam Mboolante",
+    "typeIndividual": "Kenn ak Bopp",
+    "typeFamily": "Njaboot",
+    "idDocument": "Xët Bu Gëm",
+    "birthDate": "Bisu Jibineel",
+    "joinDate": "Bisu Duggal",
+    "leaveDate": "Bisu Génne",
+    "contactInfo": "Xibaar Bu Jokkante",
+    "email": "Email",
+    "fullAddress": "Kasalaalug Lépp",
+    "profession": "Liggéey",
+    "nationality": "Réew",
+    "observations": "Xeeti",
+    "familyMembers": "Mbooloo Yu Njaboot"
   }
 }

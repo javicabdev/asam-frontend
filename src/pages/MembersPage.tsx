@@ -75,12 +75,6 @@ export default function MembersPage() {
           >
             {t('title', 'Gestión de Socios')}
           </Typography>
-          {import.meta.env.DEV && (
-            <Typography variant="caption" color="text.secondary">
-              Debug: Usuario: {user?.username || 'N/A'}, Rol: '{user?.role || 'N/A'}', Es admin:{' '}
-              {isAdmin ? 'SÍ' : 'NO'}
-            </Typography>
-          )}
           <Stack direction="row" spacing={2} alignItems="center">
             <Typography variant="body2" color="text.secondary">
               {t('total', 'Total')}: {totalCount} {t('members', 'socios')}

@@ -12,7 +12,7 @@ export function ReceiptFooter({ translations }: ReceiptFooterProps) {
       {/* Espacio para firma */}
       <View style={receiptStyles.signature}>
         <View style={receiptStyles.signatureLine} />
-        <Text style={receiptStyles.signatureLabel}>Firmado digitalmente por ASAM</Text>
+        <Text style={receiptStyles.signatureLabel}>{translations.signature}</Text>
       </View>
 
       {/* Texto legal */}

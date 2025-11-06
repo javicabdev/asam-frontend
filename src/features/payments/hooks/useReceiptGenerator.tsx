@@ -9,6 +9,8 @@ export interface ReceiptTranslations {
   title: string
   receiptNumber: string
   issuedDate: string
+  organizationName: string
+  location: string
   memberData: string
   memberNumber: string
   name: string
@@ -18,6 +20,7 @@ export interface ReceiptTranslations {
   paymentMethod: string
   totalAmount: string
   notes: string
+  signature: string
   footer: string
 }
 
@@ -41,7 +44,7 @@ export function useReceiptGenerator(): UseReceiptGeneratorReturn {
     async (payment: PaymentListItem, autoDownload = true) => {
       // Validate payment status
       if (payment.status.toUpperCase() !== 'PAID') {
-        setError(new Error('Solo se pueden generar recibos para pagos confirmados'))
+        setError(new Error(t('receipt.errorOnlyPaid')))
         return
       }
 
@@ -56,16 +59,19 @@ export function useReceiptGenerator(): UseReceiptGeneratorReturn {
         const translations: ReceiptTranslations = {
           title: t('receipt.title'),
           receiptNumber: t('receipt.number'),
-          issuedDate: t('receipt.date'),
-          memberData: t('receipt.member'),
-          memberNumber: t('list.columns.memberNumber') || t('table.memberNumber'),
-          name: t('list.columns.name') || 'Nombre',
+          issuedDate: t('receipt.issuedDate'),
+          organizationName: t('receipt.organizationName'),
+          location: t('receipt.location'),
+          memberData: t('receipt.memberData'),
+          memberNumber: t('table.memberNumber'),
+          name: t('receipt.name'),
           family: t('table.family'),
-          paymentDetails: 'Detalles del Pago',
+          paymentDetails: t('receipt.paymentDetails'),
           paymentDate: t('receipt.date'),
           paymentMethod: t('receipt.method'),
           totalAmount: t('receipt.amount'),
-          notes: 'Observaciones',
+          notes: t('receipt.notes'),
+          signature: t('receipt.signature'),
           footer: t('receipt.footer'),
         }
 
@@ -90,7 +96,7 @@ export function useReceiptGenerator(): UseReceiptGeneratorReturn {
         }
       } catch (err) {
         const errorMessage =
-          err instanceof Error ? err.message : 'Error desconocido al generar el recibo'
+          err instanceof Error ? err.message : t('receipt.errorUnknown')
 
         setError(new Error(errorMessage))
         console.error('Error generating receipt:', err)
@@ -98,7 +104,7 @@ export function useReceiptGenerator(): UseReceiptGeneratorReturn {
         setIsGenerating(false)
       }
     },
-    []
+    [t, i18n.language]
   )
 
   return {

@@ -99,11 +99,21 @@
     "title": "Recibo de Pago",
     "number": "Número de recibo",
     "date": "Fecha",
+    "issuedDate": "Fecha de emisión",
+    "organizationName": "Asociación para la Solidaridad y Apoyo Mutuo",
+    "location": "Sabadell, Catalunya",
     "member": "Miembro",
+    "memberData": "Datos del Socio",
+    "name": "Nombre",
     "concept": "Concepto",
     "amount": "Monto",
     "method": "Método de pago",
-    "footer": "Gracias por su pago"
+    "paymentDetails": "Detalles del Pago",
+    "notes": "Observaciones",
+    "signature": "Firmado digitalmente por ASAM",
+    "footer": "Gracias por su pago",
+    "errorOnlyPaid": "Solo se pueden generar recibos para pagos confirmados",
+    "errorUnknown": "Error desconocido al generar el recibo"
   },
   "stats": {
     "total": "Total",

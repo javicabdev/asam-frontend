@@ -37,8 +37,8 @@ export function ReceiptHeader({ receipt, translations }: ReceiptHeaderProps) {
 
       {/* Información de ASAM */}
       <Text style={receiptStyles.headerInfo}>
-        Asociación para la Solidaridad y Apoyo Mutuo{'\n'}
-        Sabadell, Catalunya{'\n'}
+        {translations.organizationName}{'\n'}
+        {translations.location}{'\n'}
         {translations.issuedDate}: {formatReceiptDate(receipt.generatedAt)}
       </Text>
     </View>

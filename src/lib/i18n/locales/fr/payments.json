@@ -99,11 +99,21 @@
     "title": "Reçu de Paiement",
     "number": "Numéro de reçu",
     "date": "Date",
+    "issuedDate": "Date d'émission",
+    "organizationName": "Association pour la Solidarité et l'Entraide Mutuelle",
+    "location": "Sabadell, Catalogne",
     "member": "Membre",
+    "memberData": "Données du Membre",
+    "name": "Nom",
     "concept": "Concept",
     "amount": "Montant",
     "method": "Méthode de paiement",
-    "footer": "Merci pour votre paiement"
+    "paymentDetails": "Détails du Paiement",
+    "notes": "Observations",
+    "signature": "Signé numériquement par ASAM",
+    "footer": "Merci pour votre paiement",
+    "errorOnlyPaid": "Seuls les paiements confirmés peuvent générer des reçus",
+    "errorUnknown": "Erreur inconnue lors de la génération du reçu"
   },
   "stats": {
     "total": "Total",

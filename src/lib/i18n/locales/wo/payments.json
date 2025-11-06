@@ -99,11 +99,21 @@
     "title": "Kàddu Fay",
     "number": "Nimero kàddu",
     "date": "Bis",
+    "issuedDate": "Bisu joxe",
+    "organizationName": "Mboolante ngir Yellitaan ak Wallante",
+    "location": "Sabadell, Catalunya",
     "member": "Mbooloo",
+    "memberData": "Xibaar Mbooloo",
+    "name": "Tur",
     "concept": "Lu muy",
     "amount": "Dayoo",
     "method": "Anamu fay",
-    "footer": "Jërëjëf ci sa fay"
+    "paymentDetails": "Faramfacce yu Fay",
+    "notes": "Xeeti",
+    "signature": "Sañ-sañ bu njëkkal ci ASAM",
+    "footer": "Jërëjëf ci sa fay",
+    "errorOnlyPaid": "Kàddu yi man nañu def rekk ci fay yu tànnee",
+    "errorUnknown": "Njuumte bu xam wul ci def kàddu bi"
   },
   "stats": {
     "total": "Bépp",

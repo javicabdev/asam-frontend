@@ -7,9 +7,10 @@ import type { ReceiptTranslations } from '../../hooks/useReceiptGenerator'
 interface ReceiptBodyProps {
   receipt: ReceiptData
   translations: ReceiptTranslations
+  language: string
 }
 
-export function ReceiptBody({ receipt, translations }: ReceiptBodyProps) {
+export function ReceiptBody({ receipt, translations, language }: ReceiptBodyProps) {
   const memberInfo = receipt.familyName
     ? `${receipt.memberName} (${translations.family}: ${receipt.familyName})`
     : receipt.memberName
@@ -37,7 +38,7 @@ export function ReceiptBody({ receipt, translations }: ReceiptBodyProps) {
 
         <View style={receiptStyles.row}>
           <Text style={receiptStyles.label}>{translations.paymentDate}:</Text>
-          <Text style={receiptStyles.value}>{formatReceiptDate(receipt.paymentDate)}</Text>
+          <Text style={receiptStyles.value}>{formatReceiptDate(receipt.paymentDate, language)}</Text>
         </View>
 
         <View style={receiptStyles.row}>

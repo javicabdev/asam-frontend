@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { es } from 'date-fns/locale'
+import { es, fr } from 'date-fns/locale'
 import type { PaymentListItem, ReceiptData } from '../types'
 
 /**
@@ -27,12 +27,24 @@ export function formatCurrency(amount: number): string {
 }
 
 /**
- * Formats date for receipt display
+ * Formats date for receipt display according to language
+ * @param dateString - ISO date string
+ * @param language - Language code (es-ES, fr-FR, fr-SN for Wolof)
  */
-export function formatReceiptDate(dateString: string | null): string {
+export function formatReceiptDate(dateString: string | null, language: string = 'es-ES'): string {
   if (!dateString) return ''
   const date = new Date(dateString)
-  return format(date, "d 'de' MMMM 'de' yyyy", { locale: es })
+
+  // Wolof uses French locale since date-fns doesn't have Wolof
+  const locale = language === 'fr-FR' || language === 'fr-SN' ? fr : es
+
+  // French format: "d MMMM yyyy" (e.g., "15 janvier 2025")
+  // Spanish format: "d 'de' MMMM 'de' yyyy" (e.g., "15 de enero de 2025")
+  const dateFormat = language === 'fr-FR' || language === 'fr-SN'
+    ? 'd MMMM yyyy'
+    : "d 'de' MMMM 'de' yyyy"
+
+  return format(date, dateFormat, { locale })
 }
 
 /**

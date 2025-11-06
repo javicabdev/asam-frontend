@@ -26,8 +26,8 @@ export function ReceiptDocument({ receipt, translations, language = 'es-ES' }: R
       language={language}
     >
       <Page size="A4" style={receiptStyles.page}>
-        <ReceiptHeader receipt={receipt} translations={translations} />
-        <ReceiptBody receipt={receipt} translations={translations} />
+        <ReceiptHeader receipt={receipt} translations={translations} language={language} />
+        <ReceiptBody receipt={receipt} translations={translations} language={language} />
         <ReceiptFooter translations={translations} />
       </Page>
     </Document>

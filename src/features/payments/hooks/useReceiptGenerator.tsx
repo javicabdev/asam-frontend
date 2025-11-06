@@ -109,7 +109,8 @@ export function useReceiptGenerator(): UseReceiptGeneratorReturn {
         if (autoDownload) {
           const link = document.createElement('a')
           link.href = url
-          link.download = `recibo-${receiptData.receiptNumber}.pdf`
+          // Filename format: recibo-SOCIO123-ASAM-2025-00142.pdf
+          link.download = `recibo-${receiptData.memberNumber}-${receiptData.receiptNumber}.pdf`
           link.click()
         }
       } catch (err) {

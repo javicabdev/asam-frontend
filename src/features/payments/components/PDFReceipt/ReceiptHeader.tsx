@@ -7,9 +7,10 @@ import type { ReceiptTranslations } from '../../hooks/useReceiptGenerator'
 interface ReceiptHeaderProps {
   receipt: ReceiptData
   translations: ReceiptTranslations
+  language: string
 }
 
-export function ReceiptHeader({ receipt, translations }: ReceiptHeaderProps) {
+export function ReceiptHeader({ receipt, translations, language }: ReceiptHeaderProps) {
   // Use existing logo from public/icons directory
   const logoPath = '/icons/original-logo.png'
   const hasLogo = true
@@ -39,7 +40,7 @@ export function ReceiptHeader({ receipt, translations }: ReceiptHeaderProps) {
       <Text style={receiptStyles.headerInfo}>
         {translations.organizationName}{'\n'}
         {translations.location}{'\n'}
-        {translations.issuedDate}: {formatReceiptDate(receipt.generatedAt)}
+        {translations.issuedDate}: {formatReceiptDate(receipt.generatedAt, language)}
       </Text>
     </View>
   )

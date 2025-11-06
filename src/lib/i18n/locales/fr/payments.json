@@ -81,6 +81,7 @@
     },
     "status": {
       "pending": "En attente",
+      "paid": "Payé",
       "completed": "Complété",
       "failed": "Échoué",
       "refunded": "Remboursé",

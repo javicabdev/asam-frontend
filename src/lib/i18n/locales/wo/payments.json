@@ -81,6 +81,7 @@
     },
     "status": {
       "pending": "Mungi xaar",
+      "paid": "Fay na",
       "completed": "Jeex na",
       "failed": "Antuwul",
       "refunded": "Delloo nañu ko",

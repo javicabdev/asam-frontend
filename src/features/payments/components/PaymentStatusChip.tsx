@@ -1,5 +1,6 @@
 import React from 'react'
 import { Chip } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 import type { PaymentStatus } from '@/graphql/generated/schema'
 
 interface PaymentStatusChipProps {
@@ -10,16 +11,19 @@ interface PaymentStatusChipProps {
  * Display payment status as a colored chip
  */
 export const PaymentStatusChip: React.FC<PaymentStatusChipProps> = ({ status }) => {
+  const { t } = useTranslation('payments')
+
   const statusConfig: Record<
     string,
-    { label: string; color: 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' }
+    { labelKey: string; color: 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' }
   > = {
-    PENDING: { label: 'Pendiente', color: 'warning' },
-    PAID: { label: 'Pagado', color: 'success' },
-    CANCELLED: { label: 'Cancelado', color: 'error' },
+    PENDING: { labelKey: 'status.pending', color: 'warning' },
+    PAID: { labelKey: 'status.paid', color: 'success' },
+    CANCELLED: { labelKey: 'status.cancelled', color: 'error' },
   }
 
-  const config = statusConfig[status] || { label: status, color: 'default' as const }
+  const config = statusConfig[status]
+  const label = config ? t(config.labelKey) : status
 
-  return <Chip label={config.label} color={config.color} size="small" />
+  return <Chip label={label} color={config?.color || 'default'} size="small" />
 }

@@ -81,6 +81,7 @@
     },
     "status": {
       "pending": "Pendiente",
+      "paid": "Pagado",
       "completed": "Completado",
       "failed": "Fallido",
       "refunded": "Reembolsado",

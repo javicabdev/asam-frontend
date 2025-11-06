@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Dialog,
   DialogTitle,
@@ -35,6 +36,7 @@ export const TransactionFormDialog = ({
   onClose,
   transaction,
 }: TransactionFormDialogProps) => {
+  const { t } = useTranslation('cashflow')
   const isEdit = !!transaction
   const [category, setCategory] = useState<OperationCategory>('INGRESO')
   const { createCashFlow, loading: createLoading } = useCreateCashFlow()
@@ -136,7 +138,7 @@ export const TransactionFormDialog = ({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>{isEdit ? 'Editar Transacción' : 'Registrar Transacción'}</DialogTitle>
+      <DialogTitle>{isEdit ? t('form.edit') : t('form.new')}</DialogTitle>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
@@ -151,11 +153,11 @@ export const TransactionFormDialog = ({
               >
                 <ToggleButton value="INGRESO" color="success">
                   <AddIcon sx={{ mr: 1 }} />
-                  Ingreso
+                  {t('form.income')}
                 </ToggleButton>
                 <ToggleButton value="GASTO" color="error">
                   <RemoveIcon sx={{ mr: 1 }} />
-                  Gasto
+                  {t('form.expense')}
                 </ToggleButton>
               </ToggleButtonGroup>
             </Grid>
@@ -167,7 +169,7 @@ export const TransactionFormDialog = ({
                 control={control}
                 render={({ field }) => (
                   <DatePicker
-                    label="Fecha *"
+                    label={`${t('form.fields.date')} *`}
                     value={field.value}
                     onChange={field.onChange}
                     maxDate={new Date()}
@@ -193,7 +195,7 @@ export const TransactionFormDialog = ({
                     {...field}
                     select
                     fullWidth
-                    label="Categoría *"
+                    label={`${t('form.fields.category')} *`}
                     error={!!errors.operationType}
                     helperText={errors.operationType?.message}
                   >
@@ -201,7 +203,7 @@ export const TransactionFormDialog = ({
                       const config = getOperationTypeConfig(type)
                       return (
                         <MenuItem key={type} value={type}>
-                          {config.icon} {config.label}
+                          {config.icon} {t(`operationTypes.${type}`)}
                         </MenuItem>
                       )
                     })}
@@ -220,7 +222,7 @@ export const TransactionFormDialog = ({
                     {...field}
                     type="number"
                     fullWidth
-                    label="Importe *"
+                    label={`${t('form.fields.amount')} *`}
                     InputProps={{
                       startAdornment: category === 'INGRESO' ? '+' : '-',
                       endAdornment: '€',
@@ -248,7 +250,7 @@ export const TransactionFormDialog = ({
                   <TextField
                     {...field}
                     fullWidth
-                    label="Concepto *"
+                    label={`${t('form.fields.detail')} *`}
                     multiline
                     rows={2}
                     error={!!errors.detail}
@@ -270,9 +272,9 @@ export const TransactionFormDialog = ({
                       onChange={(member: Member | null) => {
                         field.onChange(member?.miembro_id || null)
                       }}
-                      label="Socio *"
+                      label={`${t('form.fields.member')} *`}
                       error={!!errors.memberId}
-                      helperText={errors.memberId?.message || 'Obligatorio para repatriaciones'}
+                      helperText={errors.memberId?.message || t('form.memberRequired')}
                     />
                   )}
                 />
@@ -283,7 +285,7 @@ export const TransactionFormDialog = ({
 
         <DialogActions>
           <Button onClick={onClose} disabled={loading}>
-            Cancelar
+            {t('actions.cancel')}
           </Button>
           <Button
             type="submit"
@@ -292,11 +294,11 @@ export const TransactionFormDialog = ({
           >
             {loading
               ? isEdit
-                ? 'Actualizando...'
-                : 'Registrando...'
+                ? t('actions.updating')
+                : t('actions.registering')
               : isEdit
-                ? 'Actualizar'
-                : 'Registrar'}
+                ? t('actions.update')
+                : t('actions.register')}
           </Button>
         </DialogActions>
       </form>

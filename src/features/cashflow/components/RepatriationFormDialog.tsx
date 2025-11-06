@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Dialog,
   DialogTitle,
@@ -16,7 +18,6 @@ import { useCreateCashFlow } from '../hooks/useCreateCashFlow'
 import { OperationType } from '../types'
 import { MemberAutocomplete } from '@/features/users/components/MemberAutocomplete'
 import type { Member } from '@/graphql/generated/operations'
-import { useState } from 'react'
 
 interface RepatriationFormDialogProps {
   open: boolean
@@ -29,6 +30,7 @@ export const RepatriationFormDialog = ({
   open,
   onClose,
 }: RepatriationFormDialogProps) => {
+  const { t } = useTranslation('cashflow')
   const { createCashFlow, loading } = useCreateCashFlow()
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
 
@@ -75,12 +77,12 @@ export const RepatriationFormDialog = ({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>✈️ Registrar Repatriación</DialogTitle>
+      <DialogTitle>✈️ {t('repatriation.title')}</DialogTitle>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <Alert severity="info" sx={{ mb: 3 }}>
-            El importe por defecto es 1.500€, pero puedes editarlo si es necesario.
+            {t('repatriation.defaultAmountInfo')}
           </Alert>
 
           <Grid container spacing={3}>
@@ -91,7 +93,7 @@ export const RepatriationFormDialog = ({
                 control={control}
                 render={({ field }) => (
                   <DatePicker
-                    label="Fecha *"
+                    label={`${t('repatriation.form.date')} *`}
                     value={field.value}
                     onChange={field.onChange}
                     maxDate={new Date()}
@@ -116,7 +118,7 @@ export const RepatriationFormDialog = ({
                   <MemberAutocomplete
                     value={selectedMember}
                     onChange={handleMemberChange}
-                    label="Socio *"
+                    label={`${t('repatriation.form.member')} *`}
                     error={!!errors.memberId}
                     helperText={errors.memberId?.message}
                   />
@@ -134,7 +136,7 @@ export const RepatriationFormDialog = ({
                     {...field}
                     type="number"
                     fullWidth
-                    label="Importe *"
+                    label={`${t('repatriation.form.amount')} *`}
                     InputProps={{
                       startAdornment: '-',
                       endAdornment: '€',
@@ -159,7 +161,7 @@ export const RepatriationFormDialog = ({
                   <TextField
                     {...field}
                     fullWidth
-                    label="Concepto *"
+                    label={`${t('repatriation.form.detail')} *`}
                     multiline
                     rows={2}
                     error={!!errors.detail}
@@ -173,7 +175,7 @@ export const RepatriationFormDialog = ({
 
         <DialogActions>
           <Button onClick={onClose} disabled={loading}>
-            Cancelar
+            {t('actions.cancel')}
           </Button>
           <Button
             type="submit"
@@ -181,7 +183,7 @@ export const RepatriationFormDialog = ({
             color="error"
             disabled={loading || !selectedMember}
           >
-            {loading ? 'Registrando...' : 'Registrar Repatriación'}
+            {loading ? t('actions.registering') : t('actions.register')}
           </Button>
         </DialogActions>
       </form>

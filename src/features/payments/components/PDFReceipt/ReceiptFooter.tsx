@@ -1,7 +1,12 @@
 import { View, Text } from '@react-pdf/renderer'
 import { receiptStyles } from './styles'
+import type { ReceiptTranslations } from '../../hooks/useReceiptGenerator'
 
-export function ReceiptFooter() {
+interface ReceiptFooterProps {
+  translations: ReceiptTranslations
+}
+
+export function ReceiptFooter({ translations }: ReceiptFooterProps) {
   return (
     <View style={receiptStyles.footer}>
       {/* Espacio para firma */}
@@ -12,9 +17,7 @@ export function ReceiptFooter() {
 
       {/* Texto legal */}
       <Text style={receiptStyles.footerText}>
-        Este documento es un comprobante válido de pago{'\n'}
-        Generado automáticamente - No requiere firma manuscrita{'\n'}
-        Para cualquier consulta, contacte con la administración de ASAM
+        {translations.footer}
       </Text>
     </View>
   )

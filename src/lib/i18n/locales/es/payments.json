@@ -110,5 +110,26 @@
     "thisMonth": "Este mes",
     "lastMonth": "Mes anterior",
     "average": "Promedio mensual"
+  },
+  "table": {
+    "memberNumber": "Nº Socio",
+    "member": "Socio",
+    "family": "Familia",
+    "amount": "Importe",
+    "date": "Fecha",
+    "paymentMethod": "Forma de pago",
+    "status": "Estado",
+    "actions": "Acciones",
+    "viewDetails": "Ver detalles",
+    "downloadReceipt": "Descargar recibo",
+    "confirmPayment": "Confirmar pago",
+    "empty": "No hay pagos registrados",
+    "rowsPerPage": "Filas por página",
+    "displayedRows": "{{from}}-{{to}} de {{count}}",
+    "paymentMethods": {
+      "CASH": "Efectivo",
+      "TRANSFER": "Transferencia",
+      "CARD": "Tarjeta"
+    }
   }
 }

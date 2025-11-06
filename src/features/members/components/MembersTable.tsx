@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   DataGrid,
   GridColDef,
@@ -84,6 +85,7 @@ function CustomToolbar({
   isExporting,
   exportProgress,
 }: CustomToolbarProps) {
+  const { t } = useTranslation('members')
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
@@ -127,12 +129,12 @@ function CustomToolbar({
           onClick={handleClick}
           disabled={isExporting}
         >
-          {isExporting ? `Exportando... ${Math.round(exportProgress)}%` : 'Exportar'}
+          {isExporting ? t('table.exporting') + ` ${Math.round(exportProgress)}%` : t('table.export')}
         </Button>
 
         {selectedCount > 0 && (
           <Typography variant="body2" color="text.secondary">
-            {selectedCount} seleccionado{selectedCount > 1 ? 's' : ''}
+            {t('table.selectionCount', { count: selectedCount })}
           </Typography>
         )}
       </Box>
@@ -151,20 +153,20 @@ function CustomToolbar({
       >
         <MenuItem onClick={handleExportAll}>
           <TableChartIcon sx={{ mr: 1, fontSize: 20 }} />
-          Exportar todos los socios
+          {t('table.exportAll')}
         </MenuItem>
 
         {filters && (
           <MenuItem onClick={handleExportFiltered}>
             <TableChartIcon sx={{ mr: 1, fontSize: 20 }} />
-            Exportar socios filtrados
+            {t('table.exportFiltered')}
           </MenuItem>
         )}
 
         {selectedCount > 0 && (
           <MenuItem onClick={handleExportSelected}>
             <TableChartIcon sx={{ mr: 1, fontSize: 20 }} />
-            Exportar {selectedCount} seleccionado{selectedCount > 1 ? 's' : ''}
+            {t('table.exportSelected', { count: selectedCount })}
           </MenuItem>
         )}
 
@@ -172,7 +174,7 @@ function CustomToolbar({
 
         <MenuItem disabled>
           <DescriptionIcon sx={{ mr: 1, fontSize: 20 }} />
-          Exportar a Excel (próximamente)
+          {t('table.exportExcel')}
         </MenuItem>
       </Menu>
     </GridToolbarContainer>
@@ -196,6 +198,7 @@ export function MembersTable({
   selectable = false,
   isAdmin = false,
 }: MembersTableProps) {
+  const { t } = useTranslation('members')
   const theme = useTheme()
   const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([])
   const [snackbar, setSnackbar] = useState<{
@@ -220,14 +223,14 @@ export function MembersTable({
     onSuccess: () => {
       setSnackbar({
         open: true,
-        message: 'Exportación completada exitosamente',
+        message: t('export.success'),
         severity: 'success',
       })
     },
     onError: (error) => {
       setSnackbar({
         open: true,
-        message: `Error al exportar: ${error.message}`,
+        message: t('export.error', { message: error.message }),
         severity: 'error',
       })
     },
@@ -258,11 +261,11 @@ export function MembersTable({
     () => [
       {
         field: 'numero_socio',
-        headerName: 'Nº Socio',
+        headerName: t('list.columns.memberNumber'),
         width: 110,
         sortable: true,
         renderCell: (params) => (
-          <Tooltip title={`Ver detalles de ${params.row ? params.row.nombre || '' : ''}`}>
+          <Tooltip title={`${t('list.actions.view')} ${params.row ? params.row.nombre || '' : ''}`}>
             <Box
               sx={{
                 cursor: 'pointer',
@@ -278,7 +281,7 @@ export function MembersTable({
       },
       {
         field: 'nombre_completo',
-        headerName: 'Nombre Completo',
+        headerName: t('list.columns.fullName'),
         width: 250,
         sortable: true,
         valueGetter: (params) => {
@@ -290,7 +293,7 @@ export function MembersTable({
             <Typography variant="body2">{params.value || ''}</Typography>
             {params.row && params.row.documento_identidad && (
               <Typography variant="caption" color="text.secondary">
-                DNI: {params.row.documento_identidad}
+                {t('table.dni')}: {params.row.documento_identidad}
               </Typography>
             )}
           </Box>
@@ -298,13 +301,13 @@ export function MembersTable({
       },
       {
         field: 'tipo_membresia',
-        headerName: 'Tipo',
+        headerName: t('list.columns.membershipType'),
         width: 120,
         sortable: true,
         filterable: true,
         renderCell: (params) => (
           <Chip
-            label={params.value === MembershipType.INDIVIDUAL ? 'Individual' : 'Familiar'}
+            label={params.value === MembershipType.INDIVIDUAL ? t('form.membershipType.individual') : t('form.membershipType.family')}
             color={params.value === MembershipType.INDIVIDUAL ? 'primary' : 'secondary'}
             size="small"
           />
@@ -312,13 +315,13 @@ export function MembersTable({
       },
       {
         field: 'estado',
-        headerName: 'Estado',
+        headerName: t('list.columns.status'),
         width: 120,
         sortable: true,
         filterable: true,
         renderCell: (params) => (
           <Chip
-            label={params.value === MemberStatus.ACTIVE ? 'Activo' : 'Inactivo'}
+            label={params.value === MemberStatus.ACTIVE ? t('details.status.active') : t('details.status.inactive')}
             color={params.value === MemberStatus.ACTIVE ? 'success' : 'default'}
             size="small"
             variant={params.value === MemberStatus.ACTIVE ? 'filled' : 'outlined'}
@@ -327,14 +330,14 @@ export function MembersTable({
       },
       {
         field: 'poblacion',
-        headerName: 'Población',
+        headerName: t('list.columns.population'),
         width: 150,
         sortable: true,
         filterable: true,
       },
       {
         field: 'provincia',
-        headerName: 'Provincia',
+        headerName: t('list.columns.province'),
         width: 130,
         sortable: true,
         filterable: true,
@@ -345,7 +348,7 @@ export function MembersTable({
       },
       {
         field: 'correo_electronico',
-        headerName: 'Email',
+        headerName: t('list.columns.email'),
         width: 200,
         sortable: false,
         filterable: true,
@@ -365,7 +368,7 @@ export function MembersTable({
       },
       {
         field: 'fecha_alta',
-        headerName: 'Fecha Alta',
+        headerName: t('table.dateHigh'),
         width: 130,
         sortable: true,
         filterable: true,
@@ -377,7 +380,7 @@ export function MembersTable({
       },
       {
         field: 'fecha_baja',
-        headerName: 'Fecha Baja',
+        headerName: t('table.dateLow'),
         width: 130,
         sortable: true,
         filterable: true,
@@ -397,14 +400,14 @@ export function MembersTable({
       },
       {
         field: 'actions',
-        headerName: 'Acciones',
+        headerName: t('list.columns.actions'),
         width: isAdmin ? 150 : 80,
         sortable: false,
         filterable: false,
         disableColumnMenu: true,
         renderCell: (params) => (
           <Box sx={{ display: 'flex', gap: 0.5 }}>
-            <Tooltip title="Ver detalles">
+            <Tooltip title={t('list.actions.view')}>
               <IconButton
                 size="small"
                 onClick={(e) => {
@@ -417,10 +420,10 @@ export function MembersTable({
                 <VisibilityIcon fontSize="small" />
               </IconButton>
             </Tooltip>
-            
+
             {isAdmin && (
               <>
-                <Tooltip title="Editar">
+                <Tooltip title={t('list.actions.edit')}>
                   <IconButton
                     size="small"
                     onClick={(e) => {
@@ -433,8 +436,8 @@ export function MembersTable({
                     <EditIcon fontSize="small" />
                   </IconButton>
                 </Tooltip>
-                
-                <Tooltip title="Dar de baja">
+
+                <Tooltip title={t('table.deactivate')}>
                   <span>
                     <IconButton
                       size="small"
@@ -456,7 +459,7 @@ export function MembersTable({
         ),
       },
     ],
-    [onRowClick, onEditClick, onDeactivateClick, isAdmin]
+    [onRowClick, onEditClick, onDeactivateClick, isAdmin, t]
   )
 
   const handlePaginationModelChange = (model: GridPaginationModel) => {

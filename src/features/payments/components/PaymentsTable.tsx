@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { DataGrid, GridColDef, GridPaginationModel, GridSortModel } from '@mui/x-data-grid'
 import { Box, Chip, IconButton, Tooltip, useTheme } from '@mui/material'
 import {
@@ -43,11 +44,13 @@ export function PaymentsTable({
   onDownloadReceipt,
   isAdmin = false,
 }: PaymentsTableProps) {
+  const { t, i18n } = useTranslation('payments')
   const theme = useTheme()
 
   // Format currency to EUR
   const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat('es-ES', {
+    const locale = i18n.language === 'wo' ? 'fr-SN' : i18n.language === 'fr' ? 'fr-FR' : 'es-ES'
+    return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: 'EUR',
     }).format(amount)
@@ -70,13 +73,13 @@ export function PaymentsTable({
   const columns: GridColDef<PaymentListItem>[] = [
     {
       field: 'memberNumber',
-      headerName: 'Nº Socio',
+      headerName: t('table.memberNumber'),
       width: 120,
       sortable: true,
     },
     {
       field: 'memberName',
-      headerName: 'Socio',
+      headerName: t('table.member'),
       flex: 1,
       minWidth: 200,
       sortable: true,
@@ -85,7 +88,7 @@ export function PaymentsTable({
           <Box sx={{ fontWeight: 500 }}>{params.value}</Box>
           {params.row.familyName && (
             <Chip
-              label="Familia"
+              label={t('table.family')}
               size="small"
               sx={{
                 height: 18,
@@ -101,7 +104,7 @@ export function PaymentsTable({
     },
     {
       field: 'amount',
-      headerName: 'Importe',
+      headerName: t('table.amount'),
       width: 120,
       sortable: true,
       align: 'right',
@@ -114,43 +117,38 @@ export function PaymentsTable({
     },
     {
       field: 'paymentDate',
-      headerName: 'Fecha',
+      headerName: t('table.date'),
       width: 120,
       sortable: true,
       renderCell: (params) => formatDate(params.value),
     },
     {
       field: 'paymentMethod',
-      headerName: 'Forma de pago',
+      headerName: t('table.paymentMethod'),
       width: 130,
       sortable: true,
       renderCell: (params) => {
         if (!params.value) return ''
-        const methodLabels: Record<string, string> = {
-          CASH: 'Efectivo',
-          TRANSFER: 'Transferencia',
-          CARD: 'Tarjeta',
-        }
-        return methodLabels[params.value] || params.value
+        return t(`table.paymentMethods.${params.value}`) || params.value
       },
     },
     {
       field: 'status',
-      headerName: 'Estado',
+      headerName: t('table.status'),
       width: 130,
       sortable: true,
       renderCell: (params) => <PaymentStatusChip status={params.value} />,
     },
     {
       field: 'actions',
-      headerName: 'Acciones',
+      headerName: t('table.actions'),
       width: isAdmin ? 180 : 110,
       sortable: false,
       align: 'center',
       headerAlign: 'center',
       renderCell: (params) => (
         <Box sx={{ display: 'flex', gap: 0.5 }}>
-          <Tooltip title="Ver detalles">
+          <Tooltip title={t('table.viewDetails')}>
             <IconButton
               size="small"
               onClick={(e) => {
@@ -163,7 +161,7 @@ export function PaymentsTable({
           </Tooltip>
 
           {params.row.status.toUpperCase() === 'PAID' && (
-            <Tooltip title="Descargar recibo">
+            <Tooltip title={t('table.downloadReceipt')}>
               <IconButton
                 size="small"
                 color="primary"
@@ -178,7 +176,7 @@ export function PaymentsTable({
           )}
 
           {isAdmin && params.row.status.toUpperCase() === 'PENDING' && (
-            <Tooltip title="Confirmar pago">
+            <Tooltip title={t('table.confirmPayment')}>
               <IconButton
                 size="small"
                 color="success"
@@ -243,11 +241,11 @@ export function PaymentsTable({
         disableRowSelectionOnClick
         autoHeight
         localeText={{
-          noRowsLabel: 'No hay pagos registrados',
+          noRowsLabel: t('table.empty'),
           MuiTablePagination: {
-            labelRowsPerPage: 'Filas por página:',
+            labelRowsPerPage: t('table.rowsPerPage'),
             labelDisplayedRows: ({ from, to, count }) =>
-              `${from}-${to} de ${count !== -1 ? count : `más de ${to}`}`,
+              t('table.displayedRows', { from, to, count: count !== -1 ? count : `más de ${to}` }),
           },
         }}
         sx={{

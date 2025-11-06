@@ -2,12 +2,14 @@ import { View, Text, Image } from '@react-pdf/renderer'
 import { receiptStyles } from './styles'
 import { formatReceiptDate } from '../../utils/receiptUtils'
 import type { ReceiptData } from '../../types'
+import type { ReceiptTranslations } from '../../hooks/useReceiptGenerator'
 
 interface ReceiptHeaderProps {
   receipt: ReceiptData
+  translations: ReceiptTranslations
 }
 
-export function ReceiptHeader({ receipt }: ReceiptHeaderProps) {
+export function ReceiptHeader({ receipt, translations }: ReceiptHeaderProps) {
   // Use existing logo from public/icons directory
   const logoPath = '/icons/original-logo.png'
   const hasLogo = true
@@ -26,8 +28,10 @@ export function ReceiptHeader({ receipt }: ReceiptHeaderProps) {
 
         {/* Título y número de recibo */}
         <View>
-          <Text style={receiptStyles.receiptTitle}>RECIBO DE PAGO</Text>
-          <Text style={receiptStyles.receiptNumber}>Nº {receipt.receiptNumber}</Text>
+          <Text style={receiptStyles.receiptTitle}>{translations.title.toUpperCase()}</Text>
+          <Text style={receiptStyles.receiptNumber}>
+            {translations.receiptNumber} {receipt.receiptNumber}
+          </Text>
         </View>
       </View>
 
@@ -35,7 +39,7 @@ export function ReceiptHeader({ receipt }: ReceiptHeaderProps) {
       <Text style={receiptStyles.headerInfo}>
         Asociación para la Solidaridad y Apoyo Mutuo{'\n'}
         Sabadell, Catalunya{'\n'}
-        Fecha de emisión: {formatReceiptDate(receipt.generatedAt)}
+        {translations.issuedDate}: {formatReceiptDate(receipt.generatedAt)}
       </Text>
     </View>
   )

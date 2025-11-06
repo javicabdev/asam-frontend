@@ -1,11 +1,12 @@
 import * as yup from 'yup'
+import i18n from '@/lib/i18n'
 
 // Schema para solicitar reset de contraseña
 export const requestPasswordResetSchema = yup.object({
   email: yup
     .string()
-    .required('El correo electrónico es obligatorio')
-    .email('El correo electrónico no es válido'),
+    .required(() => i18n.t('auth:forgotPassword.validation.emailRequired'))
+    .email(() => i18n.t('auth:forgotPassword.validation.emailInvalid')),
 })
 
 export type RequestPasswordResetFormData = yup.InferType<typeof requestPasswordResetSchema>
@@ -14,16 +15,16 @@ export type RequestPasswordResetFormData = yup.InferType<typeof requestPasswordR
 export const resetPasswordSchema = yup.object({
   newPassword: yup
     .string()
-    .required('La contraseña es obligatoria')
-    .min(6, 'La contraseña debe tener al menos 6 caracteres')
+    .required(() => i18n.t('auth:resetPassword.validation.passwordRequired'))
+    .min(6, () => i18n.t('auth:resetPassword.validation.passwordMin'))
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      'La contraseña debe contener al menos una mayúscula, una minúscula y un número'
+      () => i18n.t('auth:resetPassword.validation.passwordFormat')
     ),
   confirmPassword: yup
     .string()
-    .required('Debes confirmar la contraseña')
-    .oneOf([yup.ref('newPassword')], 'Las contraseñas no coinciden'),
+    .required(() => i18n.t('auth:resetPassword.validation.confirmPasswordRequired'))
+    .oneOf([yup.ref('newPassword')], () => i18n.t('auth:resetPassword.validation.passwordsMismatch')),
 })
 
 export type ResetPasswordFormData = yup.InferType<typeof resetPasswordSchema>

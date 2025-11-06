@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   DataGrid,
   GridColDef,
@@ -32,6 +33,7 @@ export const CashFlowTable = ({
   onPageChange,
   onEditClick,
 }: CashFlowTableProps) => {
+  const { t } = useTranslation('cashflow')
   const { user } = useAuth()
   const navigate = useNavigate()
   const isAdmin = user?.role === 'admin'
@@ -61,13 +63,13 @@ export const CashFlowTable = ({
   const columns: GridColDef[] = [
     {
       field: 'date',
-      headerName: 'Fecha',
+      headerName: t('table.columns.date'),
       width: 120,
       valueGetter: (params) => formatTransactionDate(params.row.date),
     },
     {
       field: 'operationType',
-      headerName: 'Tipo',
+      headerName: t('table.columns.type'),
       width: 80,
       renderCell: (params) => {
         const config = getOperationTypeConfig(params.value)
@@ -76,13 +78,13 @@ export const CashFlowTable = ({
     },
     {
       field: 'category',
-      headerName: 'Categoría',
+      headerName: t('table.columns.category'),
       width: 180,
       renderCell: (params) => {
         const config = getOperationTypeConfig(params.row.operationType)
         return (
           <Chip
-            label={config.label}
+            label={t(`operationTypes.${params.row.operationType}`)}
             size="small"
             sx={{
               bgcolor: config.color,
@@ -94,13 +96,13 @@ export const CashFlowTable = ({
     },
     {
       field: 'detail',
-      headerName: 'Concepto',
+      headerName: t('table.columns.detail'),
       flex: 1,
       minWidth: 200,
     },
     {
       field: 'member',
-      headerName: 'Socio',
+      headerName: t('table.columns.member'),
       width: 180,
       renderCell: (params) => {
         const member = params.row.member
@@ -121,7 +123,7 @@ export const CashFlowTable = ({
     },
     {
       field: 'amount',
-      headerName: 'Importe',
+      headerName: t('table.columns.amount'),
       width: 130,
       type: 'number',
       align: 'right',
@@ -142,7 +144,7 @@ export const CashFlowTable = ({
     },
     {
       field: 'runningBalance',
-      headerName: 'Saldo',
+      headerName: t('table.columns.runningBalance'),
       width: 140,
       type: 'number',
       align: 'right',
@@ -169,14 +171,14 @@ export const CashFlowTable = ({
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Acciones',
+      headerName: t('table.columns.actions'),
       width: 120,
       getActions: (params: GridRowParams) => {
         const actions = [
           <GridActionsCellItem
             key="view"
             icon={<VisibilityIcon />}
-            label="Ver"
+            label={t('table.actions.view')}
             onClick={() => handleViewClick(params.row)}
           />,
         ]
@@ -186,13 +188,13 @@ export const CashFlowTable = ({
             <GridActionsCellItem
               key="edit"
               icon={<EditIcon />}
-              label="Editar"
+              label={t('table.actions.edit')}
               onClick={() => onEditClick?.(params.row)}
             />,
             <GridActionsCellItem
               key="delete"
               icon={<DeleteIcon />}
-              label="Eliminar"
+              label={t('table.actions.delete')}
               onClick={() => handleDeleteClick(params.row)}
             />
           )

@@ -188,5 +188,26 @@
     "cancel": "Annuler",
     "confirming": "Confirmation...",
     "confirmPayment": "Confirmer le Paiement"
+  },
+  "confirmDialog": {
+    "title": "Confirmer le Paiement",
+    "subtitle": "Complétez les détails du paiement avant de confirmer :",
+    "member": "Membre :",
+    "memberNumber": "Numéro de Membre :",
+    "amount": "Montant :",
+    "paymentDateLabel": "Date de paiement",
+    "paymentDateHelper": "Date à laquelle le paiement a été effectué",
+    "paymentMethodLabel": "Mode de paiement",
+    "methodCash": "Espèces",
+    "methodTransfer": "Virement",
+    "methodCard": "Carte",
+    "notesLabel": "Notes",
+    "notesPlaceholder": "Ajouter des notes optionnelles sur le paiement...",
+    "infoMessage": "Cette action changera le statut du paiement à PAYÉ. Le paiement sera enregistré comme confirmé dans le système.",
+    "cancel": "Annuler",
+    "confirming": "Confirmation...",
+    "confirmButton": "Confirmer le Paiement",
+    "successMessage": "Paiement confirmé avec succès",
+    "errorMessage": "Erreur lors de la confirmation du paiement"
   }
 }

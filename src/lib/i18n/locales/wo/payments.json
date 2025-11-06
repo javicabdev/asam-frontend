@@ -188,5 +188,26 @@
     "cancel": "Neenal",
     "confirming": "Mungi tànnee...",
     "confirmPayment": "Tànnee Fay Bi"
+  },
+  "confirmDialog": {
+    "title": "Tànnee Fay Bi",
+    "subtitle": "Tëral faramfacce yu fay balaa tànnee:",
+    "member": "Mbooloo:",
+    "memberNumber": "Nimero Mbooloo:",
+    "amount": "Dayoo:",
+    "paymentDateLabel": "Bisu fay",
+    "paymentDateHelper": "Bis bu ñu def fay bi",
+    "paymentMethodLabel": "Anamu fay",
+    "methodCash": "Xaalis",
+    "methodTransfer": "Yóbbale",
+    "methodCard": "Kaar",
+    "notesLabel": "Karmat",
+    "notesPlaceholder": "Yokk karmat yu amul solo ci fay bi...",
+    "infoMessage": "Li nga def laa wut tekki fay bi ba FAY NA. Fay bi dinaa bindu ni tànnee nañu ko ci sistem bi.",
+    "cancel": "Neenal",
+    "confirming": "Mungi tànnee...",
+    "confirmButton": "Tànnee Fay Bi",
+    "successMessage": "Tànnee nañu fay bi bu baax",
+    "errorMessage": "Njuumte ci tànnee fay bi"
   }
 }

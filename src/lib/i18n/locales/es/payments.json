@@ -188,5 +188,26 @@
     "cancel": "Cancelar",
     "confirming": "Confirmando...",
     "confirmPayment": "Confirmar Pago"
+  },
+  "confirmDialog": {
+    "title": "Confirmar Pago",
+    "subtitle": "Complete los detalles del pago antes de confirmar:",
+    "member": "Socio:",
+    "memberNumber": "Número de Socio:",
+    "amount": "Importe:",
+    "paymentDateLabel": "Fecha de pago",
+    "paymentDateHelper": "Fecha en la que se realizó el pago",
+    "paymentMethodLabel": "Forma de pago",
+    "methodCash": "Efectivo",
+    "methodTransfer": "Transferencia",
+    "methodCard": "Tarjeta",
+    "notesLabel": "Notas",
+    "notesPlaceholder": "Añadir notas opcionales sobre el pago...",
+    "infoMessage": "Esta acción cambiará el estado del pago a PAGADO. El pago quedará registrado como confirmado en el sistema.",
+    "cancel": "Cancelar",
+    "confirming": "Confirmando...",
+    "confirmButton": "Confirmar Pago",
+    "successMessage": "Pago confirmado correctamente",
+    "errorMessage": "Error al confirmar el pago"
   }
 }

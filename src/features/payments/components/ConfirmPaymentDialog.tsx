@@ -18,6 +18,7 @@ import {
 import { CheckCircleOutline as CheckIcon } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
 import { format } from 'date-fns'
+import { useTranslation } from 'react-i18next'
 
 import { useConfirmPayment } from '../hooks/useConfirmPayment'
 import type { PaymentListItem } from '../types'
@@ -38,6 +39,7 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
   onClose,
   onSuccess,
 }) => {
+  const { t } = useTranslation('payments')
   const { enqueueSnackbar } = useSnackbar()
   const { confirmPayment, loading, error } = useConfirmPayment()
 
@@ -84,16 +86,16 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
       )
 
       if (success) {
-        enqueueSnackbar('Pago confirmado correctamente', { variant: 'success' })
+        enqueueSnackbar(t('confirmDialog.successMessage'), { variant: 'success' })
         onSuccess?.()
         onClose()
       } else {
-        enqueueSnackbar('Error al confirmar el pago', { variant: 'error' })
+        enqueueSnackbar(t('confirmDialog.errorMessage'), { variant: 'error' })
       }
     } catch (err) {
       console.error('Error confirming payment:', err)
       enqueueSnackbar(
-        err instanceof Error ? err.message : 'Error al confirmar el pago',
+        err instanceof Error ? err.message : t('confirmDialog.errorMessage'),
         { variant: 'error' }
       )
     }
@@ -107,7 +109,7 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <CheckIcon color="success" />
           <Typography variant="h6" component="span">
-            Confirmar Pago
+            {t('confirmDialog.title')}
           </Typography>
         </Box>
       </DialogTitle>
@@ -121,28 +123,28 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
 
         <Box sx={{ mb: 2 }}>
           <Typography variant="body1" gutterBottom>
-            Complete los detalles del pago antes de confirmar:
+            {t('confirmDialog.subtitle')}
           </Typography>
         </Box>
 
         {/* Member info (read-only) */}
         <Box sx={{ mb: 3, p: 2, bgcolor: 'background.default', borderRadius: 1 }}>
           <Typography variant="body2" color="text.secondary">
-            Socio:
+            {t('confirmDialog.member')}
           </Typography>
           <Typography variant="h6" gutterBottom>
             {payment.memberName}
           </Typography>
 
           <Typography variant="body2" color="text.secondary">
-            Número de Socio:
+            {t('confirmDialog.memberNumber')}
           </Typography>
           <Typography variant="body1" gutterBottom>
             {payment.memberNumber}
           </Typography>
 
           <Typography variant="body2" color="text.secondary">
-            Importe:
+            {t('confirmDialog.amount')}
           </Typography>
           <Typography variant="h5" color="success.main">
             {formatCurrency(payment.amount)}
@@ -153,7 +155,7 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {/* Payment Date */}
           <TextField
-            label="Fecha de pago"
+            label={t('confirmDialog.paymentDateLabel')}
             type="date"
             value={paymentDate}
             onChange={(e) => setPaymentDate(e.target.value)}
@@ -161,46 +163,45 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
             InputLabelProps={{
               shrink: true,
             }}
-            helperText="Fecha en la que se realizó el pago"
+            helperText={t('confirmDialog.paymentDateHelper')}
           />
 
           {/* Payment Method */}
           <FormControl fullWidth>
-            <InputLabel>Forma de pago</InputLabel>
+            <InputLabel>{t('confirmDialog.paymentMethodLabel')}</InputLabel>
             <Select
               value={paymentMethod}
-              label="Forma de pago"
+              label={t('confirmDialog.paymentMethodLabel')}
               onChange={(e) => setPaymentMethod(e.target.value)}
             >
-              <MenuItem value="CASH">Efectivo</MenuItem>
-              <MenuItem value="TRANSFER">Transferencia</MenuItem>
-              <MenuItem value="CARD">Tarjeta</MenuItem>
+              <MenuItem value="CASH">{t('confirmDialog.methodCash')}</MenuItem>
+              <MenuItem value="TRANSFER">{t('confirmDialog.methodTransfer')}</MenuItem>
+              <MenuItem value="CARD">{t('confirmDialog.methodCard')}</MenuItem>
             </Select>
           </FormControl>
 
           {/* Notes */}
           <TextField
-            label="Notas"
+            label={t('confirmDialog.notesLabel')}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             multiline
             rows={3}
             fullWidth
-            placeholder="Añadir notas opcionales sobre el pago..."
+            placeholder={t('confirmDialog.notesPlaceholder')}
           />
         </Box>
 
         <Alert severity="info" sx={{ mt: 2 }}>
           <Typography variant="body2">
-            Esta acción cambiará el estado del pago a <strong>PAGADO</strong>. El pago quedará
-            registrado como confirmado en el sistema.
+            {t('confirmDialog.infoMessage')}
           </Typography>
         </Alert>
       </DialogContent>
 
       <DialogActions>
         <Button onClick={onClose} disabled={loading}>
-          Cancelar
+          {t('confirmDialog.cancel')}
         </Button>
         <Button
           onClick={() => void handleConfirm()}
@@ -209,7 +210,7 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
           disabled={loading}
           startIcon={loading ? <CircularProgress size={20} /> : <CheckIcon />}
         >
-          {loading ? 'Confirmando...' : 'Confirmar Pago'}
+          {loading ? t('confirmDialog.confirming') : t('confirmDialog.confirmButton')}
         </Button>
       </DialogActions>
     </Dialog>

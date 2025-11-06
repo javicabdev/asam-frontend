@@ -175,5 +175,18 @@
     "status": "Tekki:",
     "date": "Bis:",
     "notes": "Karmat:"
+  },
+  "initialPaymentForm": {
+    "title": "Tànnee Fay Bu Xaalis",
+    "amountToPay": "Dayoo bu fay:",
+    "paymentMethod": "Anamu fay:",
+    "cash": "Xaalis",
+    "paymentDateLabel": "Bisu Fay",
+    "paymentDateHelper": "Bis bu ñu jot xaalis bi",
+    "notesLabel": "Karmat (amul solo)",
+    "notesPlaceholder": "Misaal: Ñu ko jot ci [tur], nimero kàddu, njk.",
+    "cancel": "Neenal",
+    "confirming": "Mungi tànnee...",
+    "confirmPayment": "Tànnee Fay Bi"
   }
 }

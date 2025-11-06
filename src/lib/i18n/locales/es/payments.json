@@ -175,5 +175,18 @@
     "status": "Estado:",
     "date": "Fecha:",
     "notes": "Notas:"
+  },
+  "initialPaymentForm": {
+    "title": "Confirmar Pago en Efectivo",
+    "amountToPay": "Monto a pagar:",
+    "paymentMethod": "Método de pago:",
+    "cash": "Efectivo",
+    "paymentDateLabel": "Fecha del Pago",
+    "paymentDateHelper": "Fecha en que se recibió el pago en efectivo",
+    "notesLabel": "Notas (opcional)",
+    "notesPlaceholder": "Ej: Recibido por [nombre], número de recibo, etc.",
+    "cancel": "Cancelar",
+    "confirming": "Confirmando...",
+    "confirmPayment": "Confirmar Pago"
   }
 }

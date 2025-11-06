@@ -175,5 +175,18 @@
     "status": "Statut :",
     "date": "Date :",
     "notes": "Notes :"
+  },
+  "initialPaymentForm": {
+    "title": "Confirmer le Paiement en Espèces",
+    "amountToPay": "Montant à payer :",
+    "paymentMethod": "Méthode de paiement :",
+    "cash": "Espèces",
+    "paymentDateLabel": "Date du Paiement",
+    "paymentDateHelper": "Date à laquelle le paiement en espèces a été reçu",
+    "notesLabel": "Notes (optionnel)",
+    "notesPlaceholder": "Ex : Reçu par [nom], numéro de reçu, etc.",
+    "cancel": "Annuler",
+    "confirming": "Confirmation...",
+    "confirmPayment": "Confirmer le Paiement"
   }
 }

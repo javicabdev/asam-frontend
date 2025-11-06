@@ -12,6 +12,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
+import { useTranslation } from 'react-i18next'
 import type { InitialPaymentFormData } from '../types'
 import type { MemberPayment } from '../hooks/useMemberPayments'
 
@@ -31,6 +32,7 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
   loading,
   error,
 }) => {
+  const { t } = useTranslation('payments')
   const [paymentDate, setPaymentDate] = React.useState<Date>(new Date())
   const [notes, setNotes] = React.useState('')
 
@@ -46,15 +48,15 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
   return (
     <Paper elevation={2} sx={{ p: 3 }}>
       <Typography variant="h6" gutterBottom>
-        Confirmar Pago en Efectivo
+        {t('initialPaymentForm.title')}
       </Typography>
 
       <Alert severity="info" sx={{ mb: 3 }}>
         <Typography variant="body2">
-          <strong>Monto a pagar:</strong> {pendingPayment.amount.toFixed(2)} €
+          <strong>{t('initialPaymentForm.amountToPay')}</strong> {pendingPayment.amount.toFixed(2)} €
         </Typography>
         <Typography variant="body2" sx={{ mt: 1 }}>
-          <strong>Método de pago:</strong> Efectivo
+          <strong>{t('initialPaymentForm.paymentMethod')}</strong> {t('initialPaymentForm.cash')}
         </Typography>
       </Alert>
 
@@ -67,7 +69,7 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
       <Box component="form" onSubmit={handleSubmit}>
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
           <DatePicker
-            label="Fecha del Pago"
+            label={t('initialPaymentForm.paymentDateLabel')}
             value={paymentDate}
             onChange={(date) => date && setPaymentDate(date)}
             maxDate={new Date()}
@@ -75,26 +77,26 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
               textField: {
                 fullWidth: true,
                 margin: 'normal',
-                helperText: 'Fecha en que se recibió el pago en efectivo'
+                helperText: t('initialPaymentForm.paymentDateHelper')
               }
             }}
           />
         </LocalizationProvider>
 
         <TextField
-          label="Notas (opcional)"
+          label={t('initialPaymentForm.notesLabel')}
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           multiline
           rows={3}
           fullWidth
           margin="normal"
-          placeholder="Ej: Recibido por [nombre], número de recibo, etc."
+          placeholder={t('initialPaymentForm.notesPlaceholder')}
         />
 
         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', mt: 3 }}>
           <Button variant="outlined" onClick={onCancel} disabled={loading}>
-            Cancelar
+            {t('initialPaymentForm.cancel')}
           </Button>
           <Button
             type="submit"
@@ -102,7 +104,7 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
             disabled={loading}
             startIcon={loading && <CircularProgress size={20} />}
           >
-            {loading ? 'Confirmando...' : 'Confirmar Pago'}
+            {loading ? t('initialPaymentForm.confirming') : t('initialPaymentForm.confirmPayment')}
           </Button>
         </Box>
       </Box>

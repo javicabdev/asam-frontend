@@ -13,6 +13,7 @@ import {
 import { Warning as WarningIcon } from '@mui/icons-material'
 import { useMutation } from '@apollo/client'
 import { useSnackbar } from 'notistack'
+import { useTranslation } from 'react-i18next'
 
 import { CHANGE_MEMBER_STATUS_MUTATION } from '../api/mutations'
 import { LIST_MEMBERS_QUERY } from '../api/queries'
@@ -31,6 +32,7 @@ export const ConfirmDeactivateDialog: React.FC<ConfirmDeactivateDialogProps> = (
   onClose,
   onSuccess,
 }) => {
+  const { t } = useTranslation('members')
   const { enqueueSnackbar } = useSnackbar()
 
   const [changeMemberStatus, { loading, error }] = useMutation(
@@ -38,12 +40,12 @@ export const ConfirmDeactivateDialog: React.FC<ConfirmDeactivateDialogProps> = (
     {
       refetchQueries: [{ query: LIST_MEMBERS_QUERY }],
       onCompleted: () => {
-        enqueueSnackbar('Socio dado de baja correctamente', { variant: 'success' })
+        enqueueSnackbar(t('deactivateDialog.successMessage'), { variant: 'success' })
         onSuccess?.()
         onClose()
       },
       onError: (err) => {
-        enqueueSnackbar(`Error al dar de baja el socio: ${err.message}`, { variant: 'error' })
+        enqueueSnackbar(`${t('deactivateDialog.errorMessage')}: ${err.message}`, { variant: 'error' })
       },
     }
   )
@@ -72,7 +74,7 @@ export const ConfirmDeactivateDialog: React.FC<ConfirmDeactivateDialogProps> = (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <WarningIcon color="warning" />
           <Typography variant="h6" component="span">
-            Confirmar Baja de Socio
+            {t('deactivateDialog.title')}
           </Typography>
         </Box>
       </DialogTitle>
@@ -86,7 +88,7 @@ export const ConfirmDeactivateDialog: React.FC<ConfirmDeactivateDialogProps> = (
 
         <Box sx={{ mb: 2 }}>
           <Typography variant="body1" gutterBottom>
-            ¿Está seguro de que desea dar de baja al siguiente socio?
+            {t('deactivateDialog.confirmMessage')}
           </Typography>
         </Box>
 
@@ -100,14 +102,14 @@ export const ConfirmDeactivateDialog: React.FC<ConfirmDeactivateDialogProps> = (
           }}
         >
           <Typography variant="body2" color="text.secondary" gutterBottom>
-            Número de Socio:
+            {t('deactivateDialog.memberNumber')}:
           </Typography>
           <Typography variant="h6" gutterBottom>
             {member.numero_socio}
           </Typography>
 
           <Typography variant="body2" color="text.secondary" gutterBottom sx={{ mt: 1 }}>
-            Nombre Completo:
+            {t('deactivateDialog.fullName')}:
           </Typography>
           <Typography variant="h6">
             {member.nombre} {member.apellidos}
@@ -116,15 +118,14 @@ export const ConfirmDeactivateDialog: React.FC<ConfirmDeactivateDialogProps> = (
 
         <Alert severity="warning" sx={{ mt: 2 }}>
           <Typography variant="body2">
-            Esta acción cambiará el estado del socio a <strong>INACTIVO</strong>. 
-            El socio no será eliminado del sistema.
+            {t('deactivateDialog.warningMessage')}
           </Typography>
         </Alert>
       </DialogContent>
 
       <DialogActions>
         <Button onClick={onClose} disabled={loading}>
-          Cancelar
+          {t('deactivateDialog.cancel')}
         </Button>
         <Button
           onClick={handleConfirm}
@@ -133,7 +134,7 @@ export const ConfirmDeactivateDialog: React.FC<ConfirmDeactivateDialogProps> = (
           disabled={loading}
           startIcon={loading ? <CircularProgress size={20} /> : null}
         >
-          {loading ? 'Procesando...' : 'Dar de baja'}
+          {loading ? t('deactivateDialog.processing') : t('deactivateDialog.confirm')}
         </Button>
       </DialogActions>
     </Dialog>

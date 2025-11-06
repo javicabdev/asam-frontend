@@ -172,5 +172,17 @@
   "export": {
     "success": "Exportation réussie",
     "error": "Erreur lors de l'exportation: {{message}}"
+  },
+  "deactivateDialog": {
+    "title": "Confirmer la Désactivation du Membre",
+    "confirmMessage": "Êtes-vous sûr de vouloir désactiver le membre suivant ?",
+    "memberNumber": "Numéro de Membre",
+    "fullName": "Nom Complet",
+    "warningMessage": "Cette action changera le statut du membre à INACTIF. Le membre ne sera pas supprimé du système.",
+    "cancel": "Annuler",
+    "confirm": "Désactiver",
+    "processing": "En cours...",
+    "successMessage": "Membre désactivé avec succès",
+    "errorMessage": "Erreur lors de la désactivation du membre"
   }
 }

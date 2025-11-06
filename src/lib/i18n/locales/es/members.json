@@ -172,5 +172,17 @@
   "export": {
     "success": "Exportación completada exitosamente",
     "error": "Error al exportar: {{message}}"
+  },
+  "deactivateDialog": {
+    "title": "Confirmar Baja de Socio",
+    "confirmMessage": "¿Está seguro de que desea dar de baja al siguiente socio?",
+    "memberNumber": "Número de Socio",
+    "fullName": "Nombre Completo",
+    "warningMessage": "Esta acción cambiará el estado del socio a INACTIVO. El socio no será eliminado del sistema.",
+    "cancel": "Cancelar",
+    "confirm": "Dar de baja",
+    "processing": "Procesando...",
+    "successMessage": "Socio dado de baja correctamente",
+    "errorMessage": "Error al dar de baja el socio"
   }
 }

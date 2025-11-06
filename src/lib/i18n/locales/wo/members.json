@@ -172,5 +172,17 @@
   "export": {
     "success": "Génne bi am na ci",
     "error": "Njumte ci génne: {{message}}"
+  },
+  "deactivateDialog": {
+    "title": "Tànnee Fay Mbooloo Bi",
+    "confirmMessage": "Ndax dëgg la bëgg fay mbooloo bii?",
+    "memberNumber": "Limub Mbooloo",
+    "fullName": "Tur bu mat sëkk",
+    "warningMessage": "Jëf bii dina soppi jamono mbooloo bi ba YOO XOOLUL. Mbooloo bi du koy far ci sistem bi.",
+    "cancel": "Neenal",
+    "confirm": "Fay ko",
+    "processing": "Yam jëf...",
+    "successMessage": "Fay nañu mbooloo bi bu baax",
+    "errorMessage": "Njuumte ci fay mbooloo bi"
   }
 }

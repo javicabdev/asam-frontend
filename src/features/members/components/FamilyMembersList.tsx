@@ -19,6 +19,7 @@ import {
   Delete as DeleteIcon,
   Person as PersonIcon,
 } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
 import { FamilyMember } from '../types'
 import { FamilyMemberForm } from './FamilyMemberForm'
 
@@ -35,6 +36,7 @@ export const FamilyMembersList: React.FC<FamilyMembersListProps> = ({
   onEdit,
   onRemove,
 }) => {
+  const { t } = useTranslation('members')
   const [formOpen, setFormOpen] = React.useState(false)
   const [editingIndex, setEditingIndex] = React.useState<number | null>(null)
 
@@ -69,10 +71,10 @@ export const FamilyMembersList: React.FC<FamilyMembersListProps> = ({
       <CardContent>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h6" component="h3">
-            Miembros de la Familia
+            {t('familyMembersList.title')}
           </Typography>
           <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAdd} size="small">
-            Añadir Familiar
+            {t('familyMembersList.addButton')}
           </Button>
         </Box>
 
@@ -89,9 +91,9 @@ export const FamilyMembersList: React.FC<FamilyMembersListProps> = ({
             }}
           >
             <PersonIcon sx={{ fontSize: 48, mb: 1, opacity: 0.5 }} />
-            <Typography variant="body1">No hay familiares añadidos</Typography>
+            <Typography variant="body1">{t('familyMembersList.empty')}</Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
-              Haga clic en "Añadir Familiar" para incluir miembros de la familia
+              {t('familyMembersList.emptyHint')}
             </Typography>
           </Box>
         ) : (
@@ -113,17 +115,17 @@ export const FamilyMembersList: React.FC<FamilyMembersListProps> = ({
                     <Box>
                       {member.fecha_nacimiento && (
                         <Typography variant="body2" component="span">
-                          Nacimiento: {formatDate(member.fecha_nacimiento)}
+                          {t('familyMembersList.birthDate')}: {formatDate(member.fecha_nacimiento)}
                         </Typography>
                       )}
                       {member.dni_nie && (
                         <Typography variant="body2" component="span" sx={{ ml: 2 }}>
-                          DNI/NIE: {member.dni_nie}
+                          {t('familyMembersList.dni')}: {member.dni_nie}
                         </Typography>
                       )}
                       {member.correo_electronico && (
                         <Typography variant="body2" component="div">
-                          Email: {member.correo_electronico}
+                          {t('familyMembersList.email')}: {member.correo_electronico}
                         </Typography>
                       )}
                     </Box>
@@ -132,7 +134,7 @@ export const FamilyMembersList: React.FC<FamilyMembersListProps> = ({
                 <ListItemSecondaryAction>
                   <IconButton
                     edge="end"
-                    aria-label="editar"
+                    aria-label={t('familyMembersList.editButton')}
                     onClick={() => handleEdit(index)}
                     sx={{ mr: 1 }}
                   >
@@ -140,7 +142,7 @@ export const FamilyMembersList: React.FC<FamilyMembersListProps> = ({
                   </IconButton>
                   <IconButton
                     edge="end"
-                    aria-label="eliminar"
+                    aria-label={t('familyMembersList.deleteButton')}
                     onClick={() => onRemove(index)}
                     color="error"
                   >

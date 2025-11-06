@@ -184,5 +184,16 @@
     "processing": "En cours...",
     "successMessage": "Membre désactivé avec succès",
     "errorMessage": "Erreur lors de la désactivation du membre"
+  },
+  "familyMembersList": {
+    "title": "Membres de la Famille",
+    "addButton": "Ajouter un Membre",
+    "empty": "Aucun membre de la famille ajouté",
+    "emptyHint": "Cliquez sur \"Ajouter un Membre\" pour inclure des membres de la famille",
+    "birthDate": "Naissance",
+    "dni": "DNI/NIE",
+    "email": "Email",
+    "editButton": "Modifier",
+    "deleteButton": "Supprimer"
   }
 }

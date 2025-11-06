@@ -184,5 +184,16 @@
     "processing": "Yam jëf...",
     "successMessage": "Fay nañu mbooloo bi bu baax",
     "errorMessage": "Njuumte ci fay mbooloo bi"
+  },
+  "familyMembersList": {
+    "title": "Mbooloo yu Njaboot",
+    "addButton": "Yokk Mbooloo",
+    "empty": "Amul mbooloo yu yokk",
+    "emptyHint": "Bësal \"Yokk Mbooloo\" ngir yokk mbooloo yu njaboot",
+    "birthDate": "Jibbël",
+    "dni": "DNI/NIE",
+    "email": "Email",
+    "editButton": "Soppi",
+    "deleteButton": "Far"
   }
 }

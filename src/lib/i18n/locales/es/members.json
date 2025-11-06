@@ -184,5 +184,16 @@
     "processing": "Procesando...",
     "successMessage": "Socio dado de baja correctamente",
     "errorMessage": "Error al dar de baja el socio"
+  },
+  "familyMembersList": {
+    "title": "Miembros de la Familia",
+    "addButton": "Añadir Familiar",
+    "empty": "No hay familiares añadidos",
+    "emptyHint": "Haga clic en \"Añadir Familiar\" para incluir miembros de la familia",
+    "birthDate": "Nacimiento",
+    "dni": "DNI/NIE",
+    "email": "Email",
+    "editButton": "Editar",
+    "deleteButton": "Eliminar"
   }
 }

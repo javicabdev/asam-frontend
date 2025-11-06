@@ -22,7 +22,8 @@ export const PaymentStatusChip: React.FC<PaymentStatusChipProps> = ({ status }) 
     CANCELLED: { labelKey: 'status.cancelled', color: 'error' },
   }
 
-  const config = statusConfig[status]
+  const statusUpper = status.toUpperCase()
+  const config = statusConfig[statusUpper]
   const label = config ? t(config.labelKey) : status
 
   return <Chip label={label} color={config?.color || 'default'} size="small" />

@@ -105,11 +105,44 @@
     "footer": "Gracias por su pago"
   },
   "stats": {
-    "total": "Total recaudado",
+    "total": "Total",
     "pending": "Pagos pendientes",
     "thisMonth": "Este mes",
     "lastMonth": "Mes anterior",
     "average": "Promedio mensual"
+  },
+  "actions": {
+    "refresh": "Actualizar",
+    "newPayment": "Nuevo Pago",
+    "newPaymentComingSoon": "Próximamente: Registro manual de pagos"
+  },
+  "error": {
+    "load": "Error al cargar los pagos"
+  },
+  "info": {
+    "familyDetailsComingSoon": "La página de detalles de familias estará disponible próximamente"
+  },
+  "filters": {
+    "searchPlaceholder": "Buscar por socio o nº socio",
+    "search": "Buscar...",
+    "status": {
+      "label": "Estado",
+      "all": "Todos",
+      "pending": "Pendiente",
+      "paid": "Pagado",
+      "cancelled": "Cancelado"
+    },
+    "method": {
+      "label": "Método",
+      "all": "Todos",
+      "cash": "Efectivo",
+      "transfer": "Transferencia",
+      "card": "Tarjeta"
+    },
+    "dateFrom": "Desde",
+    "dateTo": "Hasta",
+    "clear": "Limpiar",
+    "clearTooltip": "Limpiar filtros"
   },
   "table": {
     "memberNumber": "Nº Socio",

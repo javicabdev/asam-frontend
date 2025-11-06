@@ -19,6 +19,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { es } from 'date-fns/locale'
+import { useTranslation } from 'react-i18next'
 
 import { PAYMENT_METHODS } from '../types'
 import type { PaymentFiltersState } from '../types'
@@ -30,6 +31,8 @@ interface PaymentFiltersProps {
 }
 
 export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFiltersProps) {
+  const { t } = useTranslation('payments')
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       // Trigger search (filters are already applied on change)
@@ -45,11 +48,11 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
           <Grid item xs={12} md={3}>
             <TextField
               fullWidth
-              label="Buscar por socio o nº socio"
+              label={t('filters.searchPlaceholder')}
               value={filters.searchTerm}
               onChange={(e) => onFilterChange({ searchTerm: e.target.value })}
               onKeyDown={handleKeyDown}
-              placeholder="Buscar..."
+              placeholder={t('filters.search')}
               InputProps={{
                 endAdornment: (
                   <IconButton edge="end" size="small">
@@ -63,18 +66,18 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
           {/* Status filter */}
           <Grid item xs={6} md={2}>
             <FormControl fullWidth>
-              <InputLabel>Estado</InputLabel>
+              <InputLabel>{t('filters.status.label')}</InputLabel>
               <Select
                 value={filters.status}
                 onChange={(e) =>
                   onFilterChange({ status: e.target.value as PaymentFiltersState['status'] })
                 }
-                label="Estado"
+                label={t('filters.status.label')}
               >
-                <MenuItem value="ALL">Todos</MenuItem>
-                <MenuItem value="PENDING">Pendiente</MenuItem>
-                <MenuItem value="PAID">Pagado</MenuItem>
-                <MenuItem value="CANCELLED">Cancelado</MenuItem>
+                <MenuItem value="ALL">{t('filters.status.all')}</MenuItem>
+                <MenuItem value="PENDING">{t('filters.status.pending')}</MenuItem>
+                <MenuItem value="PAID">{t('filters.status.paid')}</MenuItem>
+                <MenuItem value="CANCELLED">{t('filters.status.cancelled')}</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -82,16 +85,16 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
           {/* Payment method filter */}
           <Grid item xs={6} md={2}>
             <FormControl fullWidth>
-              <InputLabel>Método</InputLabel>
+              <InputLabel>{t('filters.method.label')}</InputLabel>
               <Select
                 value={filters.paymentMethod}
                 onChange={(e) => onFilterChange({ paymentMethod: e.target.value })}
-                label="Método"
+                label={t('filters.method.label')}
               >
-                <MenuItem value="ALL">Todos</MenuItem>
-                {Object.entries(PAYMENT_METHODS).map(([key, label]) => (
+                <MenuItem value="ALL">{t('filters.method.all')}</MenuItem>
+                {Object.entries(PAYMENT_METHODS).map(([key]) => (
                   <MenuItem key={key} value={key}>
-                    {label}
+                    {t(`filters.method.${key.toLowerCase()}`)}
                   </MenuItem>
                 ))}
               </Select>
@@ -101,7 +104,7 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
           {/* Start date */}
           <Grid item xs={6} md={2}>
             <DatePicker
-              label="Desde"
+              label={t('filters.dateFrom')}
               value={filters.startDate}
               onChange={(date) => onFilterChange({ startDate: date })}
               slotProps={{
@@ -115,7 +118,7 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
           {/* End date */}
           <Grid item xs={6} md={2}>
             <DatePicker
-              label="Hasta"
+              label={t('filters.dateTo')}
               value={filters.endDate}
               onChange={(date) => onFilterChange({ endDate: date })}
               slotProps={{
@@ -134,9 +137,9 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
                 variant="outlined"
                 onClick={onReset}
                 startIcon={<ClearIcon />}
-                title="Limpiar filtros"
+                title={t('filters.clearTooltip')}
               >
-                Limpiar
+                {t('filters.clear')}
               </Button>
             </Box>
           </Grid>

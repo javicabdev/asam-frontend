@@ -14,7 +14,8 @@
     "operationType": "Tipo de Operación",
     "member": "Socio",
     "all": "Todos",
-    "clear": "Limpiar filtros"
+    "apply": "Aplicar Filtros",
+    "clear": "Limpiar"
   },
   "table": {
     "title": "Transacciones",

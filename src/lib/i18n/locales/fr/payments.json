@@ -105,11 +105,44 @@
     "footer": "Merci pour votre paiement"
   },
   "stats": {
-    "total": "Total collecté",
+    "total": "Total",
     "pending": "Paiements en attente",
     "thisMonth": "Ce mois",
     "lastMonth": "Mois dernier",
     "average": "Moyenne mensuelle"
+  },
+  "actions": {
+    "refresh": "Actualiser",
+    "newPayment": "Nouveau Paiement",
+    "newPaymentComingSoon": "Prochainement : Enregistrement manuel des paiements"
+  },
+  "error": {
+    "load": "Erreur lors du chargement des paiements"
+  },
+  "info": {
+    "familyDetailsComingSoon": "La page de détails des familles sera disponible prochainement"
+  },
+  "filters": {
+    "searchPlaceholder": "Rechercher par membre ou nº membre",
+    "search": "Rechercher...",
+    "status": {
+      "label": "Statut",
+      "all": "Tous",
+      "pending": "En attente",
+      "paid": "Payé",
+      "cancelled": "Annulé"
+    },
+    "method": {
+      "label": "Méthode",
+      "all": "Tous",
+      "cash": "Espèces",
+      "transfer": "Virement",
+      "card": "Carte"
+    },
+    "dateFrom": "Depuis",
+    "dateTo": "Jusqu'à",
+    "clear": "Effacer",
+    "clearTooltip": "Effacer les filtres"
   },
   "table": {
     "memberNumber": "Nº Membre",

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Box, Typography, Button, Alert, Stack, useTheme, Snackbar } from '@mui/material'
 import { Add as AddIcon, Refresh as RefreshIcon } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '@/stores/authStore'
 
 import { PaymentFilters } from '@/features/payments/components/PaymentFilters'
@@ -13,6 +14,7 @@ import { useReceiptGenerator } from '@/features/payments/hooks/useReceiptGenerat
 import type { PaymentListItem } from '@/features/payments/types'
 
 export default function PaymentsPage() {
+  const { t } = useTranslation('payments')
   const theme = useTheme()
   const navigate = useNavigate()
   const { user } = useAuthStore()
@@ -77,11 +79,11 @@ export default function PaymentsPage() {
               fontWeight: 600,
             }}
           >
-            Gestión de Pagos
+            {t('title')}
           </Typography>
           <Stack direction="row" spacing={2} alignItems="center">
             <Typography variant="body2" color="text.secondary">
-              Total: {pageInfo.totalCount} pagos
+              {t('stats.total')}: {pageInfo.totalCount}
             </Typography>
           </Stack>
         </Box>
@@ -92,7 +94,7 @@ export default function PaymentsPage() {
             onClick={() => void refetch()}
             disabled={loading}
           >
-            Actualizar
+            {t('actions.refresh')}
           </Button>
           {isAdmin && (
             <Button
@@ -100,9 +102,9 @@ export default function PaymentsPage() {
               startIcon={<AddIcon />}
               onClick={handleNewPayment}
               disabled
-              title="Próximamente: Registro manual de pagos"
+              title={t('actions.newPaymentComingSoon')}
             >
-              Nuevo Pago
+              {t('actions.newPayment')}
             </Button>
           )}
         </Stack>
@@ -114,7 +116,7 @@ export default function PaymentsPage() {
       {/* Error Alert */}
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Error al cargar los pagos: {error.message}
+          {t('error.load')}: {error.message}
         </Alert>
       )}
 
@@ -153,7 +155,7 @@ export default function PaymentsPage() {
           severity="info"
           sx={{ width: '100%' }}
         >
-          La página de detalles de familias estará disponible próximamente
+          {t('info.familyDetailsComingSoon')}
         </Alert>
       </Snackbar>
     </Box>

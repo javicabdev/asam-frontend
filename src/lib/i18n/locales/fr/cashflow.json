@@ -8,13 +8,14 @@
   },
   "filters": {
     "title": "Filtres",
-    "dateFrom": "Du",
-    "dateTo": "Au",
+    "dateFrom": "Depuis",
+    "dateTo": "Jusqu'à",
     "category": "Catégorie",
-    "operationType": "Type d'Opération",
+    "operationType": "Type d'opération",
     "member": "Membre",
     "all": "Tous",
-    "clear": "Effacer les filtres"
+    "apply": "Appliquer les filtres",
+    "clear": "Effacer"
   },
   "table": {
     "title": "Transactions",

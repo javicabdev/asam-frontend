@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Box,
   TextField,
@@ -18,6 +19,8 @@ interface CashFlowFiltersProps {
 }
 
 export const CashFlowFilters = ({ filters, onChange }: CashFlowFiltersProps) => {
+  const { t } = useTranslation('cashflow')
+
   const [startDate, setStartDate] = useState<Date | null>(
     filters.startDate ? new Date(filters.startDate) : null
   )
@@ -52,7 +55,7 @@ export const CashFlowFilters = ({ filters, onChange }: CashFlowFiltersProps) => 
         {/* Rango de fechas */}
         <Grid item xs={12} md={3}>
           <DatePicker
-            label="Desde"
+            label={t('filters.dateFrom')}
             value={startDate}
             onChange={setStartDate}
             slotProps={{
@@ -63,7 +66,7 @@ export const CashFlowFilters = ({ filters, onChange }: CashFlowFiltersProps) => 
 
         <Grid item xs={12} md={3}>
           <DatePicker
-            label="Hasta"
+            label={t('filters.dateTo')}
             value={endDate}
             onChange={setEndDate}
             slotProps={{
@@ -78,14 +81,14 @@ export const CashFlowFilters = ({ filters, onChange }: CashFlowFiltersProps) => 
             select
             fullWidth
             size="small"
-            label="Tipo de Operación"
+            label={t('filters.operationType')}
             value={operationType}
             onChange={(e) => setOperationType(e.target.value as OperationType)}
           >
-            <MenuItem value="">Todos</MenuItem>
+            <MenuItem value="">{t('filters.all')}</MenuItem>
             {Object.entries(OPERATION_TYPES).map(([key, config]) => (
               <MenuItem key={key} value={key}>
-                {config.icon} {config.label}
+                {config.icon} {t(`operationTypes.${key}`)}
               </MenuItem>
             ))}
           </TextField>
@@ -96,7 +99,7 @@ export const CashFlowFilters = ({ filters, onChange }: CashFlowFiltersProps) => 
           <MemberAutocomplete
             value={selectedMember}
             onChange={setSelectedMember}
-            label="Socio"
+            label={t('filters.member')}
           />
         </Grid>
 
@@ -104,10 +107,10 @@ export const CashFlowFilters = ({ filters, onChange }: CashFlowFiltersProps) => 
         <Grid item xs={12}>
           <Box display="flex" gap={2}>
             <Button variant="contained" onClick={handleApplyFilters}>
-              Aplicar Filtros
+              {t('filters.apply')}
             </Button>
             <Button variant="outlined" onClick={handleClearFilters}>
-              Limpiar
+              {t('filters.clear')}
             </Button>
           </Box>
         </Grid>

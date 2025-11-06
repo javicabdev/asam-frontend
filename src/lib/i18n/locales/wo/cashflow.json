@@ -8,13 +8,14 @@
   },
   "filters": {
     "title": "Filtres yi",
-    "dateFrom": "Ci",
-    "dateTo": "Ba",
+    "dateFrom": "Dalay ci",
+    "dateTo": "Takk ci",
     "category": "Catégorie bi",
-    "operationType": "Nataal liggeey",
+    "operationType": "Xeet bu ñu jëfandikoo",
     "member": "Membre bi",
-    "all": "Yépp",
-    "clear": "Fey filtres yi"
+    "all": "Lépp",
+    "apply": "Défar filtres yi",
+    "clear": "Soppi"
   },
   "table": {
     "title": "Transactions yi",

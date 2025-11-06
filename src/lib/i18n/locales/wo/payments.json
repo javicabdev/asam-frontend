@@ -105,11 +105,44 @@
     "footer": "Jërëjëf ci sa fay"
   },
   "stats": {
-    "total": "Bépp bu ñu dajale",
+    "total": "Bépp",
     "pending": "Fay yu xaar",
     "thisMonth": "Weer wii",
     "lastMonth": "Weer wi weesu",
     "average": "Diggante weer"
+  },
+  "actions": {
+    "refresh": "Yeesal",
+    "newPayment": "Fay Bu Bees",
+    "newPaymentComingSoon": "Dinaa ñëw : Bindu fay ci loxo"
+  },
+  "error": {
+    "load": "Njuumte ci yab fay yi"
+  },
+  "info": {
+    "familyDetailsComingSoon": "Xëtu faramfacce njaboot dinaa ñëw"
+  },
+  "filters": {
+    "searchPlaceholder": "Seet ci mbooloo walla nimero",
+    "search": "Seet...",
+    "status": {
+      "label": "Tekki",
+      "all": "Bépp",
+      "pending": "Mungi xaar",
+      "paid": "Fay na",
+      "cancelled": "Neenal nañu ko"
+    },
+    "method": {
+      "label": "Anam",
+      "all": "Bépp",
+      "cash": "Xaalis",
+      "transfer": "Yóbbale",
+      "card": "Kaar"
+    },
+    "dateFrom": "Ci",
+    "dateTo": "Ba",
+    "clear": "Soppee",
+    "clearTooltip": "Soppee filtar yi"
   },
   "table": {
     "memberNumber": "Nimero mbooloo",

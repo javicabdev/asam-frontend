@@ -1,0 +1,96 @@
+{
+  "delinquent": {
+    "title": "Rapport yu njëkk xaalis",
+    "subtitle": "Limu mbokk yi ak mbootaay yi ànd na xaalis bu tùn",
+    "generateReport": "Sos Rapport bi",
+    "exportPDF": "Jox ci PDF",
+    "exportCSV": "Jox ci CSV",
+    "generatedAt": "Sosoon",
+    "noData": "Amul njëkk xaalis ci wakhtoo wii",
+    "noDataDescription": "Yépp fay xaalis yi. Liggéey bu baax!",
+
+    "filters": {
+      "title": "Filtre yi",
+      "cutoffDate": "Bësu waxtu",
+      "minAmount": "Xaalis bu ndaw",
+      "debtorType": "Xeetu njëkk xaalis",
+      "sortBy": "Reer ci",
+      "reset": "Delloo filtre yi",
+      "all": "Yépp",
+      "individual": "Mbokk yi ñeneen",
+      "family": "Mbootaay"
+    },
+
+    "sortOptions": {
+      "amountDesc": "Xaalis bu bari bi ñàkk",
+      "amountAsc": "Xaalis bu ndaw bi ñàkk",
+      "daysDesc": "Fan bu bari ci wajur",
+      "daysAsc": "Fan bu ndaw ci wajur",
+      "nameAsc": "Tur (A-Z)"
+    },
+
+    "table": {
+      "debtor": "Njëkk xaalis",
+      "type": "Xeet",
+      "memberNumber": "Limu mbokk",
+      "contact": "Jokkale",
+      "totalDebt": "Yépp ci xaalis",
+      "oldestDebt": "Wajur",
+      "daysOverdue": "{{count}} fan",
+      "daysOverdue_one": "{{count}} fan",
+      "lastPayment": "Fay xaalis bu mujj",
+      "actions": "Jëf",
+      "viewDetails": "Xool li ci ànd",
+      "sendReminder": "Yónnee wakh",
+      "noPendingPayments": "Amul fay xaalis bu tùn"
+    },
+
+    "debtorType": {
+      "individual": "Kenn",
+      "family": "Mbootaay"
+    },
+
+    "summary": {
+      "title": "Résumé",
+      "totalDebtors": "Yépp njëkk xaalis",
+      "individualDebtors": "Mbokk yi ñeneen",
+      "familyDebtors": "Mbootaay yi",
+      "totalDebt": "Yépp ci xaalis",
+      "avgDaysOverdue": "Njëkkaleen fan yu wajur",
+      "avgDebtPerDebtor": "Xaalis wu njëkkaleen"
+    },
+
+    "details": {
+      "title": "Li ci ànd ci xaalis",
+      "debtorInfo": "Xëtu njëkk xaalis bi",
+      "memberNumber": "Limu mbokk",
+      "name": "Tur",
+      "email": "Email",
+      "phone": "Telefon",
+      "familyMembers": "Mbootaay bi",
+      "pendingPayments": "Fay xaalis yi tùn",
+      "paymentDate": "Bësu fay xaalis",
+      "amount": "Xaalis",
+      "daysOverdue": "Fan yu wajur",
+      "notes": "Bindu",
+      "lastPaymentInfo": "Li ci ànd ci fay xaalis bu mujj",
+      "lastPaymentDate": "Bës",
+      "lastPaymentAmount": "Xaalis",
+      "noLastPayment": "Amul fay xaalis bu jiitu",
+      "close": "Téy"
+    },
+
+    "export": {
+      "pdfFilename": "rapport-njekk-xaalis-{{date}}.pdf",
+      "csvFilename": "njekk-xaalis-{{date}}.csv",
+      "success": "Rapport bi joxe na",
+      "error": "Njumte ci joxe rapport bi"
+    },
+
+    "errors": {
+      "loadFailed": "Njumte ci yeb rapport bi",
+      "unauthorized": "Amul seen ay baraama ngir xool rapport bii",
+      "retry": "Jéema"
+    }
+  }
+}

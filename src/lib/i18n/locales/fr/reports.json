@@ -1,0 +1,96 @@
+{
+  "delinquent": {
+    "title": "Rapport des Débiteurs",
+    "subtitle": "Liste des membres et familles avec paiements en retard",
+    "generateReport": "Générer le Rapport",
+    "exportPDF": "Exporter PDF",
+    "exportCSV": "Exporter CSV",
+    "generatedAt": "Généré le",
+    "noData": "Aucun débiteur actuellement",
+    "noDataDescription": "Tous les paiements sont à jour. Excellent travail!",
+
+    "filters": {
+      "title": "Filtres",
+      "cutoffDate": "Date de référence",
+      "minAmount": "Montant minimum",
+      "debtorType": "Type de débiteur",
+      "sortBy": "Trier par",
+      "reset": "Réinitialiser les filtres",
+      "all": "Tous",
+      "individual": "Membres individuels",
+      "family": "Familles"
+    },
+
+    "sortOptions": {
+      "amountDesc": "Plus grande dette d'abord",
+      "amountAsc": "Plus petite dette d'abord",
+      "daysDesc": "Plus de jours de retard",
+      "daysAsc": "Moins de jours de retard",
+      "nameAsc": "Nom (A-Z)"
+    },
+
+    "table": {
+      "debtor": "Débiteur",
+      "type": "Type",
+      "memberNumber": "Nº Membre",
+      "contact": "Contact",
+      "totalDebt": "Dette Totale",
+      "oldestDebt": "Retard",
+      "daysOverdue": "{{count}} jours",
+      "daysOverdue_one": "{{count}} jour",
+      "lastPayment": "Dernier Paiement",
+      "actions": "Actions",
+      "viewDetails": "Voir Détails",
+      "sendReminder": "Envoyer Rappel",
+      "noPendingPayments": "Aucun paiement en attente"
+    },
+
+    "debtorType": {
+      "individual": "Individuel",
+      "family": "Famille"
+    },
+
+    "summary": {
+      "title": "Résumé",
+      "totalDebtors": "Total Débiteurs",
+      "individualDebtors": "Membres Individuels",
+      "familyDebtors": "Familles",
+      "totalDebt": "Dette Totale",
+      "avgDaysOverdue": "Moyenne Jours de Retard",
+      "avgDebtPerDebtor": "Dette Moyenne"
+    },
+
+    "details": {
+      "title": "Détails de la Dette",
+      "debtorInfo": "Information du Débiteur",
+      "memberNumber": "Numéro de Membre",
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "familyMembers": "Membres de la Famille",
+      "pendingPayments": "Paiements en Attente",
+      "paymentDate": "Date du Paiement",
+      "amount": "Montant",
+      "daysOverdue": "Jours de Retard",
+      "notes": "Notes",
+      "lastPaymentInfo": "Information du Dernier Paiement",
+      "lastPaymentDate": "Date",
+      "lastPaymentAmount": "Montant",
+      "noLastPayment": "Aucun paiement antérieur enregistré",
+      "close": "Fermer"
+    },
+
+    "export": {
+      "pdfFilename": "rapport-debiteurs-{{date}}.pdf",
+      "csvFilename": "debiteurs-{{date}}.csv",
+      "success": "Rapport exporté avec succès",
+      "error": "Erreur lors de l'exportation du rapport"
+    },
+
+    "errors": {
+      "loadFailed": "Erreur lors du chargement du rapport des débiteurs",
+      "unauthorized": "Vous n'avez pas les permissions pour voir ce rapport",
+      "retry": "Réessayer"
+    }
+  }
+}

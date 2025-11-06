@@ -1,0 +1,96 @@
+{
+  "delinquent": {
+    "title": "Informe de Morosos",
+    "subtitle": "Lista de socios y familias con pagos pendientes",
+    "generateReport": "Generar Informe",
+    "exportPDF": "Exportar PDF",
+    "exportCSV": "Exportar CSV",
+    "generatedAt": "Generado el",
+    "noData": "No hay socios morosos en este momento",
+    "noDataDescription": "Todos los pagos están al día. ¡Excelente trabajo!",
+
+    "filters": {
+      "title": "Filtros",
+      "cutoffDate": "Fecha de corte",
+      "minAmount": "Importe mínimo",
+      "debtorType": "Tipo de deudor",
+      "sortBy": "Ordenar por",
+      "reset": "Restablecer filtros",
+      "all": "Todos",
+      "individual": "Socios individuales",
+      "family": "Familias"
+    },
+
+    "sortOptions": {
+      "amountDesc": "Mayor deuda primero",
+      "amountAsc": "Menor deuda primero",
+      "daysDesc": "Más días de atraso",
+      "daysAsc": "Menos días de atraso",
+      "nameAsc": "Nombre (A-Z)"
+    },
+
+    "table": {
+      "debtor": "Deudor",
+      "type": "Tipo",
+      "memberNumber": "Nº Socio",
+      "contact": "Contacto",
+      "totalDebt": "Deuda Total",
+      "oldestDebt": "Atraso",
+      "daysOverdue": "{{count}} días",
+      "daysOverdue_one": "{{count}} día",
+      "lastPayment": "Último Pago",
+      "actions": "Acciones",
+      "viewDetails": "Ver Detalles",
+      "sendReminder": "Enviar Recordatorio",
+      "noPendingPayments": "Sin pagos pendientes"
+    },
+
+    "debtorType": {
+      "individual": "Individual",
+      "family": "Familia"
+    },
+
+    "summary": {
+      "title": "Resumen",
+      "totalDebtors": "Total Morosos",
+      "individualDebtors": "Socios Individuales",
+      "familyDebtors": "Familias",
+      "totalDebt": "Deuda Total",
+      "avgDaysOverdue": "Promedio Días Atraso",
+      "avgDebtPerDebtor": "Deuda Promedio"
+    },
+
+    "details": {
+      "title": "Detalles de Deuda",
+      "debtorInfo": "Información del Deudor",
+      "memberNumber": "Número de Socio",
+      "name": "Nombre",
+      "email": "Email",
+      "phone": "Teléfono",
+      "familyMembers": "Miembros de Familia",
+      "pendingPayments": "Pagos Pendientes",
+      "paymentDate": "Fecha del Pago",
+      "amount": "Importe",
+      "daysOverdue": "Días de Atraso",
+      "notes": "Notas",
+      "lastPaymentInfo": "Información del Último Pago",
+      "lastPaymentDate": "Fecha",
+      "lastPaymentAmount": "Importe",
+      "noLastPayment": "Sin pagos previos registrados",
+      "close": "Cerrar"
+    },
+
+    "export": {
+      "pdfFilename": "informe-morosos-{{date}}.pdf",
+      "csvFilename": "morosos-{{date}}.csv",
+      "success": "Informe exportado correctamente",
+      "error": "Error al exportar el informe"
+    },
+
+    "errors": {
+      "loadFailed": "Error al cargar el informe de morosos",
+      "unauthorized": "No tienes permisos para ver este informe",
+      "retry": "Reintentar"
+    }
+  }
+}

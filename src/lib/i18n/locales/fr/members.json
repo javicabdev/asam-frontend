@@ -206,5 +206,38 @@
     "birthDate": "Date de Naissance",
     "dni": "DNI/NIE",
     "email": "Adresse Email"
+  },
+  "familyMemberForm": {
+    "addTitle": "Ajouter un Membre",
+    "editTitle": "Modifier le Membre",
+    "fields": {
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "birthDate": "Date de Naissance",
+      "dni": "DNI/NIE",
+      "dniPlaceholder": "Entrez le DNI ou NIE",
+      "email": "Adresse Email",
+      "emailPlaceholder": "Format: utilisateur@domaine.com",
+      "relationship": "Relation"
+    },
+    "relationship": {
+      "child": "Fils/Fille",
+      "father": "Père",
+      "mother": "Mère",
+      "sibling": "Frère/Sœur",
+      "grandparent": "Grand-père/Grand-mère",
+      "grandchild": "Petit-fils/Petite-fille",
+      "uncle_aunt": "Oncle/Tante",
+      "nephew_niece": "Neveu/Nièce",
+      "cousin": "Cousin/Cousine",
+      "other": "Autre"
+    },
+    "validation": {
+      "invalidEmail": "Email invalide. Format attendu: utilisateur@domaine.com",
+      "validating": "Validation en cours..."
+    },
+    "cancel": "Annuler",
+    "add": "Ajouter",
+    "update": "Mettre à jour"
   }
 }

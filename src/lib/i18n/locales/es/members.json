@@ -206,5 +206,38 @@
     "birthDate": "Fecha de Nacimiento",
     "dni": "DNI/NIE",
     "email": "Correo Electrónico"
+  },
+  "familyMemberForm": {
+    "addTitle": "Añadir Familiar",
+    "editTitle": "Editar Familiar",
+    "fields": {
+      "firstName": "Nombre",
+      "lastName": "Apellidos",
+      "birthDate": "Fecha de Nacimiento",
+      "dni": "DNI/NIE",
+      "dniPlaceholder": "Introduzca el DNI o NIE",
+      "email": "Correo Electrónico",
+      "emailPlaceholder": "Formato: usuario@dominio.com",
+      "relationship": "Parentesco"
+    },
+    "relationship": {
+      "child": "Hijo/a",
+      "father": "Padre",
+      "mother": "Madre",
+      "sibling": "Hermano/a",
+      "grandparent": "Abuelo/a",
+      "grandchild": "Nieto/a",
+      "uncle_aunt": "Tío/a",
+      "nephew_niece": "Sobrino/a",
+      "cousin": "Primo/a",
+      "other": "Otro"
+    },
+    "validation": {
+      "invalidEmail": "Email inválido. Formato esperado: usuario@dominio.com",
+      "validating": "Validando..."
+    },
+    "cancel": "Cancelar",
+    "add": "Añadir",
+    "update": "Actualizar"
   }
 }

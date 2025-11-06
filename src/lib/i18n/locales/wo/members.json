@@ -206,5 +206,38 @@
     "birthDate": "Bésu juddu",
     "dni": "DNI/NIE",
     "email": "Adres email"
+  },
+  "familyMemberForm": {
+    "addTitle": "Yokk Mbooloo",
+    "editTitle": "Soppi Mbooloo",
+    "fields": {
+      "firstName": "Tur",
+      "lastName": "Sant",
+      "birthDate": "Bésu juddu",
+      "dni": "DNI/NIE",
+      "dniPlaceholder": "Dugal DNI walla NIE",
+      "email": "Adres email",
+      "emailPlaceholder": "Jëm: jëfandikukat@domain.com",
+      "relationship": "Mbokk"
+    },
+    "relationship": {
+      "child": "Doom",
+      "father": "Baay",
+      "mother": "Yaay",
+      "sibling": "Rakk/Mag",
+      "grandparent": "Maam/Naam",
+      "grandchild": "Doom-doom",
+      "uncle_aunt": "Bajjan/Tante",
+      "nephew_niece": "Doom-rakk",
+      "cousin": "Nijaay",
+      "other": "Beneen"
+    },
+    "validation": {
+      "invalidEmail": "Email baaxul. Jëm bu war: jëfandikukat@domain.com",
+      "validating": "Yam tëkki..."
+    },
+    "cancel": "Neenal",
+    "add": "Yokk",
+    "update": "Yeesal"
   }
 }

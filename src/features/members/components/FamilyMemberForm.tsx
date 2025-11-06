@@ -13,6 +13,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
+import { useTranslation } from 'react-i18next'
 import { FamilyMember } from '../types'
 import { useDocumentValidation } from '../hooks'
 import { isValidEmail } from '@/utils/validation'
@@ -24,32 +25,34 @@ interface FamilyMemberFormProps {
   onSave: (member: FamilyMember) => void
 }
 
-const PARENTESCO_OPTIONS = [
-  'Hijo/a',
-  'Padre',
-  'Madre',
-  'Hermano/a',
-  'Abuelo/a',
-  'Nieto/a',
-  'Tío/a',
-  'Sobrino/a',
-  'Primo/a',
-  'Otro',
-]
-
 export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
   open,
   member,
   onClose,
   onSave,
 }) => {
+  const { t } = useTranslation('members')
+
+  const PARENTESCO_OPTIONS = [
+    { value: 'child', label: t('familyMemberForm.relationship.child') },
+    { value: 'father', label: t('familyMemberForm.relationship.father') },
+    { value: 'mother', label: t('familyMemberForm.relationship.mother') },
+    { value: 'sibling', label: t('familyMemberForm.relationship.sibling') },
+    { value: 'grandparent', label: t('familyMemberForm.relationship.grandparent') },
+    { value: 'grandchild', label: t('familyMemberForm.relationship.grandchild') },
+    { value: 'uncle_aunt', label: t('familyMemberForm.relationship.uncle_aunt') },
+    { value: 'nephew_niece', label: t('familyMemberForm.relationship.nephew_niece') },
+    { value: 'cousin', label: t('familyMemberForm.relationship.cousin') },
+    { value: 'other', label: t('familyMemberForm.relationship.other') },
+  ]
+
   const [formData, setFormData] = React.useState<FamilyMember>({
     nombre: '',
     apellidos: '',
     fecha_nacimiento: '',
     dni_nie: '',
     correo_electronico: '',
-    parentesco: 'Hijo/a',
+    parentesco: 'child',
   })
 
   const [fechaNacimiento, setFechaNacimiento] = React.useState<Date | null>(null)
@@ -75,7 +78,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
       }
       // Validar email si existe
       if (member.correo_electronico && !isValidEmail(member.correo_electronico)) {
-        setEmailError('Email inválido. Formato esperado: usuario@dominio.com')
+        setEmailError(t('familyMemberForm.validation.invalidEmail'))
       } else {
         setEmailError('')
       }
@@ -86,7 +89,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
         fecha_nacimiento: '',
         dni_nie: '',
         correo_electronico: '',
-        parentesco: 'Hijo/a',
+        parentesco: 'child',
       })
       setFechaNacimiento(null)
       clearValidation()
@@ -148,7 +151,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
 
     // Validar email si no está vacío
     if (value && !isValidEmail(value)) {
-      setEmailError('Email inválido. Formato esperado: usuario@dominio.com')
+      setEmailError(t('familyMemberForm.validation.invalidEmail'))
     } else {
       setEmailError('')
     }
@@ -190,13 +193,15 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
       <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-        <DialogTitle>{member ? 'Editar Familiar' : 'Añadir Familiar'}</DialogTitle>
+        <DialogTitle>
+          {member ? t('familyMemberForm.editTitle') : t('familyMemberForm.addTitle')}
+        </DialogTitle>
         <DialogContent>
           <Grid container spacing={2} sx={{ mt: 1 }}>
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="Nombre"
+                label={t('familyMemberForm.fields.firstName')}
                 value={formData.nombre}
                 onChange={handleChange('nombre')}
                 required
@@ -205,7 +210,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="Apellidos"
+                label={t('familyMemberForm.fields.lastName')}
                 value={formData.apellidos}
                 onChange={handleChange('apellidos')}
                 required
@@ -213,7 +218,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
             </Grid>
             <Grid item xs={12} sm={6}>
               <DatePicker
-                label="Fecha de Nacimiento"
+                label={t('familyMemberForm.fields.birthDate')}
                 value={fechaNacimiento}
                 onChange={handleDateChange}
                 slotProps={{
@@ -227,7 +232,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="DNI/NIE"
+                label={t('familyMemberForm.fields.dni')}
                 value={formData.dni_nie || ''}
                 onChange={handleDniChange}
                 onBlur={handleDniBlur}
@@ -240,34 +245,34 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
                   formData.dni_nie !== '' && documentValidation && !documentValidation.isValid
                     ? documentValidation.errorMessage
                     : isValidatingDocument
-                      ? 'Validando...'
-                      : 'Introduzca el DNI o NIE'
+                      ? t('familyMemberForm.validation.validating')
+                      : t('familyMemberForm.fields.dniPlaceholder')
                 }
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
-                label="Correo Electrónico"
+                label={t('familyMemberForm.fields.email')}
                 type="email"
                 value={formData.correo_electronico || ''}
                 onChange={handleEmailChange}
                 error={!!emailError}
-                helperText={emailError || 'Formato: usuario@dominio.com'}
+                helperText={emailError || t('familyMemberForm.fields.emailPlaceholder')}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 fullWidth
                 select
-                label="Parentesco"
+                label={t('familyMemberForm.fields.relationship')}
                 value={formData.parentesco || ''}
                 onChange={handleChange('parentesco')}
                 required
               >
                 {PARENTESCO_OPTIONS.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
                   </MenuItem>
                 ))}
               </TextField>
@@ -275,9 +280,9 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>Cancelar</Button>
+          <Button onClick={onClose}>{t('familyMemberForm.cancel')}</Button>
           <Button onClick={handleSubmit} variant="contained" disabled={isSubmitDisabled}>
-            {member ? 'Actualizar' : 'Añadir'}
+            {member ? t('familyMemberForm.update') : t('familyMemberForm.add')}
           </Button>
         </DialogActions>
       </Dialog>

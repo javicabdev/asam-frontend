@@ -165,5 +165,15 @@
       "TRANSFER": "Transferencia",
       "CARD": "Tarjeta"
     }
+  },
+  "summary": {
+    "title": "Pago Registrado Exitosamente",
+    "confirmedMessage": "El pago ha sido registrado y confirmado",
+    "pendingMessage": "El pago ha sido registrado y está pendiente de confirmación",
+    "amount": "Monto:",
+    "paymentMethod": "Método de Pago:",
+    "status": "Estado:",
+    "date": "Fecha:",
+    "notes": "Notas:"
   }
 }

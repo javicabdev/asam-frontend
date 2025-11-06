@@ -165,5 +165,15 @@
       "TRANSFER": "Virement",
       "CARD": "Carte"
     }
+  },
+  "summary": {
+    "title": "Paiement Enregistré avec Succès",
+    "confirmedMessage": "Le paiement a été enregistré et confirmé",
+    "pendingMessage": "Le paiement a été enregistré et est en attente de confirmation",
+    "amount": "Montant :",
+    "paymentMethod": "Méthode de Paiement :",
+    "status": "Statut :",
+    "date": "Date :",
+    "notes": "Notes :"
   }
 }

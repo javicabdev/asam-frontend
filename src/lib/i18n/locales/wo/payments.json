@@ -232,5 +232,15 @@
     "receiptSuccess": "Kàddu bi def na bu baax",
     "receiptError": "Njuumte ci def kàddu bi. Jéemaalee.",
     "loadError": "Njuumte ci yab jaar-jaar yu fay:"
+  },
+  "status": {
+    "pending": "Mungi xaar",
+    "paid": "Fay na",
+    "cancelled": "Neenal nañu ko"
+  },
+  "methods": {
+    "cash": "Xaalis",
+    "transfer": "Yóbbale Bank",
+    "card": "Kaar"
   }
 }

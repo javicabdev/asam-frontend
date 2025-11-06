@@ -232,5 +232,15 @@
     "receiptSuccess": "Recibo generado exitosamente",
     "receiptError": "Error al generar el recibo. Por favor, inténtelo de nuevo.",
     "loadError": "Error al cargar el historial de pagos:"
+  },
+  "status": {
+    "pending": "Pendiente",
+    "paid": "Pagado",
+    "cancelled": "Cancelado"
+  },
+  "methods": {
+    "cash": "Efectivo",
+    "transfer": "Transferencia Bancaria",
+    "card": "Tarjeta"
   }
 }

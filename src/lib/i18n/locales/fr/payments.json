@@ -232,5 +232,15 @@
     "receiptSuccess": "Reçu généré avec succès",
     "receiptError": "Erreur lors de la génération du reçu. Veuillez réessayer.",
     "loadError": "Erreur lors du chargement de l'historique des paiements :"
+  },
+  "status": {
+    "pending": "En attente",
+    "paid": "Payé",
+    "cancelled": "Annulé"
+  },
+  "methods": {
+    "cash": "Espèces",
+    "transfer": "Virement Bancaire",
+    "card": "Carte"
   }
 }

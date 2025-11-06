@@ -1,5 +1,6 @@
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
+import i18n from '@/lib/i18n'
 
 /**
  * Format a payment amount with currency symbol
@@ -39,16 +40,18 @@ export const getPaymentStatusColor = (
 }
 
 /**
- * Get payment status label in Spanish
+ * Get payment status label (internationalized)
  */
 export const getPaymentStatusLabel = (status: string): string => {
-  switch (status) {
+  const statusUpper = status.toUpperCase()
+
+  switch (statusUpper) {
     case 'PAID':
-      return 'Pagado'
+      return i18n.t('payments:status.paid')
     case 'PENDING':
-      return 'Pendiente'
+      return i18n.t('payments:status.pending')
     case 'CANCELLED':
-      return 'Cancelado'
+      return i18n.t('payments:status.cancelled')
     default:
       return status
   }
@@ -94,16 +97,23 @@ export function formatReceiptDate(dateString: string | null): string {
 }
 
 /**
- * Translates payment method code to Spanish (full name)
+ * Translates payment method code (internationalized)
  */
 export function translatePaymentMethod(method: string | null): string {
   if (!method) return ''
-  const translations: Record<string, string> = {
-    CASH: 'Efectivo',
-    TRANSFER: 'Transferencia Bancaria',
-    CARD: 'Tarjeta',
+
+  const methodUpper = method.toUpperCase()
+
+  switch (methodUpper) {
+    case 'CASH':
+      return i18n.t('payments:methods.cash')
+    case 'TRANSFER':
+      return i18n.t('payments:methods.transfer')
+    case 'CARD':
+      return i18n.t('payments:methods.card')
+    default:
+      return method
   }
-  return translations[method] || method
 }
 
 /**

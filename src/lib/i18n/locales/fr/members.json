@@ -274,5 +274,35 @@
       "mustLogin": "Vous devez vous connecter pour accéder à cette page",
       "noPermissionMessage": "Vous n'avez pas les permissions d'administrateur pour créer des membres. Contactez un administrateur si vous avez besoin de créer un nouveau membre."
     }
+  },
+  "editMemberPage": {
+    "title": "Modifier le Membre",
+    "breadcrumbs": {
+      "dashboard": "Tableau de bord",
+      "members": "Membres",
+      "edit": "Modifier"
+    },
+    "familySection": {
+      "title": "Membres de la Famille",
+      "readOnlyMessage": "L'affichage des membres de la famille est en lecture seule. Pour modifier les membres de la famille, utilisez le formulaire de gestion des familles."
+    },
+    "debug": {
+      "authenticated": "Authentifié",
+      "notAuthenticated": "Non authentifié",
+      "user": "Utilisateur",
+      "role": "Rôle"
+    },
+    "errors": {
+      "invalidId": "ID de membre invalide",
+      "updateError": "Erreur lors de la mise à jour du membre",
+      "notAuthenticated": "Vous devez vous connecter pour modifier un membre",
+      "noAdminPermission": "Vous n'avez pas les permissions d'administrateur pour modifier des membres",
+      "loadError": "Impossible de charger les informations du membre. Veuillez vérifier que l'ID est correct.",
+      "mustLogin": "Vous devez vous connecter pour accéder à cette page",
+      "noPermissionMessage": "Vous n'avez pas les permissions d'administrateur pour modifier des membres. Contactez un administrateur."
+    },
+    "success": {
+      "updateMessage": "Membre mis à jour avec succès"
+    }
   }
 }

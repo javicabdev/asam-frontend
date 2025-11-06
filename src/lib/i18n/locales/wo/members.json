@@ -274,5 +274,35 @@
       "mustLogin": "War nga dugg ngir jëfandikoo bët bii",
       "noPermissionMessage": "Amul kilifa bu kilifa ngir sos mbooloo. Jokkoo ak kilifa bu gën su fekkee daal la bëgg sos mbooloo bu bees."
     }
+  },
+  "editMemberPage": {
+    "title": "Soppi Mbooloo",
+    "breadcrumbs": {
+      "dashboard": "Tablo bu gën",
+      "members": "Mbooloo",
+      "edit": "Soppi"
+    },
+    "familySection": {
+      "title": "Mbooloo yu Njaboot",
+      "readOnlyMessage": "Wonewu mbooloo yu njaboot dafa am ci xool rekk. Ngir soppi mbooloo yu njaboot, jëfandikoo fórom bu gésti njaboot yi."
+    },
+    "debug": {
+      "authenticated": "Tëkki na",
+      "notAuthenticated": "Tëkkil",
+      "user": "Jëfandikukat",
+      "role": "Jëfu"
+    },
+    "errors": {
+      "invalidId": "ID bu mbooloo baaxul",
+      "updateError": "Njuumte ci yeesal mbooloo bi",
+      "notAuthenticated": "War nga dugg ngir soppi mbooloo",
+      "noAdminPermission": "Amul kilifa bu kilifa ngir soppi mbooloo",
+      "loadError": "Mënul yab xibaar mbooloo bi. Tëkki ndax ID bi baax na.",
+      "mustLogin": "War nga dugg ngir jëfandikoo bët bii",
+      "noPermissionMessage": "Amul kilifa bu kilifa ngir soppi mbooloo. Jokkoo ak kilifa bu gën."
+    },
+    "success": {
+      "updateMessage": "Mbooloo bi yeesal na bu baax"
+    }
   }
 }

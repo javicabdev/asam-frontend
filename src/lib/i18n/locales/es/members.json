@@ -274,5 +274,35 @@
       "mustLogin": "Debes iniciar sesión para acceder a esta página",
       "noPermissionMessage": "No tienes permisos de administrador para crear socios. Contacta con un administrador si necesitas crear un nuevo socio."
     }
+  },
+  "editMemberPage": {
+    "title": "Editar Socio",
+    "breadcrumbs": {
+      "dashboard": "Dashboard",
+      "members": "Socios",
+      "edit": "Editar"
+    },
+    "familySection": {
+      "title": "Miembros de la Familia",
+      "readOnlyMessage": "La visualización de los miembros de la familia es solo de lectura. Para editar familiares, utilice el formulario de gestión de familias."
+    },
+    "debug": {
+      "authenticated": "Autenticado",
+      "notAuthenticated": "No autenticado",
+      "user": "Usuario",
+      "role": "Rol"
+    },
+    "errors": {
+      "invalidId": "ID de socio no válido",
+      "updateError": "Error al actualizar el socio",
+      "notAuthenticated": "Debes iniciar sesión para editar un socio",
+      "noAdminPermission": "No tienes permisos de administrador para editar socios",
+      "loadError": "No se pudo cargar la información del socio. Por favor, verifica que el ID sea correcto.",
+      "mustLogin": "Debes iniciar sesión para acceder a esta página",
+      "noPermissionMessage": "No tienes permisos de administrador para editar socios. Contacta con un administrador."
+    },
+    "success": {
+      "updateMessage": "Socio actualizado correctamente"
+    }
   }
 }

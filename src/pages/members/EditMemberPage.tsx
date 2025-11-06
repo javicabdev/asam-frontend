@@ -14,6 +14,7 @@ import {
   Chip,
 } from '@mui/material'
 import { NavigateNext } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '@/stores/authStore'
 
 import { MemberForm } from '@/features/members/components/MemberForm'
@@ -46,6 +47,7 @@ interface MemberFormSubmitData {
 }
 
 export const EditMemberPage: React.FC = () => {
+  const { t } = useTranslation('members')
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [error, setError] = React.useState<string | null>(null)
@@ -112,7 +114,7 @@ export const EditMemberPage: React.FC = () => {
 
   const handleSubmit = async (data: MemberFormSubmitData) => {
     if (!id) {
-      setError('ID de socio no válido')
+      setError(t('editMemberPage.errors.invalidId'))
       return
     }
 
@@ -159,8 +161,8 @@ export const EditMemberPage: React.FC = () => {
         
         const extractedFieldErrors = extractFieldErrors(graphQLError)
         setFieldErrors(extractedFieldErrors)
-        
-        const errorMessage = graphQLError.message || 'Error al actualizar el socio'
+
+        const errorMessage = graphQLError.message || t('editMemberPage.errors.updateError')
         if (graphQLError.extensions?.fields) {
           const fields = graphQLError.extensions.fields as Record<string, string>
           const fieldErrorsText = Object.entries(fields)
@@ -185,7 +187,7 @@ export const EditMemberPage: React.FC = () => {
 
     } catch (err) {
       console.error('Error updating member:', err)
-      const errorMessage = err instanceof Error ? err.message : 'Error al actualizar el socio'
+      const errorMessage = err instanceof Error ? err.message : t('editMemberPage.errors.updateError')
       setError(errorMessage)
     } finally {
       setLoading(false)
@@ -195,16 +197,16 @@ export const EditMemberPage: React.FC = () => {
   // Check permissions
   React.useEffect(() => {
     if (!isAuthenticated) {
-      setError('Debes iniciar sesión para editar un socio')
+      setError(t('editMemberPage.errors.notAuthenticated'))
     } else if (user?.role !== 'admin') {
-      setError('No tienes permisos de administrador para editar socios')
+      setError(t('editMemberPage.errors.noAdminPermission'))
     }
-  }, [isAuthenticated, user])
+  }, [isAuthenticated, user, t])
 
   if (!id) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Alert severity="error">ID de socio no válido</Alert>
+        <Alert severity="error">{t('editMemberPage.errors.invalidId')}</Alert>
       </Container>
     )
   }
@@ -223,7 +225,7 @@ export const EditMemberPage: React.FC = () => {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Alert severity="error">
-          No se pudo cargar la información del socio. Por favor, verifica que el ID sea correcto.
+          {t('editMemberPage.errors.loadError')}
         </Alert>
       </Container>
     )
@@ -242,7 +244,7 @@ export const EditMemberPage: React.FC = () => {
               navigate('/dashboard')
             }}
           >
-            Dashboard
+            {t('editMemberPage.breadcrumbs.dashboard')}
           </Link>
           <Link
             underline="hover"
@@ -253,7 +255,7 @@ export const EditMemberPage: React.FC = () => {
               navigate('/members')
             }}
           >
-            Socios
+            {t('editMemberPage.breadcrumbs.members')}
           </Link>
           <Link
             underline="hover"
@@ -266,24 +268,24 @@ export const EditMemberPage: React.FC = () => {
           >
             {member.nombre} {member.apellidos}
           </Link>
-          <Typography color="text.primary">Editar</Typography>
+          <Typography color="text.primary">{t('editMemberPage.breadcrumbs.edit')}</Typography>
         </Breadcrumbs>
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
         <Typography variant="h4" component="h1">
-          Editar Socio
+          {t('editMemberPage.title')}
         </Typography>
         {import.meta.env.DEV && (
           <Box sx={{ display: 'flex', gap: 1 }}>
             <Chip
-              label={isAuthenticated ? 'Autenticado' : 'No autenticado'}
+              label={isAuthenticated ? t('editMemberPage.debug.authenticated') : t('editMemberPage.debug.notAuthenticated')}
               color={isAuthenticated ? 'success' : 'error'}
               size="small"
             />
-            <Chip label={`Usuario: ${user?.username || 'N/A'}`} color="info" size="small" />
+            <Chip label={`${t('editMemberPage.debug.user')}: ${user?.username || 'N/A'}`} color="info" size="small" />
             <Chip
-              label={`Rol: ${user?.role || 'N/A'}`}
+              label={`${t('editMemberPage.debug.role')}: ${user?.role || 'N/A'}`}
               color={user?.role === 'admin' ? 'success' : 'warning'}
               size="small"
             />
@@ -306,11 +308,10 @@ export const EditMemberPage: React.FC = () => {
           {member.tipo_membresia === MembershipType.FAMILY && (
             <Box sx={{ mt: 3 }}>
               <Typography variant="h6" gutterBottom color="primary">
-                Miembros de la Familia
+                {t('editMemberPage.familySection.title')}
               </Typography>
               <Alert severity="info" sx={{ mb: 2 }}>
-                La visualización de los miembros de la familia es solo de lectura. Para editar
-                familiares, utilice el formulario de gestión de familias.
+                {t('editMemberPage.familySection.readOnlyMessage')}
               </Alert>
               <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, border: 1, borderColor: 'divider' }}>
                 <FamilyMembersDisplay
@@ -324,8 +325,8 @@ export const EditMemberPage: React.FC = () => {
       ) : (
         <Alert severity="error" sx={{ mt: 2 }}>
           {!isAuthenticated
-            ? 'Debes iniciar sesión para acceder a esta página'
-            : 'No tienes permisos de administrador para editar socios. Contacta con un administrador.'}
+            ? t('editMemberPage.errors.mustLogin')
+            : t('editMemberPage.errors.noPermissionMessage')}
         </Alert>
       )}
 
@@ -341,7 +342,7 @@ export const EditMemberPage: React.FC = () => {
 
       <Snackbar open={success} autoHideDuration={2000} onClose={() => setSuccess(false)}>
         <Alert onClose={() => setSuccess(false)} severity="success" sx={{ width: '100%' }}>
-          Socio actualizado correctamente
+          {t('editMemberPage.success.updateMessage')}
         </Alert>
       </Snackbar>
     </Container>

@@ -1,9 +1,9 @@
 # 🗺️ Hoja de Ruta - ASAM Frontend
 
 **Fecha de creación**: 18 de octubre de 2025
-**Última actualización**: 2 de noviembre de 2025 (ACTUALIZACIÓN MAYOR - Flujo de Caja Definido)
-**Versión actual**: 0.2.0
-**Estado**: En desarrollo activo - Listo para Flujo de Caja
+**Última actualización**: 6 de noviembre de 2025 (Internacionalización Completada)
+**Versión actual**: 0.3.0
+**Estado**: En desarrollo activo - Internacionalización completada, Listo para Flujo de Caja
 
 ---
 
@@ -17,11 +17,11 @@ PWA (Aplicación Web Progresiva) para la gestión de la Asociación ASAM, constr
 - React Router + Zustand
 - Workbox (PWA)
 
-### Progreso Global: ~80% completado ⬆️
+### Progreso Global: ~85% completado ⬆️
 
 ---
 
-## ✅ Funcionalidades Implementadas (80%)
+## ✅ Funcionalidades Implementadas (85%)
 
 ### 1. ✅ Infraestructura Base (100%)
 - [x] Configuración del proyecto (React 18 + TypeScript + Vite)
@@ -184,7 +184,89 @@ src/features/payments/hooks/useSearchMemberOrFamily.ts
 
 ---
 
-### 7. ⚠️ Otros Módulos Pendientes (0-10%)
+### 7. ✅ Internacionalización (i18n) (100%) 🎉
+- [x] Configuración de i18next con react-i18next
+- [x] Soporte de 3 idiomas: Español, Francés, Wolof
+- [x] Selector de idioma en la interfaz
+- [x] Persistencia de preferencia de idioma
+- [x] **Módulo de Miembros 100% internacionalizado** ✅
+- [x] **Módulo de Pagos 100% internacionalizado** ✅
+- [x] Internacionalización de componentes de navegación
+- [x] Internacionalización de mensajes de error y validación
+- [x] Formateo de fechas según idioma
+- [x] Traducción de estados y métodos de pago
+- [x] **Recibos PDF multiidioma** ✅
+- [x] Nombres de archivo PDF con información contextual
+
+**Componentes Internacionalizados del Módulo Members:**
+- ✅ MembersPage y MembersTable
+- ✅ MembersFilters
+- ✅ NewMemberPage y MemberForm
+- ✅ EditMemberPage
+- ✅ MemberDetailsPage
+- ✅ FamilyMembersList y FamilyMembersDisplay
+- ✅ FamilyMemberForm
+- ✅ ConfirmDeactivateDialog
+
+**Componentes Internacionalizados del Módulo Payments:**
+- ✅ PaymentsPage y PaymentsTable
+- ✅ PaymentFilters
+- ✅ PaymentStatusChip
+- ✅ PaymentSummary
+- ✅ InitialPaymentForm
+- ✅ ConfirmPaymentDialog
+- ✅ MemberPaymentHistory
+- ✅ **Generador de recibos PDF (ReceiptDocument, Header, Body, Footer)** ✅
+- ✅ Utilidades (formatReceiptDate con soporte multi-idioma)
+
+**Traducciones Completas:**
+```
+src/lib/i18n/locales/
+├── es/ (Español)
+│   ├── common.json
+│   ├── navigation.json
+│   ├── auth.json
+│   ├── members.json (completo)
+│   ├── payments.json (completo)
+│   ├── users.json
+│   ├── dashboard.json
+│   └── cashflow.json
+├── fr/ (Francés)
+│   └── [misma estructura]
+└── wo/ (Wolof)
+    └── [misma estructura]
+```
+
+**Funcionalidades Especiales:**
+- ✅ Formateo de fechas con date-fns (locale-aware)
+  - Español: "15 de enero de 2025"
+  - Francés/Wolof: "15 janvier 2025"
+- ✅ Traducción dinámica de estados de pago (PENDING, PAID, CANCELLED)
+- ✅ Traducción de métodos de pago (CASH, TRANSFER, CARD)
+- ✅ Recibos PDF completamente traducidos según idioma activo
+- ✅ Nombres de archivo contextuales: `recibo-SOCIO123-ASAM-2025-00142.pdf`
+
+**Archivos clave:**
+```
+src/lib/i18n/
+├── index.ts (configuración principal)
+├── locales/ (traducciones por idioma)
+└── LanguageSelector.tsx (componente selector)
+
+src/features/members/components/ (todos internacionalizados)
+src/features/payments/components/ (todos internacionalizados)
+src/features/payments/hooks/useReceiptGenerator.tsx
+src/features/payments/utils/receiptUtils.ts
+```
+
+**Correcciones de Bugs:**
+- ✅ Corregido case sensitivity en PaymentStatusChip (estados en minúsculas)
+- ✅ Corregido método de pago siempre en español en recibos PDF
+- ✅ Corregido formateo de fechas en recibos PDF
+
+---
+
+### 8. ⚠️ Otros Módulos Pendientes (0-10%)
 - [ ] **CashFlow**: Requisitos definidos, pendiente de implementación
 - [ ] **Reports**: Página creada pero sin funcionalidad  
 - [ ] **Dashboard**: Página básica, faltan métricas y estadísticas
@@ -1152,10 +1234,11 @@ Estado: 🔮 FUTURO
 
 ## 📅 Timeline Actualizado
 
-### Estado Actual (2 de Noviembre de 2025)
+### Estado Actual (6 de Noviembre de 2025)
 ```
 ✅ FASE 1: Módulo de Socios - COMPLETADO 100%
 ✅ FASE 2: Módulo de Pagos - COMPLETADO 100%
+✅ FASE i18n: Internacionalización - COMPLETADO 100% 🌍
 🔴 FASE 4: Flujo de Caja - LISTO PARA IMPLEMENTAR (4 días)
 🟡 FASE 3: Dashboard y Reportes - PENDIENTE (3-4 días)
 🟡 FASE 5: PWA y UX - PENDIENTE (Post-MVP)
@@ -1191,6 +1274,7 @@ Estado: 🔮 FUTURO
 - ✅ Registro y confirmación de pagos
 - ✅ Generación de recibos PDF
 - ✅ Historial de pagos por socio
+- ✅ **Internacionalización completa (3 idiomas)** ⬆️ COMPLETADO
 - [ ] **Sistema de flujo de caja** ⬅️ SIGUIENTE
 - [ ] Dashboard con métricas principales
 
@@ -1212,27 +1296,29 @@ Estado: 🔮 FUTURO
 
 ## 📈 Métricas de Progreso
 
-### Estado Actual (2/11/2025) ⬆️⬆️
-```
-Infraestructura:     ████████████████████ 100%
-Autenticación:       ████████████████████ 100%
-Permisos y Roles:    ████████████████████ 100%
-Miembros:            ████████████████████ 100% ⬆️
-Pagos:               ████████████████████ 100% ⬆️
-Dashboard:           ██░░░░░░░░░░░░░░░░░░  10%
-Flujo de Caja:       ░░░░░░░░░░░░░░░░░░░░   0% (requisitos definidos ✅)
-Reportes:            ░░░░░░░░░░░░░░░░░░░░   0%
-
-TOTAL:               ████████████████░░░░  80% ⬆️⬆️
-```
-
-### Meta MVP (Estimado: 1.5 semanas)
+### Estado Actual (6/11/2025) ⬆️⬆️⬆️
 ```
 Infraestructura:     ████████████████████ 100%
 Autenticación:       ████████████████████ 100%
 Permisos y Roles:    ████████████████████ 100%
 Miembros:            ████████████████████ 100%
 Pagos:               ████████████████████ 100%
+i18n (3 idiomas):    ████████████████████ 100% ⬆️ NUEVO
+Dashboard:           ██░░░░░░░░░░░░░░░░░░  10%
+Flujo de Caja:       ░░░░░░░░░░░░░░░░░░░░   0% (requisitos definidos ✅)
+Reportes:            ░░░░░░░░░░░░░░░░░░░░   0%
+
+TOTAL:               █████████████████░░░  85% ⬆️⬆️⬆️
+```
+
+### Meta MVP (Estimado: 1 semana)
+```
+Infraestructura:     ████████████████████ 100%
+Autenticación:       ████████████████████ 100%
+Permisos y Roles:    ████████████████████ 100%
+Miembros:            ████████████████████ 100%
+Pagos:               ████████████████████ 100%
+i18n (3 idiomas):    ████████████████████ 100%
 Dashboard:           ████████████░░░░░░░░  60%
 Flujo de Caja:       ████████████████████ 100%
 Reportes:            ████████░░░░░░░░░░░░  40%
@@ -1243,6 +1329,73 @@ TOTAL:               ███████████████████�
 ---
 
 ## 📝 Cambios Recientes (Log de Actualizaciones)
+
+### 6 de Noviembre de 2025 - INTERNACIONALIZACIÓN COMPLETA ✅ 🌍
+
+#### 🌐 Sistema Multiidioma Completado
+
+**Implementación i18n:**
+- ✅ Configuración completa de react-i18next
+- ✅ Soporte de 3 idiomas: Español (es), Francés (fr), Wolof (wo)
+- ✅ Selector de idioma funcional con persistencia
+- ✅ 100% de componentes de Members internacionalizados (10/10)
+- ✅ 100% de componentes de Payments internacionalizados (10/10)
+
+**Archivos de Traducción Completos:**
+```
+Total de archivos: 24 (8 namespaces × 3 idiomas)
+├── common.json (3 idiomas)
+├── navigation.json (3 idiomas)
+├── auth.json (3 idiomas)
+├── members.json (3 idiomas) - 245+ claves
+├── payments.json (3 idiomas) - 256+ claves
+├── users.json (3 idiomas)
+├── dashboard.json (3 idiomas)
+└── cashflow.json (3 idiomas)
+```
+
+**Funcionalidades Destacadas:**
+
+1. **Formateo de Fechas Localizado:**
+   - Integración con date-fns locales
+   - Formato español: "15 de enero de 2025"
+   - Formato francés/wolof: "15 janvier 2025"
+   - Aplicado en recibos PDF y toda la UI
+
+2. **Recibos PDF Multiidioma:**
+   - Traducción completa del contenido
+   - Formateo de fechas según idioma
+   - Traducción de métodos de pago
+   - Traducción de estados
+   - Nombres de archivo contextuales
+
+3. **Traducciones Dinámicas:**
+   - Estados de pago (PENDING, PAID, CANCELLED)
+   - Métodos de pago (CASH, TRANSFER, CARD)
+   - Mensajes de error y validación
+   - Navegación y menús
+
+**Correcciones de Bugs:**
+1. ✅ Fix: Estados de pago en inglés → Corregido case sensitivity en PaymentStatusChip
+2. ✅ Fix: Método de pago en español en PDF → Traducción dinámica implementada
+3. ✅ Fix: Fechas siempre en español → Formateo según idioma activo
+
+**Commits Principales:**
+- `625f0db` - Internacionalizar fechas en recibos PDF y mejorar nombres de archivo
+- `35077b2` - Completar internacionalización de método de pago en recibo PDF
+- `6cf4d53` - Internacionalizar generador de recibos PDF
+- `3c23ced` - Corregir traducción de estados en PaymentStatusChip
+- `486ee1b` - Internacionalizar funciones utilitarias de payments
+- `6dca325` - Internacionalizar MemberDetailsPage
+- Y 13+ commits más de internacionalización
+
+**Impacto:**
+- Versión actualizada: 0.2.0 → 0.3.0
+- Progreso total: 80% → 85%
+- Preparación para usuarios multilingües
+- Mejora significativa de UX para comunidad wolof y francófona
+
+---
 
 ### 2 de Noviembre de 2025 - DEFINICIÓN COMPLETA DE FLUJO DE CAJA ✅
 

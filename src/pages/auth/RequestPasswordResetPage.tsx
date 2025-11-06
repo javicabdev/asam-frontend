@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useTranslation } from 'react-i18next'
 import {
   Box,
   Button,
@@ -24,6 +25,7 @@ import { requestPasswordResetSchema, RequestPasswordResetFormData } from './pass
 
 export const RequestPasswordResetPage: React.FC = () => {
   const { requestPasswordReset } = useAuth()
+  const { t } = useTranslation('auth')
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState<string>('')
 
@@ -55,14 +57,12 @@ export const RequestPasswordResetPage: React.FC = () => {
 
     if (result.success) {
       setStatus('success')
-      const successMessage = 
-        result.message ||
-        'Si el correo electrónico existe en nuestro sistema, recibirás instrucciones para restablecer tu contraseña.'
+      const successMessage = result.message || t('forgotPassword.successMessage')
       setMessage(successMessage)
       reset()
     } else {
       setStatus('error')
-      const errorMessage = result.message || 'Error al procesar la solicitud'
+      const errorMessage = result.message || t('forgotPassword.errorMessage')
       setMessage(errorMessage)
     }
   }
@@ -112,7 +112,7 @@ export const RequestPasswordResetPage: React.FC = () => {
 
           {/* Title */}
           <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-            Recuperar Contraseña
+            {t('forgotPassword.title')}
           </Typography>
 
           {/* Success message */}
@@ -123,19 +123,18 @@ export const RequestPasswordResetPage: React.FC = () => {
               </Alert>
 
               <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                Revisa tu bandeja de entrada y sigue las instrucciones del correo electrónico.
+                {t('forgotPassword.successDescription')}
               </Typography>
 
               <Button component={RouterLink} to="/login" variant="contained" fullWidth>
-                Volver al inicio de sesión
+                {t('forgotPassword.backToLogin')}
               </Button>
             </Box>
           ) : (
             <>
               {/* Instructions */}
               <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
-                Ingresa tu correo electrónico y te enviaremos instrucciones para restablecer tu
-                contraseña.
+                {t('forgotPassword.instructions')}
               </Typography>
 
               {/* Error Alert */}
@@ -153,7 +152,7 @@ export const RequestPasswordResetPage: React.FC = () => {
                   required
                   fullWidth
                   id="email"
-                  label="Correo electrónico"
+                  label={t('forgotPassword.email')}
                   autoComplete="email"
                   autoFocus
                   error={!!errors.email}
@@ -171,15 +170,15 @@ export const RequestPasswordResetPage: React.FC = () => {
                   {isSubmitting ? (
                     <CircularProgress size={24} color="inherit" />
                   ) : (
-                    'Enviar instrucciones'
+                    t('forgotPassword.submit')
                   )}
                 </Button>
 
                 <Box sx={{ textAlign: 'center' }}>
                   <Typography variant="body2" color="text.secondary">
-                    ¿Recordaste tu contraseña?{' '}
+                    {t('forgotPassword.rememberPassword')}{' '}
                     <Link component={RouterLink} to="/login" variant="body2">
-                      Iniciar sesión
+                      {t('forgotPassword.loginLink')}
                     </Link>
                   </Typography>
                 </Box>
@@ -190,7 +189,7 @@ export const RequestPasswordResetPage: React.FC = () => {
 
         {/* Footer */}
         <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 4 }}>
-          © {new Date().getFullYear()} Mutua ASAM. Todos los derechos reservados.
+          {t('common.footer', { year: new Date().getFullYear() })}
         </Typography>
       </Box>
     </Container>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams, Link as RouterLink } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useTranslation } from 'react-i18next'
 import {
   Box,
   Button,
@@ -29,6 +30,7 @@ export const ResetPasswordPage: React.FC = () => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { resetPasswordWithToken } = useAuth()
+  const { t } = useTranslation('auth')
 
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState<string>('')
@@ -56,11 +58,11 @@ export const ResetPasswordPage: React.FC = () => {
   useEffect(() => {
     if (!token) {
       setStatus('error')
-      setMessage('Token inválido o no proporcionado')
+      setMessage(t('resetPassword.invalidToken'))
     } else {
       setFocus('newPassword')
     }
-  }, [token, setFocus])
+  }, [token, setFocus, t])
 
   // Handle form submission
   const onSubmit = async (data: ResetPasswordFormData) => {
@@ -73,7 +75,7 @@ export const ResetPasswordPage: React.FC = () => {
 
     if (result.success) {
       setStatus('success')
-      const successMessage = result.message || 'Contraseña restablecida exitosamente'
+      const successMessage = result.message || t('resetPassword.successMessage')
       setMessage(successMessage)
 
       // Redirect to login after 3 seconds
@@ -82,7 +84,7 @@ export const ResetPasswordPage: React.FC = () => {
       }, 3000)
     } else {
       setStatus('error')
-      const errorMessage = result.message || 'Error al restablecer la contraseña'
+      const errorMessage = result.message || t('resetPassword.errorMessage')
       setMessage(errorMessage)
     }
   }
@@ -131,15 +133,15 @@ export const ResetPasswordPage: React.FC = () => {
             </Box>
 
             <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-              Enlace Inválido
+              {t('resetPassword.invalidLinkTitle')}
             </Typography>
 
             <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-              El enlace de recuperación de contraseña es inválido o ha expirado.
+              {t('resetPassword.invalidLinkMessage')}
             </Typography>
 
             <Button component={RouterLink} to="/forgot-password" variant="contained" fullWidth>
-              Solicitar nuevo enlace
+              {t('resetPassword.requestNewLink')}
             </Button>
           </Paper>
         </Box>
@@ -185,7 +187,7 @@ export const ResetPasswordPage: React.FC = () => {
 
           {/* Title */}
           <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
-            Nueva Contraseña
+            {t('resetPassword.title')}
           </Typography>
 
           {/* Success message */}
@@ -196,7 +198,7 @@ export const ResetPasswordPage: React.FC = () => {
               </Alert>
 
               <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                Serás redirigido al inicio de sesión en unos segundos...
+                {t('resetPassword.redirectMessage')}
               </Typography>
 
               <CircularProgress size={24} />
@@ -205,8 +207,7 @@ export const ResetPasswordPage: React.FC = () => {
             <>
               {/* Instructions */}
               <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
-                Ingresa tu nueva contraseña. Debe tener al menos 6 caracteres e incluir mayúsculas,
-                minúsculas y números.
+                {t('resetPassword.instructions')}
               </Typography>
 
               {/* Error Alert */}
@@ -223,7 +224,7 @@ export const ResetPasswordPage: React.FC = () => {
                   margin="normal"
                   required
                   fullWidth
-                  label="Nueva contraseña"
+                  label={t('resetPassword.newPassword')}
                   type={showPassword ? 'text' : 'password'}
                   id="newPassword"
                   autoComplete="new-password"
@@ -252,7 +253,7 @@ export const ResetPasswordPage: React.FC = () => {
                   margin="normal"
                   required
                   fullWidth
-                  label="Confirmar contraseña"
+                  label={t('resetPassword.confirmPassword')}
                   type={showConfirmPassword ? 'text' : 'password'}
                   id="confirmPassword"
                   autoComplete="new-password"
@@ -285,15 +286,15 @@ export const ResetPasswordPage: React.FC = () => {
                   {isSubmitting ? (
                     <CircularProgress size={24} color="inherit" />
                   ) : (
-                    'Restablecer contraseña'
+                    t('resetPassword.submit')
                   )}
                 </Button>
 
                 <Box sx={{ textAlign: 'center' }}>
                   <Typography variant="body2" color="text.secondary">
-                    ¿Recordaste tu contraseña?{' '}
+                    {t('resetPassword.rememberPassword')}{' '}
                     <Link component={RouterLink} to="/login" variant="body2">
-                      Iniciar sesión
+                      {t('resetPassword.loginLink')}
                     </Link>
                   </Typography>
                 </Box>
@@ -304,7 +305,7 @@ export const ResetPasswordPage: React.FC = () => {
 
         {/* Footer */}
         <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 4 }}>
-          © {new Date().getFullYear()} Mutua ASAM. Todos los derechos reservados.
+          {t('common.footer', { year: new Date().getFullYear() })}
         </Typography>
       </Box>
     </Container>

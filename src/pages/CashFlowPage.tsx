@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Box,
   Typography,
@@ -22,6 +23,7 @@ import { exportToCSV } from '@/features/cashflow/utils/exportCSV'
 import type { CashFlowFilters as CashFlowFiltersType } from '@/features/cashflow/types'
 
 export default function CashFlowPage() {
+  const { t } = useTranslation('cashflow')
   const { user } = useAuth()
   const isAdmin = user?.role === 'admin'
 
@@ -45,7 +47,7 @@ export default function CashFlowPage() {
       {/* Header */}
       <Box mb={3} display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h4" component="h1">
-          💰 Flujo de Caja
+          💰 {t('title')}
         </Typography>
 
         {isAdmin && (
@@ -55,7 +57,7 @@ export default function CashFlowPage() {
               startIcon={<AddIcon />}
               onClick={() => setOpenTransactionForm(true)}
             >
-              Registrar Transacción
+              {t('actions.new')}
             </Button>
             <Button
               variant="contained"
@@ -63,7 +65,7 @@ export default function CashFlowPage() {
               startIcon={<FlightTakeoffIcon />}
               onClick={() => setOpenRepatriationForm(true)}
             >
-              Repatriación
+              {t('actions.newRepatriation')}
             </Button>
             <Button
               variant="outlined"
@@ -71,7 +73,7 @@ export default function CashFlowPage() {
               onClick={handleExportCSV}
               disabled={cashFlows.length === 0}
             >
-              Exportar CSV
+              {t('actions.export')}
             </Button>
           </Stack>
         )}
@@ -83,7 +85,7 @@ export default function CashFlowPage() {
       {/* Filtros */}
       <Paper sx={{ mt: 3, p: 2 }}>
         <Typography variant="h6" gutterBottom>
-          🔍 Filtros
+          🔍 {t('filters.title')}
         </Typography>
         <CashFlowFilters filters={filters} onChange={setFilters} />
       </Paper>
@@ -91,7 +93,7 @@ export default function CashFlowPage() {
       {/* Tabla de Transacciones */}
       <Paper sx={{ mt: 3, p: 2 }}>
         <Typography variant="h6" gutterBottom>
-          📊 Transacciones ({totalCount})
+          📊 {t('table.title')} ({totalCount})
         </Typography>
         <CashFlowTable
           cashFlows={cashFlows}

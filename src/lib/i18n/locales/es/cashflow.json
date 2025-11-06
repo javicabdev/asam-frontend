@@ -1,0 +1,119 @@
+{
+  "title": "Flujo de Caja",
+  "balance": {
+    "title": "Balance Actual",
+    "totalIncome": "Total Ingresos",
+    "totalExpenses": "Total Gastos",
+    "currentBalance": "Balance Actual"
+  },
+  "filters": {
+    "title": "Filtros",
+    "dateFrom": "Desde",
+    "dateTo": "Hasta",
+    "category": "Categoría",
+    "operationType": "Tipo de Operación",
+    "member": "Socio",
+    "all": "Todos",
+    "clear": "Limpiar filtros"
+  },
+  "table": {
+    "title": "Transacciones",
+    "columns": {
+      "date": "Fecha",
+      "type": "Tipo",
+      "category": "Categoría",
+      "detail": "Concepto",
+      "member": "Socio",
+      "amount": "Importe",
+      "runningBalance": "Saldo",
+      "actions": "Acciones"
+    },
+    "actions": {
+      "view": "Ver",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "empty": "No hay transacciones registradas",
+    "loading": "Cargando transacciones..."
+  },
+  "form": {
+    "new": "Registrar Transacción",
+    "edit": "Editar Transacción",
+    "income": "Ingreso",
+    "expense": "Gasto",
+    "fields": {
+      "date": "Fecha",
+      "category": "Categoría",
+      "amount": "Importe",
+      "detail": "Concepto",
+      "member": "Socio"
+    },
+    "placeholders": {
+      "detail": "Describe la transacción...",
+      "amount": "0.00"
+    },
+    "required": "Campo obligatorio",
+    "memberRequired": "Obligatorio para repatriaciones"
+  },
+  "operationTypes": {
+    "INGRESO_CUOTA": "Cuota de Socio",
+    "INGRESO_DONACION": "Donación",
+    "INGRESO_OTRO": "Otro Ingreso",
+    "GASTO_REPATRIACION": "Repatriación",
+    "GASTO_ADMINISTRATIVO": "Gasto Administrativo",
+    "GASTO_BANCARIO": "Gasto Bancario",
+    "GASTO_AYUDA": "Ayuda Social",
+    "GASTO_OTRO": "Otro Gasto"
+  },
+  "repatriation": {
+    "title": "Registrar Repatriación",
+    "defaultAmountInfo": "El importe por defecto es 1.500€, pero puedes editarlo si es necesario.",
+    "form": {
+      "date": "Fecha",
+      "member": "Socio",
+      "amount": "Importe",
+      "detail": "Concepto"
+    }
+  },
+  "actions": {
+    "new": "Registrar Transacción",
+    "newRepatriation": "Repatriación",
+    "export": "Exportar CSV",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "register": "Registrar",
+    "update": "Actualizar",
+    "registering": "Registrando...",
+    "updating": "Actualizando..."
+  },
+  "delete": {
+    "title": "Eliminar Transacción",
+    "message": "¿Estás seguro de que deseas eliminar esta transacción?",
+    "detail": "Esta acción no se puede deshacer.",
+    "confirm": "Eliminar",
+    "cancel": "Cancelar",
+    "deleting": "Eliminando..."
+  },
+  "details": {
+    "title": "Detalles de la Transacción",
+    "date": "Fecha",
+    "category": "Categoría",
+    "amount": "Importe",
+    "detail": "Concepto",
+    "member": "Socio",
+    "createdBy": "Creado por",
+    "createdAt": "Fecha de creación",
+    "close": "Cerrar"
+  },
+  "success": {
+    "created": "Transacción registrada exitosamente",
+    "updated": "Transacción actualizada exitosamente",
+    "deleted": "Transacción eliminada exitosamente"
+  },
+  "error": {
+    "create": "Error al registrar la transacción",
+    "update": "Error al actualizar la transacción",
+    "delete": "Error al eliminar la transacción",
+    "load": "Error al cargar las transacciones"
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "title": "Xaalis bi",
+  "balance": {
+    "title": "Balance bi leegi",
+    "totalIncome": "Liggeey yi ñu jog",
+    "totalExpenses": "Xaalis yi ñu jënd",
+    "currentBalance": "Balance bi leegi"
+  },
+  "filters": {
+    "title": "Filtres yi",
+    "dateFrom": "Ci",
+    "dateTo": "Ba",
+    "category": "Catégorie bi",
+    "operationType": "Nataal liggeey",
+    "member": "Membre bi",
+    "all": "Yépp",
+    "clear": "Fey filtres yi"
+  },
+  "table": {
+    "title": "Transactions yi",
+    "columns": {
+      "date": "Bés",
+      "type": "Nataal",
+      "category": "Catégorie",
+      "detail": "Détail",
+      "member": "Membre",
+      "amount": "Montant",
+      "runningBalance": "Solde",
+      "actions": "Jëf yi"
+    },
+    "actions": {
+      "view": "Xool",
+      "edit": "Soppi",
+      "delete": "Fey"
+    },
+    "empty": "Amul transaction",
+    "loading": "Yam transactions yi..."
+  },
+  "form": {
+    "new": "Bind transaction bu bees",
+    "edit": "Soppi transaction bi",
+    "income": "Jog",
+    "expense": "Jënd",
+    "fields": {
+      "date": "Bés",
+      "category": "Catégorie",
+      "amount": "Montant",
+      "detail": "Détail",
+      "member": "Membre"
+    },
+    "placeholders": {
+      "detail": "Fàyyetu transaction bi...",
+      "amount": "0.00"
+    },
+    "required": "Dafa wara am",
+    "memberRequired": "Dafa wara am ngir rapatriement"
+  },
+  "operationTypes": {
+    "INGRESO_CUOTA": "Cotisation membre",
+    "INGRESO_DONACION": "Dieufedieul",
+    "INGRESO_OTRO": "Beneen jog",
+    "GASTO_REPATRIACION": "Rapatriement",
+    "GASTO_ADMINISTRATIVO": "Dépense administrative",
+    "GASTO_BANCARIO": "Dépense bancaire",
+    "GASTO_AYUDA": "Ndimbalante",
+    "GASTO_OTRO": "Beneen jënd"
+  },
+  "repatriation": {
+    "title": "Bind rapatriement bu bees",
+    "defaultAmountInfo": "Montant bi par défaut 1.500€, waaye mën nga kó soppi su bëggee.",
+    "form": {
+      "date": "Bés",
+      "member": "Membre",
+      "amount": "Montant",
+      "detail": "Détail"
+    }
+  },
+  "actions": {
+    "new": "Bind transaction bu bees",
+    "newRepatriation": "Rapatriement",
+    "export": "Exporter CSV",
+    "cancel": "Annuler",
+    "save": "Marr",
+    "register": "Bind",
+    "update": "Soppi",
+    "registering": "Yam bind...",
+    "updating": "Yam soppi..."
+  },
+  "delete": {
+    "title": "Fey transaction bi",
+    "message": "Ndax dëgg la bëgg fey transaction bii?",
+    "detail": "Mënul kó dellu.",
+    "confirm": "Fey",
+    "cancel": "Annuler",
+    "deleting": "Yam fey..."
+  },
+  "details": {
+    "title": "Détails transaction bi",
+    "date": "Bés",
+    "category": "Catégorie",
+    "amount": "Montant",
+    "detail": "Détail",
+    "member": "Membre",
+    "createdBy": "Kiy def",
+    "createdAt": "Bés def",
+    "close": "Tëj"
+  },
+  "success": {
+    "created": "Transaction bi am na ci",
+    "updated": "Transaction bi soppi na",
+    "deleted": "Transaction bi fey na"
+  },
+  "error": {
+    "create": "Njumte ci bind transaction bi",
+    "update": "Njumte ci soppi transaction bi",
+    "delete": "Njumte ci fey transaction bi",
+    "load": "Njumte ci yam transactions yi"
+  }
+}

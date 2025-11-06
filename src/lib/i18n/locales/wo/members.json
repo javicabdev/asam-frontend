@@ -127,5 +127,27 @@
       "exportData": "Génne xibaar yi",
       "printCard": "Móol kàrt bi"
     }
+  },
+  "table": {
+    "export": "Génne",
+    "exporting": "Yam génne...",
+    "exportProgress": "{{progress}}%",
+    "exportAll": "Génne mbooloo yépp",
+    "exportFiltered": "Génne mbooloo yu filter",
+    "exportSelected": "Génne {{count}} tànn",
+    "exportSelected_plural": "Génne {{count}} tànn",
+    "exportExcel": "Génne ci Excel (ba jot)",
+    "selectionCount": "{{count}} tànn",
+    "selectionCount_plural": "{{count}} tànn",
+    "dni": "DNI",
+    "dateHigh": "Bésu dugg",
+    "dateLow": "Bésu génné",
+    "deactivate": "Fay",
+    "rowsPerPage": "Limu renku ci bët",
+    "displayedRows": "{{from}}-{{to}} ci {{count}}"
+  },
+  "export": {
+    "success": "Génne bi am na ci",
+    "error": "Njumte ci génne: {{message}}"
   }
 }

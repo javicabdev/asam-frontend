@@ -127,5 +127,27 @@
       "exportData": "Exportar datos",
       "printCard": "Imprimir carnet"
     }
+  },
+  "table": {
+    "export": "Exportar",
+    "exporting": "Exportando...",
+    "exportProgress": "{{progress}}%",
+    "exportAll": "Exportar todos los socios",
+    "exportFiltered": "Exportar socios filtrados",
+    "exportSelected": "Exportar {{count}} seleccionado",
+    "exportSelected_plural": "Exportar {{count}} seleccionados",
+    "exportExcel": "Exportar a Excel (próximamente)",
+    "selectionCount": "{{count}} seleccionado",
+    "selectionCount_plural": "{{count}} seleccionados",
+    "dni": "DNI",
+    "dateHigh": "Fecha Alta",
+    "dateLow": "Fecha Baja",
+    "deactivate": "Dar de baja",
+    "rowsPerPage": "Filas por página",
+    "displayedRows": "{{from}}-{{to}} de {{count}}"
+  },
+  "export": {
+    "success": "Exportación completada exitosamente",
+    "error": "Error al exportar: {{message}}"
   }
 }

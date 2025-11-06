@@ -110,5 +110,26 @@
     "thisMonth": "Weer wii",
     "lastMonth": "Weer wi weesu",
     "average": "Diggante weer"
+  },
+  "table": {
+    "memberNumber": "Nimero mbooloo",
+    "member": "Mbooloo",
+    "family": "Njaboot",
+    "amount": "Dayoo",
+    "date": "Bis",
+    "paymentMethod": "Anamu fay",
+    "status": "Tekki",
+    "actions": "Jëf",
+    "viewDetails": "Xool faramfacce",
+    "downloadReceipt": "Yeb kàddu",
+    "confirmPayment": "Tànnee fay bi",
+    "empty": "Amul fay bu bindu",
+    "rowsPerPage": "Limu renku ci bët",
+    "displayedRows": "{{from}}-{{to}} ci {{count}}",
+    "paymentMethods": {
+      "CASH": "Xaalis",
+      "TRANSFER": "Yóbbale",
+      "CARD": "Kaar"
+    }
   }
 }

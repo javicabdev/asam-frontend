@@ -1,6 +1,7 @@
 import { Card, CardContent, Grid, Typography, Box } from '@mui/material'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import TrendingDownIcon from '@mui/icons-material/TrendingDown'
+import { useTranslation } from 'react-i18next'
 import { formatCurrency } from '../utils/formatters'
 import { CashFlowBalance } from '../types'
 
@@ -10,6 +11,7 @@ interface BalanceCardProps {
 }
 
 export const BalanceCard = ({ balance }: BalanceCardProps) => {
+  const { t } = useTranslation('cashflow')
   const { totalIncome, totalExpenses, currentBalance } = balance
   const isPositive = currentBalance >= 0
 
@@ -17,7 +19,7 @@ export const BalanceCard = ({ balance }: BalanceCardProps) => {
     <Card elevation={3}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          💰 Balance Actual
+          💰 {t('balance.title')}
         </Typography>
 
         <Grid container spacing={3} sx={{ mt: 1 }}>
@@ -25,7 +27,7 @@ export const BalanceCard = ({ balance }: BalanceCardProps) => {
           <Grid item xs={12} md={4}>
             <Box>
               <Typography variant="body2" color="text.secondary">
-                Total Ingresos
+                {t('balance.totalIncome')}
               </Typography>
               <Typography
                 variant="h4"
@@ -40,7 +42,7 @@ export const BalanceCard = ({ balance }: BalanceCardProps) => {
           <Grid item xs={12} md={4}>
             <Box>
               <Typography variant="body2" color="text.secondary">
-                Total Gastos
+                {t('balance.totalExpenses')}
               </Typography>
               <Typography
                 variant="h4"
@@ -55,7 +57,7 @@ export const BalanceCard = ({ balance }: BalanceCardProps) => {
           <Grid item xs={12} md={4}>
             <Box>
               <Typography variant="body2" color="text.secondary">
-                Balance Actual
+                {t('balance.currentBalance')}
               </Typography>
               <Box display="flex" alignItems="center" gap={1} mt={1}>
                 <Typography

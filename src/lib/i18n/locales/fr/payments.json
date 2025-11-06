@@ -110,5 +110,26 @@
     "thisMonth": "Ce mois",
     "lastMonth": "Mois dernier",
     "average": "Moyenne mensuelle"
+  },
+  "table": {
+    "memberNumber": "Nº Membre",
+    "member": "Membre",
+    "family": "Famille",
+    "amount": "Montant",
+    "date": "Date",
+    "paymentMethod": "Mode de paiement",
+    "status": "Statut",
+    "actions": "Actions",
+    "viewDetails": "Voir les détails",
+    "downloadReceipt": "Télécharger le reçu",
+    "confirmPayment": "Confirmer le paiement",
+    "empty": "Aucun paiement enregistré",
+    "rowsPerPage": "Lignes par page",
+    "displayedRows": "{{from}}-{{to}} sur {{count}}",
+    "paymentMethods": {
+      "CASH": "Espèces",
+      "TRANSFER": "Virement",
+      "CARD": "Carte"
+    }
   }
 }

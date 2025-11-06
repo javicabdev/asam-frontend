@@ -1,0 +1,119 @@
+{
+  "title": "Flux de Trésorerie",
+  "balance": {
+    "title": "Solde Actuel",
+    "totalIncome": "Total des Recettes",
+    "totalExpenses": "Total des Dépenses",
+    "currentBalance": "Solde Actuel"
+  },
+  "filters": {
+    "title": "Filtres",
+    "dateFrom": "Du",
+    "dateTo": "Au",
+    "category": "Catégorie",
+    "operationType": "Type d'Opération",
+    "member": "Membre",
+    "all": "Tous",
+    "clear": "Effacer les filtres"
+  },
+  "table": {
+    "title": "Transactions",
+    "columns": {
+      "date": "Date",
+      "type": "Type",
+      "category": "Catégorie",
+      "detail": "Détail",
+      "member": "Membre",
+      "amount": "Montant",
+      "runningBalance": "Solde",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "Voir",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "empty": "Aucune transaction enregistrée",
+    "loading": "Chargement des transactions..."
+  },
+  "form": {
+    "new": "Enregistrer une Transaction",
+    "edit": "Modifier la Transaction",
+    "income": "Recette",
+    "expense": "Dépense",
+    "fields": {
+      "date": "Date",
+      "category": "Catégorie",
+      "amount": "Montant",
+      "detail": "Détail",
+      "member": "Membre"
+    },
+    "placeholders": {
+      "detail": "Décrivez la transaction...",
+      "amount": "0.00"
+    },
+    "required": "Champ obligatoire",
+    "memberRequired": "Obligatoire pour les rapatriements"
+  },
+  "operationTypes": {
+    "INGRESO_CUOTA": "Cotisation de Membre",
+    "INGRESO_DONACION": "Don",
+    "INGRESO_OTRO": "Autre Recette",
+    "GASTO_REPATRIACION": "Rapatriement",
+    "GASTO_ADMINISTRATIVO": "Dépense Administrative",
+    "GASTO_BANCARIO": "Dépense Bancaire",
+    "GASTO_AYUDA": "Aide Sociale",
+    "GASTO_OTRO": "Autre Dépense"
+  },
+  "repatriation": {
+    "title": "Enregistrer un Rapatriement",
+    "defaultAmountInfo": "Le montant par défaut est de 1.500€, mais vous pouvez le modifier si nécessaire.",
+    "form": {
+      "date": "Date",
+      "member": "Membre",
+      "amount": "Montant",
+      "detail": "Détail"
+    }
+  },
+  "actions": {
+    "new": "Enregistrer une Transaction",
+    "newRepatriation": "Rapatriement",
+    "export": "Exporter CSV",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "register": "Enregistrer",
+    "update": "Mettre à jour",
+    "registering": "Enregistrement...",
+    "updating": "Mise à jour..."
+  },
+  "delete": {
+    "title": "Supprimer la Transaction",
+    "message": "Êtes-vous sûr de vouloir supprimer cette transaction?",
+    "detail": "Cette action ne peut pas être annulée.",
+    "confirm": "Supprimer",
+    "cancel": "Annuler",
+    "deleting": "Suppression..."
+  },
+  "details": {
+    "title": "Détails de la Transaction",
+    "date": "Date",
+    "category": "Catégorie",
+    "amount": "Montant",
+    "detail": "Détail",
+    "member": "Membre",
+    "createdBy": "Créé par",
+    "createdAt": "Date de création",
+    "close": "Fermer"
+  },
+  "success": {
+    "created": "Transaction enregistrée avec succès",
+    "updated": "Transaction mise à jour avec succès",
+    "deleted": "Transaction supprimée avec succès"
+  },
+  "error": {
+    "create": "Erreur lors de l'enregistrement de la transaction",
+    "update": "Erreur lors de la mise à jour de la transaction",
+    "delete": "Erreur lors de la suppression de la transaction",
+    "load": "Erreur lors du chargement des transactions"
+  }
+}

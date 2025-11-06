@@ -127,5 +127,27 @@
       "exportData": "Exporter les données",
       "printCard": "Imprimer la carte"
     }
+  },
+  "table": {
+    "export": "Exporter",
+    "exporting": "Exportation...",
+    "exportProgress": "{{progress}}%",
+    "exportAll": "Exporter tous les membres",
+    "exportFiltered": "Exporter les membres filtrés",
+    "exportSelected": "Exporter {{count}} sélectionné",
+    "exportSelected_plural": "Exporter {{count}} sélectionnés",
+    "exportExcel": "Exporter vers Excel (prochainement)",
+    "selectionCount": "{{count}} sélectionné",
+    "selectionCount_plural": "{{count}} sélectionnés",
+    "dni": "DNI",
+    "dateHigh": "Date d'adhésion",
+    "dateLow": "Date de départ",
+    "deactivate": "Désactiver",
+    "rowsPerPage": "Lignes par page",
+    "displayedRows": "{{from}}-{{to}} sur {{count}}"
+  },
+  "export": {
+    "success": "Exportation réussie",
+    "error": "Erreur lors de l'exportation: {{message}}"
   }
 }

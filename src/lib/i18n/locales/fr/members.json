@@ -304,5 +304,80 @@
     "success": {
       "updateMessage": "Membre mis à jour avec succès"
     }
+  },
+  "memberForm": {
+    "title": "Données du Nouveau Membre",
+    "description": "Complétez le formulaire pour enregistrer un nouveau membre. Les champs marqués d'un * sont obligatoires.",
+    "validation": {
+      "numeroSocioRequired": "Le numéro de membre est obligatoire",
+      "numeroSocioFormat": "Le format doit être A00000 pour les familles ou B00000 pour les individuels",
+      "tipoMembresiaRequired": "Le type d'adhésion est obligatoire",
+      "nombreRequired": "Le prénom est obligatoire",
+      "apellidosRequired": "Le nom est obligatoire",
+      "direccionRequired": "L'adresse est obligatoire",
+      "codigoPostalRequired": "Le code postal est obligatoire",
+      "poblacionRequired": "La ville est obligatoire",
+      "provinciaRequired": "La province est obligatoire",
+      "paisRequired": "Le pays est obligatoire",
+      "documentoIdentidadRequired": "Le document d'identité est obligatoire",
+      "emailRequired": "L'email est obligatoire",
+      "emailInvalid": "Email invalide. Format attendu: utilisateur@domaine.com"
+    },
+    "errors": {
+      "numeroSocioDuplicate": "Ce numéro de membre existe déjà",
+      "documentoInvalido": "Document invalide"
+    },
+    "sections": {
+      "datosPersonales": "Données Personnelles",
+      "datosEsposo": "Données du Mari (Titulaire de l'Adhésion)",
+      "direccion": "Adresse",
+      "datosFamilia": "Données de la Famille",
+      "datosEsposa": "Données de l'Épouse (Optionnel)",
+      "miembrosAdicionales": "Membres Additionnels de la Famille (Optionnel)"
+    },
+    "fields": {
+      "tipoMembresia": "Type d'Adhésion",
+      "numeroSocio": "Numéro de Membre",
+      "nombre": "Prénom",
+      "apellidos": "Nom",
+      "fechaNacimiento": "Date de Naissance",
+      "dniNie": "DNI/NIE",
+      "correoElectronico": "Adresse Email",
+      "profesion": "Profession",
+      "calleNumeroPiso": "Rue, Numéro, Étage",
+      "codigoPostal": "Code Postal",
+      "poblacion": "Ville",
+      "provincia": "Province",
+      "pais": "Pays",
+      "nacionalidad": "Nationalité",
+      "observaciones": "Observations",
+      "esposa": {
+        "nombre": "Prénom de l'Épouse",
+        "apellidos": "Nom de l'Épouse",
+        "dniNie": "DNI/NIE de l'Épouse",
+        "email": "Email de l'Épouse"
+      }
+    },
+    "membershipTypes": {
+      "individual": "Individuel",
+      "family": "Familial"
+    },
+    "helpers": {
+      "validating": "Validation en cours...",
+      "numeroSocioError": "Erreur lors de l'obtention du numéro. Vous pouvez le saisir manuellement.",
+      "numeroSocioFormat": "Vous pouvez écrire seulement le numéro (ex: 2) et il sera formaté automatiquement",
+      "fieldDisabled": "Ce champ ne peut pas être modifié",
+      "dniNieHelper": "Entrez le DNI ou NIE",
+      "familyDataOptional": "Les données de l'épouse et des membres additionnels sont optionnelles."
+    },
+    "placeholders": {
+      "numeroSocioFamily": "ex: 2 → A00002",
+      "numeroSocioIndividual": "ex: 2 → B00002"
+    },
+    "buttons": {
+      "cancel": "Annuler",
+      "continue": "Continuer",
+      "saveChanges": "Enregistrer les Modifications"
+    }
   }
 }

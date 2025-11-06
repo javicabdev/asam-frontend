@@ -18,6 +18,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
+import { useTranslation } from 'react-i18next'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
@@ -94,22 +95,22 @@ interface MemberFormProps {
   disabledFields?: string[] // Campos que deben estar deshabilitados
 }
 
-const validationSchema = Yup.object({
+const getValidationSchema = (t: any) => Yup.object({
   numero_socio: Yup.string()
-    .required('El número de socio es obligatorio')
-    .matches(/^[AB]\d{5}$/, 'El formato debe ser A00000 para familias o B00000 para individuales'),
-  tipo_membresia: Yup.string().required('El tipo de membresía es obligatorio'),
-  nombre: Yup.string().required('El nombre es obligatorio'),
-  apellidos: Yup.string().required('Los apellidos son obligatorios'),
-  calle_numero_piso: Yup.string().required('La dirección es obligatoria'),
-  codigo_postal: Yup.string().required('El código postal es obligatorio'),
-  poblacion: Yup.string().required('La población es obligatoria'),
-  provincia: Yup.string().required('La provincia es obligatoria'),
-  pais: Yup.string().required('El país es obligatorio'),
-  documento_identidad: Yup.string().required('El documento de identidad es obligatorio'),
+    .required(t('memberForm.validation.numeroSocioRequired'))
+    .matches(/^[AB]\d{5}$/, t('memberForm.validation.numeroSocioFormat')),
+  tipo_membresia: Yup.string().required(t('memberForm.validation.tipoMembresiaRequired')),
+  nombre: Yup.string().required(t('memberForm.validation.nombreRequired')),
+  apellidos: Yup.string().required(t('memberForm.validation.apellidosRequired')),
+  calle_numero_piso: Yup.string().required(t('memberForm.validation.direccionRequired')),
+  codigo_postal: Yup.string().required(t('memberForm.validation.codigoPostalRequired')),
+  poblacion: Yup.string().required(t('memberForm.validation.poblacionRequired')),
+  provincia: Yup.string().required(t('memberForm.validation.provinciaRequired')),
+  pais: Yup.string().required(t('memberForm.validation.paisRequired')),
+  documento_identidad: Yup.string().required(t('memberForm.validation.documentoIdentidadRequired')),
   correo_electronico: Yup.string()
-    .required('El email es obligatorio')
-    .test('email-format', 'Email inválido. Formato esperado: usuario@dominio.com', (value) => {
+    .required(t('memberForm.validation.emailRequired'))
+    .test('email-format', t('memberForm.validation.emailInvalid'), (value) => {
       if (!value) return false // Required ya maneja esto
       return EMAIL_REGEX.test(value)
     }),
@@ -120,7 +121,7 @@ const validationSchema = Yup.object({
   observaciones: Yup.string().nullable(),
 })
 
-const familyValidationSchema = validationSchema.shape({
+const getFamilyValidationSchema = (t: any) => getValidationSchema(t).shape({
   // Esposa: campos opcionales
   esposa_nombre: Yup.string().nullable(),
   esposa_apellidos: Yup.string().nullable(),
@@ -128,7 +129,7 @@ const familyValidationSchema = validationSchema.shape({
   esposa_documento_identidad: Yup.string().nullable(),
   esposa_correo_electronico: Yup.string()
     .nullable()
-    .test('email-format', 'Email inválido. Formato esperado: usuario@dominio.com', (value) => {
+    .test('email-format', t('memberForm.validation.emailInvalid'), (value) => {
       // Si está vacío o null, es válido (campo opcional)
       if (!value) return true
       // Si tiene valor, debe cumplir el formato
@@ -136,14 +137,15 @@ const familyValidationSchema = validationSchema.shape({
     }),
 })
 
-export const MemberForm: React.FC<MemberFormProps> = ({ 
-  mode = 'create', 
-  initialData, 
-  onCancel, 
-  onSubmit, 
+export const MemberForm: React.FC<MemberFormProps> = ({
+  mode = 'create',
+  initialData,
+  onCancel,
+  onSubmit,
   externalErrors,
-  disabledFields = [] 
+  disabledFields = []
 }) => {
+  const { t } = useTranslation('members')
   const { familyMembers, addFamilyMember, editFamilyMember, removeFamilyMember } = useFamilyForm()
   const [memberNumberManuallyEdited, setMemberNumberManuallyEdited] = React.useState(false)
   const { isValidating, isDuplicate, validateMemberNumber, clearValidation } =
@@ -217,7 +219,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
 
   const form = useForm<MemberFormData>({
     // @ts-expect-error - Schema dinámico de Yup con validación condicional no infiere tipos correctamente
-    resolver: yupResolver(familyValidationSchema),
+    resolver: yupResolver(getFamilyValidationSchema(t)),
     defaultValues: getDefaultValues(),
   })
 
@@ -324,7 +326,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
     if (isDuplicate === true) {
       setError('numero_socio', {
         type: 'manual',
-        message: 'Este número de socio ya existe',
+        message: t('memberForm.errors.numeroSocioDuplicate'),
       })
       return
     }
@@ -333,7 +335,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
     if (documentValidation && !documentValidation.isValid) {
       setError('documento_identidad', {
         type: 'manual',
-        message: documentValidation.errorMessage || 'Documento inválido',
+        message: documentValidation.errorMessage || t('memberForm.errors.documentoInvalido'),
       })
       return
     }
@@ -342,7 +344,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
     if (isFamily && data.esposa_documento_identidad && esposaDocValidation && !esposaDocValidation.isValid) {
       setError('esposa_documento_identidad', {
         type: 'manual',
-        message: esposaDocValidation.errorMessage || 'Documento inválido',
+        message: esposaDocValidation.errorMessage || t('memberForm.errors.documentoInvalido'),
       })
       return
     }
@@ -372,7 +374,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       await onSubmit(formattedData)
     }
     },
-    [isFamily, familyMembers, isDuplicate, documentValidation, esposaDocValidation, onSubmit, setError]
+    [isFamily, familyMembers, isDuplicate, documentValidation, esposaDocValidation, onSubmit, setError, t]
   )
 
   // Wrapper para manejar correctamente el evento del formulario
@@ -389,7 +391,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
   return (
     <Paper elevation={2} sx={{ p: 3 }}>
       <Typography variant="h5" component="h2" gutterBottom>
-        Datos del Nuevo Socio
+        {t('memberForm.title')}
       </Typography>
 
       <Divider sx={{ mb: 3 }} />
@@ -397,8 +399,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
         <Box component="form" onSubmit={onFormSubmit}>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-            Complete el formulario para registrar un nuevo socio. Los campos marcados con * son
-            obligatorios.
+            {t('memberForm.description')}
           </Typography>
 
           {/* Tipo de Membresía y Número de Socio */}
@@ -409,10 +410,10 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                 control={control}
                 render={({ field }) => (
                   <FormControl fullWidth required error={!!errors.tipo_membresia}>
-                    <InputLabel id="tipo-membresia-label">Tipo de Membresía</InputLabel>
-                    <Select {...field} labelId="tipo-membresia-label" label="Tipo de Membresía" disabled={mode === 'edit'}>
-                      <MenuItem value={MembershipType.INDIVIDUAL}>Individual</MenuItem>
-                      <MenuItem value={MembershipType.FAMILY}>Familiar</MenuItem>
+                    <InputLabel id="tipo-membresia-label">{t('memberForm.fields.tipoMembresia')}</InputLabel>
+                    <Select {...field} labelId="tipo-membresia-label" label={t('memberForm.fields.tipoMembresia')} disabled={mode === 'edit'}>
+                      <MenuItem value={MembershipType.INDIVIDUAL}>{t('memberForm.membershipTypes.individual')}</MenuItem>
+                      <MenuItem value={MembershipType.FAMILY}>{t('memberForm.membershipTypes.family')}</MenuItem>
                     </Select>
                     {errors.tipo_membresia && (
                       <FormHelperText>{errors.tipo_membresia.message}</FormHelperText>
@@ -430,15 +431,15 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   <TextField
                     {...field}
                     fullWidth
-                    label="Número de Socio"
+                    label={t('memberForm.fields.numeroSocio')}
                     error={!!errors.numero_socio || isDuplicate === true}
                     helperText={
                       errors.numero_socio?.message ||
-                      (isDuplicate && 'Este número de socio ya existe') ||
-                      (isValidating && 'Verificando...') ||
+                      (isDuplicate && t('memberForm.errors.numeroSocioDuplicate')) ||
+                      (isValidating && t('memberForm.helpers.validating')) ||
                       (memberNumberError
-                        ? 'Error al obtener el número. Puede introducirlo manualmente.'
-                        : 'Puede escribir solo el número (ej: 2) y se formateará automáticamente')
+                        ? t('memberForm.helpers.numeroSocioError')
+                        : t('memberForm.helpers.numeroSocioFormat'))
                     }
                     required
                     disabled={mode === 'edit' || loadingMemberNumber}
@@ -457,7 +458,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                           if (!isValid) {
                             setError('numero_socio', {
                               type: 'manual',
-                              message: 'Este número de socio ya existe',
+                              message: t('memberForm.errors.numeroSocioDuplicate'),
                             })
                           }
                         })
@@ -465,7 +466,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                       field.onBlur()
                     }}
                     InputProps={{
-                      placeholder: isFamily ? 'ej: 2 → A00002' : 'ej: 2 → B00002',
+                      placeholder: isFamily ? t('memberForm.placeholders.numeroSocioFamily') : t('memberForm.placeholders.numeroSocioIndividual'),
                     }}
                   />
                 )}
@@ -475,7 +476,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
             {/* Datos Personales del Socio Principal */}
             <Grid item xs={12}>
               <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
-                {isFamily ? 'Datos del Esposo (Titular de la Membresía)' : 'Datos Personales'}
+                {isFamily ? t('memberForm.sections.datosEsposo') : t('memberForm.sections.datosPersonales')}
               </Typography>
             </Grid>
 
@@ -487,9 +488,9 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   <TextField
                     {...field}
                     fullWidth
-                    label="Nombre"
+                    label={t('memberForm.fields.nombre')}
                     error={!!errors.nombre}
-                    helperText={errors.nombre?.message || (disabledFields.includes('nombre') ? 'Este campo no puede modificarse' : '')}
+                    helperText={errors.nombre?.message || (disabledFields.includes('nombre') ? t('memberForm.helpers.fieldDisabled') : '')}
                     required
                     disabled={disabledFields.includes('nombre')}
                   />
@@ -505,9 +506,9 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   <TextField
                     {...field}
                     fullWidth
-                    label="Apellidos"
+                    label={t('memberForm.fields.apellidos')}
                     error={!!errors.apellidos}
-                    helperText={errors.apellidos?.message || (disabledFields.includes('apellidos') ? 'Este campo no puede modificarse' : '')}
+                    helperText={errors.apellidos?.message || (disabledFields.includes('apellidos') ? t('memberForm.helpers.fieldDisabled') : '')}
                     required
                     disabled={disabledFields.includes('apellidos')}
                   />
@@ -521,7 +522,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                 control={control}
                 render={({ field }) => (
                   <DatePicker
-                    label="Fecha de Nacimiento"
+                    label={t('memberForm.fields.fechaNacimiento')}
                     value={field.value}
                     onChange={field.onChange}
                     disabled={disabledFields.includes('fecha_nacimiento')}
@@ -529,7 +530,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                       textField: {
                         fullWidth: true,
                         error: !!errors.fecha_nacimiento,
-                        helperText: errors.fecha_nacimiento?.message || (disabledFields.includes('fecha_nacimiento') ? 'Este campo no puede modificarse' : ''),
+                        helperText: errors.fecha_nacimiento?.message || (disabledFields.includes('fecha_nacimiento') ? t('memberForm.helpers.fieldDisabled') : ''),
                       },
                     }}
                     maxDate={new Date()}
@@ -546,7 +547,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   <TextField
                     {...field}
                     fullWidth
-                    label="DNI/NIE"
+                    label={t('memberForm.fields.dniNie')}
                     error={
                       !!errors.documento_identidad ||
                       (documentValidation ? !documentValidation.isValid : false)
@@ -556,8 +557,8 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                       (documentValidation &&
                         !documentValidation.isValid &&
                         documentValidation.errorMessage) ||
-                      (isValidatingDocument && 'Validando...') ||
-                      'Introduzca el DNI o NIE'
+                      (isValidatingDocument && t('memberForm.helpers.validating')) ||
+                      t('memberForm.helpers.dniNieHelper')
                     }
                     required
                     onChange={(e) => {
@@ -583,7 +584,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                           if (result && !result.isValid) {
                             setError('documento_identidad', {
                               type: 'manual',
-                              message: result.errorMessage || 'Documento inválido',
+                              message: result.errorMessage || t('memberForm.errors.documentoInvalido'),
                             })
                           } else {
                             clearErrors('documento_identidad')
@@ -604,7 +605,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   <TextField
                     {...field}
                     fullWidth
-                    label="Correo Electrónico"
+                    label={t('memberForm.fields.correoElectronico')}
                     type="email"
                     error={!!errors.correo_electronico}
                     helperText={errors.correo_electronico?.message}
@@ -618,14 +619,14 @@ export const MemberForm: React.FC<MemberFormProps> = ({
               <Controller
                 name="profesion"
                 control={control}
-                render={({ field }) => <TextField {...field} fullWidth label="Profesión" />}
+                render={({ field }) => <TextField {...field} fullWidth label={t('memberForm.fields.profesion')} />}
               />
             </Grid>
 
             {/* Dirección */}
             <Grid item xs={12}>
               <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
-                Dirección
+                {t('memberForm.sections.direccion')}
               </Typography>
             </Grid>
 
@@ -637,7 +638,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   <TextField
                     {...field}
                     fullWidth
-                    label="Calle, Número, Piso"
+                    label={t('memberForm.fields.calleNumeroPiso')}
                     error={!!errors.calle_numero_piso}
                     helperText={errors.calle_numero_piso?.message}
                     required
@@ -654,7 +655,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   <TextField
                     {...field}
                     fullWidth
-                    label="Código Postal"
+                    label={t('memberForm.fields.codigoPostal')}
                     error={!!errors.codigo_postal}
                     helperText={errors.codigo_postal?.message}
                     required
@@ -671,7 +672,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   <TextField
                     {...field}
                     fullWidth
-                    label="Población"
+                    label={t('memberForm.fields.poblacion')}
                     error={!!errors.poblacion}
                     helperText={errors.poblacion?.message}
                     required
@@ -688,7 +689,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   <TextField
                     {...field}
                     fullWidth
-                    label="Provincia"
+                    label={t('memberForm.fields.provincia')}
                     error={!!errors.provincia}
                     helperText={errors.provincia?.message}
                     required
@@ -705,7 +706,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   <TextField
                     {...field}
                     fullWidth
-                    label="País"
+                    label={t('memberForm.fields.pais')}
                     error={!!errors.pais}
                     helperText={errors.pais?.message}
                     required
@@ -718,7 +719,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
               <Controller
                 name="nacionalidad"
                 control={control}
-                render={({ field }) => <TextField {...field} fullWidth label="Nacionalidad" disabled={disabledFields.includes('nacionalidad')} />}
+                render={({ field }) => <TextField {...field} fullWidth label={t('memberForm.fields.nacionalidad')} disabled={disabledFields.includes('nacionalidad')} />}
               />
             </Grid>
 
@@ -727,7 +728,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                 name="observaciones"
                 control={control}
                 render={({ field }) => (
-                  <TextField {...field} fullWidth multiline rows={3} label="Observaciones" />
+                  <TextField {...field} fullWidth multiline rows={3} label={t('memberForm.fields.observaciones')} />
                 )}
               />
             </Grid>
@@ -738,17 +739,17 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                 <Grid item xs={12}>
                   <Divider sx={{ my: 3 }} />
                   <Typography variant="h6" sx={{ mb: 2 }}>
-                    Datos de la Familia
+                    {t('memberForm.sections.datosFamilia')}
                   </Typography>
                   <Alert severity="info" sx={{ mb: 2 }}>
-                    Los datos de la esposa y familiares adicionales son opcionales.
+                    {t('memberForm.helpers.familyDataOptional')}
                   </Alert>
                 </Grid>
 
                 {/* Datos de la Esposa */}
                 <Grid item xs={12}>
                   <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                    Datos de la Esposa (Opcional)
+                    {t('memberForm.sections.datosEsposa')}
                   </Typography>
                 </Grid>
 
@@ -760,7 +761,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                       <TextField
                         {...field}
                         fullWidth
-                        label="Nombre de la Esposa"
+                        label={t('memberForm.fields.esposa.nombre')}
                         error={!!errors.esposa_nombre}
                         helperText={errors.esposa_nombre?.message}
                       />
@@ -776,7 +777,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                       <TextField
                         {...field}
                         fullWidth
-                        label="Apellidos de la Esposa"
+                        label={t('memberForm.fields.esposa.apellidos')}
                         error={!!errors.esposa_apellidos}
                         helperText={errors.esposa_apellidos?.message}
                       />
@@ -790,7 +791,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                     control={control}
                     render={({ field }) => (
                       <DatePicker
-                        label="Fecha de Nacimiento"
+                        label={t('memberForm.fields.fechaNacimiento')}
                         value={field.value}
                         onChange={field.onChange}
                         slotProps={{
@@ -809,14 +810,14 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                     name="esposa_documento_identidad"
                     control={control}
                     render={({ field }) => (
-                      <TextField 
-                        {...field} 
-                        fullWidth 
-                        label="DNI/NIE de la Esposa"
+                      <TextField
+                        {...field}
+                        fullWidth
+                        label={t('memberForm.fields.esposa.dniNie')}
                         error={esposaDocValidation ? !esposaDocValidation.isValid : false}
                         helperText={
                           (esposaDocValidation && !esposaDocValidation.isValid && esposaDocValidation.errorMessage) ||
-                          (isValidatingEsposaDoc && 'Validando...')
+                          (isValidatingEsposaDoc && t('memberForm.helpers.validating'))
                         }
                         onChange={(e) => {
                           clearErrors('esposa_documento_identidad') // Clear external errors when user edits
@@ -845,7 +846,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                     name="esposa_correo_electronico"
                     control={control}
                     render={({ field }) => (
-                      <TextField {...field} fullWidth label="Email de la Esposa" type="email" />
+                      <TextField {...field} fullWidth label={t('memberForm.fields.esposa.email')} type="email" />
                     )}
                   />
                 </Grid>
@@ -853,7 +854,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                 {/* Lista de Familiares */}
                 <Grid item xs={12} sx={{ mt: 3 }}>
                   <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                    Miembros Adicionales de la Familia (Opcional)
+                    {t('memberForm.sections.miembrosAdicionales')}
                   </Typography>
                   <FamilyMembersList
                     members={familyMembers}
@@ -868,10 +869,10 @@ export const MemberForm: React.FC<MemberFormProps> = ({
 
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end', mt: 3 }}>
             <Button variant="outlined" onClick={onCancel} size="large">
-              Cancelar
+              {t('memberForm.buttons.cancel')}
             </Button>
             <Button type="submit" variant="contained" size="large">
-              {mode === 'edit' ? 'Guardar Cambios' : 'Continuar'}
+              {mode === 'edit' ? t('memberForm.buttons.saveChanges') : t('memberForm.buttons.continue')}
             </Button>
           </Box>
         </Box>

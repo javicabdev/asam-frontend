@@ -304,5 +304,80 @@
     "success": {
       "updateMessage": "Mbooloo bi yeesal na bu baax"
     }
+  },
+  "memberForm": {
+    "title": "Xibaar Mbooloo Bu Bees",
+    "description": "Dugal fórom bi ngir bind mbooloo bu bees. Njàngat yi am * dañu war.",
+    "validation": {
+      "numeroSocioRequired": "Limu mbooloo dafa war",
+      "numeroSocioFormat": "Jëm bi war A00000 ci njaboot walla B00000 ci kenn",
+      "tipoMembresiaRequired": "Xeetu bokk dafa war",
+      "nombreRequired": "Tur dafa war",
+      "apellidosRequired": "Sant dafa war",
+      "direccionRequired": "Màkkaanu kër dafa war",
+      "codigoPostalRequired": "Kood postal dafa war",
+      "poblacionRequired": "Dëkk dafa war",
+      "provinciaRequired": "Diwaan dafa war",
+      "paisRequired": "Réew dafa war",
+      "documentoIdentidadRequired": "Kàddu bu ñakkite dafa war",
+      "emailRequired": "Email dafa war",
+      "emailInvalid": "Email baaxul. Jëm bu war: jëfandikukat@domain.com"
+    },
+    "errors": {
+      "numeroSocioDuplicate": "Limu mbooloo bii am na ba",
+      "documentoInvalido": "Kàddu baaxul"
+    },
+    "sections": {
+      "datosPersonales": "Xibaar Bopp",
+      "datosEsposo": "Xibaar Jëkër (Ki am bokk bi)",
+      "direccion": "Màkkaanu Kër",
+      "datosFamilia": "Xibaar Njaboot",
+      "datosEsposa": "Xibaar Jabar (Doo waar)",
+      "miembrosAdicionales": "Mbooloo yu njaboot yu yokk (Doo waar)"
+    },
+    "fields": {
+      "tipoMembresia": "Xeetu Bokk",
+      "numeroSocio": "Limu Mbooloo",
+      "nombre": "Tur",
+      "apellidos": "Sant",
+      "fechaNacimiento": "Bésu Juddu",
+      "dniNie": "DNI/NIE",
+      "correoElectronico": "Adres Email",
+      "profesion": "Liggéey",
+      "calleNumeroPiso": "Gàllu, Limu, Naat",
+      "codigoPostal": "Kood Postal",
+      "poblacion": "Dëkk",
+      "provincia": "Diwaan",
+      "pais": "Réew",
+      "nacionalidad": "Nasionalite",
+      "observaciones": "Karmat",
+      "esposa": {
+        "nombre": "Tur bu jabar",
+        "apellidos": "Sant bu jabar",
+        "dniNie": "DNI/NIE bu jabar",
+        "email": "Email bu jabar"
+      }
+    },
+    "membershipTypes": {
+      "individual": "Kenn",
+      "family": "Njaboot"
+    },
+    "helpers": {
+      "validating": "Yam tëkki...",
+      "numeroSocioError": "Njuumte ci yàpp limu bi. Mën nga ko dugal sa bopp.",
+      "numeroSocioFormat": "Mën nga bind limu rekk (mb: 2) te dina ko soppi otomatik",
+      "fieldDisabled": "Njàngat bii mënul ko soppi",
+      "dniNieHelper": "Dugal DNI walla NIE",
+      "familyDataOptional": "Xibaar jabar ak mbooloo yu njaboot yu yokk doo waar."
+    },
+    "placeholders": {
+      "numeroSocioFamily": "mb: 2 → A00002",
+      "numeroSocioIndividual": "mb: 2 → B00002"
+    },
+    "buttons": {
+      "cancel": "Neenal",
+      "continue": "Jëkk",
+      "saveChanges": "Dakk Soppi Yi"
+    }
   }
 }

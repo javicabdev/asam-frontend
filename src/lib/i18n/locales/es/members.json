@@ -304,5 +304,80 @@
     "success": {
       "updateMessage": "Socio actualizado correctamente"
     }
+  },
+  "memberForm": {
+    "title": "Datos del Nuevo Socio",
+    "description": "Complete el formulario para registrar un nuevo socio. Los campos marcados con * son obligatorios.",
+    "validation": {
+      "numeroSocioRequired": "El número de socio es obligatorio",
+      "numeroSocioFormat": "El formato debe ser A00000 para familias o B00000 para individuales",
+      "tipoMembresiaRequired": "El tipo de membresía es obligatorio",
+      "nombreRequired": "El nombre es obligatorio",
+      "apellidosRequired": "Los apellidos son obligatorios",
+      "direccionRequired": "La dirección es obligatoria",
+      "codigoPostalRequired": "El código postal es obligatorio",
+      "poblacionRequired": "La población es obligatoria",
+      "provinciaRequired": "La provincia es obligatoria",
+      "paisRequired": "El país es obligatorio",
+      "documentoIdentidadRequired": "El documento de identidad es obligatorio",
+      "emailRequired": "El email es obligatorio",
+      "emailInvalid": "Email inválido. Formato esperado: usuario@dominio.com"
+    },
+    "errors": {
+      "numeroSocioDuplicate": "Este número de socio ya existe",
+      "documentoInvalido": "Documento inválido"
+    },
+    "sections": {
+      "datosPersonales": "Datos Personales",
+      "datosEsposo": "Datos del Esposo (Titular de la Membresía)",
+      "direccion": "Dirección",
+      "datosFamilia": "Datos de la Familia",
+      "datosEsposa": "Datos de la Esposa (Opcional)",
+      "miembrosAdicionales": "Miembros Adicionales de la Familia (Opcional)"
+    },
+    "fields": {
+      "tipoMembresia": "Tipo de Membresía",
+      "numeroSocio": "Número de Socio",
+      "nombre": "Nombre",
+      "apellidos": "Apellidos",
+      "fechaNacimiento": "Fecha de Nacimiento",
+      "dniNie": "DNI/NIE",
+      "correoElectronico": "Correo Electrónico",
+      "profesion": "Profesión",
+      "calleNumeroPiso": "Calle, Número, Piso",
+      "codigoPostal": "Código Postal",
+      "poblacion": "Población",
+      "provincia": "Provincia",
+      "pais": "País",
+      "nacionalidad": "Nacionalidad",
+      "observaciones": "Observaciones",
+      "esposa": {
+        "nombre": "Nombre de la Esposa",
+        "apellidos": "Apellidos de la Esposa",
+        "dniNie": "DNI/NIE de la Esposa",
+        "email": "Email de la Esposa"
+      }
+    },
+    "membershipTypes": {
+      "individual": "Individual",
+      "family": "Familiar"
+    },
+    "helpers": {
+      "validating": "Validando...",
+      "numeroSocioError": "Error al obtener el número. Puede introducirlo manualmente.",
+      "numeroSocioFormat": "Puede escribir solo el número (ej: 2) y se formateará automáticamente",
+      "fieldDisabled": "Este campo no puede modificarse",
+      "dniNieHelper": "Introduzca el DNI o NIE",
+      "familyDataOptional": "Los datos de la esposa y familiares adicionales son opcionales."
+    },
+    "placeholders": {
+      "numeroSocioFamily": "ej: 2 → A00002",
+      "numeroSocioIndividual": "ej: 2 → B00002"
+    },
+    "buttons": {
+      "cancel": "Cancelar",
+      "continue": "Continuar",
+      "saveChanges": "Guardar Cambios"
+    }
   }
 }

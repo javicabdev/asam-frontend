@@ -1,0 +1,53 @@
+# Query para obtener el informe de morosos
+query GetDelinquentReport($input: DelinquentReportInput) {
+  getDelinquentReport(input: $input) {
+    debtors {
+      memberId
+      familyId
+      type
+      member {
+        id
+        memberNumber
+        firstName
+        lastName
+        email
+        phone
+        status
+      }
+      family {
+        id
+        familyName
+        primaryMember {
+          id
+          memberNumber
+          firstName
+          lastName
+          email
+          phone
+        }
+        totalMembers
+      }
+      pendingPayments {
+        id
+        amount
+        createdAt
+        daysOverdue
+        notes
+      }
+      totalDebt
+      oldestDebtDays
+      oldestDebtDate
+      lastPaymentDate
+      lastPaymentAmount
+    }
+    summary {
+      totalDebtors
+      individualDebtors
+      familyDebtors
+      totalDebtAmount
+      averageDaysOverdue
+      averageDebtPerDebtor
+    }
+    generatedAt
+  }
+}

@@ -1355,6 +1355,13 @@ export type RegisterFeeMutationVariables = Exact<{
 
 export type RegisterFeeMutation = { __typename?: 'Mutation', registerFee: { __typename?: 'MutationResponse', success: boolean, message?: string | null, error?: string | null } };
 
+export type GetDelinquentReportQueryVariables = Exact<{
+  input?: InputMaybe<DelinquentReportInput>;
+}>;
+
+
+export type GetDelinquentReportQuery = { __typename?: 'Query', getDelinquentReport: { __typename?: 'DelinquentReportResponse', generatedAt: string, debtors: Array<{ __typename?: 'Debtor', memberId?: string | null, familyId?: string | null, type: string, totalDebt: number, oldestDebtDays: number, oldestDebtDate: string, lastPaymentDate?: string | null, lastPaymentAmount?: number | null, member?: { __typename?: 'DebtorMemberInfo', id: string, memberNumber: string, firstName: string, lastName: string, email?: string | null, phone?: string | null, status: string } | null, family?: { __typename?: 'DebtorFamilyInfo', id: string, familyName: string, totalMembers: number, primaryMember: { __typename?: 'DebtorMemberInfo', id: string, memberNumber: string, firstName: string, lastName: string, email?: string | null, phone?: string | null } } | null, pendingPayments: Array<{ __typename?: 'PendingPayment', id: string, amount: number, createdAt: string, daysOverdue: number, notes?: string | null }> }>, summary: { __typename?: 'DelinquentSummary', totalDebtors: number, individualDebtors: number, familyDebtors: number, totalDebtAmount: number, averageDaysOverdue: number, averageDebtPerDebtor: number } } };
+
 export type HealthCheckQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3899,6 +3906,93 @@ export function useRegisterFeeMutation(baseOptions?: Apollo.MutationHookOptions<
 export type RegisterFeeMutationHookResult = ReturnType<typeof useRegisterFeeMutation>;
 export type RegisterFeeMutationResult = Apollo.MutationResult<RegisterFeeMutation>;
 export type RegisterFeeMutationOptions = Apollo.BaseMutationOptions<RegisterFeeMutation, RegisterFeeMutationVariables>;
+export const GetDelinquentReportDocument = gql`
+    query GetDelinquentReport($input: DelinquentReportInput) {
+  getDelinquentReport(input: $input) {
+    debtors {
+      memberId
+      familyId
+      type
+      member {
+        id
+        memberNumber
+        firstName
+        lastName
+        email
+        phone
+        status
+      }
+      family {
+        id
+        familyName
+        primaryMember {
+          id
+          memberNumber
+          firstName
+          lastName
+          email
+          phone
+        }
+        totalMembers
+      }
+      pendingPayments {
+        id
+        amount
+        createdAt
+        daysOverdue
+        notes
+      }
+      totalDebt
+      oldestDebtDays
+      oldestDebtDate
+      lastPaymentDate
+      lastPaymentAmount
+    }
+    summary {
+      totalDebtors
+      individualDebtors
+      familyDebtors
+      totalDebtAmount
+      averageDaysOverdue
+      averageDebtPerDebtor
+    }
+    generatedAt
+  }
+}
+    `;
+
+/**
+ * __useGetDelinquentReportQuery__
+ *
+ * To run a query within a React component, call `useGetDelinquentReportQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDelinquentReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDelinquentReportQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetDelinquentReportQuery(baseOptions?: Apollo.QueryHookOptions<GetDelinquentReportQuery, GetDelinquentReportQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDelinquentReportQuery, GetDelinquentReportQueryVariables>(GetDelinquentReportDocument, options);
+      }
+export function useGetDelinquentReportLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDelinquentReportQuery, GetDelinquentReportQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDelinquentReportQuery, GetDelinquentReportQueryVariables>(GetDelinquentReportDocument, options);
+        }
+export function useGetDelinquentReportSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetDelinquentReportQuery, GetDelinquentReportQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetDelinquentReportQuery, GetDelinquentReportQueryVariables>(GetDelinquentReportDocument, options);
+        }
+export type GetDelinquentReportQueryHookResult = ReturnType<typeof useGetDelinquentReportQuery>;
+export type GetDelinquentReportLazyQueryHookResult = ReturnType<typeof useGetDelinquentReportLazyQuery>;
+export type GetDelinquentReportSuspenseQueryHookResult = ReturnType<typeof useGetDelinquentReportSuspenseQuery>;
+export type GetDelinquentReportQueryResult = Apollo.QueryResult<GetDelinquentReportQuery, GetDelinquentReportQueryVariables>;
 export const HealthCheckDocument = gql`
     query HealthCheck {
   health

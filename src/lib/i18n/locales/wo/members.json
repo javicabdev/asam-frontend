@@ -239,5 +239,40 @@
     "cancel": "Neenal",
     "add": "Yokk",
     "update": "Yeesal"
+  },
+  "newMemberPage": {
+    "title": "Bind Mbooloo Bu Bees",
+    "breadcrumbs": {
+      "dashboard": "Tablo bu gën",
+      "members": "Mbooloo",
+      "newMember": "Mbooloo Bu Bees"
+    },
+    "importantNote": {
+      "title": "Bu yàgg",
+      "message": "Bu bind bi jeexal, dangaa mën tëkki fay bi ci xaalis."
+    },
+    "debug": {
+      "authenticated": "Tëkki na",
+      "notAuthenticated": "Tëkkil",
+      "user": "Jëfandikukat",
+      "role": "Jëfu",
+      "tokenPresent": "Token am na",
+      "noToken": "Token amul"
+    },
+    "errors": {
+      "notAuthenticated": "War nga dugg ngir sos mbooloo",
+      "noAdminPermission": "Amul sa kilifa ngir sos mbooloo",
+      "createMember": "Njuumte ci sos mbooloo bi",
+      "createFamily": "Njuumte ci sos njaboot bi",
+      "invalidServerResponse": "Amul jaabaram bu baax ci serveur bi",
+      "familyCreatedButNotFound": "Njaboot bi sos na bu baax (Limu: {{numeroSocio}}), waaye gisul mbooloo bi. Seet ko ci limu mbooloo yi.",
+      "familyCreatedSearchError": "Njaboot bi sos na bu baax (Limu: {{numeroSocio}}), waaye am na njuumte ci seet mbooloo bi. Seet ko ci sa bopp.",
+      "genericError": "Am na njuumte ci sos mbooloo bi",
+      "duplicateNumber": "Limu mbooloo \"{{numeroSocio}}\" am na ba ci biir. Génne benn limu bu bees walla tëkki ci database bi.",
+      "networkError": "Njuumte ci jokkoo. Tëkki sa jokkoo internet.",
+      "internalServerError": "Njuumte ci serveur bi. Mbooloo bi mën na sos ko ci yëpp. Xool limu mbooloo yi ba dugg leegi.",
+      "mustLogin": "War nga dugg ngir jëfandikoo bët bii",
+      "noPermissionMessage": "Amul kilifa bu kilifa ngir sos mbooloo. Jokkoo ak kilifa bu gën su fekkee daal la bëgg sos mbooloo bu bees."
+    }
   }
 }

@@ -239,5 +239,40 @@
     "cancel": "Cancelar",
     "add": "Añadir",
     "update": "Actualizar"
+  },
+  "newMemberPage": {
+    "title": "Registrar Nuevo Socio",
+    "breadcrumbs": {
+      "dashboard": "Dashboard",
+      "members": "Socios",
+      "newMember": "Nuevo Socio"
+    },
+    "importantNote": {
+      "title": "Importante",
+      "message": "Después de completar el registro, podrá confirmar el pago de la cuota inicial en efectivo."
+    },
+    "debug": {
+      "authenticated": "Autenticado",
+      "notAuthenticated": "No autenticado",
+      "user": "Usuario",
+      "role": "Rol",
+      "tokenPresent": "Token presente",
+      "noToken": "Sin token"
+    },
+    "errors": {
+      "notAuthenticated": "Debes iniciar sesión para crear un socio",
+      "noAdminPermission": "No tienes permisos de administrador para crear socios",
+      "createMember": "Error al crear el socio",
+      "createFamily": "Error al crear la familia",
+      "invalidServerResponse": "No se recibió una respuesta válida del servidor",
+      "familyCreatedButNotFound": "La familia se creó correctamente (Número: {{numeroSocio}}), pero no se pudo localizar el socio. Por favor, búscalo manualmente en la lista de socios.",
+      "familyCreatedSearchError": "La familia se creó correctamente (Número: {{numeroSocio}}), pero hubo un error al buscar el socio. Por favor, búscalo manualmente.",
+      "genericError": "Ha ocurrido un error al crear el socio",
+      "duplicateNumber": "El número de socio \"{{numeroSocio}}\" ya existe. Por favor, genera un nuevo número o verifica en la base de datos.",
+      "networkError": "Error de conexión. Por favor verifica tu conexión a internet.",
+      "internalServerError": "Error del servidor. El socio puede haber sido creado parcialmente. Verifica en la lista de socios antes de intentar de nuevo.",
+      "mustLogin": "Debes iniciar sesión para acceder a esta página",
+      "noPermissionMessage": "No tienes permisos de administrador para crear socios. Contacta con un administrador si necesitas crear un nuevo socio."
+    }
   }
 }

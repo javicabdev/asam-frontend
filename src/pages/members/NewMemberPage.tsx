@@ -16,6 +16,7 @@ import {
   Chip,
 } from '@mui/material'
 import { NavigateNext } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '@/stores/authStore'
 
 import { MemberForm } from '@/features/members/components/MemberForm'
@@ -70,6 +71,7 @@ interface MemberFormSubmitData {
 }
 
 export const NewMemberPage: React.FC = () => {
+  const { t } = useTranslation('members')
   const navigate = useNavigate()
   const [error, setError] = React.useState<string | null>(null)
   const [loading, setLoading] = React.useState(false)
@@ -112,11 +114,11 @@ export const NewMemberPage: React.FC = () => {
   // Check if user has admin permissions
   React.useEffect(() => {
     if (!isAuthenticated) {
-      setError('Debes iniciar sesión para crear un socio')
+      setError(t('newMemberPage.errors.notAuthenticated'))
     } else if (user?.role !== 'admin') {
-      setError('No tienes permisos de administrador para crear socios')
+      setError(t('newMemberPage.errors.noAdminPermission'))
     }
-  }, [isAuthenticated, user])
+  }, [isAuthenticated, user, t])
 
   const handleSubmit = async (data: MemberFormSubmitData) => {
     setLoading(true)
@@ -168,9 +170,9 @@ export const NewMemberPage: React.FC = () => {
           // Extract field-specific errors
           const extractedFieldErrors = extractFieldErrors(graphQLError)
           setFieldErrors(extractedFieldErrors)
-          
+
           // Set general error message
-          const errorMessage = graphQLError.message || 'Error al crear el socio'
+          const errorMessage = graphQLError.message || t('newMemberPage.errors.createMember')
           if (graphQLError.extensions?.fields) {
             const fields = graphQLError.extensions.fields as Record<string, string>
             const fieldErrorsText = Object.entries(fields)
@@ -187,7 +189,7 @@ export const NewMemberPage: React.FC = () => {
 
         // Validate response data
         if (!memberResult.data?.createMember?.miembro_id) {
-          setError('No se recibió una respuesta válida del servidor')
+          setError(t('newMemberPage.errors.invalidServerResponse'))
           setLoading(false)
           return
         }
@@ -251,9 +253,9 @@ export const NewMemberPage: React.FC = () => {
         // Extract field-specific errors
         const extractedFieldErrors = extractFieldErrors(graphQLError)
         setFieldErrors(extractedFieldErrors)
-        
+
         // Set general error message
-        const errorMessage = graphQLError.message || 'Error al crear la familia'
+        const errorMessage = graphQLError.message || t('newMemberPage.errors.createFamily')
         if (graphQLError.extensions?.fields) {
           const fields = graphQLError.extensions.fields as Record<string, string>
           const fieldErrorsText = Object.entries(fields)
@@ -270,7 +272,7 @@ export const NewMemberPage: React.FC = () => {
 
       // Validate response data
       if (!familyResult.data?.createFamily?.id) {
-        setError('No se recibió una respuesta válida del servidor')
+        setError(t('newMemberPage.errors.invalidServerResponse'))
         setLoading(false)
         return
       }
@@ -308,19 +310,13 @@ export const NewMemberPage: React.FC = () => {
             newMemberId = matchingMember.miembro_id
           } else {
             console.error('Could not find member after search fallback')
-            setError(
-              `La familia se creó correctamente (Número: ${newFamily.numero_socio}), ` +
-              'pero no se pudo localizar el socio. Por favor, búscalo manualmente en la lista de socios.'
-            )
+            setError(t('newMemberPage.errors.familyCreatedButNotFound', { numeroSocio: newFamily.numero_socio }))
             setLoading(false)
             return
           }
         } catch (searchError) {
           console.error('Error searching for member:', searchError)
-          setError(
-            `La familia se creó correctamente (Número: ${newFamily.numero_socio}), ` +
-            'pero hubo un error al buscar el socio. Por favor, búscalo manualmente.'
-          )
+          setError(t('newMemberPage.errors.familyCreatedSearchError', { numeroSocio: newFamily.numero_socio }))
           setLoading(false)
           return
         }
@@ -332,25 +328,25 @@ export const NewMemberPage: React.FC = () => {
       console.error('Error creating member:', err)
 
       // Better error handling with specific messages
-      let errorMessage = 'Ha ocurrido un error al crear el socio'
+      let errorMessage = t('newMemberPage.errors.genericError')
 
       if (err instanceof ApolloError) {
         // Check for specific error types
-        const graphQLError = err.graphQLErrors && err.graphQLErrors.length > 0 
-          ? err.graphQLErrors[0].message 
+        const graphQLError = err.graphQLErrors && err.graphQLErrors.length > 0
+          ? err.graphQLErrors[0].message
           : ''
-        
+
         // Detect duplicate number error
-        if (graphQLError.toLowerCase().includes('duplicate') || 
+        if (graphQLError.toLowerCase().includes('duplicate') ||
             graphQLError.toLowerCase().includes('duplicado') ||
             graphQLError.toLowerCase().includes('already exists')) {
-          errorMessage = `El número de socio "${data.numero_socio}" ya existe. Por favor, genera un nuevo número o verifica en la base de datos.`
+          errorMessage = t('newMemberPage.errors.duplicateNumber', { numeroSocio: data.numero_socio })
         } else if (graphQLError) {
           errorMessage = graphQLError
         } else if (err.networkError) {
-          errorMessage = 'Error de conexión. Por favor verifica tu conexión a internet.'
+          errorMessage = t('newMemberPage.errors.networkError')
         } else if (err.message.toLowerCase().includes('internal server error')) {
-          errorMessage = `Error del servidor. El socio puede haber sido creado parcialmente. Verifica en la lista de socios antes de intentar de nuevo.`
+          errorMessage = t('newMemberPage.errors.internalServerError')
         } else if (err.message) {
           errorMessage = err.message
         }
@@ -377,7 +373,7 @@ export const NewMemberPage: React.FC = () => {
               navigate('/dashboard')
             }}
           >
-            Dashboard
+            {t('newMemberPage.breadcrumbs.dashboard')}
           </Link>
           <Link
             underline="hover"
@@ -388,31 +384,31 @@ export const NewMemberPage: React.FC = () => {
               navigate('/members')
             }}
           >
-            Socios
+            {t('newMemberPage.breadcrumbs.members')}
           </Link>
-          <Typography color="text.primary">Nuevo Socio</Typography>
+          <Typography color="text.primary">{t('newMemberPage.breadcrumbs.newMember')}</Typography>
         </Breadcrumbs>
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
         <Typography variant="h4" component="h1">
-          Registrar Nuevo Socio
+          {t('newMemberPage.title')}
         </Typography>
         {import.meta.env.DEV && (
           <Box sx={{ display: 'flex', gap: 1 }}>
             <Chip
-              label={isAuthenticated ? 'Autenticado' : 'No autenticado'}
+              label={isAuthenticated ? t('newMemberPage.debug.authenticated') : t('newMemberPage.debug.notAuthenticated')}
               color={isAuthenticated ? 'success' : 'error'}
               size="small"
             />
-            <Chip label={`Usuario: ${user?.username || 'N/A'}`} color="info" size="small" />
+            <Chip label={`${t('newMemberPage.debug.user')}: ${user?.username || 'N/A'}`} color="info" size="small" />
             <Chip
-              label={`Rol: ${user?.role || 'N/A'}`}
+              label={`${t('newMemberPage.debug.role')}: ${user?.role || 'N/A'}`}
               color={user?.role === 'admin' ? 'success' : 'warning'}
               size="small"
             />
             <Chip
-              label={accessToken ? 'Token presente' : 'Sin token'}
+              label={accessToken ? t('newMemberPage.debug.tokenPresent') : t('newMemberPage.debug.noToken')}
               color={accessToken ? 'success' : 'error'}
               size="small"
             />
@@ -423,8 +419,7 @@ export const NewMemberPage: React.FC = () => {
       <Card sx={{ mb: 3, bgcolor: 'info.lighter' }}>
         <CardContent>
           <Typography variant="body1">
-            <strong>Importante:</strong> Después de completar el registro, podrá confirmar
-            el pago de la cuota inicial en efectivo.
+            <strong>{t('newMemberPage.importantNote.title')}:</strong> {t('newMemberPage.importantNote.message')}
           </Typography>
         </CardContent>
       </Card>
@@ -438,8 +433,8 @@ export const NewMemberPage: React.FC = () => {
       ) : (
         <Alert severity="error" sx={{ mt: 2 }}>
           {!isAuthenticated
-            ? 'Debes iniciar sesión para acceder a esta página'
-            : 'No tienes permisos de administrador para crear socios. Contacta con un administrador si necesitas crear un nuevo socio.'}
+            ? t('newMemberPage.errors.mustLogin')
+            : t('newMemberPage.errors.noPermissionMessage')}
         </Alert>
       )}
 

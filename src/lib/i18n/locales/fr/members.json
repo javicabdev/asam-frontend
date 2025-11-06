@@ -239,5 +239,40 @@
     "cancel": "Annuler",
     "add": "Ajouter",
     "update": "Mettre à jour"
+  },
+  "newMemberPage": {
+    "title": "Enregistrer un Nouveau Membre",
+    "breadcrumbs": {
+      "dashboard": "Tableau de bord",
+      "members": "Membres",
+      "newMember": "Nouveau Membre"
+    },
+    "importantNote": {
+      "title": "Important",
+      "message": "Après avoir complété l'inscription, vous pourrez confirmer le paiement de la cotisation initiale en espèces."
+    },
+    "debug": {
+      "authenticated": "Authentifié",
+      "notAuthenticated": "Non authentifié",
+      "user": "Utilisateur",
+      "role": "Rôle",
+      "tokenPresent": "Token présent",
+      "noToken": "Sans token"
+    },
+    "errors": {
+      "notAuthenticated": "Vous devez vous connecter pour créer un membre",
+      "noAdminPermission": "Vous n'avez pas les permissions d'administrateur pour créer des membres",
+      "createMember": "Erreur lors de la création du membre",
+      "createFamily": "Erreur lors de la création de la famille",
+      "invalidServerResponse": "Aucune réponse valide n'a été reçue du serveur",
+      "familyCreatedButNotFound": "La famille a été créée avec succès (Numéro: {{numeroSocio}}), mais le membre n'a pas pu être localisé. Veuillez le rechercher manuellement dans la liste des membres.",
+      "familyCreatedSearchError": "La famille a été créée avec succès (Numéro: {{numeroSocio}}), mais il y a eu une erreur lors de la recherche du membre. Veuillez le rechercher manuellement.",
+      "genericError": "Une erreur s'est produite lors de la création du membre",
+      "duplicateNumber": "Le numéro de membre \"{{numeroSocio}}\" existe déjà. Veuillez générer un nouveau numéro ou vérifier dans la base de données.",
+      "networkError": "Erreur de connexion. Veuillez vérifier votre connexion internet.",
+      "internalServerError": "Erreur du serveur. Le membre peut avoir été créé partiellement. Vérifiez dans la liste des membres avant de réessayer.",
+      "mustLogin": "Vous devez vous connecter pour accéder à cette page",
+      "noPermissionMessage": "Vous n'avez pas les permissions d'administrateur pour créer des membres. Contactez un administrateur si vous avez besoin de créer un nouveau membre."
+    }
   }
 }

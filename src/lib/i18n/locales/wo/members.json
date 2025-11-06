@@ -8,6 +8,29 @@
   "adminOnly": "Kilifa yi rekk munu sos mbooloo yu bees",
   "newMember": "Mbooloo Bu Bees",
   "loadError": "Njuumte ci yab mbooloo yi",
+  "filters": {
+    "searchPlaceholder": "Seet ci tur, sant walla limub mbooloo",
+    "search": "Seet...",
+    "status": {
+      "label": "Jamono",
+      "all": "Bépp",
+      "active": "Yoo xool",
+      "inactive": "Yoo xoolul"
+    },
+    "type": {
+      "label": "Xeetu",
+      "all": "Bépp",
+      "individual": "Kenn ci biir",
+      "family": "Njaboot"
+    },
+    "apply": "Seet",
+    "clear": "Soppi",
+    "advancedTooltip": "Filtar yu yépp (bu leeral amul lool)",
+    "advancedTitle": "Filtar Yu Yépp",
+    "advancedUnavailable": "(Bu leeral amul lool)",
+    "advancedMessage": "Filtar yu yépp léeral na ñu ko ci backend bi.",
+    "advancedHint": "Leegi, nga mën a jëfandikoo seet bu mat sëkk ngir filter ci tur, sant walla limub mbooloo."
+  },
   "list": {
     "title": "Limu Mbooloo",
     "search": "Seet mbooloo...",

@@ -8,6 +8,29 @@
   "adminOnly": "Solo los administradores pueden crear nuevos socios",
   "newMember": "Nuevo Socio",
   "loadError": "Error al cargar los socios",
+  "filters": {
+    "searchPlaceholder": "Buscar por nombre, apellidos o nº socio",
+    "search": "Buscar...",
+    "status": {
+      "label": "Estado",
+      "all": "Todos",
+      "active": "Activo",
+      "inactive": "Inactivo"
+    },
+    "type": {
+      "label": "Tipo",
+      "all": "Todos",
+      "individual": "Individual",
+      "family": "Familiar"
+    },
+    "apply": "Buscar",
+    "clear": "Limpiar",
+    "advancedTooltip": "Filtros avanzados (temporalmente no disponibles)",
+    "advancedTitle": "Filtros Avanzados",
+    "advancedUnavailable": "(Temporalmente no disponibles)",
+    "advancedMessage": "Los filtros avanzados están temporalmente deshabilitados mientras se implementan en el backend.",
+    "advancedHint": "Por ahora, puede usar la búsqueda general para filtrar por nombre, apellidos o número de socio."
+  },
   "list": {
     "title": "Lista de Miembros",
     "search": "Buscar miembros...",

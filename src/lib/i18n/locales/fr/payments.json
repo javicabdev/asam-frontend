@@ -209,5 +209,28 @@
     "confirmButton": "Confirmer le Paiement",
     "successMessage": "Paiement confirmé avec succès",
     "errorMessage": "Erreur lors de la confirmation du paiement"
+  },
+  "history": {
+    "title": "Historique des Paiements",
+    "paymentSingular": "paiement enregistré",
+    "paymentPlural": "paiements enregistrés",
+    "totalPaid": "Total Payé",
+    "viewAll": "Voir Tous",
+    "noPayments": "Ce membre n'a pas encore de paiements enregistrés.",
+    "columnDate": "Date",
+    "columnMethod": "Mode de paiement",
+    "columnAmount": "Montant",
+    "columnStatus": "Statut",
+    "columnActions": "Actions",
+    "methodCash": "Espèces",
+    "methodTransfer": "Virement",
+    "methodCard": "Carte",
+    "receiptButton": "Reçu",
+    "confirmButton": "Confirmer",
+    "viewRemaining": "Voir les {{count}} paiements restants →",
+    "errorNoMemberData": "Erreur : Le paiement n'a pas de données de membre associées. Veuillez contacter le support.",
+    "receiptSuccess": "Reçu généré avec succès",
+    "receiptError": "Erreur lors de la génération du reçu. Veuillez réessayer.",
+    "loadError": "Erreur lors du chargement de l'historique des paiements :"
   }
 }

@@ -209,5 +209,28 @@
     "confirmButton": "Confirmar Pago",
     "successMessage": "Pago confirmado correctamente",
     "errorMessage": "Error al confirmar el pago"
+  },
+  "history": {
+    "title": "Historial de Pagos",
+    "paymentSingular": "pago registrado",
+    "paymentPlural": "pagos registrados",
+    "totalPaid": "Total Pagado",
+    "viewAll": "Ver Todos",
+    "noPayments": "Este socio aún no tiene pagos registrados.",
+    "columnDate": "Fecha",
+    "columnMethod": "Forma de pago",
+    "columnAmount": "Importe",
+    "columnStatus": "Estado",
+    "columnActions": "Acciones",
+    "methodCash": "Efectivo",
+    "methodTransfer": "Transferencia",
+    "methodCard": "Tarjeta",
+    "receiptButton": "Recibo",
+    "confirmButton": "Confirmar",
+    "viewRemaining": "Ver los {{count}} pagos restantes →",
+    "errorNoMemberData": "Error: El pago no tiene datos de socio asociados. Por favor, contacte con soporte.",
+    "receiptSuccess": "Recibo generado exitosamente",
+    "receiptError": "Error al generar el recibo. Por favor, inténtelo de nuevo.",
+    "loadError": "Error al cargar el historial de pagos:"
   }
 }

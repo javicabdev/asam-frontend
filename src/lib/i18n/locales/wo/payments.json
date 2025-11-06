@@ -209,5 +209,28 @@
     "confirmButton": "Tànnee Fay Bi",
     "successMessage": "Tànnee nañu fay bi bu baax",
     "errorMessage": "Njuumte ci tànnee fay bi"
+  },
+  "history": {
+    "title": "Jaar-jaar Yu Fay",
+    "paymentSingular": "fay bu bindu",
+    "paymentPlural": "fay yi bindu",
+    "totalPaid": "Lépp Bu Fay",
+    "viewAll": "Gis Lépp",
+    "noPayments": "Mbooloo bii amul fay yu bindu.",
+    "columnDate": "Bis",
+    "columnMethod": "Anamu fay",
+    "columnAmount": "Dayoo",
+    "columnStatus": "Tekki",
+    "columnActions": "Jëf",
+    "methodCash": "Xaalis",
+    "methodTransfer": "Yóbbale",
+    "methodCard": "Kaar",
+    "receiptButton": "Kàddu",
+    "confirmButton": "Tànnee",
+    "viewRemaining": "Gis {{count}} fay yi des →",
+    "errorNoMemberData": "Njuumte: Fay bi amul xëtu mbooloo. Jokkon ak soporte.",
+    "receiptSuccess": "Kàddu bi def na bu baax",
+    "receiptError": "Njuumte ci def kàddu bi. Jéemaalee.",
+    "loadError": "Njuumte ci yab jaar-jaar yu fay:"
   }
 }

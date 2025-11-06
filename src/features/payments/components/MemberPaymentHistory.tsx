@@ -20,6 +20,7 @@ import { es } from 'date-fns/locale'
 import { Receipt as ReceiptIcon, Launch as LaunchIcon, CheckCircleOutline as ConfirmIcon } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useMemberPayments, MemberPayment } from '../hooks/useMemberPayments'
 import { PaymentStatusChip } from './PaymentStatusChip'
@@ -38,6 +39,7 @@ interface MemberPaymentHistoryProps {
  * Shows a compact table with recent payments and summary
  */
 export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }: MemberPaymentHistoryProps) {
+  const { t } = useTranslation('payments')
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
   const { payments, loading, error, totalPaid } = useMemberPayments(memberId, membershipType)
@@ -75,12 +77,11 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
   const translateMethod = (method: string | null | undefined): string => {
     if (!method) return ''
 
-    const translations: Record<string, string> = {
-      CASH: 'Efectivo',
-      TRANSFER: 'Transferencia',
-      CARD: 'Tarjeta',
-    }
-    return translations[method.toUpperCase()] || method
+    const methodKey = method.toUpperCase()
+    if (methodKey === 'CASH') return t('history.methodCash')
+    if (methodKey === 'TRANSFER') return t('history.methodTransfer')
+    if (methodKey === 'CARD') return t('history.methodCard')
+    return method
   }
 
   // Handle download receipt
@@ -89,7 +90,7 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
       // Validate that we have member data
       if (!payment.member) {
         enqueueSnackbar(
-          'Error: El pago no tiene datos de socio asociados. Por favor, contacte con soporte.',
+          t('history.errorNoMemberData'),
           { variant: 'error' }
         )
         return
@@ -112,11 +113,11 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
 
       await generateReceipt(paymentListItem, true)
 
-      enqueueSnackbar('Recibo generado exitosamente', { variant: 'success' })
+      enqueueSnackbar(t('history.receiptSuccess'), { variant: 'success' })
     } catch (error) {
       console.error('Error downloading receipt:', error)
       enqueueSnackbar(
-        'Error al generar el recibo. Por favor, inténtelo de nuevo.',
+        t('history.receiptError'),
         { variant: 'error' }
       )
     }
@@ -160,7 +161,7 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
   if (error) {
     return (
       <Alert severity="error" sx={{ my: 2 }}>
-        Error al cargar el historial de pagos: {error.message}
+        {t('history.loadError')} {error.message}
       </Alert>
     )
   }
@@ -174,16 +175,16 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Box>
           <Typography variant="h6" gutterBottom>
-            Historial de Pagos
+            {t('history.title')}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {payments.length} {payments.length === 1 ? 'pago registrado' : 'pagos registrados'}
+            {payments.length} {payments.length === 1 ? t('history.paymentSingular') : t('history.paymentPlural')}
           </Typography>
         </Box>
         <Stack direction="row" spacing={2} alignItems="center">
           <Box textAlign="right">
             <Typography variant="caption" color="text.secondary" display="block">
-              Total Pagado
+              {t('history.totalPaid')}
             </Typography>
             <Typography variant="h6" color="success.main" fontWeight="bold">
               {formatCurrency(totalPaid)}
@@ -195,7 +196,7 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
             endIcon={<LaunchIcon />}
             onClick={() => navigate(`/payments?search=${memberId}`)}
           >
-            Ver Todos
+            {t('history.viewAll')}
           </Button>
         </Stack>
       </Box>
@@ -204,7 +205,7 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
 
       {payments.length === 0 ? (
         <Alert severity="info" sx={{ my: 2 }}>
-          Este socio aún no tiene pagos registrados.
+          {t('history.noPayments')}
         </Alert>
       ) : (
         <>
@@ -212,11 +213,11 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>Fecha</TableCell>
-                  <TableCell>Forma de pago</TableCell>
-                  <TableCell align="right">Importe</TableCell>
-                  <TableCell align="center">Estado</TableCell>
-                  <TableCell align="center">Acciones</TableCell>
+                  <TableCell>{t('history.columnDate')}</TableCell>
+                  <TableCell>{t('history.columnMethod')}</TableCell>
+                  <TableCell align="right">{t('history.columnAmount')}</TableCell>
+                  <TableCell align="center">{t('history.columnStatus')}</TableCell>
+                  <TableCell align="center">{t('history.columnActions')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -251,7 +252,7 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
                           onClick={() => handleDownloadReceipt(payment)}
                           disabled={isGenerating}
                         >
-                          Recibo
+                          {t('history.receiptButton')}
                         </Button>
                       )}
                       {payment.status.toUpperCase() === 'PENDING' && (
@@ -262,7 +263,7 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
                           startIcon={<ConfirmIcon />}
                           onClick={() => handleConfirmPayment(payment)}
                         >
-                          Confirmar
+                          {t('history.confirmButton')}
                         </Button>
                       )}
                     </TableCell>
@@ -279,7 +280,7 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
                 size="small"
                 onClick={() => navigate(`/payments?search=${memberId}`)}
               >
-                Ver los {payments.length - maxRows} pagos restantes →
+                {t('history.viewRemaining', { count: payments.length - maxRows })}
               </Button>
             </Box>
           )}

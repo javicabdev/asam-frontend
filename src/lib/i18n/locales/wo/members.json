@@ -195,5 +195,16 @@
     "email": "Email",
     "editButton": "Soppi",
     "deleteButton": "Far"
+  },
+  "familyMembersDisplay": {
+    "errorMessage": "Njuumte ci yab xibaar njaboot yi",
+    "noFamilyData": "Gisul xibaar njaboot ci mbooloo bii",
+    "spousesTitle": "Jëkër ak jabar",
+    "additionalMembersTitle": "Mbooloo yu njaboot yu yokk",
+    "noAdditionalMembers": "Amul mbooloo yu njaboot yu yokk yu bind",
+    "fullName": "Tur bu mat sëkk",
+    "birthDate": "Bésu juddu",
+    "dni": "DNI/NIE",
+    "email": "Adres email"
   }
 }

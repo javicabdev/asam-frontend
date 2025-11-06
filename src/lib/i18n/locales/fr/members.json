@@ -195,5 +195,16 @@
     "email": "Email",
     "editButton": "Modifier",
     "deleteButton": "Supprimer"
+  },
+  "familyMembersDisplay": {
+    "errorMessage": "Erreur lors du chargement des informations familiales",
+    "noFamilyData": "Aucune information familiale trouvée pour ce membre",
+    "spousesTitle": "Conjoints",
+    "additionalMembersTitle": "Membres de la Famille Additionnels",
+    "noAdditionalMembers": "Aucun membre de la famille additionnel enregistré",
+    "fullName": "Nom Complet",
+    "birthDate": "Date de Naissance",
+    "dni": "DNI/NIE",
+    "email": "Adresse Email"
   }
 }

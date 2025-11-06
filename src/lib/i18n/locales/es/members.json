@@ -195,5 +195,16 @@
     "email": "Email",
     "editButton": "Editar",
     "deleteButton": "Eliminar"
+  },
+  "familyMembersDisplay": {
+    "errorMessage": "Error al cargar la información familiar",
+    "noFamilyData": "No se encontró información familiar para este socio",
+    "spousesTitle": "Cónyuges",
+    "additionalMembersTitle": "Familiares Adicionales",
+    "noAdditionalMembers": "No hay familiares adicionales registrados",
+    "fullName": "Nombre Completo",
+    "birthDate": "Fecha de Nacimiento",
+    "dni": "DNI/NIE",
+    "email": "Correo Electrónico"
   }
 }

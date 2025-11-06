@@ -20,6 +20,7 @@ import {
 } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
+import { useTranslation } from 'react-i18next'
 
 import { useFamilyData } from '../hooks'
 import { MembershipType } from '../types'
@@ -35,6 +36,7 @@ interface FamilyMembersDisplayProps {
  * Shows spouse information and additional family members in a read-only table
  */
 export function FamilyMembersDisplay({ memberId, membershipType }: FamilyMembersDisplayProps) {
+  const { t } = useTranslation('members')
   const { family, familiares, loading, error } = useFamilyData(memberId, membershipType)
 
   // Don't render anything if not a family membership
@@ -59,7 +61,7 @@ export function FamilyMembersDisplay({ memberId, membershipType }: FamilyMembers
     return (
       <Alert severity="error" icon={<InfoIcon />}>
         <Typography variant="body2">
-          Error al cargar los miembros de la familia: {error.message}
+          {t('familyMembersDisplay.errorMessage')}: {error.message}
         </Typography>
       </Alert>
     )
@@ -70,7 +72,7 @@ export function FamilyMembersDisplay({ memberId, membershipType }: FamilyMembers
     return (
       <Alert severity="info" icon={<InfoIcon />}>
         <Typography variant="body2">
-          No se encontró información de la familia asociada a este socio.
+          {t('familyMembersDisplay.noFamilyData')}
         </Typography>
       </Alert>
     )
@@ -92,7 +94,7 @@ export function FamilyMembersDisplay({ memberId, membershipType }: FamilyMembers
       {/* Spouse Information */}
       <Box sx={{ mb: 3 }}>
         <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-          Cónyuges
+          {t('familyMembersDisplay.spousesTitle')}
         </Typography>
         <Stack direction="row" spacing={2} sx={{ mt: 1 }}>
           <Chip
@@ -115,7 +117,7 @@ export function FamilyMembersDisplay({ memberId, membershipType }: FamilyMembers
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
           <PeopleIcon color="action" />
           <Typography variant="subtitle2" color="text.secondary">
-            Familiares Adicionales
+            {t('familyMembersDisplay.additionalMembersTitle')}
           </Typography>
           {hasFamiliares && (
             <Chip label={familiares.length} size="small" color="primary" variant="outlined" />
@@ -125,7 +127,7 @@ export function FamilyMembersDisplay({ memberId, membershipType }: FamilyMembers
         {!hasFamiliares ? (
           <Alert severity="info" icon={<InfoIcon />}>
             <Typography variant="body2">
-              No hay familiares adicionales registrados para esta familia.
+              {t('familyMembersDisplay.noAdditionalMembers')}
             </Typography>
           </Alert>
         ) : (
@@ -134,16 +136,16 @@ export function FamilyMembersDisplay({ memberId, membershipType }: FamilyMembers
               <TableHead>
                 <TableRow>
                   <TableCell>
-                    <strong>Nombre Completo</strong>
+                    <strong>{t('familyMembersDisplay.fullName')}</strong>
                   </TableCell>
                   <TableCell>
-                    <strong>Fecha de Nacimiento</strong>
+                    <strong>{t('familyMembersDisplay.birthDate')}</strong>
                   </TableCell>
                   <TableCell>
-                    <strong>DNI/NIE</strong>
+                    <strong>{t('familyMembersDisplay.dni')}</strong>
                   </TableCell>
                   <TableCell>
-                    <strong>Correo Electrónico</strong>
+                    <strong>{t('familyMembersDisplay.email')}</strong>
                   </TableCell>
                 </TableRow>
               </TableHead>

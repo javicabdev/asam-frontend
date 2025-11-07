@@ -194,6 +194,7 @@ export type DebtorMemberInfo = {
   id: Scalars['ID']['output'];
   lastName: Scalars['String']['output'];
   memberNumber: Scalars['String']['output'];
+  membership: Scalars['String']['output'];
   phone?: Maybe<Scalars['String']['output']>;
   status: Scalars['String']['output'];
 };

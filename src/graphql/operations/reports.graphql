@@ -13,6 +13,7 @@ query GetDelinquentReport($input: DelinquentReportInput) {
         email
         phone
         status
+        membership
       }
       family {
         id
@@ -24,6 +25,7 @@ query GetDelinquentReport($input: DelinquentReportInput) {
           lastName
           email
           phone
+          membership
         }
         totalMembers
       }

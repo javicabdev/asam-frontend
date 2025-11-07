@@ -13,7 +13,6 @@ import {
   Snackbar,
   CircularProgress,
   Backdrop,
-  Chip,
 } from '@mui/material'
 import { NavigateNext } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
@@ -77,8 +76,8 @@ export const NewMemberPage: React.FC = () => {
   const [loading, setLoading] = React.useState(false)
   const [fieldErrors, setFieldErrors] = React.useState<Array<{field: string, message: string}>>([])
 
-  // Get auth state for debugging
-  const { user, isAuthenticated, accessToken } = useAuthStore()
+  // Get auth state
+  const { user, isAuthenticated } = useAuthStore()
 
   // Helper function to extract field errors from GraphQL error
   const extractFieldErrors = (graphQLError: any): Array<{field: string, message: string}> => {
@@ -390,31 +389,9 @@ export const NewMemberPage: React.FC = () => {
         </Breadcrumbs>
       </Box>
 
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-        <Typography variant="h4" component="h1">
-          {t('newMemberPage.title')}
-        </Typography>
-        {import.meta.env.DEV && (
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Chip
-              label={isAuthenticated ? t('newMemberPage.debug.authenticated') : t('newMemberPage.debug.notAuthenticated')}
-              color={isAuthenticated ? 'success' : 'error'}
-              size="small"
-            />
-            <Chip label={`${t('newMemberPage.debug.user')}: ${user?.username || 'N/A'}`} color="info" size="small" />
-            <Chip
-              label={`${t('newMemberPage.debug.role')}: ${user?.role || 'N/A'}`}
-              color={user?.role === 'admin' ? 'success' : 'warning'}
-              size="small"
-            />
-            <Chip
-              label={accessToken ? t('newMemberPage.debug.tokenPresent') : t('newMemberPage.debug.noToken')}
-              color={accessToken ? 'success' : 'error'}
-              size="small"
-            />
-          </Box>
-        )}
-      </Box>
+      <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
+        {t('newMemberPage.title')}
+      </Typography>
 
       <Card sx={{ mb: 3, bgcolor: 'info.lighter' }}>
         <CardContent>

@@ -1,267 +1,387 @@
-# Generación de Cuotas Anuales - Plan de Implementación
+# 🎯 Generación de Cuotas Anuales ASAM
 
-## 📋 Índice
-
-1. [Visión General](#visión-general)
-2. [Objetivos](#objetivos)
-3. [Arquitectura](#arquitectura)
-4. [Documentación Técnica](#documentación-técnica)
-5. [Cronograma](#cronograma)
-6. [Criterios de Aceptación](#criterios-de-aceptación)
+**Documentación Completa para Implementación**
 
 ---
 
-## 🎯 Visión General
+## 🚀 Inicio Rápido
 
-La funcionalidad de **Generación de Cuotas Anuales** permite a los administradores de ASAM crear automáticamente las cuotas de membresía anual para todos los miembros activos, tanto individuales como familiares, facilitando la migración de datos históricos desde Excel y el seguimiento de pagos futuros.
+### ¿Eres nuevo en este proyecto?
 
-### Problema a Resolver
+👉 **LEE PRIMERO**: [MASTER_PLAN.md](./MASTER_PLAN.md) - Documento Consolidado Final
 
-Actualmente, la asociación gestiona manualmente las cuotas anuales en Excel, lo que dificulta:
-- El seguimiento de pagos pendientes por año
-- La generación histórica de cuotas para migración de datos
-- El control de morosidad por año específico
-- La automatización de recordatorios de pago
-
-### Solución Propuesta
-
-Implementar un sistema completo de generación de cuotas que permita:
-- ✅ Crear cuotas para un año específico (presente o pasado, nunca futuro)
-- ✅ Calcular automáticamente el monto según el tipo de membresía
-- ✅ Asociar pagos a cuotas específicas
-- ✅ Visualizar el estado de pagos por año y miembro
-- ✅ Generar informes de morosidad por año
+Este es el **single source of truth** con:
+- ✅ Resumen ejecutivo completo
+- ✅ Estado actual del código
+- ✅ Arquitectura y decisiones técnicas
+- ✅ Roadmap detallado (25 días)
+- ✅ Riesgos y mitigaciones
+- ✅ Criterios de aceptación
+- ✅ Guías por rol
 
 ---
 
-## 🎯 Objetivos
-
-### Funcionales
-1. **Generación Masiva**: Crear cuotas para todos los miembros activos de un año específico
-2. **Cálculo Automático**: Aplicar tarifas diferenciadas para familias vs individuales
-3. **Migración Histórica**: Permitir generación retroactiva para años pasados
-4. **Validación**: Prevenir duplicación de cuotas para el mismo año/miembro
-5. **Asociación Pagos**: Vincular pagos existentes a cuotas generadas
-
-### No Funcionales
-1. **Performance**: Generación de <2s para ~200 miembros
-2. **Integridad**: Transaccionalidad completa (todo o nada)
-3. **Auditoría**: Log completo de generaciones
-4. **Usabilidad**: Interfaz intuitiva con feedback claro
-
----
-
-## 🏗️ Arquitectura
-
-### Modelo de Datos
+## 📚 Estructura de la Documentación
 
 ```
-MembershipFee (Cuota Anual)
-├── year: int (año de la cuota)
-├── base_fee_amount: float (tarifa base)
-├── family_fee_extra: float (extra para familias)
-└── due_date: time (31 diciembre del año)
-
-Payment (Pago)
-├── member_id: uint (socio que paga)
-├── amount: float
-├── payment_date: time
-├── status: enum (pending/paid/cancelled)
-├── membership_fee_id: uint* (cuota asociada)
-└── notes: string
-```
-
-### Flujo de Generación
-
-```mermaid
-graph TD
-    A[Usuario selecciona año] --> B{¿Año válido?}
-    B -->|No| C[Mostrar error]
-    B -->|Sí| D[Verificar cuotas existentes]
-    D --> E{¿Ya existen?}
-    E -->|Sí| F[Mostrar confirmación]
-    E -->|No| G[Calcular montos]
-    F --> G
-    G --> H[Crear cuota anual]
-    H --> I[Generar pagos pendientes]
-    I --> J{¿Éxito?}
-    J -->|Sí| K[Mostrar resumen]
-    J -->|No| L[Rollback + Error]
+docs/annual_fee_generation/
+├── MASTER_PLAN.md          ⭐ DOCUMENTO PRINCIPAL - Leer primero
+├── CURRENT_STATE.md        📊 Estado actual del código (qué existe vs qué falta)
+├── backend.md              🔧 Guía de implementación backend paso a paso
+├── frontend.md             💻 Guía de implementación frontend completa
+├── testing.md              🧪 Estrategia de testing y ejemplos
+├── deployment.md           🚀 Guía de despliegue Blue-Green
+├── COMPARISON_REPORT.md    📋 Análisis de diferencias entre documentaciones
+└── UPDATE_SUMMARY.md       📝 Resumen de actualizaciones realizadas
 ```
 
 ---
 
-## 📚 Documentación Técnica
+## 👥 Guía por Rol
 
-La documentación completa está organizada en los siguientes archivos:
+### 👨‍💻 Backend Developer
 
-### 1. [Backend Implementation](./backend.md)
-Especificación técnica detallada del backend:
-- Nuevas queries y mutations GraphQL
-- Servicios de dominio
-- Repositorios y modelos
-- Validaciones de negocio
-- Ejemplos de código completos
+**Orden de lectura**:
+1. [MASTER_PLAN.md](./MASTER_PLAN.md) - Sección "Estado Actual" y "Arquitectura"
+2. [CURRENT_STATE.md](./CURRENT_STATE.md) - Ver gaps específicos
+3. [backend.md](./backend.md) - Seguir paso a paso
 
-### 2. [Frontend Implementation](./frontend.md)
-Especificación técnica detallada del frontend:
-- Componentes UI (React + Material-UI)
-- Hooks personalizados
-- Integración GraphQL
-- Gestión de estado
-- Validaciones de formulario
-- Ejemplos de implementación
+**Quick Start**:
+```bash
+# 1. Ver qué falta implementar
+grep "❌ Backend" CURRENT_STATE.md
 
-### 3. [Testing Strategy](./testing.md)
-Plan de pruebas completo:
-- Tests unitarios (backend y frontend)
-- Tests de integración
-- Tests end-to-end
-- Casos de prueba específicos
-- Cobertura mínima requerida
+# 2. Crear rama
+git checkout -b feat/annual-fee-generation
 
-### 4. [Deployment Guide](./deployment.md)
-Guía de despliegue paso a paso:
-- Migraciones de base de datos
-- Variables de entorno
-- Rollout strategy
-- Rollback plan
-- Monitorización post-deploy
+# 3. Comenzar con Sprint 1 - Día 1
+open backend.md
+```
+
+**Tiempo estimado**: 15 días
 
 ---
 
-## 📅 Cronograma
+### 👩‍💻 Frontend Developer
 
-### Fase 1: Backend (Estimado: 3-4 días)
-- **Día 1**: Modificaciones en modelos + migraciones
-- **Día 2**: Servicios de generación + validaciones
-- **Día 3**: Resolvers GraphQL + tests unitarios
-- **Día 4**: Tests de integración + documentación
+**Orden de lectura**:
+1. [MASTER_PLAN.md](./MASTER_PLAN.md) - Sección "Arquitectura" y "Decisiones"
+2. [frontend.md](./frontend.md) - Implementación completa
+3. [testing.md](./testing.md) - Tests de componentes
 
-### Fase 2: Frontend (Estimado: 3-4 días)
-- **Día 1**: Componentes UI básicos
-- **Día 2**: Lógica de negocio + validaciones
-- **Día 3**: Integración GraphQL + estados
-- **Día 4**: Refinamiento UX + tests
+**Quick Start**:
+```bash
+# 1. Verificar backend en staging
+curl https://staging-api.asam.com/graphql
 
-### Fase 3: Testing & Deploy (Estimado: 2 días)
-- **Día 1**: Tests E2E + correcciones
-- **Día 2**: Deploy staging + validación + production
+# 2. Crear rama
+git checkout -b feat/annual-fees-ui
 
-**Tiempo Total Estimado: 8-10 días laborables**
+# 3. Comenzar con API Layer
+open frontend.md
+```
+
+**Tiempo estimado**: 15 días (tras backend en staging)
 
 ---
 
-## ✅ Criterios de Aceptación
+### 🧪 QA Engineer
+
+**Orden de lectura**:
+1. [MASTER_PLAN.md](./MASTER_PLAN.md) - Sección "Criterios de Aceptación"
+2. [testing.md](./testing.md) - Estrategia completa
+3. [deployment.md](./deployment.md) - Smoke tests
+
+**Quick Start**:
+```bash
+# 1. Revisar criterios Must Have
+grep "Must Have" MASTER_PLAN.md
+
+# 2. Crear test plan
+open testing.md
+
+# 3. Setup Cypress
+cd frontend && npm run cypress:open
+```
+
+**Tiempo estimado**: 10 días
+
+---
+
+### 🚀 DevOps/SRE
+
+**Orden de lectura**:
+1. [deployment.md](./deployment.md) - Estrategia Blue-Green
+2. [MASTER_PLAN.md](./MASTER_PLAN.md) - Sección "Riesgos"
+3. [backend.md](./backend.md) - Sección "Migraciones"
+
+**Quick Start**:
+```bash
+# 1. Validar migrations
+cd backend && make migrate-test
+
+# 2. Preparar monitoring
+open deployment.md#monitoring
+
+# 3. Configurar rollback
+open deployment.md#rollback
+```
+
+**Tiempo estimado**: 5 días
+
+---
+
+### 👔 Tech Lead / PM
+
+**Orden de lectura**:
+1. [MASTER_PLAN.md](./MASTER_PLAN.md) - **TODO**
+2. [COMPARISON_REPORT.md](./COMPARISON_REPORT.md) - Decisiones tomadas
+
+**Quick Start**:
+```bash
+# 1. Revisar plan completo
+open MASTER_PLAN.md
+
+# 2. Validar cronograma (25 días)
+grep "Sprint" MASTER_PLAN.md
+
+# 3. Revisar riesgos
+grep "Riesgo" MASTER_PLAN.md
+```
+
+---
+
+## 🎯 Objetivo del Proyecto
+
+### Funcionalidad a Implementar
+
+Crear un sistema completo de **generación de cuotas anuales** que permita:
+
+✅ Generar cuotas para el año **actual** o **pasado** (nunca futuro)  
+✅ Asignar automáticamente a todos los miembros activos  
+✅ Calcular montos según tipo de membresía (individual/familia)  
+✅ Vincular pagos realizados con cuotas generadas  
+✅ Consultar cuotas pendientes por miembro y año  
+✅ Prevenir duplicados (operación idempotente)  
+✅ Migrar datos históricos desde Excel  
+
+### Prioridad
+
+🔴 **CRÍTICO** - Última funcionalidad necesaria para **producción v1.0**
+
+---
+
+## 📊 Estado del Proyecto
+
+| Aspecto | Estado | Detalle |
+|---------|--------|---------|
+| **Completitud** | 15% | Ver [CURRENT_STATE.md](./CURRENT_STATE.md) |
+| **Backend** | ⚠️ 40% | Modelo existe, falta servicio y API |
+| **Frontend** | ❌ 0% | Todo por implementar |
+| **Testing** | ❌ 0% | Plan listo en [testing.md](./testing.md) |
+| **Deploy** | ✅ 80% | Pipeline existe, ajustes menores |
+
+**Esfuerzo Total Estimado**: 25 días (4 semanas)
+
+---
+
+## 🗺️ Roadmap Resumido
+
+```
+Sprint 1: Backend Foundation       [5 días]  ▓▓▓▓▓░░░░░░░░░░░░░░░ 25%
+  └─ Modelo, Repo, Servicio Base
+
+Sprint 2: Backend GraphQL         [5 días]  ░░░░░▓▓▓▓▓░░░░░░░░░░ 50%
+  └─ Schema, Resolvers, Tests
+
+Sprint 3: Frontend Foundation     [5 días]  ░░░░░░░░░░▓▓▓▓▓░░░░░ 75%
+  └─ API Layer, Hooks
+
+Sprint 4: Frontend UI             [5 días]  ░░░░░░░░░░░░░░░▓▓▓▓▓ 100%
+  └─ Components, Pages, i18n
+
+Sprint 5: QA & Deploy (Opcional)  [5 días]  (Buffer y pulido)
+  └─ E2E, UAT, Production
+```
+
+**Inicio**: Día 1  
+**Entrega Mínima Viable**: Día 20  
+**Producción**: Día 25
+
+---
+
+## ⚠️ Riesgos Principales
+
+| Riesgo | Impacto | Mitigación |
+|--------|---------|------------|
+| Duplicados en producción | CRÍTICO | Constraint UNIQUE + validación en 3 niveles |
+| Performance batch generation | Alto | Batch insert + índices + timeout |
+| Migración datos históricos | Alto | Script dedicado + dry-run + rollback |
+| UI/UX no intuitiva | Medio | Prototipo + UAT temprana |
+
+Ver análisis completo en [MASTER_PLAN.md](./MASTER_PLAN.md#-riesgos-y-mitigaciones)
+
+---
+
+## ✅ Criterios de Aceptación Mínimos
+
+### Backend Must Have
+- [ ] API genera cuotas para año ≤ actual
+- [ ] API previene duplicados (error 409)
+- [ ] API vincula pagos con cuotas
+- [ ] Tests ≥85% cobertura
+- [ ] Performance <2s para 1000 cuotas
+
+### Frontend Must Have
+- [ ] UI permite generar con año + montos
+- [ ] UI muestra preview antes de confirmar
+- [ ] UI lista cuotas con filtros
+- [ ] Validación: año no futuro
+- [ ] Tests ≥80% cobertura
+- [ ] Responsive + WCAG 2.1 AA
+
+Ver lista completa en [MASTER_PLAN.md](./MASTER_PLAN.md#-criterios-de-aceptación)
+
+---
+
+## 🔧 Tecnologías
 
 ### Backend
-- [ ] Se pueden generar cuotas para cualquier año ≤ año actual
-- [ ] Se previene generación duplicada para mismo año
-- [ ] Se calculan correctamente montos para familias vs individuales
-- [ ] Se crean registros de Payment con status PENDING
-- [ ] Se mantiene integridad transaccional
-- [ ] Cobertura de tests ≥ 80%
+- Go 1.21+
+- GraphQL (gqlgen)
+- GORM + PostgreSQL
+- Clean Architecture
 
 ### Frontend
-- [ ] Interfaz permite seleccionar año y monto base
-- [ ] Validación previene años futuros
-- [ ] Muestra preview antes de confirmar
-- [ ] Feedback claro en éxito/error
-- [ ] Loading states apropiados
-- [ ] Responsive en mobile
+- React 18 + TypeScript
+- Apollo Client
+- React Hook Form
+- i18n (es, fr, wo)
 
-### Integración
-- [ ] Flujo completo funciona sin errores
-- [ ] Generación de ~200 cuotas < 2 segundos
-- [ ] Rollback funciona correctamente
-- [ ] Logs de auditoría completos
-- [ ] Sin memory leaks ni race conditions
+### Testing
+- Backend: Go testing + testify
+- Frontend: Jest + React Testing Library + Cypress
 
-### Migración Histórica
-- [ ] Se pueden crear cuotas para años pasados (ej: 2020-2024)
-- [ ] Pagos históricos se asocian correctamente
-- [ ] No afecta cuotas/pagos existentes
-- [ ] Data consistency al 100%
+### Infrastructure
+- Docker + Docker Compose
+- GitHub Actions (CI/CD)
+- Google Cloud Run
+- Aiven PostgreSQL
 
 ---
 
-## 📖 Convenciones
+## 📞 Soporte
 
-### Commits
-```
-feat(fees): add annual fee generation service
-fix(fees): prevent duplicate fee creation
-test(fees): add integration tests for fee generation
-docs(fees): update fee generation documentation
-```
+### Preguntas Frecuentes
 
-### Branches
-```
-feature/annual-fee-generation-backend
-feature/annual-fee-generation-frontend
-```
+**Q: ¿Por dónde empiezo?**  
+A: Lee [MASTER_PLAN.md](./MASTER_PLAN.md) completo primero.
 
-### Pull Requests
-- Título: `[FEAT] Annual Fee Generation - <componente>`
-- Descripción: Link a esta documentación + checklist
-- Revisores: Mínimo 1 revisor técnico
-- Tests: Todos los tests deben pasar
+**Q: ¿Puedo empezar frontend antes que backend?**  
+A: No. Espera a que backend esté en staging (fin Sprint 2).
 
----
+**Q: ¿Qué hago si encuentro un problema no documentado?**  
+A: 1) Añádelo al documento relevante, 2) Notifica al equipo, 3) Actualiza estimaciones.
 
-## 🚀 Quick Start
+**Q: ¿Cómo reporto bugs?**  
+A: Issue en GitHub con label `feat/annual-fees` + severidad.
 
-### Para Backend Developer
-```bash
-# 1. Leer documentación
-cat docs/annual_fee_generation/backend.md
+### Escalación
 
-# 2. Crear rama
-git checkout -b feature/annual-fee-generation-backend
-
-# 3. Seguir pasos en backend.md
-# ...
-```
-
-### Para Frontend Developer
-```bash
-# 1. Leer documentación
-cat docs/annual_fee_generation/frontend.md
-
-# 2. Crear rama
-git checkout -b feature/annual-fee-generation-frontend
-
-# 3. Seguir pasos en frontend.md
-# ...
-```
+- **Bloqueador técnico**: Tech Lead inmediatamente
+- **Cambio de alcance**: Product Owner + Tech Lead  
+- **Retraso >2 días**: Tech Lead + PM
+- **Bug crítico staging**: Rollback + equipo completo
 
 ---
 
-## 📞 Contacto y Soporte
+## 📈 Métricas de Éxito
 
-Para dudas o clarificaciones sobre esta funcionalidad:
-- **Tech Lead**: Javier Fernández
-- **Docs**: Este repositorio `/docs/annual_fee_generation/`
-- **Issues**: GitHub Issues con tag `annual-fees`
-
----
-
-## 📝 Changelog
-
-| Versión | Fecha | Descripción |
-|---------|-------|-------------|
-| 1.0.0   | 2025-11-07 | Documentación inicial |
+| Métrica | Objetivo | Cómo Medir |
+|---------|----------|------------|
+| Cobertura Tests Backend | ≥85% | `go test -cover` |
+| Cobertura Tests Frontend | ≥80% | `npm run test:coverage` |
+| Performance Generación | <2s/1000 | Benchmark |
+| Bugs Críticos Post-Deploy | 0 | Issue tracker |
+| Satisfacción Usuario | ≥4/5 | Survey UAT |
 
 ---
 
-## 🔗 Referencias
+## 🚦 Próximos Pasos
 
-- [Domain Model](../../internal/domain/models/)
-- [GraphQL Schema](../../internal/adapters/gql/schema/)
-- [Payment Service](../../internal/domain/services/payment_service.go)
-- [Frontend Payments Feature](../../../src/features/payments/)
+### Hoy (Día 0)
+- [ ] **Todos**: Leer [MASTER_PLAN.md](./MASTER_PLAN.md) completo
+- [ ] **Tech Lead**: Validar roadmap con stakeholders
+- [ ] **Backend**: Setup entorno de desarrollo
+- [ ] **Frontend**: Revisar APIs staging
+- [ ] **QA**: Preparar plan de tests
+
+### Mañana (Día 1)
+- [ ] **Backend**: Comenzar Sprint 1 - Modelo + Migrations
+- [ ] **Frontend**: Estudiar [frontend.md](./frontend.md)
+- [ ] **QA**: Escribir test cases
+- [ ] **DevOps**: Validar pipeline
+
+### Esta Semana (Días 2-5)
+- [ ] **Backend**: Completar Sprint 1 (Repo + Servicio)
+- [ ] **Frontend**: Esperar staging + preparación
+- [ ] **QA**: Tests unitarios backend
+- [ ] **Todos**: Daily standups
 
 ---
 
-**Última actualización**: 7 de noviembre de 2025  
-**Estado**: 📝 Documentación Completa - Pendiente de Implementación
+## 📝 Documentos por Prioridad
+
+| Prioridad | Documento | Cuándo Leer |
+|-----------|-----------|-------------|
+| 🔴 **CRÍTICO** | [MASTER_PLAN.md](./MASTER_PLAN.md) | **ANTES DE EMPEZAR** |
+| 🔴 **CRÍTICO** | [CURRENT_STATE.md](./CURRENT_STATE.md) | Antes de codificar |
+| 🟡 Importante | [backend.md](./backend.md) | Durante impl backend |
+| 🟡 Importante | [frontend.md](./frontend.md) | Durante impl frontend |
+| 🟢 Referencia | [testing.md](./testing.md) | Durante QA |
+| 🟢 Referencia | [deployment.md](./deployment.md) | Durante deploy |
+| 🔵 Opcional | [COMPARISON_REPORT.md](./COMPARISON_REPORT.md) | Si hay dudas |
+| 🔵 Opcional | [UPDATE_SUMMARY.md](./UPDATE_SUMMARY.md) | Histórico |
+
+---
+
+## ✅ Checklist de Preparación
+
+Antes de comenzar la implementación:
+
+- [ ] He leído [MASTER_PLAN.md](./MASTER_PLAN.md) completo
+- [ ] He revisado [CURRENT_STATE.md](./CURRENT_STATE.md)
+- [ ] Entiendo la arquitectura propuesta
+- [ ] Conozco mi rol y responsabilidades
+- [ ] Tengo acceso a repos backend y frontend
+- [ ] Mi entorno de desarrollo está configurado
+- [ ] Conozco el cronograma y deadlines
+- [ ] He identificado posibles bloqueadores
+
+**¿Todo marcado?** → Estás listo para comenzar 🚀
+
+---
+
+## 🎉 Conclusión
+
+Esta documentación te proporciona **TODO** lo necesario para implementar exitosamente la generación de cuotas anuales:
+
+✅ **Estado actual claro** - Sabes qué existe y qué falta  
+✅ **Arquitectura sólida** - Decisiones técnicas justificadas  
+✅ **Roadmap realista** - 25 días con buffer incluido  
+✅ **Riesgos mitigados** - Plan B para cada problema  
+✅ **Criterios claros** - Sabes cuándo has terminado  
+✅ **Guías paso a paso** - Backend y Frontend detallados  
+
+**Nivel de confianza**: 85%
+
+---
+
+**Siguiente Acción**: Leer [MASTER_PLAN.md](./MASTER_PLAN.md) 📖
+
+---
+
+**Última Actualización**: 2025-11-07  
+**Versión**: 3.0.0  
+**Estado**: ✅ **LISTO PARA IMPLEMENTACIÓN**  
+**Mantenido por**: Tech Team ASAM

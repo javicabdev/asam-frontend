@@ -92,7 +92,7 @@ export function DelinquentSummaryCards({
     {
       icon: <CalendarToday />,
       label: t('delinquent.summary.avgDaysOverdue'),
-      value: `${summary.averageDaysOverdue} ${t('delinquent.table.daysOverdue', { count: summary.averageDaysOverdue })}`,
+      value: t('delinquent.table.daysOverdue', { count: summary.averageDaysOverdue }),
       color: 'warning',
     },
     {

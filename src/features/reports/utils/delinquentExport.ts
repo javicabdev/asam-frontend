@@ -84,7 +84,7 @@ export function exportToPDF(
     52
   )
   doc.text(
-    `${t('delinquent.summary.avgDaysOverdue')}: ${data.summary.averageDaysOverdue} ${t('delinquent.table.daysOverdue', { count: data.summary.averageDaysOverdue })}`,
+    `${t('delinquent.summary.avgDaysOverdue')}: ${t('delinquent.table.daysOverdue', { count: data.summary.averageDaysOverdue })}`,
     14,
     59
   )
@@ -94,7 +94,7 @@ export function exportToPDF(
     getDebtorName(debtor),
     t(`delinquent.debtorType.${debtor.type.toLowerCase()}`),
     formatCurrency(debtor.totalDebt),
-    `${debtor.oldestDebtDays} ${t('delinquent.table.daysOverdue', { count: debtor.oldestDebtDays })}`,
+    t('delinquent.table.daysOverdue', { count: debtor.oldestDebtDays }),
     getDebtorContact(debtor),
   ])
 

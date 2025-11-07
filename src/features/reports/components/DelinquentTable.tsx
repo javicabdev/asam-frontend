@@ -113,7 +113,7 @@ export function DelinquentTable({
       align: 'right',
       headerAlign: 'right',
       valueGetter: (params) =>
-        `${params.row.oldestDebtDays} ${t('delinquent.table.daysOverdue', { count: params.row.oldestDebtDays })}`,
+        t('delinquent.table.daysOverdue', { count: params.row.oldestDebtDays }),
     },
     {
       field: 'lastPaymentDate',

@@ -191,7 +191,10 @@
     "confirm": "Fay ko",
     "processing": "Yam jëf...",
     "successMessage": "Fay nañu mbooloo bi bu baax",
-    "errorMessage": "Njuumte ci fay mbooloo bi"
+    "errorMessage": "Njuumte ci fay mbooloo bi",
+    "errorTitle": "Manuwul fay",
+    "errorPendingPayments": "Mbooloo bii am na {{count}} fey bu jamontal bu dóór te royub {{amount}}€. War na yëmbal ñépp ci fay.",
+    "errorPendingPayments_plural": "Mbooloo bii am na {{count}} fey yu jamontal yu dóór te royub {{amount}}€. War na yëmbal ñépp ci fay."
   },
   "familyMembersList": {
     "title": "Mbooloo yu Njaboot",

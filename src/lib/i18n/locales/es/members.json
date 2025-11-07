@@ -191,7 +191,10 @@
     "confirm": "Dar de baja",
     "processing": "Procesando...",
     "successMessage": "Socio dado de baja correctamente",
-    "errorMessage": "Error al dar de baja el socio"
+    "errorMessage": "Error al dar de baja el socio",
+    "errorTitle": "No se puede dar de baja",
+    "errorPendingPayments": "Este socio tiene {{count}} pago pendiente por un total de {{amount}}€. Debe saldar todas sus deudas antes de darse de baja.",
+    "errorPendingPayments_plural": "Este socio tiene {{count}} pagos pendientes por un total de {{amount}}€. Debe saldar todas sus deudas antes de darse de baja."
   },
   "familyMembersList": {
     "title": "Miembros de la Familia",

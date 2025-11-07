@@ -191,7 +191,10 @@
     "confirm": "Désactiver",
     "processing": "En cours...",
     "successMessage": "Membre désactivé avec succès",
-    "errorMessage": "Erreur lors de la désactivation du membre"
+    "errorMessage": "Erreur lors de la désactivation du membre",
+    "errorTitle": "Impossible de désactiver",
+    "errorPendingPayments": "Ce membre a {{count}} paiement en attente pour un total de {{amount}}€. Toutes les dettes doivent être réglées avant de pouvoir se désinscrire.",
+    "errorPendingPayments_plural": "Ce membre a {{count}} paiements en attente pour un total de {{amount}}€. Toutes les dettes doivent être réglées avant de pouvoir se désinscrire."
   },
   "familyMembersList": {
     "title": "Membres de la Famille",

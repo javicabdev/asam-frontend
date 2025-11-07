@@ -10,13 +10,14 @@ import {
   Alert,
   CircularProgress,
 } from '@mui/material'
-import { Warning as WarningIcon } from '@mui/icons-material'
+import { Warning as WarningIcon, ErrorOutline as ErrorIcon } from '@mui/icons-material'
 import { useMutation } from '@apollo/client'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 
 import { CHANGE_MEMBER_STATUS_MUTATION } from '../api/mutations'
 import { LIST_MEMBERS_QUERY } from '../api/queries'
+import { useGetMemberPaymentsQuery } from '@/features/payments/api/queries'
 import type { Member, MemberStatus } from '../types'
 
 interface ConfirmDeactivateDialogProps {
@@ -34,6 +35,23 @@ export const ConfirmDeactivateDialog: React.FC<ConfirmDeactivateDialogProps> = (
 }) => {
   const { t } = useTranslation('members')
   const { enqueueSnackbar } = useSnackbar()
+
+  // Check for pending payments
+  const { data: paymentsData, loading: paymentsLoading } = useGetMemberPaymentsQuery({
+    variables: { memberId: member?.miembro_id || '' },
+    skip: !open || !member,
+  })
+
+  const pendingPayments = React.useMemo(() => {
+    return (paymentsData?.getMemberPayments || []).filter(
+      (payment) => payment.status.toUpperCase() === 'PENDING'
+    )
+  }, [paymentsData])
+
+  const hasPendingPayments = pendingPayments.length > 0
+  const totalPendingAmount = React.useMemo(() => {
+    return pendingPayments.reduce((sum, payment) => sum + payment.amount, 0)
+  }, [pendingPayments])
 
   const [changeMemberStatus, { loading, error }] = useMutation(
     CHANGE_MEMBER_STATUS_MUTATION,
@@ -86,6 +104,12 @@ export const ConfirmDeactivateDialog: React.FC<ConfirmDeactivateDialogProps> = (
           </Alert>
         )}
 
+        {paymentsLoading && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <CircularProgress size={24} />
+          </Box>
+        )}
+
         <Box sx={{ mb: 2 }}>
           <Typography variant="body1" gutterBottom>
             {t('deactivateDialog.confirmMessage')}
@@ -116,11 +140,25 @@ export const ConfirmDeactivateDialog: React.FC<ConfirmDeactivateDialogProps> = (
           </Typography>
         </Box>
 
-        <Alert severity="warning" sx={{ mt: 2 }}>
-          <Typography variant="body2">
-            {t('deactivateDialog.warningMessage')}
-          </Typography>
-        </Alert>
+        {hasPendingPayments ? (
+          <Alert severity="error" icon={<ErrorIcon />} sx={{ mt: 2 }}>
+            <Typography variant="body2" fontWeight="bold" gutterBottom>
+              {t('deactivateDialog.errorTitle')}
+            </Typography>
+            <Typography variant="body2">
+              {t('deactivateDialog.errorPendingPayments', {
+                count: pendingPayments.length,
+                amount: totalPendingAmount.toFixed(2),
+              })}
+            </Typography>
+          </Alert>
+        ) : (
+          <Alert severity="warning" sx={{ mt: 2 }}>
+            <Typography variant="body2">
+              {t('deactivateDialog.warningMessage')}
+            </Typography>
+          </Alert>
+        )}
       </DialogContent>
 
       <DialogActions>
@@ -131,7 +169,7 @@ export const ConfirmDeactivateDialog: React.FC<ConfirmDeactivateDialogProps> = (
           onClick={handleConfirm}
           variant="contained"
           color="error"
-          disabled={loading}
+          disabled={loading || hasPendingPayments || paymentsLoading}
           startIcon={loading ? <CircularProgress size={20} /> : null}
         >
           {loading ? t('deactivateDialog.processing') : t('deactivateDialog.confirm')}

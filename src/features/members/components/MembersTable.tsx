@@ -491,7 +491,20 @@ export function MembersTable({
       const { field, sort } = model[0]
       // Convert MUI DataGrid sort ('asc'/'desc') to GraphQL format ('ASC'/'DESC')
       const direction = sort ? (sort.toUpperCase() as 'ASC' | 'DESC') : null
-      onSortChange(field, direction)
+
+      // Map frontend field names to backend database column names
+      const fieldMapping: Record<string, string> = {
+        numero_socio: 'membership_number',
+        tipo_membresia: 'membership_type',
+        estado: 'state',
+        poblacion: 'city',
+        provincia: 'province',
+        fecha_alta: 'registration_date',
+        fecha_baja: 'leaving_date',
+      }
+
+      const mappedField = fieldMapping[field] || field
+      onSortChange(mappedField, direction)
     } else {
       onSortChange('', null)
     }

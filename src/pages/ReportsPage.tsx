@@ -66,15 +66,6 @@ export default function ReportsPage() {
           />
         </Box>
 
-        {/* Debug info */}
-        {!loading && (
-          <Alert severity="info" sx={{ mb: 3 }}>
-            Debug - Estado: loading={loading.toString()}, hasData={!!data},
-            hasError={!!error}, debtorsCount={data?.debtors?.length ?? 0}
-            {error && `, error: ${error.message}`}
-          </Alert>
-        )}
-
         {/* Error state */}
         {error && (
           <Alert severity="error" sx={{ mb: 3 }}>

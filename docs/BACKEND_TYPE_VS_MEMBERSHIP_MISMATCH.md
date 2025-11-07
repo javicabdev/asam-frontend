@@ -1,8 +1,8 @@
 # 🚨 URGENTE: Inconsistencia entre `type` y `membership` en la Respuesta
 
 **Fecha**: 7 de noviembre de 2025
-**Prioridad**: CRÍTICA
-**Problema**: El campo `membership` se está enviando pero NO se está usando para calcular el `type`
+**Prioridad**: ~~CRÍTICA~~ **✅ RESUELTO**
+**Problema**: ~~El campo `membership` se está enviando pero NO se está usando para calcular el `type`~~ **SOLUCIONADO**
 
 ---
 
@@ -304,4 +304,23 @@ Sin esta corrección, el módulo de informes mostrará información incorrecta a
 
 **Creado**: 7 de noviembre de 2025
 **Reportado por**: Usuario final (Pedro López Fernández aparece como Individual)
-**Estado**: Pendiente de corrección en backend
+**Estado**: ✅ **RESUELTO** - Fix implementado en backend
+
+---
+
+## ✅ Solución Implementada
+
+**Fecha de resolución**: 7 de noviembre de 2025
+
+El backend implementó correctamente la comparación del campo `membership_type` de la base de datos:
+- Ahora compara con `"familiar"` (minúsculas) en lugar de `"FAMILY"` (mayúsculas)
+- El campo `type` en la respuesta GraphQL ahora refleja correctamente si es `"INDIVIDUAL"` o `"FAMILY"`
+
+**Resultado**:
+- ✅ Pedro López Fernández y otros socios familiares ahora aparecen con `type: "FAMILY"`
+- ✅ Los contadores del summary son correctos:
+  - `individualDebtors`: Solo cuenta socios individuales
+  - `familyDebtors`: Solo cuenta familias
+- ✅ Los chips en la UI muestran el tipo correcto ("Familia" vs "Individual")
+
+**Frontend**: El campo `type` es ahora la fuente de verdad única. El campo `membership` en el objeto `member` era redundante y ha sido removido del schema GraphQL.

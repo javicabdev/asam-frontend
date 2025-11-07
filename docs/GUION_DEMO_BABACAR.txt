@@ -79,7 +79,7 @@ EXPLICAR:
 "Al hacer clic en cualquier socio, ves:
 • Toda su información personal
 • Sus familiares beneficiarios (muy importante para repatriaciones)
-• Todo su historial de pagos: qué ha pagado, cuándo, cuánto debe"
+• Todo su historial de pagos: qué años ha pagado, cuánto debe"
 
 
 3. 💰 REGISTRO DE PAGOS (4 min)
@@ -91,17 +91,20 @@ IR A: Menú → Pagos → Nuevo Pago
 DEMOSTRAR:
 1. Buscar al socio por nombre o número
 2. Seleccionar tipo de pago:
-   • Cuota mensual normal (10€)
-   • Cuota de ingreso (20€ primera vez)
+   • Cuota anual (ejemplo: 120€ por año)
+   • Cuota de ingreso (única vez, ejemplo: 20€)
 3. Introducir método de pago (efectivo, transferencia)
 4. Confirmar
 
 EXPLICAR:
-"Cuando un socio viene a pagar:
+"Cuando un socio viene a pagar su cuota anual:
 1. Buscas su nombre
-2. Ves automáticamente cuánto debe
+2. Ves automáticamente si debe la cuota del año actual
 3. Registras el pago
 4. El sistema guarda todo y puede imprimir un recibo si lo necesita"
+
+ACLARAR:
+"Cada socio paga UNA CUOTA AL AÑO, no mensual. Es más simple de gestionar."
 
 MOSTRAR:
 • El recibo PDF que se genera automáticamente
@@ -149,15 +152,15 @@ IR A: Menú → Informes → Morosos
 MOSTRAR:
 • Lista de socios con pagos pendientes
 • Cantidad que debe cada uno
-• Meses de retraso
+• Años de retraso
 • Botones para exportar a Excel
 
 EXPLICAR:
 "Este informe es muy útil:
 • Te muestra quién debe pagos
-• Cuánto debe cada uno
+• Cuánto debe cada uno (cuántos años)
 • Puedes exportarlo a Excel para hacer seguimiento
-• Es perfecto para hacer recordatorios de pago"
+• Es perfecto para hacer recordatorios de pago antes de fin de año"
 
 
 ═══════════════════════════════════════════════════════════════════════════
@@ -295,6 +298,7 @@ Socio que paga            | ✓ SÍ      | Ya definido
 Cantidad                  | ✓ SÍ      | Ya definido
 Tipo de pago              | ✓ SÍ      | Ya definido
 Fecha del pago            | ✓ SÍ      | Por defecto hoy
+Año al que corresponde    | ✓ SÍ      | Ya definido (año actual)
 Método (efectivo/transf.) | ?         | ¿Es importante registrarlo?
 Nº referencia             | ?         | ¿Para transferencias?
 Notas/Observaciones       | ?         | ¿Hay casos especiales?
@@ -307,7 +311,7 @@ PREGUNTAS CLAVE:
    contabilidad?"
    
 3. "¿Hay situaciones especiales en los pagos que debemos poder anotar?"
-   Ejemplo: "Pago atrasado de 3 meses" o "Descuento especial"
+   Ejemplo: "Pago de varios años atrasados" o "Descuento especial"
 
 
 4. 💸 MOVIMIENTOS DE CAJA (Gastos)
@@ -331,6 +335,88 @@ PREGUNTAS CLAVE:
 2. "¿Hay tipos de gastos recurrentes que deberíamos poder registrar 
    fácilmente?"
 
+
+═══════════════════════════════════════════════════════════════════════════
+
+5. 📅 GENERACIÓN DE CUOTAS ANUALES (PREGUNTA CLAVE)
+────────────────────────────────────────────────────
+
+CONTEXTO:
+El sistema tiene una funcionalidad para generar la obligación de pago 
+de la cuota anual para todos los socios activos de forma masiva.
+
+PREGUNTA CLAVE PARA BABACAR:
+
+"¿Cómo te gustaría gestionar la generación de la obligación de pago 
+de la cuota anual?"
+
+OPCIONES Y RECOMENDACIÓN:
+
+A) MANUAL (⭐ RECOMENDADO):
+   • Tú decides cuándo generar las obligaciones del nuevo año
+   • Puedes ajustar el importe de la cuota anual si cambia
+   • Tienes control total sobre el proceso
+   • Proceso: Vas a una pantalla, introduces el año y el importe 
+     de la cuota anual, y el sistema genera todas las obligaciones 
+     de pago para todos los socios activos
+
+   Ventajas:
+   ✓ Flexibilidad para cambiar el importe de la cuota anual
+   ✓ Control: generas cuando estés listo
+   ✓ Evita errores si hay cambios pendientes a inicio de año
+   ✓ Transparencia: es una acción consciente y documentada
+   
+   Cuándo hacerlo:
+   • A finales de diciembre/inicio de enero
+   • O cuando lo decidas según las necesidades de la asociación
+   
+   Ejemplo práctico:
+   "31 de diciembre: Generas las obligaciones para 2026
+    Año: 2026
+    Importe: 120€
+    → El sistema crea la obligación de pago de 120€ para cada socio 
+      activo para el año 2026"
+
+B) AUTOMÁTICO:
+   • El sistema genera automáticamente las obligaciones el 1 de enero
+   • Sin intervención manual
+   
+   Desventajas:
+   ✗ No permite cambiar el importe de la cuota fácilmente
+   ✗ Puede generar obligaciones incorrectas si hay cambios pendientes
+   ✗ Menos control sobre el proceso
+   ✗ ¿Qué importe usa? ¿El del año anterior?
+
+C) NO GENERAR OBLIGACIONES PREVIAS:
+   • Solo se registran los pagos cuando se reciben
+   • No hay "obligaciones" pendientes en el sistema
+   
+   Desventajas:
+   ✗ No puedes ver fácilmente quién debe la cuota del año
+   ✗ El reporte de morosos no funcionaría automáticamente
+   ✗ Más difícil hacer seguimiento
+
+NUESTRA RECOMENDACIÓN: OPCIÓN A (MANUAL)
+
+Razones:
+1. Te da control total sobre cuándo y cómo se generan
+2. Permite ajustar el importe si la asamblea decide cambiar la cuota
+3. Evita problemas al inicio del año
+4. Es un proceso simple: un clic y se generan todas
+5. Puedes hacerlo cuando tengas confirmado el importe para el nuevo año
+
+PREGUNTA DIRECTA:
+"¿El importe de la cuota anual suele cambiar de un año a otro, 
+o siempre es el mismo? Si puede cambiar, definitivamente es mejor 
+el proceso manual."
+
+PREGUNTA ADICIONAL:
+"¿Cuándo preferirías generar las obligaciones del nuevo año?"
+a) A finales de diciembre (antes de que termine el año)
+b) A principios de enero (cuando empieza el año)
+c) Cuando tú decidas (flexibilidad total)
+
+═══════════════════════════════════════════════════════════════════════════
 
 📊 RESUMEN DE DECISIONES A TOMAR
 ──────────────────────────────────
@@ -389,6 +475,13 @@ Obligatorios: __________________________________________________
 Opcionales: ____________________________________________________
 Notas: _________________________________________________________
 
+GENERACIÓN DE CUOTAS ANUALES:
+Opción elegida: ________________________________________________
+Importe cuota anual actual: ____________________________________
+¿Puede cambiar el importe?: ____________________________________
+¿Cuándo generar?: ______________________________________________
+Notas: _________________________________________________________
+
 
 ═══════════════════════════════════════════════════════════════════════════
 PARTE 3: PREGUNTAS Y RESPUESTAS (5 min)
@@ -417,11 +510,35 @@ PREGUNTAS COMUNES A ANTICIPAR:
    → "Sí, cada pago genera un recibo en PDF que puedes descargar, 
       imprimir o enviar por email."
 
-5. "¿Qué pasa al cambiar de año?"
+5. "¿Qué pasa al cambiar de año?" ⭐ RESPUESTA ACTUALIZADA
    
-   → "El sistema calcula automáticamente las obligaciones de pago del 
-      nuevo año. Los socios activos tendrán sus 12 nuevas cuotas 
-      mensuales pendientes."
+   → "Al cambiar de año, tienes una función muy práctica: con un solo 
+      clic puedes generar la obligación de pago de la cuota anual para 
+      todos los socios activos. 
+      
+      El proceso es simple:
+      1. Vas a la sección de 'Generar Cuotas Anuales'
+      2. Introduces el año (ej: 2026)
+      3. Introduces el importe de la cuota anual (si cambió o se mantiene)
+      4. El sistema crea la obligación de pago para cada socio activo
+      
+      Esto te da control: si la asamblea decide cambiar el importe 
+      de la cuota, simplemente introduces el nuevo valor. Y puedes 
+      hacerlo cuando tú decidas, no hay que esperar a una fecha fija.
+      
+      A partir de ese momento, cuando un socio venga a pagar, el sistema 
+      ya sabe que debe la cuota de ese año."
+
+6. "¿Un socio puede pagar varios años de una vez?"
+   
+   → "Sí, puedes registrar varios pagos para diferentes años. Por ejemplo, 
+      si un socio debe 2023, 2024 y 2025, puedes registrar los tres pagos 
+      a la vez."
+
+7. "¿Cómo sé quién debe cuotas de años anteriores?"
+   
+   → "El reporte de morosos te muestra exactamente quién debe y de qué 
+      años. Así puedes hacer seguimiento fácilmente antes de fin de año."
 
 
 ═══════════════════════════════════════════════════════════════════════════
@@ -435,6 +552,9 @@ PREGUNTAS COMUNES A ANTICIPAR:
 • Seguridad: "Solo usuarios autorizados tienen acceso"
 • Movilidad: "Puedes usarla desde cualquier lugar"
 • Trazabilidad: "Cada acción queda registrada para auditorías"
+• Control: "Tú decides cuándo hacer cada cosa, nada es automático 
+  sin tu aprobación"
+• Modelo simple: "UNA cuota AL AÑO por socio, fácil de gestionar"
 
 ❌ EVITAR:
 ───────────
@@ -442,6 +562,7 @@ PREGUNTAS COMUNES A ANTICIPAR:
 • Explicaciones muy largas
 • Mostrar errores o bugs
 • Entrar en detalles de configuración
+• Confundir con "cuotas mensuales" - es ANUAL
 
 💡 CONSEJOS PARA LA PRESENTACIÓN:
 ───────────────────────────────────
@@ -450,7 +571,8 @@ PREGUNTAS COMUNES A ANTICIPAR:
 • Haz pausas para que Babacar haga preguntas
 • Muestra entusiasmo por las características importantes
 • Ten casos de uso reales preparados:
-  Ejemplo: "Imagina que viene Mohamed a pagar su cuota..."
+  Ejemplo: "Imagina que viene Mohamed a pagar su cuota de 2025..."
+• Enfatiza la simplicidad del modelo: "Una cuota al año, simple y claro"
 
 
 ═══════════════════════════════════════════════════════════════════════════
@@ -466,10 +588,10 @@ Movimientos de Caja       | 3 min     | ALTA
 Reporte de Morosos        | 2 min     | ALTA
 PWA y Multiidioma         | 3 min     | MEDIA
 Usuarios y Tema           | 3 min     | BAJA
-Validación de Datos       | 5-10 min  | ALTA
+Validación de Datos       | 10-15 min | ALTA (incluye cuotas anuales)
 Preguntas                 | 5 min     | -
 ─────────────────────────────────────────────────────────
-TOTAL                     | 32-37 min | -
+TOTAL                     | 37-42 min | -
 
 
 ═══════════════════════════════════════════════════════════════════════════
@@ -484,6 +606,13 @@ MENSAJE FINAL:
 2. Controlar los pagos y la caja con transparencia
 3. Tener informes claros para tomar decisiones
 4. Trabajar desde cualquier lugar, en cualquier momento
+5. Mantener el control total sobre todos los procesos
+
+La filosofía de la aplicación es darte herramientas potentes pero 
+simples, donde TÚ decides cuándo y cómo hacer las cosas.
+
+El modelo es muy claro: cada socio paga UNA cuota AL AÑO. Simple, 
+transparente y fácil de gestionar.
 
 ¿Qué te parece? ¿Tienes alguna pregunta o sugerencia?"
 
@@ -492,12 +621,19 @@ MENSAJE FINAL:
 🚀 SIGUIENTE PASO DESPUÉS DE LA REUNIÓN
 ═══════════════════════════════════════════════════════════════════════════
 
-Una vez Babacar tome las decisiones sobre campos obligatorios:
+Una vez Babacar tome las decisiones sobre:
+✓ Campos obligatorios vs opcionales
+✓ Generación de cuotas anuales (manual/automático)
+✓ Importe de la cuota anual actual
+✓ Cualquier otra personalización
 
+Entonces procederemos a:
 ✓ Actualizar las validaciones en los formularios
+✓ Implementar/ajustar la funcionalidad de generación de cuotas anuales
 ✓ Ajustar los mensajes de error
 ✓ Documentar las reglas de negocio
 ✓ Hacer pruebas con casos reales
+✓ Confirmar que todo el sistema está alineado con el modelo de cuota anual
 
 
 ═══════════════════════════════════════════════════════════════════════════

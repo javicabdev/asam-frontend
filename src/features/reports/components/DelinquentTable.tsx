@@ -8,6 +8,7 @@ import { DebtorType } from '../types'
 import type { Debtor } from '../types'
 import { DebtorTypeChip } from './DebtorTypeChip'
 import { formatCurrency, formatDate } from '../utils/delinquentFormatters'
+import { getDebtorId } from '../utils/debtorId'
 
 interface DelinquentTableProps {
   debtors: Debtor[]
@@ -161,7 +162,7 @@ export function DelinquentTable({
             onPaginationModelChange={setPaginationModel}
             pageSizeOptions={[10, 25, 50, 100]}
             disableRowSelectionOnClick
-            getRowId={(row) => row.memberId || row.familyId || Math.random()}
+            getRowId={(row) => getDebtorId(row)}
             autoHeight
             sx={{
               '& .MuiDataGrid-cell:focus': {

@@ -18,6 +18,16 @@ export function useDelinquentReport() {
     notifyOnNetworkStatusChange: true,
   })
 
+  // Debug: Log para verificar los datos que llegan del backend
+  console.log('useDelinquentReport - Debug:', {
+    loading,
+    error: error?.message,
+    hasData: !!data,
+    debtorsCount: data?.getDelinquentReport?.debtors?.length,
+    summary: data?.getDelinquentReport?.summary,
+    filters,
+  })
+
   const updateFilters = (newFilters: Partial<DelinquentReportInput>) => {
     setFilters((prev) => ({ ...prev, ...newFilters }))
   }

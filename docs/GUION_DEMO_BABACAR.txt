@@ -1,0 +1,505 @@
+═══════════════════════════════════════════════════════════════════════════
+   GUIÓN PARA DEMO DE APLICACIÓN ASAM - BABACAR
+═══════════════════════════════════════════════════════════════════════════
+
+📌 PREPARACIÓN PREVIA
+══════════════════════
+□ Tener datos de prueba cargados (socios, pagos, movimientos)
+□ Usuario administrador listo para login
+□ Backend ejecutándose correctamente
+□ Navegador preparado en pantalla completa
+
+
+═══════════════════════════════════════════════════════════════════════════
+PARTE 1: FUNCIONALIDADES PRINCIPALES (15-20 min)
+═══════════════════════════════════════════════════════════════════════════
+
+1. 🏠 INICIO DE SESIÓN Y PANEL PRINCIPAL (2 min)
+─────────────────────────────────────────────────
+
+MOSTRAR:
+• Login con correo y contraseña
+• Panel de control (Dashboard) al entrar
+
+EXPLICAR A BABACAR:
+"Esta es la pantalla principal que verás cuando entres. Aquí tienes un 
+resumen rápido de:
+• Cuántos socios hay activos
+• Cuánto dinero hay en caja
+• Gráficos con la evolución de pagos y socios nuevos
+• Las últimas actividades registradas"
+
+PUNTOS CLAVE:
+• Todo está en tiempo real
+• Los números se actualizan automáticamente
+• Puedes ver el estado general de la asociación de un vistazo
+
+
+2. 👥 GESTIÓN DE SOCIOS (5 min)
+────────────────────────────────
+
+IR A: Menú → Socios
+
+2.1 Ver listado de socios
+MOSTRAR:
+• Tabla con todos los socios
+• Búsqueda por nombre o número
+• Filtros (activos, inactivos, morosos)
+
+EXPLICAR:
+"Aquí tienes todos tus socios. Puedes:
+• Buscar por nombre o número de socio
+• Ver quién está al día o quién debe pagos
+• Filtrar para ver solo los activos o los que están atrasados"
+
+2.2 Crear un nuevo socio
+DEMOSTRAR:
+1. Clic en "Nuevo Socio"
+2. Rellenar formulario básico:
+   • Nombre completo
+   • Número de DNI/Pasaporte
+   • Teléfono
+   • Email (opcional)
+   • Dirección
+
+EXPLICAR:
+"Cuando alguien nuevo quiere unirse:
+1. Le das de alta aquí con sus datos
+2. El sistema le asigna automáticamente un número de socio
+3. Puedes añadir familiares después si es necesario"
+
+2.3 Ver detalles de un socio
+MOSTRAR:
+• Hacer clic en un socio existente
+• Pestaña de Información Personal
+• Pestaña de Familiares
+• Pestaña de Historial de Pagos
+
+EXPLICAR:
+"Al hacer clic en cualquier socio, ves:
+• Toda su información personal
+• Sus familiares beneficiarios (muy importante para repatriaciones)
+• Todo su historial de pagos: qué ha pagado, cuándo, cuánto debe"
+
+
+3. 💰 REGISTRO DE PAGOS (4 min)
+────────────────────────────────
+
+IR A: Menú → Pagos → Nuevo Pago
+
+3.1 Registrar un pago
+DEMOSTRAR:
+1. Buscar al socio por nombre o número
+2. Seleccionar tipo de pago:
+   • Cuota mensual normal (10€)
+   • Cuota de ingreso (20€ primera vez)
+3. Introducir método de pago (efectivo, transferencia)
+4. Confirmar
+
+EXPLICAR:
+"Cuando un socio viene a pagar:
+1. Buscas su nombre
+2. Ves automáticamente cuánto debe
+3. Registras el pago
+4. El sistema guarda todo y puede imprimir un recibo si lo necesita"
+
+MOSTRAR:
+• El recibo PDF que se genera automáticamente
+• Cómo se actualiza el historial del socio
+
+
+4. 📊 CONTROL DE MOVIMIENTOS DE CAJA (3 min)
+─────────────────────────────────────────────
+
+IR A: Menú → Caja
+
+MOSTRAR:
+• Balance actual de la caja
+• Listado de entradas y salidas
+• Filtros por fecha y tipo
+
+EXPLICAR:
+"Esta es tu contabilidad simplificada:
+• Ves todo el dinero que entra (pagos de socios)
+• Y todo lo que sale (gastos de repatriaciones, gastos administrativos)
+• El balance te dice cuánto dinero hay disponible en todo momento"
+
+4.1 Registrar un gasto (Repatriación)
+DEMOSTRAR:
+1. Clic en "Nuevo Movimiento"
+2. Seleccionar tipo: "Repatriación"
+3. Introducir:
+   • Socio fallecido
+   • Cantidad gastada
+   • Concepto (vuelo, traslado, etc.)
+   • Fecha
+
+EXPLICAR:
+"Cuando hay que repatriar a un socio fallecido:
+1. Registras el gasto aquí
+2. Automáticamente se descuenta de la caja
+3. Queda todo documentado para auditorías"
+
+
+5. 📋 REPORTE DE MOROSOS (2 min)
+─────────────────────────────────
+
+IR A: Menú → Informes → Morosos
+
+MOSTRAR:
+• Lista de socios con pagos pendientes
+• Cantidad que debe cada uno
+• Meses de retraso
+• Botones para exportar a Excel
+
+EXPLICAR:
+"Este informe es muy útil:
+• Te muestra quién debe pagos
+• Cuánto debe cada uno
+• Puedes exportarlo a Excel para hacer seguimiento
+• Es perfecto para hacer recordatorios de pago"
+
+
+═══════════════════════════════════════════════════════════════════════════
+PARTE 2: CARACTERÍSTICAS ESPECIALES (5-10 min)
+═══════════════════════════════════════════════════════════════════════════
+
+6. 📱 APLICACIÓN INSTALABLE (PWA) (2 min)
+──────────────────────────────────────────
+
+DEMOSTRAR EN MÓVIL O TABLET:
+• Botón "Instalar aplicación"
+• Ícono en la pantalla de inicio
+• Funciona como una app normal
+
+EXPLICAR:
+"Esta aplicación web se puede instalar en el móvil o tablet:
+• Funciona como una app normal
+• No ocupa mucho espacio
+• Puedes usarla incluso sin internet para consultar información"
+
+
+7. 🌍 MULTIIDIOMA (1 min)
+──────────────────────────
+
+MOSTRAR:
+• Selector de idioma (arriba a la derecha)
+• Cambiar entre Español, Francés y Wolof
+
+EXPLICAR:
+"La aplicación está en tres idiomas:
+• Español (para la administración)
+• Francés (para muchos socios)
+• Wolof (para los socios senegaleses)
+Cada usuario puede elegir su idioma preferido"
+
+
+8. 🔐 GESTIÓN DE USUARIOS (2 min)
+──────────────────────────────────
+
+IR A: Menú → Usuarios (solo si eres admin)
+
+MOSTRAR:
+• Lista de usuarios de la aplicación
+• Roles: Administrador, Operador
+• Crear nuevo usuario
+
+EXPLICAR:
+"Como administrador, puedes:
+• Dar acceso a otras personas de la asociación
+• Crear usuarios 'Operadores' que solo pueden registrar pagos
+• Los administradores tienen acceso completo a todo"
+
+
+9. 🎨 PERSONALIZACIÓN (1 min)
+──────────────────────────────
+
+MOSTRAR:
+• Tema claro/oscuro (botón arriba a la derecha)
+• Cómo cambia toda la interfaz
+
+EXPLICAR:
+"Puedes cambiar el tema según tu preferencia:
+• Tema claro para trabajar de día
+• Tema oscuro para reducir el cansancio visual"
+
+
+═══════════════════════════════════════════════════════════════════════════
+PARTE 2.5: PREGUNTAS SOBRE VALIDACIÓN DE DATOS (5-10 min)
+═══════════════════════════════════════════════════════════════════════════
+
+🔍 ACLARACIÓN DE CAMPOS OBLIGATORIOS VS OPCIONALES
+────────────────────────────────────────────────────
+
+Objetivo: Definir qué información es imprescindible y cuál es opcional.
+
+
+1. 📋 FORMULARIO DE NUEVO SOCIO
+────────────────────────────────
+
+CAMPOS Y PREGUNTAS PARA BABACAR:
+
+Campo                     | Estado    | Pregunta para Babacar
+─────────────────────────────────────────────────────────────────────
+Nombre completo           | ✓ SÍ      | Ya definido
+Apellidos                 | ✓ SÍ      | Ya definido
+Documento (DNI/Pasaporte) | ✓ SÍ      | Ya definido
+Fecha de nacimiento       | ?         | ¿Imprescindible al dar de alta?
+Teléfono                  | ?         | ¿Obligatorio o opcional?
+Email                     | ?         | ¿Qué % de socios tiene email?
+Dirección (calle)         | ?         | ¿Completa desde el principio?
+Ciudad                    | ?         | ¿Obligatoria u opcional?
+Código postal             | ?         | ¿Necesario?
+País                      | ✓ SÍ      | Suele ser España
+Nacionalidad              | ?         | ¿Es importante registrarla?
+
+PREGUNTAS CLAVE:
+
+1. "¿Cuál es la información MÍNIMA para dar de alta a un socio y que 
+   pueda empezar a pagar?"
+   
+2. "¿Hay información que normalmente NO tienes al principio pero que 
+   puedes completar después?"
+   
+3. "¿Qué datos te da habitualmente un nuevo socio cuando viene por 
+   primera vez?"
+
+
+2. 👨‍👩‍👧‍👦 FAMILIARES BENEFICIARIOS
+─────────────────────────────────────
+
+Campo                     | Estado    | Pregunta para Babacar
+─────────────────────────────────────────────────────────────────────
+Nombre del familiar       | ✓ SÍ      | Ya definido
+Apellidos                 | ✓ SÍ      | Ya definido
+Parentesco                | ✓ SÍ      | Ya definido
+Fecha de nacimiento       | ?         | ¿Necesaria o solo parentesco?
+Teléfono del familiar     | ?         | ¿Útil tenerlo separado?
+Dirección del familiar    | ?         | ¿Viven en otra dirección?
+
+PREGUNTAS CLAVE:
+
+1. "¿Qué información de los familiares es CRÍTICA para gestionar una 
+   repatriación?"
+   
+2. "¿Los familiares deben estar registrados desde el principio o se 
+   pueden añadir después?"
+
+
+3. 💶 REGISTRO DE PAGOS
+────────────────────────
+
+Campo                     | Estado    | Pregunta para Babacar
+─────────────────────────────────────────────────────────────────────
+Socio que paga            | ✓ SÍ      | Ya definido
+Cantidad                  | ✓ SÍ      | Ya definido
+Tipo de pago              | ✓ SÍ      | Ya definido
+Fecha del pago            | ✓ SÍ      | Por defecto hoy
+Método (efectivo/transf.) | ?         | ¿Es importante registrarlo?
+Nº referencia             | ?         | ¿Para transferencias?
+Notas/Observaciones       | ?         | ¿Hay casos especiales?
+
+PREGUNTAS CLAVE:
+
+1. "¿Cómo registras los pagos actualmente? ¿Qué información guardas?"
+   
+2. "¿Necesitas diferenciar entre efectivo y transferencia para tu 
+   contabilidad?"
+   
+3. "¿Hay situaciones especiales en los pagos que debemos poder anotar?"
+   Ejemplo: "Pago atrasado de 3 meses" o "Descuento especial"
+
+
+4. 💸 MOVIMIENTOS DE CAJA (Gastos)
+───────────────────────────────────
+
+Campo                     | Estado    | Pregunta para Babacar
+─────────────────────────────────────────────────────────────────────
+Tipo (repatriación/admin) | ✓ SÍ      | Ya definido
+Cantidad                  | ✓ SÍ      | Ya definido
+Concepto/Descripción      | ✓ SÍ      | Ya definido
+Fecha                     | ✓ SÍ      | Ya definido
+Socio relacionado         | ?         | ¿Siempre hay uno o gastos generales?
+Justificante/Recibo       | ?         | ¿Adjuntar facturas?
+Proveedor                 | ?         | ¿Quién proporcionó el servicio?
+
+PREGUNTAS CLAVE:
+
+1. "¿Qué información de un gasto necesitas para justificarlo ante los 
+   socios en una asamblea?"
+   
+2. "¿Hay tipos de gastos recurrentes que deberíamos poder registrar 
+   fácilmente?"
+
+
+📊 RESUMEN DE DECISIONES A TOMAR
+──────────────────────────────────
+
+Para cada formulario, Babacar debe decidir:
+
+✓ OBLIGATORIOS: Sin ellos NO se puede guardar el registro
+⚠ RECOMENDADOS: Se puede guardar sin ellos, pero aparece un aviso
+✗ OPCIONALES: Totalmente opcionales, sin avisos
+
+EJEMPLO:
+NUEVO SOCIO:
+✓ Obligatorios: Nombre, Apellidos, Documento
+⚠ Recomendados: Teléfono, Fecha de nacimiento
+✗ Opcionales: Email, Dirección completa
+
+
+💡 CRITERIOS PARA DECIDIR
+───────────────────────────
+
+1. "¿Puedo gestionar sin este dato?"
+   → SÍ: Opcional | NO: Obligatorio
+
+2. "¿Lo tengo SIEMPRE al registrar?"
+   → SÍ: Puede ser obligatorio | NO: Debe ser opcional
+
+3. "¿Lo necesito para reportes legales?"
+   → SÍ: Obligatorio | NO: Opcional
+
+4. "¿Hacerlo obligatorio frena el registro?"
+   → SÍ: Mejor opcional | NO: Puede ser obligatorio
+
+
+✏️ ESPACIO PARA NOTAS DE LA REUNIÓN
+─────────────────────────────────────
+
+DECISIONES TOMADAS CON BABACAR:
+
+SOCIOS:
+Obligatorios: __________________________________________________
+Opcionales: ____________________________________________________
+Notas: _________________________________________________________
+
+FAMILIARES:
+Obligatorios: __________________________________________________
+Opcionales: ____________________________________________________
+Notas: _________________________________________________________
+
+PAGOS:
+Obligatorios: __________________________________________________
+Opcionales: ____________________________________________________
+Notas: _________________________________________________________
+
+MOVIMIENTOS:
+Obligatorios: __________________________________________________
+Opcionales: ____________________________________________________
+Notas: _________________________________________________________
+
+
+═══════════════════════════════════════════════════════════════════════════
+PARTE 3: PREGUNTAS Y RESPUESTAS (5 min)
+═══════════════════════════════════════════════════════════════════════════
+
+PREGUNTAS COMUNES A ANTICIPAR:
+
+1. "¿Qué pasa si no tengo internet?"
+   
+   → "La aplicación funciona sin internet para consultar información. 
+      Para registrar pagos o cambios necesitas conexión, pero se 
+      guardará automáticamente cuando vuelvas a tener internet."
+
+2. "¿Cómo se hacen copias de seguridad?"
+   
+   → "El sistema hace copias de seguridad automáticas cada día. Toda 
+      la información está segura en el servidor."
+
+3. "¿Puedo ver la información desde mi móvil?"
+   
+   → "Sí, completamente. La aplicación funciona en cualquier 
+      dispositivo: móvil, tablet o ordenador."
+
+4. "¿Se pueden imprimir recibos para los socios?"
+   
+   → "Sí, cada pago genera un recibo en PDF que puedes descargar, 
+      imprimir o enviar por email."
+
+5. "¿Qué pasa al cambiar de año?"
+   
+   → "El sistema calcula automáticamente las obligaciones de pago del 
+      nuevo año. Los socios activos tendrán sus 12 nuevas cuotas 
+      mensuales pendientes."
+
+
+═══════════════════════════════════════════════════════════════════════════
+📝 NOTAS IMPORTANTES PARA LA DEMO
+═══════════════════════════════════════════════════════════════════════════
+
+✅ HACER ÉNFASIS EN:
+─────────────────────
+• Simplicidad: "Es muy fácil de usar, no necesitas ser experto"
+• Tiempo real: "Todo se actualiza al instante"
+• Seguridad: "Solo usuarios autorizados tienen acceso"
+• Movilidad: "Puedes usarla desde cualquier lugar"
+• Trazabilidad: "Cada acción queda registrada para auditorías"
+
+❌ EVITAR:
+───────────
+• Términos técnicos (React, GraphQL, PWA, etc.)
+• Explicaciones muy largas
+• Mostrar errores o bugs
+• Entrar en detalles de configuración
+
+💡 CONSEJOS PARA LA PRESENTACIÓN:
+───────────────────────────────────
+• Usa datos realistas en la demo
+• Ten preparado un "guión feliz" (todo funciona bien)
+• Haz pausas para que Babacar haga preguntas
+• Muestra entusiasmo por las características importantes
+• Ten casos de uso reales preparados:
+  Ejemplo: "Imagina que viene Mohamed a pagar su cuota..."
+
+
+═══════════════════════════════════════════════════════════════════════════
+⏱️ TIMING SUGERIDO
+═══════════════════════════════════════════════════════════════════════════
+
+Sección                   | Tiempo    | Prioridad
+─────────────────────────────────────────────────────────
+Login y Dashboard         | 2 min     | ALTA
+Gestión de Socios         | 5 min     | ALTA
+Registro de Pagos         | 4 min     | ALTA
+Movimientos de Caja       | 3 min     | ALTA
+Reporte de Morosos        | 2 min     | ALTA
+PWA y Multiidioma         | 3 min     | MEDIA
+Usuarios y Tema           | 3 min     | BAJA
+Validación de Datos       | 5-10 min  | ALTA
+Preguntas                 | 5 min     | -
+─────────────────────────────────────────────────────────
+TOTAL                     | 32-37 min | -
+
+
+═══════════════════════════════════════════════════════════════════════════
+🎬 CIERRE DE LA DEMO
+═══════════════════════════════════════════════════════════════════════════
+
+MENSAJE FINAL:
+
+"Como ves, esta aplicación te ayuda a:
+
+1. Gestionar todos tus socios de forma ordenada
+2. Controlar los pagos y la caja con transparencia
+3. Tener informes claros para tomar decisiones
+4. Trabajar desde cualquier lugar, en cualquier momento
+
+¿Qué te parece? ¿Tienes alguna pregunta o sugerencia?"
+
+
+═══════════════════════════════════════════════════════════════════════════
+🚀 SIGUIENTE PASO DESPUÉS DE LA REUNIÓN
+═══════════════════════════════════════════════════════════════════════════
+
+Una vez Babacar tome las decisiones sobre campos obligatorios:
+
+✓ Actualizar las validaciones en los formularios
+✓ Ajustar los mensajes de error
+✓ Documentar las reglas de negocio
+✓ Hacer pruebas con casos reales
+
+
+═══════════════════════════════════════════════════════════════════════════
+FIN DEL GUIÓN - ¡ÉXITO EN LA DEMO!
+═══════════════════════════════════════════════════════════════════════════

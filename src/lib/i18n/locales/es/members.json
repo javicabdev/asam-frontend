@@ -391,6 +391,12 @@
     "notSpecified": "No especificado",
     "statusActive": "Activo",
     "statusInactive": "Inactivo",
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "pending": "Pendiente",
+      "suspended": "Suspendido"
+    },
     "basicInfo": "Información Básica",
     "memberNumber": "Número de Socio",
     "membershipType": "Tipo de Membresía",

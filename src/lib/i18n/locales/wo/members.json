@@ -391,6 +391,12 @@
     "notSpecified": "Tëruluwul",
     "statusActive": "Dafa doxe",
     "statusInactive": "Doxul",
+    "status": {
+      "active": "Yoo xool",
+      "inactive": "Yoo xoolul",
+      "pending": "Yoo xaar",
+      "suspended": "Dakk"
+    },
     "basicInfo": "Xibaar Bu Njëkk",
     "memberNumber": "Nimero Mbooloo",
     "membershipType": "Anam Mboolante",

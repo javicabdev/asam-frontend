@@ -14,19 +14,18 @@
       "cutoffDate": "Bësu waxtu",
       "minAmount": "Xaalis bu ndaw",
       "debtorType": "Xeetu njëkk xaalis",
-      "sortBy": "Reer ci",
+      "sortBy": {
+        "label": "Reer ci",
+        "amountDesc": "Xaalis bu bari bi ñàkk",
+        "amountAsc": "Xaalis bu ndaw bi ñàkk",
+        "daysDesc": "Fan bu bari ci wajur",
+        "daysAsc": "Fan bu ndaw ci wajur",
+        "nameAsc": "Tur (A-Z)"
+      },
       "reset": "Delloo filtre yi",
       "all": "Yépp",
       "individual": "Mbokk yi ñeneen",
       "family": "Mbootaay"
-    },
-
-    "sortOptions": {
-      "amountDesc": "Xaalis bu bari bi ñàkk",
-      "amountAsc": "Xaalis bu ndaw bi ñàkk",
-      "daysDesc": "Fan bu bari ci wajur",
-      "daysAsc": "Fan bu ndaw ci wajur",
-      "nameAsc": "Tur (A-Z)"
     },
 
     "table": {
@@ -58,6 +57,13 @@
       "totalDebt": "Yépp ci xaalis",
       "avgDaysOverdue": "Njëkkaleen fan yu wajur",
       "avgDebtPerDebtor": "Xaalis wu njëkkaleen"
+    },
+
+    "actions": {
+      "exportPDF": "Jëfeeleel PDF",
+      "exportCSV": "Jëfeeleel CSV",
+      "viewDetails": "Gis li ci ànd",
+      "close": "Tëj"
     },
 
     "details": {

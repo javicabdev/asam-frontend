@@ -89,7 +89,7 @@ export function DelinquentFilters({
             <TextField
               fullWidth
               select
-              label={t('delinquent.filters.sortBy')}
+              label={t('delinquent.filters.sortBy.label')}
               value={filters.sortBy ?? SortBy.DAYS_DESC}
               onChange={(e) =>
                 onUpdateFilters({ sortBy: e.target.value as SortBy })

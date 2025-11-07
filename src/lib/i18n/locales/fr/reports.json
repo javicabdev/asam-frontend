@@ -14,19 +14,18 @@
       "cutoffDate": "Date de référence",
       "minAmount": "Montant minimum",
       "debtorType": "Type de débiteur",
-      "sortBy": "Trier par",
+      "sortBy": {
+        "label": "Trier par",
+        "amountDesc": "Plus grande dette d'abord",
+        "amountAsc": "Plus petite dette d'abord",
+        "daysDesc": "Plus de jours de retard",
+        "daysAsc": "Moins de jours de retard",
+        "nameAsc": "Nom (A-Z)"
+      },
       "reset": "Réinitialiser les filtres",
       "all": "Tous",
       "individual": "Membres individuels",
       "family": "Familles"
-    },
-
-    "sortOptions": {
-      "amountDesc": "Plus grande dette d'abord",
-      "amountAsc": "Plus petite dette d'abord",
-      "daysDesc": "Plus de jours de retard",
-      "daysAsc": "Moins de jours de retard",
-      "nameAsc": "Nom (A-Z)"
     },
 
     "table": {
@@ -58,6 +57,13 @@
       "totalDebt": "Dette Totale",
       "avgDaysOverdue": "Moyenne Jours de Retard",
       "avgDebtPerDebtor": "Dette Moyenne"
+    },
+
+    "actions": {
+      "exportPDF": "Exporter PDF",
+      "exportCSV": "Exporter CSV",
+      "viewDetails": "Voir Détails",
+      "close": "Fermer"
     },
 
     "details": {

@@ -167,7 +167,15 @@
     "dateLow": "Fecha Baja",
     "deactivate": "Dar de baja",
     "rowsPerPage": "Filas por página",
-    "displayedRows": "{{from}}-{{to}} de {{count}}"
+    "displayedRows": "{{from}}-{{to}} de {{count}}",
+    "toolbar": {
+      "columns": "Columnas",
+      "filters": "Filtros",
+      "density": "Densidad",
+      "export": "Exportar"
+    },
+    "footerRowSelected": "{{count}} fila seleccionada",
+    "footerRowSelected_plural": "{{count}} filas seleccionadas"
   },
   "export": {
     "success": "Exportación completada exitosamente",

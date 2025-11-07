@@ -167,7 +167,15 @@
     "dateLow": "Bésu génné",
     "deactivate": "Fay",
     "rowsPerPage": "Limu renku ci bët",
-    "displayedRows": "{{from}}-{{to}} ci {{count}}"
+    "displayedRows": "{{from}}-{{to}} ci {{count}}",
+    "toolbar": {
+      "columns": "Njàll",
+      "filters": "Filteeru",
+      "density": "Tëral",
+      "export": "Génne"
+    },
+    "footerRowSelected": "{{count}} renku tànn",
+    "footerRowSelected_plural": "{{count}} renku tànn"
   },
   "export": {
     "success": "Génne bi am na ci",

@@ -211,6 +211,21 @@ export function MembersTable({
     severity: 'success',
   })
 
+  // Custom locale text for DataGrid
+  const customLocaleText = {
+    ...esES.components.MuiDataGrid.defaultProps.localeText,
+    // Toolbar buttons
+    toolbarColumns: t('table.toolbar.columns'),
+    toolbarFilters: t('table.toolbar.filters'),
+    toolbarDensity: t('table.toolbar.density'),
+    toolbarExport: t('table.toolbar.export'),
+    // Footer text for selected rows
+    footerRowSelected: (count: number) =>
+      count === 1
+        ? t('table.footerRowSelected', { count })
+        : t('table.footerRowSelected_plural', { count }),
+  }
+
   // Export hook
   const {
     exportAllMembers,
@@ -474,7 +489,9 @@ export function MembersTable({
   const handleSortModelChange = (model: GridSortModel) => {
     if (model.length > 0) {
       const { field, sort } = model[0]
-      onSortChange(field, sort as 'ASC' | 'DESC' | null)
+      // Convert MUI DataGrid sort ('asc'/'desc') to GraphQL format ('ASC'/'DESC')
+      const direction = sort ? (sort.toUpperCase() as 'ASC' | 'DESC') : null
+      onSortChange(field, direction)
     } else {
       onSortChange('', null)
     }
@@ -543,7 +560,7 @@ export function MembersTable({
             exportProgress,
           } as CustomToolbarProps,
         }}
-        localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+        localeText={customLocaleText}
         sx={{
           '& .MuiDataGrid-row': {
             cursor: 'pointer',

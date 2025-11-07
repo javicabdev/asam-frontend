@@ -167,7 +167,15 @@
     "dateLow": "Date de départ",
     "deactivate": "Désactiver",
     "rowsPerPage": "Lignes par page",
-    "displayedRows": "{{from}}-{{to}} sur {{count}}"
+    "displayedRows": "{{from}}-{{to}} sur {{count}}",
+    "toolbar": {
+      "columns": "Colonnes",
+      "filters": "Filtres",
+      "density": "Densité",
+      "export": "Exporter"
+    },
+    "footerRowSelected": "{{count}} ligne sélectionnée",
+    "footerRowSelected_plural": "{{count}} lignes sélectionnées"
   },
   "export": {
     "success": "Exportation réussie",

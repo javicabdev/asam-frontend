@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Box, Typography } from '@mui/material'
 import { UsersTable, UserFormDialog } from '@/features/users'
 import type { User } from '@/graphql/generated/operations'
@@ -10,7 +10,8 @@ export default function UsersPage() {
   const { enqueueSnackbar } = useSnackbar()
   const [openDialog, setOpenDialog] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
-  
+  const refetchUsers = useRef<(() => void) | null>(null)
+
   const handleEditUser = (user: User) => {
     setSelectedUser(user)
     setOpenDialog(true)
@@ -31,6 +32,11 @@ export default function UsersPage() {
       ? t('form.success.updated')
       : t('form.success.created')
     enqueueSnackbar(message, { variant: 'success' })
+
+    // Refetch the users list
+    if (refetchUsers.current) {
+      refetchUsers.current()
+    }
   }
 
   return (
@@ -41,9 +47,13 @@ export default function UsersPage() {
       <Typography variant="body1" color="text.secondary" gutterBottom>
         {t('subtitle')}
       </Typography>
-      
+
       <Box sx={{ mt: 3 }}>
-        <UsersTable onEditUser={handleEditUser} onAddUser={handleAddUser} />
+        <UsersTable
+          onEditUser={handleEditUser}
+          onAddUser={handleAddUser}
+          onRefetchReady={(refetch) => { refetchUsers.current = refetch }}
+        />
       </Box>
 
       <UserFormDialog

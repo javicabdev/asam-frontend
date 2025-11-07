@@ -38,6 +38,7 @@ import { useTranslation } from 'react-i18next'
 interface UsersTableProps {
   onEditUser: (user: User) => void
   onAddUser: () => void
+  onRefetchReady?: (refetch: () => void) => void
 }
 
 interface ListUsersResponse {
@@ -52,15 +53,15 @@ interface DeleteUserResponse {
   }
 }
 
-export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser }) => {
+export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, onRefetchReady }) => {
   const { t } = useTranslation('users')
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [tabValue, setTabValue] = useState<UserRole>('admin')
   const [searchTerm, setSearchTerm] = useState('')
-  
+
   const currentUser = useAuthStore((state) => state.user)
-  
+
   // Query for users
   const { data, loading, error, refetch } = useQuery<ListUsersResponse>(LIST_USERS, {
     variables: {
@@ -68,6 +69,13 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser })
       pageSize: 100, // Get all users, we'll filter client-side
     },
   })
+
+  // Expose refetch function to parent component
+  React.useEffect(() => {
+    if (onRefetchReady && refetch) {
+      onRefetchReady(() => void refetch())
+    }
+  }, [onRefetchReady, refetch])
 
   // Delete mutation
   const [deleteUser, { loading: deleteLoading }] = useMutation<DeleteUserResponse>(DELETE_USER, {

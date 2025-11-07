@@ -2,7 +2,6 @@ import React from 'react'
 import { Box, Typography, Button, Alert, Chip, Stack, Tooltip, useTheme } from '@mui/material'
 import {
   Add as AddIcon,
-  DeleteOutline as DeleteIcon,
   Refresh as RefreshIcon,
 } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
@@ -46,11 +45,6 @@ export default function MembersPage() {
     refetch, // Added refetch here
   } = useMembersTable()
 
-  const handleBulkDelete = () => {
-    // TODO: Implement bulk delete
-    console.log('Bulk delete:', selectedMembers)
-  }
-
   const handleEditClick = (member: Member) => {
     navigate(`/members/${member.miembro_id}/edit`)
   }
@@ -89,16 +83,6 @@ export default function MembersPage() {
           </Stack>
         </Box>
         <Stack direction="row" spacing={2}>
-          {selectedMembers.length > 0 && (
-            <Button
-              variant="outlined"
-              color="error"
-              startIcon={<DeleteIcon />}
-              onClick={handleBulkDelete}
-            >
-              {t('delete', 'Eliminar')} ({selectedMembers.length})
-            </Button>
-          )}
           <Button
             variant="outlined"
             startIcon={<RefreshIcon />}

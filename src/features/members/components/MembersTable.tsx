@@ -298,7 +298,7 @@ export function MembersTable({
         field: 'nombre_completo',
         headerName: t('list.columns.fullName'),
         width: 250,
-        sortable: true,
+        sortable: false, // Disabled because it's a computed field
         valueGetter: (params) => {
           if (!params.row) return ''
           return `${params.row.nombre || ''} ${params.row.apellidos || ''}`

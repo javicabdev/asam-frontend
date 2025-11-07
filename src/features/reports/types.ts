@@ -27,9 +27,9 @@ export interface DebtorMemberInfo {
   memberNumber: string
   firstName: string
   lastName: string
-  email?: string
-  phone?: string
-  status: string
+  email?: string | null
+  phone?: string | null
+  status?: string
 }
 
 export interface DebtorFamilyInfo {
@@ -44,21 +44,21 @@ export interface PendingPayment {
   amount: number
   createdAt: string // ISO 8601 date
   daysOverdue: number
-  notes?: string
+  notes?: string | null
 }
 
 export interface Debtor {
-  memberId?: string
-  familyId?: string
-  type: DebtorType
-  member?: DebtorMemberInfo
-  family?: DebtorFamilyInfo
+  memberId?: string | null
+  familyId?: string | null
+  type: DebtorType | string // GraphQL returns string
+  member?: DebtorMemberInfo | null
+  family?: DebtorFamilyInfo | null
   pendingPayments: PendingPayment[]
   totalDebt: number
   oldestDebtDays: number
   oldestDebtDate: string // ISO 8601 date
-  lastPaymentDate?: string // ISO 8601 date
-  lastPaymentAmount?: number
+  lastPaymentDate?: string | null // ISO 8601 date
+  lastPaymentAmount?: number | null
 }
 
 export interface DelinquentSummary {

@@ -69,6 +69,10 @@
 
     "details": {
       "title": "Détails de la Dette",
+      "generalInfo": "Informations Générales",
+      "debtSummary": "Résumé de la Dette",
+      "oldestDebtDate": "Date de la Dette la Plus Ancienne",
+      "createdAt": "Créé le",
       "debtorInfo": "Information du Débiteur",
       "memberNumber": "Numéro de Membre",
       "name": "Nom",

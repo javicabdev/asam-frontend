@@ -165,7 +165,6 @@ export function DebtDetailsDialog({
                 {t('delinquent.table.oldestDebt')}:
               </Typography>
               <Typography variant="body2" fontWeight="medium">
-                {debtor.oldestDebtDays}{' '}
                 {t('delinquent.table.daysOverdue', {
                   count: debtor.oldestDebtDays,
                 })}
@@ -238,7 +237,7 @@ export function DebtDetailsDialog({
                         {formatCurrency(payment.amount)}
                       </Typography>
                       <Chip
-                        label={`${payment.daysOverdue} ${t('delinquent.table.daysOverdue', { count: payment.daysOverdue })}`}
+                        label={t('delinquent.table.daysOverdue', { count: payment.daysOverdue })}
                         size="small"
                         color={payment.daysOverdue > 90 ? 'error' : 'warning'}
                       />

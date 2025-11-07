@@ -69,6 +69,10 @@
 
     "details": {
       "title": "Detalles de Deuda",
+      "generalInfo": "Información General",
+      "debtSummary": "Resumen de Deuda",
+      "oldestDebtDate": "Fecha de Deuda Más Antigua",
+      "createdAt": "Creado el",
       "debtorInfo": "Información del Deudor",
       "memberNumber": "Número de Socio",
       "name": "Nombre",

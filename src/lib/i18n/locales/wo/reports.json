@@ -69,6 +69,10 @@
 
     "details": {
       "title": "Li ci ànd ci xaalis",
+      "generalInfo": "Xibaar Bu Yàgg",
+      "debtSummary": "Résumé Xaalis",
+      "oldestDebtDate": "Bësu Xaalis Bu Mag",
+      "createdAt": "Sosal ci",
       "debtorInfo": "Xëtu njëkk xaalis bi",
       "memberNumber": "Limu mbokk",
       "name": "Tur",

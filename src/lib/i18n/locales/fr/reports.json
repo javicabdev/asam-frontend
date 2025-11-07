@@ -29,6 +29,7 @@
     },
 
     "table": {
+      "title": "Liste des Débiteurs",
       "debtor": "Débiteur",
       "type": "Type",
       "memberNumber": "Nº Membre",

@@ -29,6 +29,7 @@
     },
 
     "table": {
+      "title": "Lista de Morosos",
       "debtor": "Deudor",
       "type": "Tipo",
       "memberNumber": "Nº Socio",

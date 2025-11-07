@@ -18,6 +18,17 @@ export function useDelinquentReport() {
     notifyOnNetworkStatusChange: true,
   })
 
+  // Debug temporal: verificar datos del backend
+  console.log('🔍 Debug - Datos del backend:', {
+    debtors: data?.getDelinquentReport?.debtors?.slice(0, 3).map(d => ({
+      name: d.member ? `${d.member.firstName} ${d.member.lastName}` : d.family?.familyName,
+      type: d.type,
+      membership: d.member?.membership || d.family?.primaryMember?.membership,
+      memberNumber: d.member?.memberNumber || d.family?.primaryMember?.memberNumber,
+    })),
+    summary: data?.getDelinquentReport?.summary,
+  })
+
   const updateFilters = (newFilters: Partial<DelinquentReportInput>) => {
     setFilters((prev) => ({ ...prev, ...newFilters }))
   }

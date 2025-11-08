@@ -97,6 +97,8 @@ export function useDashboardStats(
         esposa_nombre: activity.relatedFamily.esposa_nombre,
       } : undefined,
     }))
+    // Sort by timestamp descending (most recent first) including hour, minute, second
+    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
 
   // Combined loading state
   const loading = statsLoading || activityLoading

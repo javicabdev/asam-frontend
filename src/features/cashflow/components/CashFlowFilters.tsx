@@ -100,6 +100,7 @@ export const CashFlowFilters = ({ filters, onChange }: CashFlowFiltersProps) => 
             value={selectedMember}
             onChange={setSelectedMember}
             label={t('filters.member')}
+            size="small"
           />
         </Grid>
 

@@ -165,12 +165,14 @@ export const CashFlowTable = ({
       field: 'date',
       headerName: t('table.columns.date'),
       width: 120,
+      sortable: false,
       valueGetter: (params) => formatTransactionDate(params.row.date),
     },
     {
       field: 'operationType',
       headerName: t('table.columns.type'),
       width: 80,
+      sortable: false,
       renderCell: (params) => {
         const config = getOperationTypeConfig(params.value)
         return <span>{config.icon}</span>
@@ -180,6 +182,7 @@ export const CashFlowTable = ({
       field: 'category',
       headerName: t('table.columns.category'),
       width: 180,
+      sortable: false,
       renderCell: (params) => {
         const config = getOperationTypeConfig(params.row.operationType)
         return (
@@ -199,11 +202,13 @@ export const CashFlowTable = ({
       headerName: t('table.columns.detail'),
       flex: 1,
       minWidth: 200,
+      sortable: false,
     },
     {
       field: 'member',
       headerName: t('table.columns.member'),
       width: 180,
+      sortable: false,
       renderCell: (params) => {
         const member = params.row.member
         if (!member) return '-'
@@ -228,6 +233,7 @@ export const CashFlowTable = ({
       type: 'number',
       align: 'right',
       headerAlign: 'right',
+      sortable: false,
       renderCell: (params) => {
         const amount = params.value as number
         return (
@@ -249,6 +255,7 @@ export const CashFlowTable = ({
       type: 'number',
       align: 'right',
       headerAlign: 'right',
+      sortable: false,
       renderCell: (params) => {
         const balance = params.value as number
         return (

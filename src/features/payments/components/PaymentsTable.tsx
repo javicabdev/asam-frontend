@@ -1,6 +1,17 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useRef, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { DataGrid, GridColDef, GridPaginationModel, GridSortModel } from '@mui/x-data-grid'
+import {
+  DataGrid,
+  GridColDef,
+  GridPaginationModel,
+  GridSortModel,
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarDensitySelector,
+  GridToolbarQuickFilter,
+  esES,
+} from '@mui/x-data-grid'
 import { Box, Chip, IconButton, Tooltip, useTheme } from '@mui/material'
 import {
   Visibility as VisibilityIcon,
@@ -26,6 +37,18 @@ interface PaymentsTableProps {
   onConfirmClick?: (payment: PaymentListItem) => void
   onDownloadReceipt?: (payment: PaymentListItem) => void
   isAdmin?: boolean
+}
+
+// Custom Toolbar component
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarColumnsButton />
+      <GridToolbarFilterButton />
+      <GridToolbarDensitySelector />
+      <GridToolbarQuickFilter debounceMs={500} />
+    </GridToolbarContainer>
+  )
 }
 
 /**
@@ -263,6 +286,23 @@ export function PaymentsTable({
     onRowClick?.(params.row)
   }
 
+  // Custom locale text for DataGrid
+  const customLocaleText = useMemo(
+    () => ({
+      ...esES.components.MuiDataGrid.defaultProps.localeText,
+      toolbarColumns: t('table.toolbar.columns'),
+      toolbarFilters: t('table.toolbar.filters'),
+      toolbarDensity: t('table.toolbar.density'),
+      toolbarQuickFilterPlaceholder: t('table.toolbar.search'),
+      MuiTablePagination: {
+        labelRowsPerPage: t('table.rowsPerPage'),
+        labelDisplayedRows: ({ from, to, count }: { from: number; to: number; count: number }) =>
+          t('table.displayedRows', { from, to, count: count !== -1 ? count : to }),
+      },
+    }),
+    [t]
+  )
+
   return (
     <Box sx={{ width: '100%' }}>
       <DataGrid
@@ -282,16 +322,10 @@ export function PaymentsTable({
         onRowClick={handleRowClick}
         disableRowSelectionOnClick
         autoHeight
-        localeText={{
-          noRowsLabel: t('table.empty'),
-          MuiTablePagination: {
-            labelRowsPerPage: t('table.rowsPerPage'),
-            labelDisplayedRows: ({ from, to, count }) =>
-              count !== -1
-                ? t('table.displayedRows', { from, to, count })
-                : `${from}–${to} de más de ${to}`,
-          },
+        slots={{
+          toolbar: CustomToolbar,
         }}
+        localeText={customLocaleText}
         sx={{
           cursor: 'pointer',
           '& .MuiDataGrid-row': {

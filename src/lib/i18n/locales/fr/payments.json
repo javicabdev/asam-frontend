@@ -173,6 +173,12 @@
     "downloadReceipt": "Télécharger le reçu",
     "confirmPayment": "Confirmer le paiement",
     "empty": "Aucun paiement enregistré",
+    "toolbar": {
+      "columns": "Colonnes",
+      "filters": "Filtres",
+      "density": "Densité",
+      "search": "Rechercher"
+    },
     "rowsPerPage": "Lignes par page",
     "displayedRows": "{{from}}-{{to}} sur {{count}}",
     "paymentMethods": {

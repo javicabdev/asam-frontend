@@ -58,6 +58,7 @@ export const usePayments = (filters: PaymentFiltersState) => {
       }
     }
 
+    console.log('GraphQL filter being sent:', filter)
     return { filter }
   }, [filters, isAdmin, userMemberId])
 

@@ -136,6 +136,7 @@
     "familyDetailsComingSoon": "La page de détails des familles sera disponible prochainement"
   },
   "filters": {
+    "title": "Filtres",
     "searchPlaceholder": "Rechercher par membre ou nº membre",
     "search": "Rechercher...",
     "status": {

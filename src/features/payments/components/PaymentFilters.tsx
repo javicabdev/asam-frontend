@@ -6,6 +6,7 @@ import {
   MenuItem,
   Button,
   Grid,
+  Typography,
 } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers'
 import { MemberAutocomplete } from '@/features/users/components/MemberAutocomplete'
@@ -55,6 +56,9 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
 
   return (
     <Box sx={{ p: 2, bgcolor: 'background.paper', borderRadius: 1, mb: 3 }}>
+      <Typography variant="h6" sx={{ mb: 2 }}>
+        {t('filters.title')}
+      </Typography>
       <Grid container spacing={2}>
         {/* Rango de fechas */}
         <Grid item xs={12} md={3}>

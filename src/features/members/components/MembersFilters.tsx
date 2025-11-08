@@ -10,38 +10,14 @@ import {
   MenuItem,
   Button,
   Box,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
   IconButton,
-  Tooltip,
 } from '@mui/material'
 import {
   Search as SearchIcon,
   Clear as ClearIcon,
-  ExpandMore as ExpandMoreIcon,
-  FilterList as FilterListIcon,
 } from '@mui/icons-material'
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-// import { es } from 'date-fns/locale';
 
 import { MemberStatus, MembershipType, MemberFilter } from '../types'
-
-// Spanish provinces - TODO: Uncomment when backend supports province filtering
-/*
-const PROVINCES = [
-  'Álava', 'Albacete', 'Alicante', 'Almería', 'Asturias', 'Ávila', 'Badajoz', 'Barcelona',
-  'Burgos', 'Cáceres', 'Cádiz', 'Cantabria', 'Castellón', 'Ciudad Real', 'Córdoba', 'Cuenca',
-  'Girona', 'Granada', 'Guadalajara', 'Guipúzcoa', 'Huelva', 'Huesca', 'Islas Baleares',
-  'Jaén', 'La Coruña', 'La Rioja', 'Las Palmas', 'León', 'Lérida', 'Lugo', 'Madrid',
-  'Málaga', 'Murcia', 'Navarra', 'Orense', 'Palencia', 'Pontevedra', 'Salamanca',
-  'Santa Cruz de Tenerife', 'Segovia', 'Sevilla', 'Soria', 'Tarragona', 'Teruel',
-  'Toledo', 'Valencia', 'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza',
-];
-*/
 
 interface MembersFiltersProps {
   onFilterChange: (filter: Partial<MemberFilter>) => void
@@ -50,7 +26,6 @@ interface MembersFiltersProps {
 export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
   const { t } = useTranslation('members')
   const [localFilter, setLocalFilter] = useState<Partial<MemberFilter>>({})
-  const [expanded, setExpanded] = useState(false)
 
   const handleChange = <K extends keyof MemberFilter>(
     field: K, 
@@ -173,7 +148,7 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <Box display="flex" gap={1} alignItems="center">
+            <Box display="flex" gap={1}>
               <Button
                 fullWidth
                 variant="contained"
@@ -190,140 +165,10 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
               >
                 {t('filters.clear')}
               </Button>
-              <Tooltip title={t('filters.advancedTooltip')}>
-                <IconButton onClick={() => setExpanded(!expanded)} color="default">
-                  <FilterListIcon />
-                </IconButton>
-              </Tooltip>
             </Box>
           </Grid>
         </Grid>
       </Box>
-
-      {/* Advanced filters in accordion */}
-      <Accordion expanded={expanded} onChange={(_, isExpanded) => setExpanded(isExpanded)}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography>{t('filters.advancedTitle')}</Typography>
-          <Typography sx={{ ml: 2, color: 'text.secondary' }}>
-            {t('filters.advancedUnavailable')}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Box sx={{ p: 2, textAlign: 'center' }}>
-            <Typography color="text.secondary">
-              {t('filters.advancedMessage')}
-            </Typography>
-            <Typography variant="caption" color="text.secondary" sx={{ mt: 1 }}>
-              {t('filters.advancedHint')}
-            </Typography>
-          </Box>
-          {/* TODO: Uncomment when backend supports these filters
-          <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={3}>
-                <TextField
-                  fullWidth
-                  label="Población"
-                  value={localFilter.poblacion || ''}
-                  onChange={(e) => handleChange('poblacion', e.target.value)}
-                  onKeyDown={handleKeyDown}
-                />
-              </Grid>
-
-              <Grid item xs={12} md={3}>
-                <FormControl fullWidth>
-                  <InputLabel>Provincia</InputLabel>
-                  <Select
-                    value={localFilter.provincia || ''}
-                    onChange={(e) => handleChange('provincia', e.target.value)}
-                    label="Provincia"
-                  >
-                    <MenuItem value="">Todas</MenuItem>
-                    {PROVINCES.map((province) => (
-                      <MenuItem key={province} value={province}>
-                        {province}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={12} md={3}>
-                <DatePicker
-                  label="Fecha alta desde"
-                  value={localFilter.fecha_alta_desde ? new Date(localFilter.fecha_alta_desde) : null}
-                  onChange={(date) => handleChange('fecha_alta_desde', date?.toISOString())}
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                    },
-                  }}
-                />
-              </Grid>
-
-              <Grid item xs={12} md={3}>
-                <DatePicker
-                  label="Fecha alta hasta"
-                  value={localFilter.fecha_alta_hasta ? new Date(localFilter.fecha_alta_hasta) : null}
-                  onChange={(date) => handleChange('fecha_alta_hasta', date?.toISOString())}
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                    },
-                  }}
-                />
-              </Grid>
-
-              <Grid item xs={12} md={3}>
-                <DatePicker
-                  label="Fecha baja desde"
-                  value={localFilter.fecha_baja_desde ? new Date(localFilter.fecha_baja_desde) : null}
-                  onChange={(date) => handleChange('fecha_baja_desde', date?.toISOString())}
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                    },
-                  }}
-                />
-              </Grid>
-
-              <Grid item xs={12} md={3}>
-                <DatePicker
-                  label="Fecha baja hasta"
-                  value={localFilter.fecha_baja_hasta ? new Date(localFilter.fecha_baja_hasta) : null}
-                  onChange={(date) => handleChange('fecha_baja_hasta', date?.toISOString())}
-                  slotProps={{
-                    textField: {
-                      fullWidth: true,
-                    },
-                  }}
-                />
-              </Grid>
-
-              <Grid item xs={12} md={3}>
-                <TextField
-                  fullWidth
-                  label="Email"
-                  value={localFilter.correo_electronico || ''}
-                  onChange={(e) => handleChange('correo_electronico', e.target.value)}
-                  onKeyDown={handleKeyDown}
-                />
-              </Grid>
-
-              <Grid item xs={12} md={3}>
-                <TextField
-                  fullWidth
-                  label="Documento de identidad"
-                  value={localFilter.documento_identidad || ''}
-                  onChange={(e) => handleChange('documento_identidad', e.target.value)}
-                  onKeyDown={handleKeyDown}
-                />
-              </Grid>
-            </Grid>
-          </LocalizationProvider>
-          */}
-        </AccordionDetails>
-      </Accordion>
     </Paper>
   )
 }

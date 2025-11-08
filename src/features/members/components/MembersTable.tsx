@@ -223,6 +223,14 @@ export function MembersTable({
     toolbarFilters: t('table.toolbar.filters'),
     toolbarDensity: t('table.toolbar.density'),
     toolbarExport: t('table.toolbar.export'),
+    // Quick filter (search field in toolbar)
+    toolbarQuickFilterPlaceholder: t('table.toolbar.search'),
+    // Pagination
+    MuiTablePagination: {
+      labelRowsPerPage: t('table.rowsPerPage'),
+      labelDisplayedRows: ({ from, to, count }: { from: number; to: number; count: number }) =>
+        t('table.displayedRows', { from, to, count: count !== -1 ? count : to }),
+    },
     // Footer text for selected rows
     footerRowSelected: (count: number) =>
       count === 1

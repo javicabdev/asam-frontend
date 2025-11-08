@@ -24,12 +24,7 @@
       "family": "Familial"
     },
     "apply": "Rechercher",
-    "clear": "Effacer",
-    "advancedTooltip": "Filtres avancés (temporairement non disponibles)",
-    "advancedTitle": "Filtres Avancés",
-    "advancedUnavailable": "(Temporairement non disponibles)",
-    "advancedMessage": "Les filtres avancés sont temporairement désactivés pendant leur implémentation dans le backend.",
-    "advancedHint": "Pour le moment, vous pouvez utiliser la recherche générale pour filtrer par nom, prénom ou numéro de membre."
+    "clear": "Effacer"
   },
   "list": {
     "title": "Liste des Membres",
@@ -172,7 +167,8 @@
       "columns": "Colonnes",
       "filters": "Filtres",
       "density": "Densité",
-      "export": "Exporter"
+      "export": "Exporter",
+      "search": "Rechercher"
     },
     "footerRowSelected": "{{count}} ligne sélectionnée",
     "footerRowSelected_plural": "{{count}} lignes sélectionnées"

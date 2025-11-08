@@ -24,12 +24,7 @@
       "family": "Njaboot"
     },
     "apply": "Seet",
-    "clear": "Soppi",
-    "advancedTooltip": "Filtar yu yépp (bu leeral amul lool)",
-    "advancedTitle": "Filtar Yu Yépp",
-    "advancedUnavailable": "(Bu leeral amul lool)",
-    "advancedMessage": "Filtar yu yépp léeral na ñu ko ci backend bi.",
-    "advancedHint": "Leegi, nga mën a jëfandikoo seet bu mat sëkk ngir filter ci tur, sant walla limub mbooloo."
+    "clear": "Soppi"
   },
   "list": {
     "title": "Limu Mbooloo",
@@ -172,7 +167,8 @@
       "columns": "Njàll",
       "filters": "Filteeru",
       "density": "Tëral",
-      "export": "Génne"
+      "export": "Génne",
+      "search": "Seet"
     },
     "footerRowSelected": "{{count}} renku tànn",
     "footerRowSelected_plural": "{{count}} renku tànn"

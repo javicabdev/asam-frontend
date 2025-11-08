@@ -24,12 +24,7 @@
       "family": "Familiar"
     },
     "apply": "Buscar",
-    "clear": "Limpiar",
-    "advancedTooltip": "Filtros avanzados (temporalmente no disponibles)",
-    "advancedTitle": "Filtros Avanzados",
-    "advancedUnavailable": "(Temporalmente no disponibles)",
-    "advancedMessage": "Los filtros avanzados están temporalmente deshabilitados mientras se implementan en el backend.",
-    "advancedHint": "Por ahora, puede usar la búsqueda general para filtrar por nombre, apellidos o número de socio."
+    "clear": "Limpiar"
   },
   "list": {
     "title": "Lista de Miembros",
@@ -172,7 +167,8 @@
       "columns": "Columnas",
       "filters": "Filtros",
       "density": "Densidad",
-      "export": "Exportar"
+      "export": "Exportar",
+      "search": "Buscar"
     },
     "footerRowSelected": "{{count}} fila seleccionada",
     "footerRowSelected_plural": "{{count}} filas seleccionadas"

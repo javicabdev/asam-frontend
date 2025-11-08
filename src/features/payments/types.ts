@@ -67,6 +67,7 @@ export interface ReceiptData {
   paymentMethod: string | null  // Can be null for pending payments
   notes?: string | null
   generatedAt: string
+  membershipFeeYear?: number | null  // Year of annual fee if applicable
 }
 
 /**

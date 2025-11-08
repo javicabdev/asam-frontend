@@ -16,6 +16,8 @@ export interface ReceiptTranslations {
   name: string
   family: string
   paymentDetails: string
+  concept: string
+  conceptValue: string // Translated value of the concept (e.g., "Cuota 2024" or "Otro pago")
   paymentDate: string
   paymentMethod: string
   paymentMethodValue: string // Translated value of the payment method
@@ -72,6 +74,14 @@ export function useReceiptGenerator(): UseReceiptGeneratorReturn {
           }
         }
 
+        // Translate concept (annual fee or other payment)
+        const getConceptTranslation = (year: number | null | undefined): string => {
+          if (year) {
+            return t('receipt.annualFeeYear', { year })
+          }
+          return t('receipt.otherPayment')
+        }
+
         // Prepare translations for PDF
         const translations: ReceiptTranslations = {
           title: t('receipt.title'),
@@ -84,6 +94,8 @@ export function useReceiptGenerator(): UseReceiptGeneratorReturn {
           name: t('receipt.name'),
           family: t('table.family'),
           paymentDetails: t('receipt.paymentDetails'),
+          concept: t('receipt.concept'),
+          conceptValue: getConceptTranslation(receiptData.membershipFeeYear),
           paymentDate: t('receipt.date'),
           paymentMethod: t('receipt.method'),
           paymentMethodValue: getPaymentMethodTranslation(receiptData.paymentMethod),

@@ -106,6 +106,8 @@
     "memberData": "Datos del Socio",
     "name": "Nombre",
     "concept": "Concepto",
+    "annualFeeYear": "Cuota Anual {{year}}",
+    "otherPayment": "Otro pago",
     "amount": "Monto",
     "method": "Método de pago",
     "paymentDetails": "Detalles del Pago",

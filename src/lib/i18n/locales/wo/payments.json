@@ -106,6 +106,8 @@
     "memberData": "Xibaar Mbooloo",
     "name": "Tur",
     "concept": "Lu muy",
+    "annualFeeYear": "Kotisaasioŋ bu Bes bi {{year}}",
+    "otherPayment": "Beneen fay",
     "amount": "Dayoo",
     "method": "Anamu fay",
     "paymentDetails": "Faramfacce yu Fay",

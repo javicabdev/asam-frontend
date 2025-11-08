@@ -37,6 +37,11 @@ export function ReceiptBody({ receipt, translations, language }: ReceiptBodyProp
         <Text style={receiptStyles.sectionTitle}>{translations.paymentDetails}</Text>
 
         <View style={receiptStyles.row}>
+          <Text style={receiptStyles.label}>{translations.concept}:</Text>
+          <Text style={receiptStyles.value}>{translations.conceptValue}</Text>
+        </View>
+
+        <View style={receiptStyles.row}>
           <Text style={receiptStyles.label}>{translations.paymentDate}:</Text>
           <Text style={receiptStyles.value}>{formatReceiptDate(receipt.paymentDate, language)}</Text>
         </View>

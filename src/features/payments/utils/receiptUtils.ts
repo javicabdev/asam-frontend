@@ -75,5 +75,6 @@ export function paymentToReceiptData(payment: PaymentListItem): ReceiptData {
     paymentMethod: payment.paymentMethod,
     notes: payment.notes,
     generatedAt: new Date().toISOString(),
+    membershipFeeYear: payment.membershipFeeYear,
   }
 }

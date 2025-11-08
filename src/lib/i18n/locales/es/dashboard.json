@@ -30,6 +30,9 @@
     "familyAdded": "Familia agregada",
     "familyCreatedWith": "Nueva familia: {{family}}",
     "transactionRecorded": "Transacción registrada",
+    "annualFeeTransaction": "Cuota anual {{year}}",
+    "feePayment": "Pago de cuota",
+    "repatriation": "Repatriación",
     "and": "y",
     "viewAll": "Ver toda la actividad"
   },

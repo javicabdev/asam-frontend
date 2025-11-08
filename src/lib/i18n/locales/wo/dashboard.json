@@ -30,6 +30,9 @@
     "familyAdded": "Njaboot yokku nañu ko",
     "familyCreatedWith": "Njaboot bu bees: {{family}}",
     "transactionRecorded": "Njurite bindu na",
+    "annualFeeTransaction": "Kotisaasioŋ bu bes bi {{year}}",
+    "feePayment": "Fay kotisaasioŋ",
+    "repatriation": "Dellu ci réew",
     "and": "ak",
     "viewAll": "Xool lépp"
   },

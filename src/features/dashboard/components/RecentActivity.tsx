@@ -96,6 +96,30 @@ export default function RecentActivity({
     }
   }
 
+  const translateTransactionDescription = (description: string): string => {
+    // Detectar y traducir patrones comunes en descripciones de transacciones
+
+    // Patrón: "Cuota anual YYYY"
+    const annualFeeMatch = description.match(/Cuota anual (\d{4})/i)
+    if (annualFeeMatch) {
+      const year = annualFeeMatch[1]
+      return t('recentActivity.annualFeeTransaction', { year })
+    }
+
+    // Patrón: "Pago de cuota" o "Cuota"
+    if (description.match(/Pago de cuota|^Cuota$/i)) {
+      return t('recentActivity.feePayment')
+    }
+
+    // Patrón: "Repatriación" o "Repatriacion"
+    if (description.match(/Repatriaci[oó]n/i)) {
+      return t('recentActivity.repatriation')
+    }
+
+    // Si no hay coincidencia, devolver descripción original
+    return description
+  }
+
   const formatDescription = (activity: RecentActivityType) => {
     // Construir descripción traducida basada en el tipo de actividad
     const memberName = activity.relatedMember
@@ -129,9 +153,10 @@ export default function RecentActivity({
           : t('recentActivity.memberUpdated')
 
       case 'TRANSACTION_RECORDED':
-        // Para transacciones, mostrar el detalle si está disponible
-        // El backend envía el detalle de la transacción en 'description'
-        return activity.description || t('recentActivity.transactionRecorded')
+        // Para transacciones, traducir la descripción del backend
+        return activity.description
+          ? translateTransactionDescription(activity.description)
+          : t('recentActivity.transactionRecorded')
 
       default:
         return activity.description

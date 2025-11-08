@@ -30,6 +30,9 @@
     "familyAdded": "Famille ajoutée",
     "familyCreatedWith": "Nouvelle famille : {{family}}",
     "transactionRecorded": "Transaction enregistrée",
+    "annualFeeTransaction": "Cotisation annuelle {{year}}",
+    "feePayment": "Paiement de cotisation",
+    "repatriation": "Rapatriement",
     "and": "et",
     "viewAll": "Voir toute l'activité"
   },

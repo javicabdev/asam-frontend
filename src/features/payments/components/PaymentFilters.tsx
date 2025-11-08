@@ -89,7 +89,7 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
       </Typography>
       <Grid container spacing={2}>
         {/* Rango de fechas */}
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} md={2.5}>
           <DatePicker
             label={t('filters.dateFrom')}
             value={startDate}
@@ -100,7 +100,7 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
           />
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} md={2.5}>
           <DatePicker
             label={t('filters.dateTo')}
             value={endDate}
@@ -112,7 +112,7 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
         </Grid>
 
         {/* Método de pago */}
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} md={2}>
           <TextField
             select
             fullWidth
@@ -131,7 +131,7 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
         </Grid>
 
         {/* Búsqueda de socio */}
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} sm={6} md={3}>
           <MemberAutocomplete
             value={selectedMember}
             onChange={setSelectedMember}
@@ -141,12 +141,12 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
         </Grid>
 
         {/* Botones */}
-        <Grid item xs={12} md={6}>
-          <Box display="flex" gap={2}>
-            <Button variant="contained" onClick={handleApplyFilters}>
+        <Grid item xs={12} md={2}>
+          <Box display="flex" gap={1} height="100%">
+            <Button fullWidth variant="contained" onClick={handleApplyFilters}>
               {t('filters.apply')}
             </Button>
-            <Button variant="outlined" onClick={handleClearFilters}>
+            <Button fullWidth variant="outlined" onClick={handleClearFilters}>
               {t('filters.clear')}
             </Button>
           </Box>

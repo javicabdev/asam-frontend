@@ -97,6 +97,10 @@ export function useDashboardStats(
         esposa_nombre: activity.relatedFamily.esposa_nombre,
       } : undefined,
     }))
+    // Remove duplicates by ID (backend might return duplicates)
+    .filter((activity, index, self) =>
+      index === self.findIndex(a => a.id === activity.id)
+    )
     // Sort by timestamp descending (most recent first) including hour, minute, second
     .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
 

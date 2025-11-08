@@ -170,8 +170,9 @@ export const AppRoutes = () => {
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/users" element={<UsersPage />} />
               <Route path="/reports" element={<ReportsPage />} />
+              <Route path="/cash-flow" element={<CashFlowPage />} />
             </Route>
-            
+
             {/* Routes accessible to all authenticated users */}
             <Route path="/members" element={<MembersPage />} />
             <Route path="/members/new" element={<NewMemberPage />} />
@@ -179,7 +180,6 @@ export const AppRoutes = () => {
             <Route path="/members/:id/edit" element={<EditMemberPage />} />
             <Route path="/payments" element={<PaymentsPage />} />
             <Route path="/payments/initial/:memberId" element={<InitialPaymentPage />} />
-            <Route path="/cash-flow" element={<CashFlowPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
           </Route>

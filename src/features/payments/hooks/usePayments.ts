@@ -1,13 +1,19 @@
 import { useMemo } from 'react'
 import { useListPaymentsQuery } from '@/graphql/generated/operations'
+import { useAuthStore } from '@/stores/authStore'
 import type { PaymentFiltersState, PaymentListItem } from '../types'
 import type { PaymentStatus } from '@/graphql/generated/schema'
 
 /**
  * Custom hook to fetch and manage payments list
  * Uses the listPayments GraphQL query with server-side filtering and pagination
+ * Non-admin users will only see their own payments
  */
 export const usePayments = (filters: PaymentFiltersState) => {
+  const { user } = useAuthStore()
+  const isAdmin = user?.role === 'admin'
+  const userMemberId = user?.member?.miembro_id
+
   // Build GraphQL variables from filters
   const variables = useMemo(() => {
     const filter: Record<string, any> = {
@@ -15,6 +21,11 @@ export const usePayments = (filters: PaymentFiltersState) => {
         page: filters.page,
         pageSize: filters.pageSize,
       },
+    }
+
+    // Filter by member_id for non-admin users
+    if (!isAdmin && userMemberId) {
+      filter.member_id = userMemberId
     }
 
     // Only include filters that have values
@@ -38,7 +49,7 @@ export const usePayments = (filters: PaymentFiltersState) => {
     // This might need to be implemented in backend if not available yet
 
     return { filter }
-  }, [filters])
+  }, [filters, isAdmin, userMemberId])
 
   // Fetch payments from API
   const { data, loading, error, refetch } = useListPaymentsQuery({

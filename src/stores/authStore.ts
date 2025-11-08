@@ -2,11 +2,20 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { UserRole } from '@/graphql/generated/operations'
 
+interface Member {
+  miembro_id: string
+  numero_socio: string
+  nombre: string
+  apellidos: string
+  correo_electronico?: string | null
+}
+
 interface User {
   id: string
   username: string
   email?: string
   role: UserRole
+  member?: Member | null
   isActive: boolean
   lastLogin?: string | null
   emailVerified: boolean

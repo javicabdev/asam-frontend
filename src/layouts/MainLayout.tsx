@@ -76,6 +76,7 @@ const navigationItems: NavItem[] = [
     text: 'menu.cashFlow',
     icon: <AccountBalanceIcon />,
     path: '/cash-flow',
+    roles: ['admin'],
   },
   {
     text: 'menu.reports',

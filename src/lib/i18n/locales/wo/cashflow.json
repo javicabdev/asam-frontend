@@ -34,6 +34,29 @@
       "edit": "Soppi",
       "delete": "Fey"
     },
+    "toolbar": {
+      "columns": "Njàll",
+      "filters": "Filteeru",
+      "density": "Tëral",
+      "search": "Seet"
+    },
+    "filterOperators": {
+      "contains": "am ci biir",
+      "equals": "dafa mel ni",
+      "startsWith": "dafa tàmbalee",
+      "endsWith": "dafa jeexal",
+      "isEmpty": "dafa meññ",
+      "isNotEmpty": "meññul",
+      "isAnyOf": "dafa benn ci"
+    },
+    "filterPanel": {
+      "columns": "Njàll",
+      "operator": "Jëfandikukat",
+      "value": "Njëriñ",
+      "filterValue": "Seet njëriñ"
+    },
+    "rowsPerPage": "Limu renku ci bët",
+    "displayedRows": "{{from}}-{{to}} ci {{count}}",
     "empty": "Amul transaction",
     "loading": "Yam transactions yi..."
   },

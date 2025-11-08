@@ -1,10 +1,16 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   DataGrid,
   GridColDef,
   GridActionsCellItem,
   GridRowParams,
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarDensitySelector,
+  GridToolbarQuickFilter,
+  esES,
 } from '@mui/x-data-grid'
 import { Box, Chip } from '@mui/material'
 import VisibilityIcon from '@mui/icons-material/Visibility'
@@ -46,6 +52,53 @@ export const CashFlowTable = ({
 
   // Track if we initiated the change (to ignore reflection events)
   const changingRef = useRef(false)
+
+  // Custom Toolbar component
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <GridToolbarColumnsButton />
+          <GridToolbarFilterButton />
+          <GridToolbarDensitySelector />
+        </Box>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <GridToolbarQuickFilter debounceMs={500} />
+        </Box>
+      </GridToolbarContainer>
+    )
+  }
+
+  // Custom locale text for DataGrid
+  const customLocaleText = useMemo(
+    () => ({
+      ...esES.components.MuiDataGrid.defaultProps.localeText,
+      toolbarColumns: t('table.toolbar.columns'),
+      toolbarFilters: t('table.toolbar.filters'),
+      toolbarDensity: t('table.toolbar.density'),
+      toolbarQuickFilterPlaceholder: t('table.toolbar.search'),
+      // Filter operators
+      filterOperatorContains: t('table.filterOperators.contains'),
+      filterOperatorEquals: t('table.filterOperators.equals'),
+      filterOperatorStartsWith: t('table.filterOperators.startsWith'),
+      filterOperatorEndsWith: t('table.filterOperators.endsWith'),
+      filterOperatorIsEmpty: t('table.filterOperators.isEmpty'),
+      filterOperatorIsNotEmpty: t('table.filterOperators.isNotEmpty'),
+      filterOperatorIsAnyOf: t('table.filterOperators.isAnyOf'),
+      // Filter panel
+      filterPanelColumns: t('table.filterPanel.columns'),
+      filterPanelOperator: t('table.filterPanel.operator'),
+      filterPanelInputLabel: t('table.filterPanel.value'),
+      filterPanelInputPlaceholder: t('table.filterPanel.filterValue'),
+      // Pagination
+      MuiTablePagination: {
+        labelRowsPerPage: t('table.rowsPerPage'),
+        labelDisplayedRows: ({ from, to, count }: { from: number; to: number; count: number }) =>
+          t('table.displayedRows', { from, to, count: count !== -1 ? count : to }),
+      },
+    }),
+    [t]
+  )
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [transactionToDelete, setTransactionToDelete] =
@@ -266,6 +319,10 @@ export const CashFlowTable = ({
           pageSize,
         }}
         onPaginationModelChange={handlePaginationChange}
+        slots={{
+          toolbar: CustomToolbar,
+        }}
+        localeText={customLocaleText}
         getRowClassName={(params) => {
           return params.row.amount >= 0 ? 'row-income' : 'row-expense'
         }}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   DataGrid,
@@ -22,7 +22,10 @@ interface CashFlowTableProps {
   cashFlows: CashFlowTransaction[]
   loading: boolean
   totalCount: number
+  page?: number
+  pageSize?: number
   onPageChange?: (page: number) => void
+  onPageSizeChange?: (pageSize: number) => void
   onEditClick?: (transaction: CashFlowTransaction) => void
 }
 
@@ -30,13 +33,19 @@ export const CashFlowTable = ({
   cashFlows,
   loading,
   totalCount,
+  page = 1,
+  pageSize = 25,
   onPageChange,
+  onPageSizeChange,
   onEditClick,
 }: CashFlowTableProps) => {
   const { t } = useTranslation('cashflow')
   const { user } = useAuth()
   const navigate = useNavigate()
   const isAdmin = user?.role === 'admin'
+
+  // Track if we initiated the change (to ignore reflection events)
+  const changingRef = useRef(false)
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [transactionToDelete, setTransactionToDelete] =
@@ -59,6 +68,44 @@ export const CashFlowTable = ({
   const handleMemberClick = (memberId: string) => {
     navigate(`/members/${memberId}`)
   }
+
+  // Handle pagination changes
+  const handlePaginationChange = useCallback(
+    (model: { page: number; pageSize: number }) => {
+      // Ignore events while we're changing props (reflection from our own updates)
+      if (changingRef.current) {
+        return
+      }
+
+      const targetPage = model.page + 1 // Convert from 0-based to 1-based
+
+      // Check what changed
+      const sizeChanged = model.pageSize !== pageSize
+      const pageChanged = targetPage !== page
+
+      // Set flag before calling handlers
+      changingRef.current = true
+
+      try {
+        // Priority 1: Handle pageSize change (resets to page 1)
+        if (sizeChanged && onPageSizeChange) {
+          onPageSizeChange(model.pageSize)
+          return
+        }
+
+        // Priority 2: Handle page change (only if size didn't change)
+        if (pageChanged && onPageChange) {
+          onPageChange(targetPage)
+        }
+      } finally {
+        // Reset flag after a tick (allow React to update)
+        setTimeout(() => {
+          changingRef.current = false
+        }, 0)
+      }
+    },
+    [page, pageSize, onPageChange, onPageSizeChange]
+  )
 
   const columns: GridColDef[] = [
     {
@@ -214,9 +261,11 @@ export const CashFlowTable = ({
         rowCount={totalCount}
         pageSizeOptions={[25, 50, 100]}
         paginationMode="server"
-        onPaginationModelChange={(model) => {
-          onPageChange?.(model.page)
+        paginationModel={{
+          page: page - 1, // DataGrid uses 0-based indexing
+          pageSize,
         }}
+        onPaginationModelChange={handlePaginationChange}
         getRowClassName={(params) => {
           return params.row.amount >= 0 ? 'row-income' : 'row-expense'
         }}

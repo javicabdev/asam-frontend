@@ -1,3 +1,4 @@
+import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DataGrid, GridColDef, GridPaginationModel, GridSortModel } from '@mui/x-data-grid'
 import { Box, Chip, IconButton, Tooltip, useTheme } from '@mui/material'
@@ -46,6 +47,9 @@ export function PaymentsTable({
 }: PaymentsTableProps) {
   const { t, i18n } = useTranslation('payments')
   const theme = useTheme()
+
+  // Track if we initiated the change (to ignore reflection events)
+  const changingRef = useRef(false)
 
   // Format currency to EUR
   const formatCurrency = (amount: number): string => {
@@ -205,14 +209,42 @@ export function PaymentsTable({
   ]
 
   // Handle pagination changes
-  const handlePaginationChange = (model: GridPaginationModel) => {
-    if (model.page !== page - 1) {
-      onPageChange(model.page + 1) // DataGrid uses 0-based, we use 1-based
-    }
-    if (model.pageSize !== pageSize) {
-      onPageSizeChange(model.pageSize)
-    }
-  }
+  const handlePaginationChange = useCallback(
+    (model: GridPaginationModel) => {
+      // Ignore events while we're changing props (reflection from our own updates)
+      if (changingRef.current) {
+        return
+      }
+
+      const targetPage = model.page + 1 // Convert from 0-based to 1-based
+
+      // Check what changed
+      const sizeChanged = model.pageSize !== pageSize
+      const pageChanged = targetPage !== page
+
+      // Set flag before calling handlers
+      changingRef.current = true
+
+      try {
+        // Priority 1: Handle pageSize change (resets to page 1)
+        if (sizeChanged) {
+          onPageSizeChange(model.pageSize)
+          return
+        }
+
+        // Priority 2: Handle page change (only if size didn't change)
+        if (pageChanged) {
+          onPageChange(targetPage)
+        }
+      } finally {
+        // Reset flag after a tick (allow React to update)
+        setTimeout(() => {
+          changingRef.current = false
+        }, 0)
+      }
+    },
+    [page, pageSize, onPageChange, onPageSizeChange]
+  )
 
   // Handle sort changes
   const handleSortChange = (model: GridSortModel) => {

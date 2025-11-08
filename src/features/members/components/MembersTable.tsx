@@ -201,6 +201,13 @@ export function MembersTable({
   const { t } = useTranslation('members')
   const theme = useTheme()
   const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([])
+
+  // Internal state for DataGrid pagination (uncontrolled)
+  const [internalPaginationModel, setInternalPaginationModel] = useState<GridPaginationModel>({
+    page: 0,
+    pageSize: 25,
+  })
+
   const [snackbar, setSnackbar] = useState<{
     open: boolean
     message: string
@@ -477,14 +484,27 @@ export function MembersTable({
     [onRowClick, onEditClick, onDeactivateClick, isAdmin, t]
   )
 
-  const handlePaginationModelChange = (model: GridPaginationModel) => {
-    if (model.page !== page - 1) {
-      onPageChange(model.page + 1)
-    }
-    if (model.pageSize !== pageSize) {
+  const handlePaginationModelChange = useCallback((model: GridPaginationModel) => {
+    const targetPage = model.page + 1 // Convert from 0-based to 1-based
+
+    // Check what changed
+    const pageChanged = targetPage !== page
+    const sizeChanged = model.pageSize !== pageSize
+
+    // Update internal state
+    setInternalPaginationModel(model)
+
+    // If pageSize changed, update it first (this resets to page 1)
+    if (sizeChanged) {
       onPageSizeChange(model.pageSize)
+      return // Don't process page change when size changes
     }
-  }
+
+    // Only process page change if size didn't change
+    if (pageChanged) {
+      onPageChange(targetPage)
+    }
+  }, [page, pageSize, onPageChange, onPageSizeChange])
 
   const handleSortModelChange = (model: GridSortModel) => {
     if (model.length > 0) {
@@ -537,10 +557,7 @@ export function MembersTable({
         rowCount={totalCount}
         loading={loading}
         pageSizeOptions={[10, 25, 50, 100]}
-        paginationModel={{
-          page: page - 1,
-          pageSize,
-        }}
+        paginationModel={internalPaginationModel}
         onPaginationModelChange={handlePaginationModelChange}
         onSortModelChange={handleSortModelChange}
         paginationMode="server"

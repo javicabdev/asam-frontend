@@ -37,13 +37,15 @@ export function useMembersTable(): UseMembersTableResult {
 
   // Convert internal filter to GraphQL input format
   // Only include fields that are actually in the GraphQL schema
-  const graphqlFilter: MemberFilterInput = useMemo(() => ({
-    pagination: filter.pagination,
-    ...(filter.estado && { estado: filter.estado }),
-    ...(filter.tipo_membresia && { tipo_membresia: filter.tipo_membresia }),
-    ...(filter.search_term && { search_term: filter.search_term }),
-    ...(filter.sort && { sort: filter.sort }),
-  }), [filter])
+  const graphqlFilter: MemberFilterInput = useMemo(() => {
+    return {
+      pagination: filter.pagination,
+      ...(filter.estado && { estado: filter.estado }),
+      ...(filter.tipo_membresia && { tipo_membresia: filter.tipo_membresia }),
+      ...(filter.search_term && { search_term: filter.search_term }),
+      ...(filter.sort && { sort: filter.sort }),
+    }
+  }, [filter])
 
   const { data, loading, error, refetch } = useQuery<ListMembersQueryResponse>(LIST_MEMBERS_QUERY, {
     variables: { filter: graphqlFilter },
@@ -55,7 +57,7 @@ export function useMembersTable(): UseMembersTableResult {
       ...prev,
       pagination: { page: newPage, pageSize: prev.pagination?.pageSize || 25 },
     }))
-  }, [])
+  }, [filter])
 
   const handlePageSizeChange = useCallback((newPageSize: number) => {
     setFilter((prev) => ({

@@ -202,12 +202,6 @@ export function MembersTable({
   const theme = useTheme()
   const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([])
 
-  // Internal state for DataGrid pagination (uncontrolled)
-  const [internalPaginationModel, setInternalPaginationModel] = useState<GridPaginationModel>({
-    page: 0,
-    pageSize: 25,
-  })
-
   const [snackbar, setSnackbar] = useState<{
     open: boolean
     message: string
@@ -488,19 +482,16 @@ export function MembersTable({
     const targetPage = model.page + 1 // Convert from 0-based to 1-based
 
     // Check what changed
-    const pageChanged = targetPage !== page
     const sizeChanged = model.pageSize !== pageSize
+    const pageChanged = targetPage !== page
 
-    // Update internal state
-    setInternalPaginationModel(model)
-
-    // If pageSize changed, update it first (this resets to page 1)
+    // Priority 1: Handle pageSize change (resets to page 1)
     if (sizeChanged) {
       onPageSizeChange(model.pageSize)
-      return // Don't process page change when size changes
+      return
     }
 
-    // Only process page change if size didn't change
+    // Priority 2: Handle page change (only if size didn't change)
     if (pageChanged) {
       onPageChange(targetPage)
     }
@@ -557,7 +548,10 @@ export function MembersTable({
         rowCount={totalCount}
         loading={loading}
         pageSizeOptions={[10, 25, 50, 100]}
-        paginationModel={internalPaginationModel}
+        paginationModel={{
+          page: page - 1,  // Convert 1-based to 0-based
+          pageSize,
+        }}
         onPaginationModelChange={handlePaginationModelChange}
         onSortModelChange={handleSortModelChange}
         paginationMode="server"

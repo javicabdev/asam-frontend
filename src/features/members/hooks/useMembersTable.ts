@@ -57,7 +57,7 @@ export function useMembersTable(): UseMembersTableResult {
       ...prev,
       pagination: { page: newPage, pageSize: prev.pagination?.pageSize || 25 },
     }))
-  }, [filter])
+  }, [])
 
   const handlePageSizeChange = useCallback((newPageSize: number) => {
     setFilter((prev) => ({

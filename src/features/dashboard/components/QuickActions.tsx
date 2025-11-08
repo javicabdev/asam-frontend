@@ -4,9 +4,7 @@ import { useTranslation } from 'react-i18next'
 import {
   PersonAdd,
   Payment,
-  Assessment,
   People,
-  AccountBalance,
   ArrowForward,
   ReceiptLong,
 } from '@mui/icons-material'
@@ -55,20 +53,6 @@ export default function QuickActions() {
       icon: <People />,
       path: '/members',
       color: 'info',
-    },
-    {
-      title: t('quickActions.viewReports'),
-      description: t('charts.memberGrowth'),
-      icon: <Assessment />,
-      path: '/reports',
-      color: 'warning',
-    },
-    {
-      title: t('quickActions.cashFlow'),
-      description: t('quickActions.cashFlowDescription'),
-      icon: <AccountBalance />,
-      path: '/cash-flow',
-      color: 'primary',
     },
   ]
 

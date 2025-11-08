@@ -11,7 +11,7 @@ export function usePaymentFilters() {
     paymentMethod: 'ALL',
     startDate: null,
     endDate: null,
-    searchTerm: '',
+    memberId: null,
     page: 1,
     pageSize: 25,
   })
@@ -49,7 +49,7 @@ export function usePaymentFilters() {
       paymentMethod: 'ALL',
       startDate: null,
       endDate: null,
-      searchTerm: '',
+      memberId: null,
       page: 1,
       pageSize: filters.pageSize, // Preserve page size
     })

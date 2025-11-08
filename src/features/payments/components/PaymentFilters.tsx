@@ -40,7 +40,7 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
       endDate: adjustedEndDate,
       status,
       paymentMethod,
-      searchTerm: selectedMember?.miembro_id || '',
+      memberId: selectedMember?.miembro_id || null,
     })
   }
 

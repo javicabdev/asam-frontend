@@ -28,6 +28,11 @@ export const usePayments = (filters: PaymentFiltersState) => {
       filter.member_id = userMemberId
     }
 
+    // Filter by specific member if selected (admin search)
+    if (isAdmin && filters.memberId) {
+      filter.member_id = filters.memberId
+    }
+
     // Only include filters that have values
     if (filters.status !== 'ALL') {
       filter.status = filters.status as PaymentStatus
@@ -52,9 +57,6 @@ export const usePayments = (filters: PaymentFiltersState) => {
         direction: filters.sortDirection,
       }
     }
-
-    // Note: searchTerm is handled by backend through member/family name search
-    // This might need to be implemented in backend if not available yet
 
     return { filter }
   }, [filters, isAdmin, userMemberId])

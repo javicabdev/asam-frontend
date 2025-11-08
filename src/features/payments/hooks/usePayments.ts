@@ -93,6 +93,7 @@ export const usePayments = (filters: PaymentFiltersState) => {
           status: payment.status as 'PENDING' | 'PAID' | 'CANCELLED',
           paymentMethod: payment.payment_method ?? null,
           notes: payment.notes ?? null,
+          membershipFeeYear: payment.membership_fee?.year ?? null,
         }
       })
   }, [data])

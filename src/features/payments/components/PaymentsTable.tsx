@@ -116,6 +116,16 @@ export function PaymentsTable({
       ),
     },
     {
+      field: 'membershipFeeYear',
+      headerName: t('table.annualFee'),
+      width: 130,
+      sortable: true,
+      renderCell: (params) => {
+        if (!params.value) return t('table.otherPayment')
+        return t('table.annualFeeYear', { year: params.value })
+      },
+    },
+    {
       field: 'paymentDate',
       headerName: t('table.date'),
       width: 120,

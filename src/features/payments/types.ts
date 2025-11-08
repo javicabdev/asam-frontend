@@ -50,6 +50,7 @@ export interface PaymentListItem {
   status: 'PENDING' | 'PAID' | 'CANCELLED'
   paymentMethod: string | null  // Can be null for pending payments
   notes?: string | null
+  membershipFeeYear?: number | null // Year of the annual membership fee (if applicable)
 }
 
 /**

@@ -15,6 +15,10 @@ query GetPayment($id: ID!) {
     status
     payment_method
     notes
+    membership_fee {
+      id
+      year
+    }
   }
 }
 
@@ -33,6 +37,10 @@ query GetMemberPayments($memberId: ID!) {
     status
     payment_method
     notes
+    membership_fee {
+      id
+      year
+    }
   }
 }
 
@@ -51,6 +59,10 @@ query GetFamilyPayments($familyId: ID!) {
     status
     payment_method
     notes
+    membership_fee {
+      id
+      year
+    }
   }
 }
 

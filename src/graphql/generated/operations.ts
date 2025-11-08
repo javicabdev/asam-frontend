@@ -1317,21 +1317,21 @@ export type GetPaymentQueryVariables = Exact<{
 }>;
 
 
-export type GetPaymentQuery = { __typename?: 'Query', getPayment?: { __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string, notes?: string | null, member: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string, tipo_membresia: MembershipType } } | null };
+export type GetPaymentQuery = { __typename?: 'Query', getPayment?: { __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string, notes?: string | null, member: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string, tipo_membresia: MembershipType }, membership_fee?: { __typename?: 'MembershipFee', id: string, year: number } | null } | null };
 
 export type GetMemberPaymentsQueryVariables = Exact<{
   memberId: Scalars['ID']['input'];
 }>;
 
 
-export type GetMemberPaymentsQuery = { __typename?: 'Query', getMemberPayments: Array<{ __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string, notes?: string | null, member: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string, tipo_membresia: MembershipType } }> };
+export type GetMemberPaymentsQuery = { __typename?: 'Query', getMemberPayments: Array<{ __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string, notes?: string | null, member: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string, tipo_membresia: MembershipType }, membership_fee?: { __typename?: 'MembershipFee', id: string, year: number } | null }> };
 
 export type GetFamilyPaymentsQueryVariables = Exact<{
   familyId: Scalars['ID']['input'];
 }>;
 
 
-export type GetFamilyPaymentsQuery = { __typename?: 'Query', getFamilyPayments: Array<{ __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string, notes?: string | null, member: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string, tipo_membresia: MembershipType } }> };
+export type GetFamilyPaymentsQuery = { __typename?: 'Query', getFamilyPayments: Array<{ __typename?: 'Payment', id: string, amount: number, payment_date?: string | null, status: PaymentStatus, payment_method: string, notes?: string | null, member: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string, tipo_membresia: MembershipType }, membership_fee?: { __typename?: 'MembershipFee', id: string, year: number } | null }> };
 
 export type GetPaymentStatusQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -3520,6 +3520,10 @@ export const GetPaymentDocument = gql`
     status
     payment_method
     notes
+    membership_fee {
+      id
+      year
+    }
   }
 }
     `;
@@ -3572,6 +3576,10 @@ export const GetMemberPaymentsDocument = gql`
     status
     payment_method
     notes
+    membership_fee {
+      id
+      year
+    }
   }
 }
     `;
@@ -3624,6 +3632,10 @@ export const GetFamilyPaymentsDocument = gql`
     status
     payment_method
     notes
+    membership_fee {
+      id
+      year
+    }
   }
 }
     `;

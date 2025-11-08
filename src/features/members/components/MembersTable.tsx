@@ -225,6 +225,14 @@ export function MembersTable({
     toolbarExport: t('table.toolbar.export'),
     // Quick filter (search field in toolbar)
     toolbarQuickFilterPlaceholder: t('table.toolbar.search'),
+    // Filter operators
+    filterOperatorContains: t('table.filterOperators.contains'),
+    filterOperatorEquals: t('table.filterOperators.equals'),
+    filterOperatorStartsWith: t('table.filterOperators.startsWith'),
+    filterOperatorEndsWith: t('table.filterOperators.endsWith'),
+    filterOperatorIsEmpty: t('table.filterOperators.isEmpty'),
+    filterOperatorIsNotEmpty: t('table.filterOperators.isNotEmpty'),
+    filterOperatorIsAnyOf: t('table.filterOperators.isAnyOf'),
     // Pagination
     MuiTablePagination: {
       labelRowsPerPage: t('table.rowsPerPage'),

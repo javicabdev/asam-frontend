@@ -53,6 +53,15 @@
       "density": "Densidad",
       "search": "Buscar"
     },
+    "filterOperators": {
+      "contains": "contiene",
+      "equals": "es igual a",
+      "startsWith": "comienza con",
+      "endsWith": "termina con",
+      "isEmpty": "está vacío",
+      "isNotEmpty": "no está vacío",
+      "isAnyOf": "es cualquiera de"
+    },
     "pagination": {
       "rowsPerPage": "Filas por página:",
       "displayedRows": "{{from}}-{{to}} de {{count}}"

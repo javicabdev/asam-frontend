@@ -53,6 +53,15 @@
       "density": "Tëral",
       "search": "Seet"
     },
+    "filterOperators": {
+      "contains": "am ci biir",
+      "equals": "dafa mel ni",
+      "startsWith": "dafa tàmbalee",
+      "endsWith": "dafa jeexal",
+      "isEmpty": "dafa meññ",
+      "isNotEmpty": "meññul",
+      "isAnyOf": "dafa benn ci"
+    },
     "pagination": {
       "rowsPerPage": "Rëdd ci xët:",
       "displayedRows": "{{from}}-{{to}} ci {{count}}"

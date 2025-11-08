@@ -170,6 +170,15 @@
       "export": "Exporter",
       "search": "Rechercher"
     },
+    "filterOperators": {
+      "contains": "contient",
+      "equals": "est égal à",
+      "startsWith": "commence par",
+      "endsWith": "se termine par",
+      "isEmpty": "est vide",
+      "isNotEmpty": "n'est pas vide",
+      "isAnyOf": "est l'un de"
+    },
     "footerRowSelected": "{{count}} ligne sélectionnée",
     "footerRowSelected_plural": "{{count}} lignes sélectionnées"
   },

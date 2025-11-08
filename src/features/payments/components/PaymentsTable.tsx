@@ -294,6 +294,14 @@ export function PaymentsTable({
       toolbarFilters: t('table.toolbar.filters'),
       toolbarDensity: t('table.toolbar.density'),
       toolbarQuickFilterPlaceholder: t('table.toolbar.search'),
+      // Filter operators
+      filterOperatorContains: t('table.filterOperators.contains'),
+      filterOperatorEquals: t('table.filterOperators.equals'),
+      filterOperatorStartsWith: t('table.filterOperators.startsWith'),
+      filterOperatorEndsWith: t('table.filterOperators.endsWith'),
+      filterOperatorIsEmpty: t('table.filterOperators.isEmpty'),
+      filterOperatorIsNotEmpty: t('table.filterOperators.isNotEmpty'),
+      filterOperatorIsAnyOf: t('table.filterOperators.isAnyOf'),
       MuiTablePagination: {
         labelRowsPerPage: t('table.rowsPerPage'),
         labelDisplayedRows: ({ from, to, count }: { from: number; to: number; count: number }) =>

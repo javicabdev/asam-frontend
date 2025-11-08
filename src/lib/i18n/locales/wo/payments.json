@@ -179,6 +179,15 @@
       "density": "Tëral",
       "search": "Seet"
     },
+    "filterOperators": {
+      "contains": "am ci biir",
+      "equals": "dafa mel ni",
+      "startsWith": "dafa tàmbalee",
+      "endsWith": "dafa jeexal",
+      "isEmpty": "dafa meññ",
+      "isNotEmpty": "meññul",
+      "isAnyOf": "dafa benn ci"
+    },
     "rowsPerPage": "Limu renku ci bët",
     "displayedRows": "{{from}}-{{to}} ci {{count}}",
     "paymentMethods": {

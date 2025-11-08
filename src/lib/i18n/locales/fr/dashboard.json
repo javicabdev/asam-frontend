@@ -22,9 +22,15 @@
   "recentActivity": {
     "title": "Activité Récente",
     "newMember": "Nouveau membre enregistré",
+    "memberRegisteredWith": "Nouveau membre : {{name}}",
     "paymentReceived": "Paiement reçu",
+    "paymentReceivedFrom": "Paiement reçu de {{name}}",
     "memberUpdated": "Informations mises à jour",
+    "memberDeactivatedWith": "Membre désactivé : {{name}}",
     "familyAdded": "Famille ajoutée",
+    "familyCreatedWith": "Nouvelle famille : {{family}}",
+    "transactionRecorded": "Transaction enregistrée",
+    "and": "et",
     "viewAll": "Voir toute l'activité"
   },
   "quickActions": {

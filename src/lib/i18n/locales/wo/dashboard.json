@@ -22,9 +22,15 @@
   "recentActivity": {
     "title": "Jëf Yu Bees",
     "newMember": "Mbooloo bu bees bindu",
+    "memberRegisteredWith": "Mbooloo bu bees: {{name}}",
     "paymentReceived": "Fey jot na",
+    "paymentReceivedFrom": "Jot fey ci {{name}}",
     "memberUpdated": "Xibaar yeesal nañu ko",
+    "memberDeactivatedWith": "Mbooloo génn nañu: {{name}}",
     "familyAdded": "Njaboot yokku nañu ko",
+    "familyCreatedWith": "Njaboot bu bees: {{family}}",
+    "transactionRecorded": "Njurite bindu na",
+    "and": "ak",
     "viewAll": "Xool lépp"
   },
   "quickActions": {

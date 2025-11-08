@@ -97,24 +97,43 @@ export default function RecentActivity({
   }
 
   const formatDescription = (activity: RecentActivityType) => {
-    let description = activity.description
+    // Construir descripción traducida basada en el tipo de actividad
+    const memberName = activity.relatedMember
+      ? `${activity.relatedMember.nombre} ${activity.relatedMember.apellidos}`
+      : null
 
-    // Añadir información adicional si está disponible
-    if (activity.relatedMember) {
-      const memberName = `${activity.relatedMember.nombre} ${activity.relatedMember.apellidos}`
-      if (!description.includes(memberName)) {
-        description = `${description} - ${memberName}`
-      }
+    const familyName = activity.relatedFamily
+      ? `${activity.relatedFamily.esposo_nombre} ${t('recentActivity.and')} ${activity.relatedFamily.esposa_nombre}`
+      : null
+
+    // Generar descripción según el tipo de actividad
+    switch (activity.type) {
+      case 'MEMBER_REGISTERED':
+        return memberName
+          ? t('recentActivity.memberRegisteredWith', { name: memberName })
+          : t('recentActivity.newMember')
+
+      case 'PAYMENT_RECEIVED':
+        return memberName
+          ? t('recentActivity.paymentReceivedFrom', { name: memberName })
+          : t('recentActivity.paymentReceived')
+
+      case 'FAMILY_CREATED':
+        return familyName
+          ? t('recentActivity.familyCreatedWith', { family: familyName })
+          : t('recentActivity.familyAdded')
+
+      case 'MEMBER_DEACTIVATED':
+        return memberName
+          ? t('recentActivity.memberDeactivatedWith', { name: memberName })
+          : t('recentActivity.memberUpdated')
+
+      case 'TRANSACTION_RECORDED':
+        return t('recentActivity.transactionRecorded')
+
+      default:
+        return activity.description
     }
-
-    if (activity.relatedFamily) {
-      const familyName = `Familia ${activity.relatedFamily.esposo_nombre} y ${activity.relatedFamily.esposa_nombre}`
-      if (!description.includes(familyName)) {
-        description = `${description} - ${familyName}`
-      }
-    }
-
-    return description
   }
 
   if (loading) {

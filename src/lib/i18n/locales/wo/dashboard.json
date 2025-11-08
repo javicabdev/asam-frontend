@@ -30,7 +30,10 @@
   "quickActions": {
     "title": "Jëf Yu Gaaw",
     "newMember": "Mbooloo Bu Bees",
-    "registerPayment": "Bindu Fey",
+    "collectFee": "Jot Kotisaasioŋ",
+    "collectFeeDescription": "Bindu fay mbooloo",
+    "cashEntry": "Yéenem Kès",
+    "cashEntryDescription": "Bindu dugguy walla génnay",
     "viewMembers": "Xool Mbooloo Yi",
     "viewReports": "Xool Rapport Yi",
     "manageFamily": "Saytu Njaboot Yi",

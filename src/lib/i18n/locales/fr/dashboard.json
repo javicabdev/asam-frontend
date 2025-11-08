@@ -30,7 +30,10 @@
   "quickActions": {
     "title": "Actions Rapides",
     "newMember": "Nouveau Membre",
-    "registerPayment": "Enregistrer un Paiement",
+    "collectFee": "Encaisser Cotisation",
+    "collectFeeDescription": "Enregistrer paiement d'un membre",
+    "cashEntry": "Écriture de Caisse",
+    "cashEntryDescription": "Enregistrer entrée ou sortie",
     "viewMembers": "Voir les Membres",
     "viewReports": "Voir les Rapports",
     "manageFamily": "Gérer les Familles",

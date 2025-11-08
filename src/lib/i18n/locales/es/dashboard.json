@@ -30,7 +30,10 @@
   "quickActions": {
     "title": "Acciones Rápidas",
     "newMember": "Nuevo Miembro",
-    "registerPayment": "Registrar Pago",
+    "collectFee": "Cobrar Cuota",
+    "collectFeeDescription": "Registrar pago de socio",
+    "cashEntry": "Apunte de Caja",
+    "cashEntryDescription": "Registrar entrada o salida",
     "viewMembers": "Ver Miembros",
     "viewReports": "Ver Informes",
     "manageFamily": "Gestionar Familias",

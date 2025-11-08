@@ -8,6 +8,7 @@ import {
   People,
   AccountBalance,
   ArrowForward,
+  ReceiptLong,
 } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 
@@ -33,11 +34,18 @@ export default function QuickActions() {
       color: 'success',
     },
     {
-      title: t('quickActions.registerPayment'),
-      description: t('recentActivity.paymentReceived'),
+      title: t('quickActions.collectFee'),
+      description: t('quickActions.collectFeeDescription'),
       icon: <Payment />,
       path: '/payments',
       color: 'primary',
+    },
+    {
+      title: t('quickActions.cashEntry'),
+      description: t('quickActions.cashEntryDescription'),
+      icon: <ReceiptLong />,
+      path: '/cash-flow',
+      color: 'secondary',
     },
     {
       title: t('quickActions.viewMembers'),

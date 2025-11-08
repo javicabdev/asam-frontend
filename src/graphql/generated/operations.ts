@@ -1222,7 +1222,7 @@ export type GenerateAnnualFeesMutationVariables = Exact<{
 }>;
 
 
-export type GenerateAnnualFeesMutation = { __typename?: 'Mutation', generateAnnualFees: { __typename?: 'GenerateAnnualFeesResponse', year: number, membership_fee_id: string, payments_generated: number, payments_existing: number, total_members: number, total_expected_amount: number, details: Array<{ __typename?: 'PaymentGenerationDetail', member_number: string, member_name: string, amount: number, was_created: boolean, error?: string | null }> } };
+export type GenerateAnnualFeesMutation = { __typename?: 'Mutation', generateAnnualFees: { __typename?: 'GenerateAnnualFeesResponse', year: number, membership_fee_id: string, payments_generated: number, payments_existing: number, total_members: number, total_expected_amount: number, details: Array<{ __typename?: 'PaymentGenerationDetail', member_id: string, member_number: string, member_name: string, amount: number, was_created: boolean, error?: string | null }> } };
 
 export type HealthQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2859,6 +2859,7 @@ export const GenerateAnnualFeesDocument = gql`
     total_members
     total_expected_amount
     details {
+      member_id
       member_number
       member_name
       amount

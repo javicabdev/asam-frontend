@@ -4,7 +4,6 @@ export {
   useUpdatePaymentMutation,
   useConfirmPaymentMutation,
   useCancelPaymentMutation,
-  useRegisterFeeMutation,
 } from '@/graphql/generated/operations'
 
 // Export mutation documents for direct use if needed
@@ -13,7 +12,6 @@ export {
   UpdatePaymentDocument,
   ConfirmPaymentDocument,
   CancelPaymentDocument,
-  RegisterFeeDocument,
 } from '@/graphql/generated/operations'
 
 // Export types

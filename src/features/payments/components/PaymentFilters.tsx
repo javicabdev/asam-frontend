@@ -26,7 +26,6 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
 
   const [startDate, setStartDate] = useState<Date | null>(filters.startDate)
   const [endDate, setEndDate] = useState<Date | null>(filters.endDate)
-  const [status, setStatus] = useState<PaymentFiltersState['status']>(filters.status)
   const [paymentMethod, setPaymentMethod] = useState<string>(filters.paymentMethod)
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
 
@@ -37,7 +36,6 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
   useEffect(() => {
     // Only sync if all filters are at default values (indicates a reset)
     const isReset =
-      filters.status === 'ALL' &&
       filters.paymentMethod === 'ALL' &&
       filters.startDate === null &&
       filters.endDate === null &&
@@ -46,7 +44,6 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
     if (isReset && !isResettingRef.current) {
       setStartDate(null)
       setEndDate(null)
-      setStatus('ALL')
       setPaymentMethod('ALL')
       setSelectedMember(null)
     }
@@ -63,7 +60,6 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
     const filtersToApply = {
       startDate: startDate,
       endDate: adjustedEndDate,
-      status,
       paymentMethod,
       memberId: selectedMember?.miembro_id || null,
     }
@@ -80,7 +76,6 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
     isResettingRef.current = true
     setStartDate(null)
     setEndDate(null)
-    setStatus('ALL')
     setPaymentMethod('ALL')
     setSelectedMember(null)
     onReset()
@@ -114,23 +109,6 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
               textField: { fullWidth: true, size: 'small' },
             }}
           />
-        </Grid>
-
-        {/* Estado */}
-        <Grid item xs={12} md={3}>
-          <TextField
-            select
-            fullWidth
-            size="small"
-            label={t('filters.status.label')}
-            value={status}
-            onChange={(e) => setStatus(e.target.value as PaymentFiltersState['status'])}
-          >
-            <MenuItem value="ALL">{t('filters.status.all')}</MenuItem>
-            <MenuItem value="PENDING">{t('filters.status.pending')}</MenuItem>
-            <MenuItem value="PAID">{t('filters.status.paid')}</MenuItem>
-            <MenuItem value="CANCELLED">{t('filters.status.cancelled')}</MenuItem>
-          </TextField>
         </Grid>
 
         {/* Método de pago */}

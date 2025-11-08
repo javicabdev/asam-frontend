@@ -7,7 +7,6 @@ import type { PaymentFiltersState } from '../types'
  */
 export function usePaymentFilters() {
   const [filters, setFilters] = useState<PaymentFiltersState>({
-    status: 'ALL',
     paymentMethod: 'ALL',
     startDate: null,
     endDate: null,
@@ -45,7 +44,6 @@ export function usePaymentFilters() {
    */
   const resetFilters = useCallback(() => {
     setFilters({
-      status: 'ALL',
       paymentMethod: 'ALL',
       startDate: null,
       endDate: null,

@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { useListPaymentsQuery } from '@/graphql/generated/operations'
 import { useAuthStore } from '@/stores/authStore'
 import type { PaymentFiltersState, PaymentListItem } from '../types'
-import type { PaymentStatus } from '@/graphql/generated/schema'
 
 /**
  * Custom hook to fetch and manage payments list
@@ -34,10 +33,6 @@ export const usePayments = (filters: PaymentFiltersState) => {
     }
 
     // Only include filters that have values
-    if (filters.status !== 'ALL') {
-      filter.status = filters.status as PaymentStatus
-    }
-
     if (filters.paymentMethod && filters.paymentMethod !== 'ALL') {
       filter.payment_method = filters.paymentMethod
     }

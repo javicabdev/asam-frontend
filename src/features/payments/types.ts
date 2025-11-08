@@ -27,7 +27,6 @@ export const MAX_PAYMENT_AMOUNT = 1000
  * Payment filters state for list view
  */
 export interface PaymentFiltersState {
-  status: 'ALL' | 'PENDING' | 'PAID' | 'CANCELLED'
   paymentMethod: string
   startDate: Date | null
   endDate: Date | null

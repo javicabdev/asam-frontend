@@ -73,6 +73,8 @@ export function useDashboardStats(
   // Process dashboard stats
   const stats = statsData?.getDashboardStats || null
 
+  console.log('🔍 useDashboardStats - Stats received:', !!stats, 'Loading:', statsLoading, 'Error:', !!statsError)
+
   // Convert trends to chart-compatible format - Fixed: passing both required arguments
   const monthlyStats = stats
     ? convertTrendsToChartData(stats.membershipTrend, stats.revenueTrend)

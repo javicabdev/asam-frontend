@@ -6,11 +6,15 @@ Frontend web progresiva para el sistema de gestión ASAM - Asociación de miembr
 
 - ✅ Aplicación Web Progresiva (PWA)
 - ✅ Gestión de miembros individuales y familiares
-- ✅ Control de pagos y cuotas
-- ✅ Flujo de caja (entradas y salidas)
-- ✅ Reportes y listado de morosos
+- ✅ Control de pagos y cuotas con filtrado por usuario
+- ✅ Flujo de caja (entradas y salidas) - Solo administradores
+- ✅ Reportes y listado de morosos - Solo administradores
+- ✅ Sistema de permisos basado en roles (admin/user)
 - ✅ Interfaz responsive y moderna
 - ✅ Funcionalidad offline
+- ✅ Autenticación con JWT y verificación de email
+- ✅ Generación automática de cuotas anuales
+- ✅ Generación de recibos en PDF
 
 ## 🛠️ Tecnologías
 
@@ -21,6 +25,52 @@ Frontend web progresiva para el sistema de gestión ASAM - Asociación de miembr
 - **React Router** para navegación
 - **Zustand** para estado global
 - **Workbox** para PWA
+- **jsPDF** para generación de recibos
+
+## ⚡ Funcionalidades Principales
+
+### Gestión de Socios
+- **Registro de socios**: Individuales y familiares
+- **Edición de información**: Datos personales, tipo de membresía
+- **Baja de socios**: Validación de pagos pendientes antes de dar de baja
+- **Búsqueda y filtrado**: Por nombre, número de socio, tipo de membresía
+
+### Sistema de Pagos
+- **Visualización de pagos**: Tabla completa con filtros avanzados
+- **Filtrado automático por usuario**: Los usuarios regulares solo ven sus propios pagos
+- **Confirmación de pagos**: Solo administradores pueden confirmar pagos pendientes
+- **Generación de recibos**: Descarga de recibos en PDF para pagos confirmados
+- **Filtros disponibles**:
+  - Estado (pendiente/pagado)
+  - Método de pago (efectivo/transferencia/tarjeta)
+  - Rango de fechas
+
+### Generación de Cuotas Anuales
+La aplicación permite a los administradores generar las cuotas anuales para todos los socios activos:
+
+- **Generación masiva**: Un solo clic para crear cuotas de todos los socios
+- **Configuración flexible**: Definir montos base y extras para familias
+- **Validaciones**: Prevención de errores (años futuros, montos negativos)
+- **Estadísticas detalladas**: Reporte completo de la operación
+- **Idempotencia**: Ejecutar múltiples veces sin crear duplicados
+
+### Flujo de Caja (Solo Admin)
+- **Registro de transacciones**: Ingresos y egresos
+- **Categorización**: Organizar por categorías personalizadas
+- **Resumen financiero**: Balance actual, ingresos y egresos del período
+- **Filtrado avanzado**: Por fecha, categoría, tipo de operación
+
+### Sistema de Autenticación
+- **Login seguro**: JWT tokens con refresh automático
+- **Verificación de email**: Proceso completo de verificación
+- **Recuperación de contraseña**: Flujo seguro de reset
+- **Gestión de perfil**: Cambio de contraseña y datos personales
+
+### Reportes (Solo Admin)
+- **Dashboard ejecutivo**: Métricas clave del sistema
+- **Listado de morosos**: Identificación automática
+- **Estadísticas de pagos**: Visualización de tendencias
+- **Exportación**: Datos listos para análisis
 
 ## 📋 Requisitos Previos
 
@@ -114,6 +164,46 @@ Ver la documentación completa en la carpeta `docs/`:
 - [Índice de Documentación](docs/DOCS_INDEX.md)
 - [Estado del Proyecto](docs/PROJECT_STATUS.md)
 - [Estado Final](docs/FINAL_STATUS.md)
+
+## 🔒 Sistema de Permisos
+
+La aplicación implementa un sistema de permisos basado en roles que controla el acceso a diferentes secciones:
+
+### Roles Disponibles
+
+#### 👤 Usuario Regular (`user`)
+- ✅ Ver y gestionar información de socios
+- ✅ Ver **solo sus propios pagos** (pendientes y pagados)
+- ✅ Gestionar su perfil
+- ❌ No puede acceder a Flujo de Caja
+- ❌ No puede acceder a Reportes
+- ❌ No puede gestionar usuarios del sistema
+- ❌ No puede generar cuotas anuales
+
+#### 👑 Administrador (`admin`)
+- ✅ Acceso completo a todas las funcionalidades
+- ✅ Ver **todos los pagos** de todos los socios
+- ✅ Gestionar flujo de caja (ingresos y egresos)
+- ✅ Generar reportes y ver morosos
+- ✅ Gestionar usuarios del sistema
+- ✅ Generar cuotas anuales para todos los socios
+- ✅ Confirmar pagos pendientes
+
+### Protección de Rutas
+
+El sistema implementa múltiples capas de seguridad:
+
+1. **Nivel de Navegación**: Los items del menú se filtran según el rol del usuario
+2. **Nivel de Ruta**: Las rutas protegidas redirigen automáticamente si no se tienen permisos
+3. **Nivel de Datos**: Los usuarios regulares solo reciben sus propios datos desde el backend
+
+### Filtrado Automático de Pagos
+
+Los pagos se filtran automáticamente según el usuario:
+- **Admin**: Ve todos los pagos del sistema
+- **User**: Solo ve pagos asociados a su cuenta de socio (membresía)
+
+Esta funcionalidad se implementa en el hook `usePayments` que automáticamente aplica el filtro `member_id` para usuarios no administradores.
 
 ## 🔐 Variables de Entorno
 

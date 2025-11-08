@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   Container,
   Paper,
@@ -11,7 +11,7 @@ import { Add as AddIcon } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { FeeGenerationDialog } from '@/features/fees/components'
 
-export const AnnualFeesPage: React.FC = () => {
+export default function AnnualFeesPage() {
   const { t } = useTranslation('fees')
   const [dialogOpen, setDialogOpen] = useState(false)
 

@@ -136,7 +136,6 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
 
   // Get total count from pageInfo (will be the count for all roles)
   // Note: This shows total users, not filtered by role. Backend would need to support role filter for accurate count.
-  const totalCount = users.length
 
 
   const handleDelete = (userId: string) => {

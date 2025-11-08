@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Paper,
@@ -10,10 +10,8 @@ import {
   MenuItem,
   Button,
   Box,
-  IconButton,
 } from '@mui/material'
 import {
-  Search as SearchIcon,
   Clear as ClearIcon,
 } from '@mui/icons-material'
 
@@ -46,36 +44,17 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
 
     setLocalFilter(updatedFilter)
 
-    // Apply filters immediately for estado and tipo_membresia
-    if (field === 'estado' || field === 'tipo_membresia') {
-      const cleanedFilter: Partial<MemberFilter> = {}
-
-      if (updatedFilter.estado) {
-        cleanedFilter.estado = updatedFilter.estado
-      }
-      if (updatedFilter.tipo_membresia) {
-        cleanedFilter.tipo_membresia = updatedFilter.tipo_membresia
-      }
-      if (updatedFilter.search_term) {
-        cleanedFilter.search_term = updatedFilter.search_term
-      }
-
-      onFilterChange(cleanedFilter)
-    }
-  }
-
-  const handleApplyFilters = () => {
-    // Clean up empty values and only include supported fields
+    // Apply filters immediately for all fields
     const cleanedFilter: Partial<MemberFilter> = {}
 
-    if (localFilter.estado) {
-      cleanedFilter.estado = localFilter.estado
+    if (updatedFilter.estado) {
+      cleanedFilter.estado = updatedFilter.estado
     }
-    if (localFilter.tipo_membresia) {
-      cleanedFilter.tipo_membresia = localFilter.tipo_membresia
+    if (updatedFilter.tipo_membresia) {
+      cleanedFilter.tipo_membresia = updatedFilter.tipo_membresia
     }
-    if (localFilter.search_term) {
-      cleanedFilter.search_term = localFilter.search_term
+    if (updatedFilter.search_term) {
+      cleanedFilter.search_term = updatedFilter.search_term
     }
 
     onFilterChange(cleanedFilter)
@@ -86,12 +65,6 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
     setLocalFilter({})
     // Notify parent to clear all filters
     onFilterChange({})
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleApplyFilters()
-    }
   }
 
   return (
@@ -105,19 +78,11 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
               label={t('filters.searchPlaceholder')}
               value={localFilter.search_term || ''}
               onChange={(e) => handleChange('search_term', e.target.value)}
-              onKeyDown={handleKeyDown}
               placeholder={t('filters.search')}
-              InputProps={{
-                endAdornment: (
-                  <IconButton onClick={handleApplyFilters} edge="end">
-                    <SearchIcon />
-                  </IconButton>
-                ),
-              }}
             />
           </Grid>
 
-          <Grid item xs={6} md={2}>
+          <Grid item xs={6} md={3}>
             <FormControl fullWidth>
               <InputLabel>{t('filters.status.label')}</InputLabel>
               <Select
@@ -132,7 +97,7 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
             </FormControl>
           </Grid>
 
-          <Grid item xs={6} md={2}>
+          <Grid item xs={6} md={3}>
             <FormControl fullWidth>
               <InputLabel>{t('filters.type.label')}</InputLabel>
               <Select
@@ -147,25 +112,16 @@ export function MembersFilters({ onFilterChange }: MembersFiltersProps) {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} md={4}>
-            <Box display="flex" gap={1}>
-              <Button
-                fullWidth
-                variant="contained"
-                onClick={handleApplyFilters}
-                startIcon={<SearchIcon />}
-              >
-                {t('filters.apply')}
-              </Button>
-              <Button
-                fullWidth
-                variant="outlined"
-                onClick={handleClearFilters}
-                startIcon={<ClearIcon />}
-              >
-                {t('filters.clear')}
-              </Button>
-            </Box>
+          <Grid item xs={12} md={2}>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={handleClearFilters}
+              startIcon={<ClearIcon />}
+              sx={{ height: '56px' }}
+            >
+              {t('filters.clear')}
+            </Button>
           </Grid>
         </Grid>
       </Box>

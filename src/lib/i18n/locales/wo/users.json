@@ -47,6 +47,12 @@
     },
     "empty": "Giseewul benn jëfandikukat",
     "error": "Njuumte ci yeb jëfandikukat yi: {{message}}",
+    "toolbar": {
+      "columns": "Njàll",
+      "filters": "Filteeru",
+      "density": "Tëral",
+      "search": "Seet"
+    },
     "pagination": {
       "rowsPerPage": "Rëdd ci xët:",
       "displayedRows": "{{from}}-{{to}} ci {{count}}"

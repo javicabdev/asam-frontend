@@ -47,6 +47,12 @@
     },
     "empty": "No se encontraron usuarios",
     "error": "Error al cargar usuarios: {{message}}",
+    "toolbar": {
+      "columns": "Columnas",
+      "filters": "Filtros",
+      "density": "Densidad",
+      "search": "Buscar"
+    },
     "pagination": {
       "rowsPerPage": "Filas por página:",
       "displayedRows": "{{from}}-{{to}} de {{count}}"

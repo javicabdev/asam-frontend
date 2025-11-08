@@ -2,29 +2,29 @@ import React, { useState, useMemo } from 'react'
 import {
   Box,
   Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TablePagination,
   IconButton,
   Chip,
   Tab,
   Tabs,
   Typography,
-  Skeleton,
   Tooltip,
-  TextField,
-  InputAdornment,
   Button,
   Alert,
+  useTheme,
 } from '@mui/material'
+import {
+  DataGrid,
+  GridColDef,
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarDensitySelector,
+  GridToolbarQuickFilter,
+  esES,
+} from '@mui/x-data-grid'
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
-  Search as SearchIcon,
   PersonAdd as PersonAddIcon,
   AdminPanelSettings as AdminIcon,
   Person as UserIcon,
@@ -53,12 +53,36 @@ interface DeleteUserResponse {
   }
 }
 
+// Custom Toolbar component
+function CustomToolbar({ onAddUser }: { onAddUser: () => void }) {
+  const { t } = useTranslation('users')
+
+  return (
+    <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
+      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarDensitySelector />
+      </Box>
+      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        <GridToolbarQuickFilter debounceMs={500} />
+        <Button
+          variant="contained"
+          startIcon={<PersonAddIcon />}
+          onClick={onAddUser}
+          size="small"
+        >
+          {t('table.addButton')}
+        </Button>
+      </Box>
+    </GridToolbarContainer>
+  )
+}
+
 export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, onRefetchReady }) => {
   const { t } = useTranslation('users')
-  const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const theme = useTheme()
   const [tabValue, setTabValue] = useState<UserRole>('admin')
-  const [searchTerm, setSearchTerm] = useState('')
 
   const currentUser = useAuthStore((state) => state.user)
 
@@ -87,54 +111,20 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
     },
   })
 
-  // Filter users by role and search term, excluding "javi" admin
+  // Filter users by role (tab), excluding "javi" admin
   const filteredUsers = useMemo(() => {
     if (!data?.listUsers) return []
-    
+
     return data.listUsers.filter((user) => {
       // Filter out admin user "javi"
       if (user.role === 'admin' && user.username.toLowerCase() === 'javi') {
         return false
       }
-      
+
       // Filter by role (tab)
-      if (user.role !== tabValue) {
-        return false
-      }
-      
-      // Filter by search term
-      if (searchTerm) {
-        const search = searchTerm.toLowerCase()
-        return (
-          user.username.toLowerCase().includes(search) ||
-          user.email.toLowerCase().includes(search) ||
-          (user.member &&
-            (`${user.member.nombre} ${user.member.apellidos}`
-              .toLowerCase()
-              .includes(search) ||
-              user.member.numero_socio.toLowerCase().includes(search)))
-        )
-      }
-      
-      return true
+      return user.role === tabValue
     })
-  }, [data, tabValue, searchTerm])
-
-  // Paginated users
-  const paginatedUsers = useMemo(() => {
-    const start = page * rowsPerPage
-    const end = start + rowsPerPage
-    return filteredUsers.slice(start, end)
-  }, [filteredUsers, page, rowsPerPage])
-
-  const handleChangePage = (_: unknown, newPage: number) => {
-    setPage(newPage)
-  }
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
-  }
+  }, [data, tabValue])
 
   const handleDelete = (userId: string) => {
     if (window.confirm(t('table.actions.deleteConfirm'))) {
@@ -146,9 +136,161 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
     // Cannot delete yourself
     if (currentUser?.id === user.id) return false
     // Cannot delete admin "javi"
-    return !(user.role === 'admin' && user.username.toLowerCase() === 'javi');
-
+    return !(user.role === 'admin' && user.username.toLowerCase() === 'javi')
   }
+
+  // Custom locale text for DataGrid
+  const customLocaleText = useMemo(() => ({
+    ...esES.components.MuiDataGrid.defaultProps.localeText,
+    toolbarColumns: t('table.toolbar.columns'),
+    toolbarFilters: t('table.toolbar.filters'),
+    toolbarDensity: t('table.toolbar.density'),
+    toolbarQuickFilterPlaceholder: t('table.toolbar.search'),
+    MuiTablePagination: {
+      labelRowsPerPage: t('table.pagination.rowsPerPage'),
+      labelDisplayedRows: ({ from, to, count }: { from: number; to: number; count: number }) =>
+        t('table.pagination.displayedRows', { from, to, count: count !== -1 ? count : to }),
+    },
+  }), [t])
+
+  // Column definitions
+  const columns: GridColDef<User>[] = useMemo(
+    () => [
+      {
+        field: 'username',
+        headerName: t('table.columns.username'),
+        width: 150,
+        sortable: true,
+      },
+      {
+        field: 'email',
+        headerName: t('table.columns.email'),
+        width: 220,
+        sortable: true,
+      },
+      {
+        field: 'role',
+        headerName: t('table.columns.role'),
+        width: 130,
+        sortable: true,
+        renderCell: (params) => (
+          <Chip
+            label={params.value === 'admin' ? t('table.roles.admin') : t('table.roles.user')}
+            color={params.value === 'admin' ? 'warning' : 'default'}
+            size="small"
+            icon={params.value === 'admin' ? <AdminIcon /> : <UserIcon />}
+          />
+        ),
+      },
+      ...(tabValue === 'user'
+        ? [
+            {
+              field: 'member',
+              headerName: t('table.columns.associatedMember'),
+              width: 250,
+              sortable: false,
+              renderCell: (params: any) =>
+                params.value ? (
+                  <Box>
+                    <Typography variant="body2">
+                      {params.value.nombre} {params.value.apellidos}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {t('table.memberStatus.memberNumber')} {params.value.numero_socio}
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    {t('table.memberStatus.notAssociated')}
+                  </Typography>
+                ),
+            } as GridColDef<User>,
+          ]
+        : []),
+      {
+        field: 'isActive',
+        headerName: t('table.columns.status'),
+        width: 120,
+        sortable: true,
+        renderCell: (params) => (
+          <Chip
+            label={params.value ? t('table.status.active') : t('table.status.inactive')}
+            color={params.value ? 'success' : 'default'}
+            size="small"
+            variant={params.value ? 'filled' : 'outlined'}
+          />
+        ),
+      },
+      {
+        field: 'emailVerified',
+        headerName: t('table.columns.emailVerified'),
+        width: 140,
+        sortable: true,
+        renderCell: (params) => (
+          <Chip
+            label={params.value ? t('table.emailStatus.verified') : t('table.emailStatus.pending')}
+            color={params.value ? 'success' : 'warning'}
+            size="small"
+            variant="outlined"
+          />
+        ),
+      },
+      {
+        field: 'lastLogin',
+        headerName: t('table.columns.lastLogin'),
+        width: 140,
+        sortable: true,
+        renderCell: (params) =>
+          params.value ? (
+            <Typography variant="body2">
+              {new Date(params.value).toLocaleDateString('es-ES')}
+            </Typography>
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              {t('table.lastLoginStatus.never')}
+            </Typography>
+          ),
+      },
+      {
+        field: 'actions',
+        headerName: t('table.columns.actions'),
+        width: 120,
+        sortable: false,
+        filterable: false,
+        disableColumnMenu: true,
+        renderCell: (params) => (
+          <Box sx={{ display: 'flex', gap: 0.5 }}>
+            <Tooltip title={t('table.actions.edit')}>
+              <IconButton size="small" onClick={() => onEditUser(params.row)} color="primary">
+                <EditIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip
+              title={
+                canDeleteUser(params.row)
+                  ? t('table.actions.delete')
+                  : params.row.id === currentUser?.id
+                  ? t('table.actions.cannotDeleteSelf')
+                  : t('table.actions.cannotDelete')
+              }
+            >
+              <span>
+                <IconButton
+                  size="small"
+                  onClick={() => handleDelete(params.row.id)}
+                  disabled={!canDeleteUser(params.row) || deleteLoading}
+                  color="error"
+                >
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </span>
+            </Tooltip>
+          </Box>
+        ),
+      },
+    ],
+    [t, tabValue, currentUser, deleteLoading, onEditUser]
+  )
 
   if (error) {
     return (
@@ -159,35 +301,9 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
   }
 
   return (
-    <Paper>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', p: 2 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h6">{t('table.title')}</Typography>
-          <Button
-            variant="contained"
-            startIcon={<PersonAddIcon />}
-            onClick={onAddUser}
-          >
-            {t('table.addButton')}
-          </Button>
-        </Box>
-        
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder={t('table.searchPlaceholder')}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          sx={{ mb: 2 }}
-        />
-        
+    <Box sx={{ width: '100%' }}>
+      {/* Tabs para filtrar por rol */}
+      <Paper sx={{ mb: 2 }}>
         <Tabs value={tabValue} onChange={(_, value) => setTabValue(value as UserRole)}>
           <Tab
             icon={<AdminIcon />}
@@ -202,148 +318,57 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
             iconPosition="start"
           />
         </Tabs>
-      </Box>
+      </Paper>
 
-      <TableContainer sx={{ maxHeight: 600 }}>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell>{t('table.columns.username')}</TableCell>
-              <TableCell>{t('table.columns.email')}</TableCell>
-              <TableCell>{t('table.columns.role')}</TableCell>
-              {tabValue === 'user' && <TableCell>{t('table.columns.associatedMember')}</TableCell>}
-              <TableCell>{t('table.columns.status')}</TableCell>
-              <TableCell>{t('table.columns.emailVerified')}</TableCell>
-              <TableCell>{t('table.columns.lastLogin')}</TableCell>
-              <TableCell align="center">{t('table.columns.actions')}</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {loading ? (
-              Array.from(new Array(5)).map((_, index) => (
-                <TableRow key={index}>
-                  <TableCell colSpan={8}>
-                    <Skeleton variant="text" />
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : paginatedUsers.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={8} align="center">
-                  <Typography variant="body2" color="text.secondary">
-                    {t('table.empty')}
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            ) : (
-              paginatedUsers.map((user) => (
-                <TableRow key={user.id} hover>
-                  <TableCell>{user.username}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>
-                    <Chip
-                      label={user.role === 'admin' ? t('table.roles.admin') : t('table.roles.user')}
-                      color={user.role === 'admin' ? 'warning' : 'default'}
-                      size="small"
-                      icon={user.role === 'admin' ? <AdminIcon /> : <UserIcon />}
-                    />
-                  </TableCell>
-                  {tabValue === 'user' && (
-                    <TableCell>
-                      {user.member ? (
-                        <Box>
-                          <Typography variant="body2">
-                            {user.member.nombre} {user.member.apellidos}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            {t('table.memberStatus.memberNumber')} {user.member.numero_socio}
-                          </Typography>
-                        </Box>
-                      ) : (
-                        <Typography variant="body2" color="text.secondary">
-                          {t('table.memberStatus.notAssociated')}
-                        </Typography>
-                      )}
-                    </TableCell>
-                  )}
-                  <TableCell>
-                    <Chip
-                      label={user.isActive ? t('table.status.active') : t('table.status.inactive')}
-                      color={user.isActive ? 'success' : 'default'}
-                      size="small"
-                      variant={user.isActive ? 'filled' : 'outlined'}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={user.emailVerified ? t('table.emailStatus.verified') : t('table.emailStatus.pending')}
-                      color={user.emailVerified ? 'success' : 'warning'}
-                      size="small"
-                      variant="outlined"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    {user.lastLogin ? (
-                      <Typography variant="body2">
-                        {new Date(user.lastLogin).toLocaleDateString('es-ES')}
-                      </Typography>
-                    ) : (
-                      <Typography variant="body2" color="text.secondary">
-                        {t('table.lastLoginStatus.never')}
-                      </Typography>
-                    )}
-                  </TableCell>
-                  <TableCell align="center">
-                    <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-                      <Tooltip title={t('table.actions.edit')}>
-                        <IconButton
-                          size="small"
-                          onClick={() => onEditUser(user)}
-                          color="primary"
-                        >
-                          <EditIcon fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip
-                        title={
-                          canDeleteUser(user)
-                            ? t('table.actions.delete')
-                            : user.id === currentUser?.id
-                            ? t('table.actions.cannotDeleteSelf')
-                            : t('table.actions.cannotDelete')
-                        }
-                      >
-                        <span>
-                          <IconButton
-                            size="small"
-                            onClick={() => handleDelete(user.id)}
-                            disabled={!canDeleteUser(user) || deleteLoading}
-                            color="error"
-                          >
-                            <DeleteIcon fontSize="small" />
-                          </IconButton>
-                        </span>
-                      </Tooltip>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25, 50]}
-        component="div"
-        count={filteredUsers.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage={t('table.pagination.rowsPerPage')}
-        labelDisplayedRows={({ from, to, count }) => t('table.pagination.displayedRows', { from, to, count })}
+      {/* DataGrid con toolbar */}
+      <DataGrid
+        rows={filteredUsers}
+        columns={columns}
+        loading={loading}
+        pageSizeOptions={[10, 25, 50, 100]}
+        initialState={{
+          pagination: {
+            paginationModel: { pageSize: 10 },
+          },
+        }}
+        slots={{
+          toolbar: CustomToolbar,
+        }}
+        slotProps={{
+          toolbar: {
+            onAddUser,
+          },
+        }}
+        localeText={customLocaleText}
+        autoHeight
+        density="comfortable"
+        disableRowSelectionOnClick
+        sx={{
+          '& .MuiDataGrid-row': {
+            cursor: 'default',
+          },
+          // Header styling
+          '& .MuiDataGrid-columnHeader': {
+            backgroundColor:
+              theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
+            fontWeight: 'bold',
+            borderBottom: `1px solid ${theme.palette.divider}`,
+          },
+          '& .MuiDataGrid-columnHeaderTitle': {
+            fontWeight: 600,
+          },
+          // Cell styling
+          '& .MuiDataGrid-cell': {
+            borderBottom: `1px solid ${theme.palette.divider}`,
+          },
+          // Footer styling
+          '& .MuiDataGrid-footerContainer': {
+            backgroundColor:
+              theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+            borderTop: `1px solid ${theme.palette.divider}`,
+          },
+        }}
       />
-    </Paper>
+    </Box>
   )
 }

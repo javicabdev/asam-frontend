@@ -74,9 +74,16 @@ export function useDashboardStats(
   const stats = statsData?.getDashboardStats || null
 
   // Convert trends to chart-compatible format - Fixed: passing both required arguments
-  const monthlyStats = stats 
-    ? convertTrendsToChartData(stats.membershipTrend, stats.revenueTrend) 
+  const monthlyStats = stats
+    ? convertTrendsToChartData(stats.membershipTrend, stats.revenueTrend)
     : []
+
+  // Debug: Log membership trend data to verify backend is sending correct data
+  if (stats?.membershipTrend) {
+    console.log('📊 Dashboard - Membership Trend from backend:', stats.membershipTrend)
+    console.log('📊 Dashboard - Total members:', stats.totalMembers)
+    console.log('📊 Dashboard - New members this month:', stats.newMembersThisMonth)
+  }
 
   // Process recent activity - Fixed: mapping to handle null values
   const recentActivity: RecentActivity[] = (activityData?.getRecentActivity || [])

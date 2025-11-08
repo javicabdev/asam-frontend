@@ -34,6 +34,8 @@ export interface PaymentFiltersState {
   searchTerm: string
   page: number
   pageSize: number
+  sortField?: string
+  sortDirection?: 'ASC' | 'DESC'
 }
 
 /**

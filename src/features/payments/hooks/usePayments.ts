@@ -45,6 +45,14 @@ export const usePayments = (filters: PaymentFiltersState) => {
       filter.end_date = filters.endDate.toISOString()
     }
 
+    // Add sorting if specified
+    if (filters.sortField && filters.sortDirection) {
+      filter.sort = {
+        field: filters.sortField,
+        direction: filters.sortDirection,
+      }
+    }
+
     // Note: searchTerm is handled by backend through member/family name search
     // This might need to be implemented in backend if not available yet
 

@@ -4,6 +4,7 @@ import {
   DataGrid,
   GridColDef,
   GridPaginationModel,
+  GridSortModel,
   GridToolbarContainer,
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
@@ -31,6 +32,7 @@ interface PaymentsTableProps {
   pageSize: number
   onPageChange: (page: number) => void
   onPageSizeChange: (pageSize: number) => void
+  onSortChange?: (field: string, direction: 'ASC' | 'DESC' | null) => void
   onRowClick?: (payment: PaymentListItem) => void
   onConfirmClick?: (payment: PaymentListItem) => void
   onDownloadReceipt?: (payment: PaymentListItem) => void
@@ -64,6 +66,7 @@ export function PaymentsTable({
   pageSize,
   onPageChange,
   onPageSizeChange,
+  onSortChange,
   onRowClick,
   onConfirmClick,
   onDownloadReceipt,
@@ -103,14 +106,14 @@ export function PaymentsTable({
       field: 'memberNumber',
       headerName: t('table.memberNumber'),
       width: 120,
-      sortable: false,
+      sortable: true,
     },
     {
       field: 'memberName',
       headerName: t('table.member'),
       flex: 1,
       minWidth: 200,
-      sortable: false,
+      sortable: true,
       renderCell: (params) => (
         <Box>
           <Box sx={{ fontWeight: 500 }}>{params.value}</Box>
@@ -134,7 +137,7 @@ export function PaymentsTable({
       field: 'amount',
       headerName: t('table.amount'),
       width: 120,
-      sortable: false,
+      sortable: true,
       align: 'right',
       headerAlign: 'right',
       renderCell: (params) => (
@@ -147,7 +150,7 @@ export function PaymentsTable({
       field: 'membershipFeeYear',
       headerName: t('table.annualFee'),
       width: 130,
-      sortable: false,
+      sortable: true,
       renderCell: (params) => {
         if (!params.value) return t('table.otherPayment')
         return t('table.annualFeeYear', { year: params.value })
@@ -157,14 +160,14 @@ export function PaymentsTable({
       field: 'paymentDate',
       headerName: t('table.date'),
       width: 120,
-      sortable: false,
+      sortable: true,
       renderCell: (params) => formatDate(params.value),
     },
     {
       field: 'paymentMethod',
       headerName: t('table.paymentMethod'),
       width: 130,
-      sortable: false,
+      sortable: true,
       renderCell: (params) => {
         if (!params.value) return ''
         return t(`table.paymentMethods.${params.value}`) || params.value
@@ -174,7 +177,7 @@ export function PaymentsTable({
       field: 'status',
       headerName: t('table.status'),
       width: 130,
-      sortable: false,
+      sortable: true,
       renderCell: (params) => <PaymentStatusChip status={params.value} />,
     },
     {
@@ -270,6 +273,17 @@ export function PaymentsTable({
     [page, pageSize, onPageChange, onPageSizeChange]
   )
 
+  // Handle sort changes
+  const handleSortChange = (model: GridSortModel) => {
+    if (!onSortChange) return
+
+    if (model.length === 0) {
+      onSortChange('', null)
+    } else {
+      const { field, sort } = model[0]
+      onSortChange(field, sort?.toUpperCase() as 'ASC' | 'DESC')
+    }
+  }
 
   // Handle row click
   const handleRowClick = (params: any) => {
@@ -314,12 +328,14 @@ export function PaymentsTable({
         loading={loading}
         pageSizeOptions={[10, 25, 50, 100]}
         paginationMode="server"
+        sortingMode="server"
         rowCount={totalCount}
         paginationModel={{
           page: page - 1, // DataGrid uses 0-based indexing
           pageSize,
         }}
         onPaginationModelChange={handlePaginationChange}
+        onSortModelChange={handleSortChange}
         onRowClick={handleRowClick}
         disableRowSelectionOnClick
         autoHeight

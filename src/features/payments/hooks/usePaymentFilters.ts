@@ -69,6 +69,21 @@ export function usePaymentFilters() {
     updateFilters({ pageSize, page: 1 })
   }, [updateFilters])
 
+  /**
+   * Update sort field and direction
+   */
+  const setSort = useCallback((field: string, direction: 'ASC' | 'DESC' | null) => {
+    if (!direction) {
+      // Remove sorting
+      setFilters((prev) => {
+        const { sortField, sortDirection, ...rest } = prev
+        return rest
+      })
+    } else {
+      updateFilters({ sortField: field, sortDirection: direction })
+    }
+  }, [updateFilters])
+
   return {
     filters,
     updateFilters,
@@ -76,5 +91,6 @@ export function usePaymentFilters() {
     resetFilters,
     setPage,
     setPageSize,
+    setSort,
   }
 }

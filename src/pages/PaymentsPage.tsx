@@ -29,7 +29,7 @@ export default function PaymentsPage() {
   const [familySnackbar, setFamilySnackbar] = useState(false)
 
   // Filter state management
-  const { filters, updateFilters, resetFilters, setPage, setPageSize } = usePaymentFilters()
+  const { filters, updateFilters, resetFilters, setPage, setPageSize, setSort } = usePaymentFilters()
 
   // Fetch payments with current filters
   const { payments, pageInfo, loading, error } = usePayments(filters)
@@ -96,6 +96,7 @@ export default function PaymentsPage() {
         pageSize={filters.pageSize}
         onPageChange={setPage}
         onPageSizeChange={setPageSize}
+        onSortChange={setSort}
         onRowClick={handleRowClick}
         onConfirmClick={handleConfirmClick}
         onDownloadReceipt={handleDownloadReceipt}

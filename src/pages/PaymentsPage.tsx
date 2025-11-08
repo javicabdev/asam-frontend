@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Box, Typography, Button, Alert, Stack, useTheme, Snackbar } from '@mui/material'
-import { Add as AddIcon, Refresh as RefreshIcon } from '@mui/icons-material'
+import { Box, Typography, Alert, Stack, useTheme, Snackbar } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '@/stores/authStore'
@@ -33,7 +32,7 @@ export default function PaymentsPage() {
   const { filters, updateFilters, resetFilters, setPage, setPageSize } = usePaymentFilters()
 
   // Fetch payments with current filters
-  const { payments, pageInfo, loading, error, refetch } = usePayments(filters)
+  const { payments, pageInfo, loading, error } = usePayments(filters)
 
   // Receipt generator hook
   const { generateReceipt, isGenerating: isGeneratingReceipt } = useReceiptGenerator()
@@ -58,56 +57,24 @@ export default function PaymentsPage() {
     }
   }
 
-  // Handle new payment button (future implementation)
-  const handleNewPayment = () => {
-    // TODO: Implement manual payment registration
-    console.log('New payment')
-    // navigate('/payments/new')
-  }
-
   return (
     <Box>
       {/* Header */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Box>
-          <Typography
-            variant="h4"
-            component="h1"
-            gutterBottom
-            sx={{
-              color: theme.palette.text.primary,
-              fontWeight: 600,
-            }}
-          >
-            {t('title')}
-          </Typography>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Typography variant="body2" color="text.secondary">
-              {t('stats.total')}: {pageInfo.totalCount}
-            </Typography>
-          </Stack>
-        </Box>
-        <Stack direction="row" spacing={2}>
-          <Button
-            variant="outlined"
-            startIcon={<RefreshIcon />}
-            onClick={() => void refetch()}
-            disabled={loading}
-          >
-            {t('actions.refresh')}
-          </Button>
-          {isAdmin && (
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleNewPayment}
-              disabled
-              title={t('actions.newPaymentComingSoon')}
-            >
-              {t('actions.newPayment')}
-            </Button>
-          )}
-        </Stack>
+      <Box mb={3}>
+        <Typography
+          variant="h4"
+          component="h1"
+          gutterBottom
+          sx={{
+            color: theme.palette.text.primary,
+            fontWeight: 600,
+          }}
+        >
+          {t('title')}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {t('stats.total')}: {pageInfo.totalCount}
+        </Typography>
       </Box>
 
       {/* Filters */}
@@ -140,7 +107,10 @@ export default function PaymentsPage() {
         open={confirmDialog.open}
         payment={confirmDialog.payment}
         onClose={() => setConfirmDialog({ open: false, payment: null })}
-        onSuccess={() => void refetch()}
+        onSuccess={() => {
+          // Reload the page to refresh data after successful payment confirmation
+          window.location.reload()
+        }}
       />
 
       {/* Family feature not implemented snackbar */}

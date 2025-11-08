@@ -233,6 +233,11 @@ export function MembersTable({
     filterOperatorIsEmpty: t('table.filterOperators.isEmpty'),
     filterOperatorIsNotEmpty: t('table.filterOperators.isNotEmpty'),
     filterOperatorIsAnyOf: t('table.filterOperators.isAnyOf'),
+    // Filter panel
+    filterPanelColumns: t('table.filterPanel.columns'),
+    filterPanelOperator: t('table.filterPanel.operator'),
+    filterPanelInputLabel: t('table.filterPanel.value'),
+    filterPanelInputPlaceholder: t('table.filterPanel.filterValue'),
     // Pagination
     MuiTablePagination: {
       labelRowsPerPage: t('table.rowsPerPage'),

@@ -62,6 +62,12 @@
       "isNotEmpty": "meññul",
       "isAnyOf": "dafa benn ci"
     },
+    "filterPanel": {
+      "columns": "Njàll",
+      "operator": "Jëfandikukat",
+      "value": "Njëriñ",
+      "filterValue": "Seet njëriñ"
+    },
     "pagination": {
       "rowsPerPage": "Rëdd ci xët:",
       "displayedRows": "{{from}}-{{to}} ci {{count}}"

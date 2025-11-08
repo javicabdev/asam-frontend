@@ -179,6 +179,12 @@
       "isNotEmpty": "n'est pas vide",
       "isAnyOf": "est l'un de"
     },
+    "filterPanel": {
+      "columns": "Colonnes",
+      "operator": "Opérateur",
+      "value": "Valeur",
+      "filterValue": "Rechercher une valeur"
+    },
     "footerRowSelected": "{{count}} ligne sélectionnée",
     "footerRowSelected_plural": "{{count}} lignes sélectionnées"
   },

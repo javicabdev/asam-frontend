@@ -188,6 +188,12 @@
       "isNotEmpty": "no está vacío",
       "isAnyOf": "es cualquiera de"
     },
+    "filterPanel": {
+      "columns": "Columnas",
+      "operator": "Operador",
+      "value": "Valor",
+      "filterValue": "Buscar valor"
+    },
     "rowsPerPage": "Filas por página",
     "displayedRows": "{{from}}-{{to}} de {{count}}",
     "paymentMethods": {

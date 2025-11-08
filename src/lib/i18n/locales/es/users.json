@@ -62,6 +62,12 @@
       "isNotEmpty": "no está vacío",
       "isAnyOf": "es cualquiera de"
     },
+    "filterPanel": {
+      "columns": "Columnas",
+      "operator": "Operador",
+      "value": "Valor",
+      "filterValue": "Buscar valor"
+    },
     "pagination": {
       "rowsPerPage": "Filas por página:",
       "displayedRows": "{{from}}-{{to}} de {{count}}"

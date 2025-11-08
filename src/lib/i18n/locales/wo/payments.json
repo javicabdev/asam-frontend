@@ -188,6 +188,12 @@
       "isNotEmpty": "meññul",
       "isAnyOf": "dafa benn ci"
     },
+    "filterPanel": {
+      "columns": "Njàll",
+      "operator": "Jëfandikukat",
+      "value": "Njëriñ",
+      "filterValue": "Seet njëriñ"
+    },
     "rowsPerPage": "Limu renku ci bët",
     "displayedRows": "{{from}}-{{to}} ci {{count}}",
     "paymentMethods": {

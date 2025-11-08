@@ -42,11 +42,15 @@ interface PaymentsTableProps {
 // Custom Toolbar component
 function CustomToolbar() {
   return (
-    <GridToolbarContainer>
-      <GridToolbarColumnsButton />
-      <GridToolbarFilterButton />
-      <GridToolbarDensitySelector />
-      <GridToolbarQuickFilter debounceMs={500} />
+    <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
+      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarDensitySelector />
+      </Box>
+      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        <GridToolbarQuickFilter debounceMs={500} />
+      </Box>
     </GridToolbarContainer>
   )
 }
@@ -302,6 +306,11 @@ export function PaymentsTable({
       filterOperatorIsEmpty: t('table.filterOperators.isEmpty'),
       filterOperatorIsNotEmpty: t('table.filterOperators.isNotEmpty'),
       filterOperatorIsAnyOf: t('table.filterOperators.isAnyOf'),
+      // Filter panel
+      filterPanelColumns: t('table.filterPanel.columns'),
+      filterPanelOperator: t('table.filterPanel.operator'),
+      filterPanelInputLabel: t('table.filterPanel.value'),
+      filterPanelInputPlaceholder: t('table.filterPanel.filterValue'),
       MuiTablePagination: {
         labelRowsPerPage: t('table.rowsPerPage'),
         labelDisplayedRows: ({ from, to, count }: { from: number; to: number; count: number }) =>

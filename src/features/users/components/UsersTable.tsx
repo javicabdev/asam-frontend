@@ -167,6 +167,11 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
     filterOperatorIsEmpty: t('table.filterOperators.isEmpty'),
     filterOperatorIsNotEmpty: t('table.filterOperators.isNotEmpty'),
     filterOperatorIsAnyOf: t('table.filterOperators.isAnyOf'),
+    // Filter panel
+    filterPanelColumns: t('table.filterPanel.columns'),
+    filterPanelOperator: t('table.filterPanel.operator'),
+    filterPanelInputLabel: t('table.filterPanel.value'),
+    filterPanelInputPlaceholder: t('table.filterPanel.filterValue'),
     MuiTablePagination: {
       labelRowsPerPage: t('table.pagination.rowsPerPage'),
       labelDisplayedRows: ({ from, to, count }: { from: number; to: number; count: number }) =>

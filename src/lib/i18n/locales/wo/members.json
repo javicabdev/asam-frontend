@@ -179,6 +179,12 @@
       "isNotEmpty": "meññul",
       "isAnyOf": "dafa benn ci"
     },
+    "filterPanel": {
+      "columns": "Njàll",
+      "operator": "Jëfandikukat",
+      "value": "Njëriñ",
+      "filterValue": "Seet njëriñ"
+    },
     "footerRowSelected": "{{count}} renku tànn",
     "footerRowSelected_plural": "{{count}} renku tànn"
   },

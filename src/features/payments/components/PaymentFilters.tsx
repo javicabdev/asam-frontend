@@ -8,6 +8,7 @@ import {
   Grid,
   Typography,
 } from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
 import { DatePicker } from '@mui/x-date-pickers'
 import { MemberAutocomplete } from '@/features/users/components/MemberAutocomplete'
 import type { Member } from '@/graphql/generated/operations'
@@ -56,7 +57,8 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
 
   return (
     <Box sx={{ p: 2, bgcolor: 'background.paper', borderRadius: 1, mb: 3 }}>
-      <Typography variant="h6" sx={{ mb: 2 }}>
+      <Typography variant="h6" sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+        <SearchIcon />
         {t('filters.title')}
       </Typography>
       <Grid container spacing={2}>

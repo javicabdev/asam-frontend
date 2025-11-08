@@ -6,7 +6,6 @@ import {
   MenuItem,
   Button,
   Grid,
-  Typography,
 } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers'
 import type { CashFlowFilters as CashFlowFiltersType, OperationType } from '../types'
@@ -57,10 +56,7 @@ export const CashFlowFilters = ({ filters, onChange }: CashFlowFiltersProps) => 
   }
 
   return (
-    <Box sx={{ p: 2, bgcolor: 'background.paper', borderRadius: 1 }}>
-      <Typography variant="h6" sx={{ mb: 2 }}>
-        {t('filters.title')}
-      </Typography>
+    <Box>
       <Grid container spacing={2}>
         {/* Rango de fechas */}
         <Grid item xs={12} md={3}>

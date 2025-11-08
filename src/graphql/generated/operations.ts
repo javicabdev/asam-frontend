@@ -317,6 +317,23 @@ export type FamilySortField =
   | 'ESPOSO_NOMBRE'
   | 'NUMERO_SOCIO';
 
+export type GenerateAnnualFeesInput = {
+  base_fee_amount: Scalars['Float']['input'];
+  family_fee_extra: Scalars['Float']['input'];
+  year: Scalars['Int']['input'];
+};
+
+export type GenerateAnnualFeesResponse = {
+  __typename?: 'GenerateAnnualFeesResponse';
+  details: Array<PaymentGenerationDetail>;
+  membership_fee_id: Scalars['ID']['output'];
+  payments_existing: Scalars['Int']['output'];
+  payments_generated: Scalars['Int']['output'];
+  total_expected_amount: Scalars['Float']['output'];
+  total_members: Scalars['Int']['output'];
+  year: Scalars['Int']['output'];
+};
+
 export type LoginInput = {
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
@@ -413,10 +430,10 @@ export type Mutation = {
   deleteCashFlow: MutationResponse;
   deleteMember: MutationResponse;
   deleteUser: MutationResponse;
+  generateAnnualFees: GenerateAnnualFeesResponse;
   login: AuthResponse;
   logout: MutationResponse;
   refreshToken: TokenResponse;
-  registerFee: MutationResponse;
   registerPayment: Payment;
   registerTransaction: CashFlow;
   removeFamilyMember: MutationResponse;
@@ -507,6 +524,11 @@ export type MutationDeleteUserArgs = {
 };
 
 
+export type MutationGenerateAnnualFeesArgs = {
+  input: GenerateAnnualFeesInput;
+};
+
+
 export type MutationLoginArgs = {
   input: LoginInput;
 };
@@ -514,12 +536,6 @@ export type MutationLoginArgs = {
 
 export type MutationRefreshTokenArgs = {
   input: RefreshTokenInput;
-};
-
-
-export type MutationRegisterFeeArgs = {
-  base_amount: Scalars['Float']['input'];
-  year: Scalars['Int']['input'];
 };
 
 
@@ -654,6 +670,16 @@ export type PaymentFilter = {
   sort?: InputMaybe<SortInput>;
   start_date?: InputMaybe<Scalars['Time']['input']>;
   status?: InputMaybe<PaymentStatus>;
+};
+
+export type PaymentGenerationDetail = {
+  __typename?: 'PaymentGenerationDetail';
+  amount: Scalars['Float']['output'];
+  error?: Maybe<Scalars['String']['output']>;
+  member_id: Scalars['ID']['output'];
+  member_name: Scalars['String']['output'];
+  member_number: Scalars['String']['output'];
+  was_created: Scalars['Boolean']['output'];
 };
 
 export type PaymentInput = {
@@ -1191,6 +1217,13 @@ export type RemoveFamilyMemberMutationVariables = Exact<{
 
 export type RemoveFamilyMemberMutation = { __typename?: 'Mutation', removeFamilyMember: { __typename?: 'MutationResponse', success: boolean, message?: string | null, error?: string | null } };
 
+export type GenerateAnnualFeesMutationVariables = Exact<{
+  input: GenerateAnnualFeesInput;
+}>;
+
+
+export type GenerateAnnualFeesMutation = { __typename?: 'Mutation', generateAnnualFees: { __typename?: 'GenerateAnnualFeesResponse', year: number, membership_fee_id: string, payments_generated: number, payments_existing: number, total_members: number, total_expected_amount: number, details: Array<{ __typename?: 'PaymentGenerationDetail', member_number: string, member_name: string, amount: number, was_created: boolean, error?: string | null }> } };
+
 export type HealthQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1346,14 +1379,6 @@ export type CancelPaymentMutationVariables = Exact<{
 
 
 export type CancelPaymentMutation = { __typename?: 'Mutation', cancelPayment: { __typename?: 'MutationResponse', success: boolean, message?: string | null, error?: string | null } };
-
-export type RegisterFeeMutationVariables = Exact<{
-  year: Scalars['Int']['input'];
-  base_amount: Scalars['Float']['input'];
-}>;
-
-
-export type RegisterFeeMutation = { __typename?: 'Mutation', registerFee: { __typename?: 'MutationResponse', success: boolean, message?: string | null, error?: string | null } };
 
 export type GetDelinquentReportQueryVariables = Exact<{
   input?: InputMaybe<DelinquentReportInput>;
@@ -2824,6 +2849,51 @@ export function useRemoveFamilyMemberMutation(baseOptions?: Apollo.MutationHookO
 export type RemoveFamilyMemberMutationHookResult = ReturnType<typeof useRemoveFamilyMemberMutation>;
 export type RemoveFamilyMemberMutationResult = Apollo.MutationResult<RemoveFamilyMemberMutation>;
 export type RemoveFamilyMemberMutationOptions = Apollo.BaseMutationOptions<RemoveFamilyMemberMutation, RemoveFamilyMemberMutationVariables>;
+export const GenerateAnnualFeesDocument = gql`
+    mutation GenerateAnnualFees($input: GenerateAnnualFeesInput!) {
+  generateAnnualFees(input: $input) {
+    year
+    membership_fee_id
+    payments_generated
+    payments_existing
+    total_members
+    total_expected_amount
+    details {
+      member_number
+      member_name
+      amount
+      was_created
+      error
+    }
+  }
+}
+    `;
+export type GenerateAnnualFeesMutationFn = Apollo.MutationFunction<GenerateAnnualFeesMutation, GenerateAnnualFeesMutationVariables>;
+
+/**
+ * __useGenerateAnnualFeesMutation__
+ *
+ * To run a mutation, you first call `useGenerateAnnualFeesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGenerateAnnualFeesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [generateAnnualFeesMutation, { data, loading, error }] = useGenerateAnnualFeesMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGenerateAnnualFeesMutation(baseOptions?: Apollo.MutationHookOptions<GenerateAnnualFeesMutation, GenerateAnnualFeesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GenerateAnnualFeesMutation, GenerateAnnualFeesMutationVariables>(GenerateAnnualFeesDocument, options);
+      }
+export type GenerateAnnualFeesMutationHookResult = ReturnType<typeof useGenerateAnnualFeesMutation>;
+export type GenerateAnnualFeesMutationResult = Apollo.MutationResult<GenerateAnnualFeesMutation>;
+export type GenerateAnnualFeesMutationOptions = Apollo.BaseMutationOptions<GenerateAnnualFeesMutation, GenerateAnnualFeesMutationVariables>;
 export const HealthDocument = gql`
     query Health {
   health
@@ -3870,42 +3940,6 @@ export function useCancelPaymentMutation(baseOptions?: Apollo.MutationHookOption
 export type CancelPaymentMutationHookResult = ReturnType<typeof useCancelPaymentMutation>;
 export type CancelPaymentMutationResult = Apollo.MutationResult<CancelPaymentMutation>;
 export type CancelPaymentMutationOptions = Apollo.BaseMutationOptions<CancelPaymentMutation, CancelPaymentMutationVariables>;
-export const RegisterFeeDocument = gql`
-    mutation RegisterFee($year: Int!, $base_amount: Float!) {
-  registerFee(year: $year, base_amount: $base_amount) {
-    success
-    message
-    error
-  }
-}
-    `;
-export type RegisterFeeMutationFn = Apollo.MutationFunction<RegisterFeeMutation, RegisterFeeMutationVariables>;
-
-/**
- * __useRegisterFeeMutation__
- *
- * To run a mutation, you first call `useRegisterFeeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRegisterFeeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [registerFeeMutation, { data, loading, error }] = useRegisterFeeMutation({
- *   variables: {
- *      year: // value for 'year'
- *      base_amount: // value for 'base_amount'
- *   },
- * });
- */
-export function useRegisterFeeMutation(baseOptions?: Apollo.MutationHookOptions<RegisterFeeMutation, RegisterFeeMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RegisterFeeMutation, RegisterFeeMutationVariables>(RegisterFeeDocument, options);
-      }
-export type RegisterFeeMutationHookResult = ReturnType<typeof useRegisterFeeMutation>;
-export type RegisterFeeMutationResult = Apollo.MutationResult<RegisterFeeMutation>;
-export type RegisterFeeMutationOptions = Apollo.BaseMutationOptions<RegisterFeeMutation, RegisterFeeMutationVariables>;
 export const GetDelinquentReportDocument = gql`
     query GetDelinquentReport($input: DelinquentReportInput) {
   getDelinquentReport(input: $input) {

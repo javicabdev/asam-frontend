@@ -314,6 +314,23 @@ export type FamilySortField =
   | 'ESPOSO_NOMBRE'
   | 'NUMERO_SOCIO';
 
+export type GenerateAnnualFeesInput = {
+  base_fee_amount: Scalars['Float']['input'];
+  family_fee_extra: Scalars['Float']['input'];
+  year: Scalars['Int']['input'];
+};
+
+export type GenerateAnnualFeesResponse = {
+  __typename?: 'GenerateAnnualFeesResponse';
+  details: Array<PaymentGenerationDetail>;
+  membership_fee_id: Scalars['ID']['output'];
+  payments_existing: Scalars['Int']['output'];
+  payments_generated: Scalars['Int']['output'];
+  total_expected_amount: Scalars['Float']['output'];
+  total_members: Scalars['Int']['output'];
+  year: Scalars['Int']['output'];
+};
+
 export type LoginInput = {
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
@@ -410,10 +427,10 @@ export type Mutation = {
   deleteCashFlow: MutationResponse;
   deleteMember: MutationResponse;
   deleteUser: MutationResponse;
+  generateAnnualFees: GenerateAnnualFeesResponse;
   login: AuthResponse;
   logout: MutationResponse;
   refreshToken: TokenResponse;
-  registerFee: MutationResponse;
   registerPayment: Payment;
   registerTransaction: CashFlow;
   removeFamilyMember: MutationResponse;
@@ -504,6 +521,11 @@ export type MutationDeleteUserArgs = {
 };
 
 
+export type MutationGenerateAnnualFeesArgs = {
+  input: GenerateAnnualFeesInput;
+};
+
+
 export type MutationLoginArgs = {
   input: LoginInput;
 };
@@ -511,12 +533,6 @@ export type MutationLoginArgs = {
 
 export type MutationRefreshTokenArgs = {
   input: RefreshTokenInput;
-};
-
-
-export type MutationRegisterFeeArgs = {
-  base_amount: Scalars['Float']['input'];
-  year: Scalars['Int']['input'];
 };
 
 
@@ -651,6 +667,16 @@ export type PaymentFilter = {
   sort?: InputMaybe<SortInput>;
   start_date?: InputMaybe<Scalars['Time']['input']>;
   status?: InputMaybe<PaymentStatus>;
+};
+
+export type PaymentGenerationDetail = {
+  __typename?: 'PaymentGenerationDetail';
+  amount: Scalars['Float']['output'];
+  error?: Maybe<Scalars['String']['output']>;
+  member_id: Scalars['ID']['output'];
+  member_name: Scalars['String']['output'];
+  member_number: Scalars['String']['output'];
+  was_created: Scalars['Boolean']['output'];
 };
 
 export type PaymentInput = {

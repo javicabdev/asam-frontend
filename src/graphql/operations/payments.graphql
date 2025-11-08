@@ -149,11 +149,3 @@ mutation CancelPayment($id: ID!, $reason: String!) {
     error
   }
 }
-
-mutation RegisterFee($year: Int!, $base_amount: Float!) {
-  registerFee(year: $year, base_amount: $base_amount) {
-    success
-    message
-    error
-  }
-}

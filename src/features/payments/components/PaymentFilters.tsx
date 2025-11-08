@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Box,
@@ -30,6 +30,29 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
   const [paymentMethod, setPaymentMethod] = useState<string>(filters.paymentMethod)
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
 
+  // Track if this is a programmatic update (from parent)
+  const isResettingRef = useRef(false)
+
+  // Sync with parent filters when they are reset
+  useEffect(() => {
+    // Only sync if all filters are at default values (indicates a reset)
+    const isReset =
+      filters.status === 'ALL' &&
+      filters.paymentMethod === 'ALL' &&
+      filters.startDate === null &&
+      filters.endDate === null &&
+      filters.memberId === null
+
+    if (isReset && !isResettingRef.current) {
+      setStartDate(null)
+      setEndDate(null)
+      setStatus('ALL')
+      setPaymentMethod('ALL')
+      setSelectedMember(null)
+    }
+    isResettingRef.current = false
+  }, [filters])
+
   const handleApplyFilters = () => {
     // Ajustar endDate para incluir todo el día (hasta las 23:59:59.999)
     const adjustedEndDate = endDate ? new Date(endDate) : null
@@ -47,9 +70,14 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
 
     console.log('Applying filters:', filtersToApply)
     onFilterChange(filtersToApply)
+
+    // Update local state with applied values to maintain them for next apply
+    setStartDate(startDate)
+    setEndDate(adjustedEndDate)
   }
 
   const handleClearFilters = () => {
+    isResettingRef.current = true
     setStartDate(null)
     setEndDate(null)
     setStatus('ALL')

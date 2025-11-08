@@ -3,17 +3,15 @@ import { es, fr } from 'date-fns/locale'
 import type { PaymentListItem, ReceiptData } from '../types'
 
 /**
- * Generates a unique receipt number in format: ASAM-YYYY-NNNNN
- * Example: ASAM-2025-00142
+ * Generates a unique receipt number using the payment ID
+ * Format: ASAM-{paymentId}
+ * Example: ASAM-550e8400-e29b-41d4-a716-446655440000
+ *
+ * This ensures the receipt number is unique and irrepetible since it's based
+ * directly on the unique payment ID from the database.
  */
-export function generateReceiptNumber(paymentId: string, paymentDate: string | null): string {
-  const date = paymentDate ? new Date(paymentDate) : new Date()
-  const year = date.getFullYear()
-
-  // Use payment ID as unique identifier (remove hyphens and take last 5 chars)
-  const idPart = paymentId.replace(/-/g, '').slice(-5).toUpperCase()
-
-  return `ASAM-${year}-${idPart}`
+export function generateReceiptNumber(paymentId: string): string {
+  return `ASAM-${paymentId}`
 }
 
 /**
@@ -65,7 +63,7 @@ export function translatePaymentMethod(method: string | null): string {
  */
 export function paymentToReceiptData(payment: PaymentListItem): ReceiptData {
   return {
-    receiptNumber: generateReceiptNumber(payment.id, payment.paymentDate),
+    receiptNumber: generateReceiptNumber(payment.id),
     paymentId: payment.id,
     memberName: payment.memberName,
     memberNumber: payment.memberNumber,

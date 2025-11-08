@@ -1,9 +1,5 @@
 import React from 'react'
-import { Box, Typography, Button, Alert, Chip, Stack, Tooltip, useTheme } from '@mui/material'
-import {
-  Add as AddIcon,
-  Refresh as RefreshIcon,
-} from '@mui/icons-material'
+import { Box, Typography, Alert, Chip, Stack, useTheme } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/stores/authStore'
 import { useTranslation } from 'react-i18next'
@@ -42,7 +38,6 @@ export default function MembersPage() {
     handleFilterChange,
     handleSelectionChange,
     selectedMembers,
-    refetch, // Added refetch here
   } = useMembersTable()
 
   const handleEditClick = (member: Member) => {
@@ -56,58 +51,29 @@ export default function MembersPage() {
   return (
     <Box>
       {/* Header */}
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Box>
-          <Typography
-            variant="h4"
-            component="h1"
-            gutterBottom
-            sx={{
-              color: theme.palette.text.primary,
-              fontWeight: 600,
-            }}
-          >
-            {t('title', 'Gestión de Socios')}
+      <Box mb={3}>
+        <Typography
+          variant="h4"
+          component="h1"
+          gutterBottom
+          sx={{
+            color: theme.palette.text.primary,
+            fontWeight: 600,
+          }}
+        >
+          {t('title', 'Gestión de Socios')}
+        </Typography>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Typography variant="body2" color="text.secondary">
+            {t('total', 'Total')}: {totalCount} {t('members', 'socios')}
           </Typography>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Typography variant="body2" color="text.secondary">
-              {t('total', 'Total')}: {totalCount} {t('members', 'socios')}
-            </Typography>
-            {selectedMembers.length > 0 && (
-              <Chip
-                label={`${selectedMembers.length} ${t('selected', 'seleccionados')}`}
-                color="primary"
-                size="small"
-              />
-            )}
-          </Stack>
-        </Box>
-        <Stack direction="row" spacing={2}>
-          <Button
-            variant="outlined"
-            startIcon={<RefreshIcon />}
-            onClick={() => void refetch()}
-            disabled={loading}
-          >
-            {t('refresh', 'Actualizar')}
-          </Button>
-          <Tooltip
-            title={
-              !isAdmin ? t('adminOnly', 'Solo los administradores pueden crear nuevos socios') : ''
-            }
-            arrow
-          >
-            <span>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={() => navigate('/members/new')}
-                disabled={!isAdmin}
-              >
-                {t('newMember', 'Nuevo Socio')}
-              </Button>
-            </span>
-          </Tooltip>
+          {selectedMembers.length > 0 && (
+            <Chip
+              label={`${selectedMembers.length} ${t('selected', 'seleccionados')}`}
+              color="primary"
+              size="small"
+            />
+          )}
         </Stack>
       </Box>
 
@@ -138,6 +104,7 @@ export default function MembersPage() {
         onSelectionChange={handleSelectionChange}
         selectable={true}
         isAdmin={isAdmin}
+        onAddMember={() => navigate('/members/new')}
       />
 
       {/* Deactivate Confirmation Dialog */}
@@ -145,7 +112,10 @@ export default function MembersPage() {
         open={deactivateDialog.open}
         member={deactivateDialog.member}
         onClose={() => setDeactivateDialog({ open: false, member: null })}
-        onSuccess={() => void refetch()}
+        onSuccess={() => {
+          // Reload the page to refresh data after successful deactivation
+          window.location.reload()
+        }}
       />
     </Box>
   )

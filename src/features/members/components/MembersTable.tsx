@@ -39,6 +39,7 @@ import {
   ExpandMore as ExpandMoreIcon,
   TableChart as TableChartIcon,
   Description as DescriptionIcon,
+  PersonAdd as PersonAddIcon,
 } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -63,6 +64,7 @@ interface MembersTableProps {
   onSelectionChange?: (selectedIds: string[]) => void
   selectable?: boolean
   isAdmin?: boolean
+  onAddMember?: () => void
 }
 
 // Custom toolbar component
@@ -74,6 +76,8 @@ interface CustomToolbarProps {
   onExportSelected: () => void
   isExporting: boolean
   exportProgress: number
+  onAddMember?: () => void
+  isAdmin?: boolean
 }
 
 function CustomToolbar({
@@ -84,6 +88,8 @@ function CustomToolbar({
   onExportSelected,
   isExporting,
   exportProgress,
+  onAddMember,
+  isAdmin,
 }: CustomToolbarProps) {
   const { t } = useTranslation('members')
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -139,7 +145,27 @@ function CustomToolbar({
         )}
       </Box>
 
-      <GridToolbarQuickFilter debounceMs={500} />
+      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        <GridToolbarQuickFilter debounceMs={500} />
+        {onAddMember && (
+          <Tooltip
+            title={!isAdmin ? t('adminOnly', 'Solo los administradores pueden crear nuevos socios') : ''}
+            arrow
+          >
+            <span>
+              <Button
+                variant="contained"
+                startIcon={<PersonAddIcon />}
+                onClick={onAddMember}
+                disabled={!isAdmin}
+                size="small"
+              >
+                {t('newMember', 'Nuevo Socio')}
+              </Button>
+            </span>
+          </Tooltip>
+        )}
+      </Box>
 
       {/* Export menu */}
       <Menu
@@ -197,6 +223,7 @@ export function MembersTable({
   onSelectionChange,
   selectable = false,
   isAdmin = false,
+  onAddMember,
 }: MembersTableProps) {
   const { t } = useTranslation('members')
   const theme = useTheme()
@@ -621,6 +648,8 @@ export function MembersTable({
             onExportSelected: handleExportSelected,
             isExporting,
             exportProgress,
+            onAddMember,
+            isAdmin,
           } as CustomToolbarProps,
         }}
         localeText={customLocaleText}

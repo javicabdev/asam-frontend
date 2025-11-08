@@ -17,7 +17,7 @@ import {
   Link,
   Divider,
 } from '@mui/material'
-import { Visibility, VisibilityOff, LockOutlined as LockIcon } from '@mui/icons-material'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { useAuth } from '@/hooks/useAuth'
 import { createLoginSchema, LoginFormData } from './loginSchema'
 import { LanguageSelector } from '@/components/common'
@@ -135,16 +135,23 @@ export const LoginPage: React.FC = () => {
             <LanguageSelector variant="chip" size="small" />
           </Box>
 
-          {/* Logo/Icon */}
+          {/* Logo */}
           <Box
             sx={{
               m: 1,
-              p: 2,
-              bgcolor: 'primary.main',
-              borderRadius: '50%',
+              mb: 2,
             }}
           >
-            <LockIcon sx={{ color: 'white' }} />
+            <Box
+              component="img"
+              src="/icons/original-logo.png"
+              alt="ASAM"
+              sx={{
+                height: 80,
+                width: 'auto',
+                objectFit: 'contain',
+              }}
+            />
           </Box>
 
           {/* Title */}

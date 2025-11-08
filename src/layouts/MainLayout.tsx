@@ -140,10 +140,17 @@ export const MainLayout: React.FC = () => {
 
   const drawer = (
     <Box>
-      <Toolbar>
-        <Typography variant="h6" noWrap component="div">
-          ASAM
-        </Typography>
+      <Toolbar sx={{ justifyContent: 'center', py: 2 }}>
+        <Box
+          component="img"
+          src="/icons/original-logo.png"
+          alt="ASAM"
+          sx={{
+            height: 48,
+            width: 'auto',
+            objectFit: 'contain',
+          }}
+        />
       </Toolbar>
       <Divider />
       <List>

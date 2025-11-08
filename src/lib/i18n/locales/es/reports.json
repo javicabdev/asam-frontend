@@ -42,7 +42,30 @@
       "actions": "Acciones",
       "viewDetails": "Ver Detalles",
       "sendReminder": "Enviar Recordatorio",
-      "noPendingPayments": "Sin pagos pendientes"
+      "noPendingPayments": "Sin pagos pendientes",
+      "toolbar": {
+        "columns": "Columnas",
+        "filters": "Filtros",
+        "density": "Densidad",
+        "search": "Buscar"
+      },
+      "filterOperators": {
+        "contains": "contiene",
+        "equals": "es igual a",
+        "startsWith": "comienza con",
+        "endsWith": "termina con",
+        "isEmpty": "está vacío",
+        "isNotEmpty": "no está vacío",
+        "isAnyOf": "es cualquiera de"
+      },
+      "filterPanel": {
+        "columns": "Columnas",
+        "operator": "Operador",
+        "value": "Valor",
+        "filterValue": "Buscar valor"
+      },
+      "rowsPerPage": "Filas por página",
+      "displayedRows": "{{from}}-{{to}} de {{count}}"
     },
 
     "debtorType": {

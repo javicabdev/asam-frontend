@@ -42,7 +42,30 @@
       "actions": "Jëf",
       "viewDetails": "Xool li ci ànd",
       "sendReminder": "Yónnee wakh",
-      "noPendingPayments": "Amul fay xaalis bu tùn"
+      "noPendingPayments": "Amul fay xaalis bu tùn",
+      "toolbar": {
+        "columns": "Njàll",
+        "filters": "Filteeru",
+        "density": "Tëral",
+        "search": "Seet"
+      },
+      "filterOperators": {
+        "contains": "am ci biir",
+        "equals": "dafa mel ni",
+        "startsWith": "dafa tàmbalee",
+        "endsWith": "dafa jeexal",
+        "isEmpty": "dafa meññ",
+        "isNotEmpty": "meññul",
+        "isAnyOf": "dafa benn ci"
+      },
+      "filterPanel": {
+        "columns": "Njàll",
+        "operator": "Jëfandikukat",
+        "value": "Njëriñ",
+        "filterValue": "Seet njëriñ"
+      },
+      "rowsPerPage": "Limu renku ci bët",
+      "displayedRows": "{{from}}-{{to}} ci {{count}}"
     },
 
     "debtorType": {

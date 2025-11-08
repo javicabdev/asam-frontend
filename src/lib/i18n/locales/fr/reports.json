@@ -42,7 +42,30 @@
       "actions": "Actions",
       "viewDetails": "Voir Détails",
       "sendReminder": "Envoyer Rappel",
-      "noPendingPayments": "Aucun paiement en attente"
+      "noPendingPayments": "Aucun paiement en attente",
+      "toolbar": {
+        "columns": "Colonnes",
+        "filters": "Filtres",
+        "density": "Densité",
+        "search": "Rechercher"
+      },
+      "filterOperators": {
+        "contains": "contient",
+        "equals": "est égal à",
+        "startsWith": "commence par",
+        "endsWith": "se termine par",
+        "isEmpty": "est vide",
+        "isNotEmpty": "n'est pas vide",
+        "isAnyOf": "est l'un de"
+      },
+      "filterPanel": {
+        "columns": "Colonnes",
+        "operator": "Opérateur",
+        "value": "Valeur",
+        "filterValue": "Rechercher une valeur"
+      },
+      "rowsPerPage": "Lignes par page",
+      "displayedRows": "{{from}}-{{to}} sur {{count}}"
     },
 
     "debtorType": {

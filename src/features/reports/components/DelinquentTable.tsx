@@ -1,6 +1,16 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Card, CardContent, Box, Typography } from '@mui/material'
-import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
+  GridToolbarFilterButton,
+  GridToolbarDensitySelector,
+  GridToolbarQuickFilter,
+  esES,
+} from '@mui/x-data-grid'
 import { useTranslation } from 'react-i18next'
 import { Visibility } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
@@ -69,6 +79,53 @@ export function DelinquentTable({
     pageSize: 10,
     page: 0,
   })
+
+  // Custom Toolbar component
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <GridToolbarColumnsButton />
+          <GridToolbarFilterButton />
+          <GridToolbarDensitySelector />
+        </Box>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <GridToolbarQuickFilter debounceMs={500} />
+        </Box>
+      </GridToolbarContainer>
+    )
+  }
+
+  // Custom locale text for DataGrid
+  const customLocaleText = useMemo(
+    () => ({
+      ...esES.components.MuiDataGrid.defaultProps.localeText,
+      toolbarColumns: t('delinquent.table.toolbar.columns'),
+      toolbarFilters: t('delinquent.table.toolbar.filters'),
+      toolbarDensity: t('delinquent.table.toolbar.density'),
+      toolbarQuickFilterPlaceholder: t('delinquent.table.toolbar.search'),
+      // Filter operators
+      filterOperatorContains: t('delinquent.table.filterOperators.contains'),
+      filterOperatorEquals: t('delinquent.table.filterOperators.equals'),
+      filterOperatorStartsWith: t('delinquent.table.filterOperators.startsWith'),
+      filterOperatorEndsWith: t('delinquent.table.filterOperators.endsWith'),
+      filterOperatorIsEmpty: t('delinquent.table.filterOperators.isEmpty'),
+      filterOperatorIsNotEmpty: t('delinquent.table.filterOperators.isNotEmpty'),
+      filterOperatorIsAnyOf: t('delinquent.table.filterOperators.isAnyOf'),
+      // Filter panel
+      filterPanelColumns: t('delinquent.table.filterPanel.columns'),
+      filterPanelOperator: t('delinquent.table.filterPanel.operator'),
+      filterPanelInputLabel: t('delinquent.table.filterPanel.value'),
+      filterPanelInputPlaceholder: t('delinquent.table.filterPanel.filterValue'),
+      // Pagination
+      MuiTablePagination: {
+        labelRowsPerPage: t('delinquent.table.rowsPerPage'),
+        labelDisplayedRows: ({ from, to, count }: { from: number; to: number; count: number }) =>
+          t('delinquent.table.displayedRows', { from, to, count: count !== -1 ? count : to }),
+      },
+    }),
+    [t]
+  )
 
   const columns: GridColDef<Debtor>[] = [
     {
@@ -164,6 +221,10 @@ export function DelinquentTable({
             disableRowSelectionOnClick
             getRowId={(row) => getDebtorId(row)}
             autoHeight
+            slots={{
+              toolbar: CustomToolbar,
+            }}
+            localeText={customLocaleText}
             sx={{
               '& .MuiDataGrid-cell:focus': {
                 outline: 'none',

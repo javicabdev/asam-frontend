@@ -33,9 +33,15 @@ export const CashFlowFilters = ({ filters, onChange }: CashFlowFiltersProps) => 
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
 
   const handleApplyFilters = () => {
+    // Ajustar endDate para incluir todo el día (hasta las 23:59:59.999)
+    const adjustedEndDate = endDate ? new Date(endDate) : null
+    if (adjustedEndDate) {
+      adjustedEndDate.setHours(23, 59, 59, 999)
+    }
+
     onChange({
       startDate: startDate?.toISOString() || null,
-      endDate: endDate?.toISOString() || null,
+      endDate: adjustedEndDate?.toISOString() || null,
       operationType: operationType || null,
       memberId: selectedMember?.miembro_id || null,
     })

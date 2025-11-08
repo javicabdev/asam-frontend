@@ -49,6 +49,7 @@ interface MemberAutocompleteProps {
   label?: string
   required?: boolean
   excludeMembersWithUser?: boolean
+  size?: 'small' | 'medium'
 }
 
 interface SearchMembersResponse {
@@ -68,6 +69,7 @@ export const MemberAutocomplete: React.FC<MemberAutocompleteProps> = ({
   label,
   required,
   excludeMembersWithUser = false,
+  size = 'medium',
 }) => {
   const { t } = useTranslation('users')
   const [open, setOpen] = useState(false)
@@ -179,6 +181,7 @@ export const MemberAutocomplete: React.FC<MemberAutocompleteProps> = ({
           helperText={helperText}
           required={required}
           placeholder={t('form.memberSearch.placeholder')}
+          size={size}
           InputProps={{
             ...params.InputProps,
             endAdornment: (

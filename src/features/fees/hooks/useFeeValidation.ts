@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import type { FeeGenerationFormData } from '../types'
 
 export interface ValidationErrors {
+  [key: string]: string | undefined
   year?: string
   baseFeeAmount?: string
   familyFeeExtra?: string

@@ -72,7 +72,7 @@ export default function RecentActivity({
       PAYMENT_RECEIVED: t('recentActivity.paymentReceived'),
       FAMILY_CREATED: t('recentActivity.familyAdded'),
       MEMBER_DEACTIVATED: t('recentActivity.memberUpdated'),
-      TRANSACTION_RECORDED: t('recentActivity.paymentReceived'),
+      TRANSACTION_RECORDED: t('recentActivity.transactionRecorded'),
     }
     return labelMap[type] || t('recentActivity.title')
   }
@@ -129,7 +129,9 @@ export default function RecentActivity({
           : t('recentActivity.memberUpdated')
 
       case 'TRANSACTION_RECORDED':
-        return t('recentActivity.transactionRecorded')
+        // Para transacciones, mostrar el detalle si está disponible
+        // El backend envía el detalle de la transacción en 'description'
+        return activity.description || t('recentActivity.transactionRecorded')
 
       default:
         return activity.description

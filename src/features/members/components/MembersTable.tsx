@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react'
+import React, { useMemo, useState, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   DataGrid,
@@ -201,6 +201,9 @@ export function MembersTable({
   const { t } = useTranslation('members')
   const theme = useTheme()
   const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([])
+
+  // Track if we initiated the change (to ignore reflection events)
+  const changingRef = useRef(false)
 
   const [snackbar, setSnackbar] = useState<{
     open: boolean
@@ -479,21 +482,36 @@ export function MembersTable({
   )
 
   const handlePaginationModelChange = useCallback((model: GridPaginationModel) => {
+    // Ignore events while we're changing props (reflection from our own updates)
+    if (changingRef.current) {
+      return
+    }
+
     const targetPage = model.page + 1 // Convert from 0-based to 1-based
 
     // Check what changed
     const sizeChanged = model.pageSize !== pageSize
     const pageChanged = targetPage !== page
 
-    // Priority 1: Handle pageSize change (resets to page 1)
-    if (sizeChanged) {
-      onPageSizeChange(model.pageSize)
-      return
-    }
+    // Set flag before calling handlers
+    changingRef.current = true
 
-    // Priority 2: Handle page change (only if size didn't change)
-    if (pageChanged) {
-      onPageChange(targetPage)
+    try {
+      // Priority 1: Handle pageSize change (resets to page 1)
+      if (sizeChanged) {
+        onPageSizeChange(model.pageSize)
+        return
+      }
+
+      // Priority 2: Handle page change (only if size didn't change)
+      if (pageChanged) {
+        onPageChange(targetPage)
+      }
+    } finally {
+      // Reset flag after a tick (allow React to update)
+      setTimeout(() => {
+        changingRef.current = false
+      }, 0)
     }
   }, [page, pageSize, onPageChange, onPageSizeChange])
 

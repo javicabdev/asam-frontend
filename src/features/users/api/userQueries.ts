@@ -1,22 +1,29 @@
 import { gql } from '@apollo/client'
 
-// Query to get list of users
+// Query to get list of users with pagination info
 export const LIST_USERS = gql`
-  query ListUsers($page: Int, $pageSize: Int) {
-    listUsers(page: $page, pageSize: $pageSize) {
-      id
-      username
-      email
-      role
-      isActive
-      lastLogin
-      emailVerified
-      emailVerifiedAt
-      member {
-        miembro_id
-        nombre
-        apellidos
-        numero_socio
+  query ListUsers($page: Int, $pageSize: Int, $role: String) {
+    listUsers(page: $page, pageSize: $pageSize, role: $role) {
+      nodes {
+        id
+        username
+        email
+        role
+        isActive
+        lastLogin
+        emailVerified
+        emailVerifiedAt
+        member {
+          miembro_id
+          nombre
+          apellidos
+          numero_socio
+        }
+      }
+      pageInfo {
+        totalCount
+        hasNextPage
+        hasPreviousPage
       }
     }
   }

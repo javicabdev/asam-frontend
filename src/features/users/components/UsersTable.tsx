@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useCallback, useRef } from 'react'
 import {
   Box,
   Paper,
@@ -15,6 +15,7 @@ import {
 import {
   DataGrid,
   GridColDef,
+  GridPaginationModel,
   GridToolbarContainer,
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
@@ -42,7 +43,14 @@ interface UsersTableProps {
 }
 
 interface ListUsersResponse {
-  listUsers: User[]
+  listUsers: {
+    nodes: User[]
+    pageInfo: {
+      totalCount: number
+      hasNextPage: boolean
+      hasPreviousPage: boolean
+    }
+  }
 }
 
 interface DeleteUserResponse {
@@ -83,14 +91,20 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
   const { t } = useTranslation('users')
   const theme = useTheme()
   const [tabValue, setTabValue] = useState<UserRole>('admin')
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(25)
 
   const currentUser = useAuthStore((state) => state.user)
 
-  // Query for users
+  // Track if we initiated the change (to ignore reflection events)
+  const changingRef = useRef(false)
+
+  // Query for users with server-side pagination
   const { data, loading, error, refetch } = useQuery<ListUsersResponse>(LIST_USERS, {
     variables: {
-      page: 1,
-      pageSize: 100, // Get all users, we'll filter client-side
+      page,
+      pageSize,
+      role: tabValue, // Filter by role on server
     },
   })
 
@@ -111,20 +125,62 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
     },
   })
 
-  // Filter users by role (tab), excluding "javi" admin
-  const filteredUsers = useMemo(() => {
-    if (!data?.listUsers) return []
+  // Get users and filter out "javi" admin
+  const users = useMemo(() => {
+    if (!data?.listUsers?.nodes) return []
 
-    return data.listUsers.filter((user) => {
+    return data.listUsers.nodes.filter((user) => {
       // Filter out admin user "javi"
-      if (user.role === 'admin' && user.username.toLowerCase() === 'javi') {
-        return false
+      return !(user.role === 'admin' && user.username.toLowerCase() === 'javi')
+    })
+  }, [data])
+
+  // Get total count from pageInfo
+  const totalCount = data?.listUsers?.pageInfo?.totalCount || 0
+
+  // Handle pagination changes
+  const handlePaginationChange = useCallback(
+    (model: GridPaginationModel) => {
+      // Ignore events while we're changing props (reflection from our own updates)
+      if (changingRef.current) {
+        return
       }
 
-      // Filter by role (tab)
-      return user.role === tabValue
-    })
-  }, [data, tabValue])
+      const targetPage = model.page + 1 // Convert from 0-based to 1-based
+
+      // Check what changed
+      const sizeChanged = model.pageSize !== pageSize
+      const pageChanged = targetPage !== page
+
+      // Set flag before calling handlers
+      changingRef.current = true
+
+      try {
+        // Priority 1: Handle pageSize change (resets to page 1)
+        if (sizeChanged) {
+          setPageSize(model.pageSize)
+          setPage(1)
+          return
+        }
+
+        // Priority 2: Handle page change (only if size didn't change)
+        if (pageChanged) {
+          setPage(targetPage)
+        }
+      } finally {
+        // Reset flag after a tick (allow React to update)
+        setTimeout(() => {
+          changingRef.current = false
+        }, 0)
+      }
+    },
+    [page, pageSize]
+  )
+
+  // Reset to page 1 when tab changes
+  React.useEffect(() => {
+    setPage(1)
+  }, [tabValue])
 
   const handleDelete = (userId: string) => {
     if (window.confirm(t('table.actions.deleteConfirm'))) {
@@ -322,15 +378,17 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
 
       {/* DataGrid con toolbar */}
       <DataGrid
-        rows={filteredUsers}
+        rows={users}
         columns={columns}
         loading={loading}
+        rowCount={totalCount}
+        paginationMode="server"
         pageSizeOptions={[10, 25, 50, 100]}
-        initialState={{
-          pagination: {
-            paginationModel: { pageSize: 10 },
-          },
+        paginationModel={{
+          page: page - 1, // DataGrid uses 0-based indexing
+          pageSize,
         }}
+        onPaginationModelChange={handlePaginationChange}
         slots={{
           toolbar: CustomToolbar,
         }}

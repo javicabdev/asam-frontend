@@ -40,6 +40,8 @@ import reportsFr from './locales/fr/reports.json'
 import reportsWo from './locales/wo/reports.json'
 
 import feesEs from './locales/es/fees.json'
+import feesFr from './locales/fr/fees.json'
+import feesWo from './locales/wo/fees.json'
 
 export const defaultNS = 'common'
 export const resources = {
@@ -65,6 +67,7 @@ export const resources = {
     users: usersFr,
     cashflow: cashflowFr,
     reports: reportsFr,
+    fees: feesFr,
   },
   wo: {
     common: commonWo,
@@ -76,6 +79,7 @@ export const resources = {
     users: usersWo,
     cashflow: cashflowWo,
     reports: reportsWo,
+    fees: feesWo,
   },
 } as const
 

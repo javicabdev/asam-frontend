@@ -1,0 +1,58 @@
+{
+  "page": {
+    "title": "Cotisations Annuelles",
+    "generateButton": "Générer les Cotisations",
+    "about": {
+      "title": "À propos des Cotisations Annuelles",
+      "description": "Les cotisations annuelles sont générées automatiquement pour tous les membres actifs au début de chaque année.",
+      "howItWorks": "Le système calcule le montant de la cotisation selon le type d'adhésion (individuelle ou familiale) et crée des paiements en attente pour chaque membre."
+    }
+  },
+  "generation": {
+    "dialog": {
+      "title": "Générer les Cotisations Annuelles"
+    },
+    "steps": {
+      "configure": "Configurer",
+      "preview": "Aperçu",
+      "generate": "Générer"
+    },
+    "form": {
+      "description": "Configurez les montants pour les cotisations annuelles de l'année sélectionnée.",
+      "year": "Année",
+      "yearHelp": "Année pour laquelle les cotisations seront générées",
+      "baseFeeAmount": "Cotisation de Base",
+      "baseFeeAmountHelp": "Montant de base de la cotisation annuelle",
+      "familyFeeExtra": "Supplément Familial",
+      "familyFeeExtraHelp": "Montant supplémentaire pour les adhésions familiales",
+      "continue": "Continuer"
+    },
+    "preview": {
+      "title": "Aperçu - Année {{year}}",
+      "alreadyExistsWarning": "Il existe déjà des cotisations générées pour cette année. En confirmant, seuls les paiements manquants seront créés.",
+      "baseFeeAmount": "Cotisation de Base",
+      "familyFeeExtra": "Supplément Familial",
+      "individualMembers": "Membres Individuels",
+      "familyMembers": "Membres Familiaux",
+      "totalMembers": "Total des Membres",
+      "totalExpected": "Total Attendu",
+      "confirm": "Confirmer et Générer"
+    },
+    "generating": {
+      "title": "Génération des cotisations...",
+      "message": "Veuillez patienter pendant la génération des paiements pour tous les membres actifs."
+    },
+    "result": {
+      "success": "Cotisations Générées avec Succès",
+      "error": "Erreur lors de la Génération des Cotisations",
+      "summary": "Résumé",
+      "totalMembers": "Membres Traités",
+      "paymentsCreated": "Paiements Créés",
+      "totalExpectedAmount": "Montant Total",
+      "close": "Fermer"
+    }
+  },
+  "common": {
+    "back": "Retour"
+  }
+}

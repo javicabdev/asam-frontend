@@ -1,0 +1,58 @@
+{
+  "page": {
+    "title": "Kotisaasioŋ bu Bes bi",
+    "generateButton": "Defar Kotisaasioŋ yi",
+    "about": {
+      "title": "Ci Kotisaasioŋ bu Bes bi",
+      "description": "Kotisaasioŋ bu bes bi dafay defar ci lu otomatik ngir yëp nit ñi am liggéey ci tàmbali at bu nekk.",
+      "howItWorks": "Sisteem bi dafa jàppale royuwaay kotisaasioŋ bi ci lu jëkk ci nataal mbooloo (kenn ak sa bopp walla ndey ak doom) te defar ay fayamaanu fay ñu gën fay ngir kenn ak kenn."
+    }
+  },
+  "generation": {
+    "dialog": {
+      "title": "Defar Kotisaasioŋ bu Bes bi"
+    },
+    "steps": {
+      "configure": "Tëral",
+      "preview": "Xoolal",
+      "generate": "Defar"
+    },
+    "form": {
+      "description": "Tëral royuwaay kotisaasioŋ bu bes bi ngir at bi ñu tànn.",
+      "year": "At",
+      "yearHelp": "At bi ñu di defar kotisaasioŋ yi",
+      "baseFeeAmount": "Kotisaasioŋ bu Njëkk",
+      "baseFeeAmountHelp": "Royuwaay bu njëkk ci kotisaasioŋ bu bes bi",
+      "familyFeeExtra": "Yokk bu Ndey ak Doom",
+      "familyFeeExtraHelp": "Royuwaay bu yokk ngir mbooloo bu ndey ak doom",
+      "continue": "Jël"
+    },
+    "preview": {
+      "title": "Xoolal - At {{year}}",
+      "alreadyExistsWarning": "Am na kotisaasioŋ yu defar dëkk ngir at bii. Bu ñu songi, fayamaanu yi ñu des rekk la ñu di defar.",
+      "baseFeeAmount": "Kotisaasioŋ bu Njëkk",
+      "familyFeeExtra": "Yokk bu Ndey ak Doom",
+      "individualMembers": "Nit ñu ak Sa Bopp",
+      "familyMembers": "Nit ñu Ndey ak Doom",
+      "totalMembers": "Limu Nit ñi Lépp",
+      "totalExpected": "Limu yi Ñu Ngi Xaaral",
+      "confirm": "Songi te Defar"
+    },
+    "generating": {
+      "title": "Ngi defar kotisaasioŋ yi...",
+      "message": "Xaar ba mu defar fayamaanu yi ngir yëp nit ñi am liggéey."
+    },
+    "result": {
+      "success": "Kotisaasioŋ yi Defar na Baax",
+      "error": "Njumte ci Defar Kotisaasioŋ yi",
+      "summary": "Résimee",
+      "totalMembers": "Nit ñu Wax",
+      "paymentsCreated": "Fayamaanu ñu Defar",
+      "totalExpectedAmount": "Limu Lépp",
+      "close": "Tëj"
+    }
+  },
+  "common": {
+    "back": "Dellu"
+  }
+}

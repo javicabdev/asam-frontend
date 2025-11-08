@@ -154,6 +154,7 @@
     },
     "dateFrom": "Depuis",
     "dateTo": "Jusqu'à",
+    "apply": "Appliquer",
     "clear": "Effacer",
     "clearTooltip": "Effacer les filtres"
   },

@@ -1,26 +1,15 @@
-import React from 'react'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
-  Paper,
-  Grid,
+  Box,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
   MenuItem,
   Button,
-  Box,
-  IconButton,
+  Grid,
 } from '@mui/material'
-import {
-  Search as SearchIcon,
-  Clear as ClearIcon,
-} from '@mui/icons-material'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { es } from 'date-fns/locale'
-import { useTranslation } from 'react-i18next'
-
+import { DatePicker } from '@mui/x-date-pickers'
+import { MemberAutocomplete } from '@/features/users/components/MemberAutocomplete'
+import type { Member } from '@/graphql/generated/operations'
 import { PAYMENT_METHODS } from '../types'
 import type { PaymentFiltersState } from '../types'
 
@@ -33,118 +22,121 @@ interface PaymentFiltersProps {
 export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFiltersProps) {
   const { t } = useTranslation('payments')
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      // Trigger search (filters are already applied on change)
-      e.preventDefault()
+  const [startDate, setStartDate] = useState<Date | null>(filters.startDate)
+  const [endDate, setEndDate] = useState<Date | null>(filters.endDate)
+  const [status, setStatus] = useState<PaymentFiltersState['status']>(filters.status)
+  const [paymentMethod, setPaymentMethod] = useState<string>(filters.paymentMethod)
+  const [selectedMember, setSelectedMember] = useState<Member | null>(null)
+
+  const handleApplyFilters = () => {
+    // Ajustar endDate para incluir todo el día (hasta las 23:59:59.999)
+    const adjustedEndDate = endDate ? new Date(endDate) : null
+    if (adjustedEndDate) {
+      adjustedEndDate.setHours(23, 59, 59, 999)
     }
+
+    onFilterChange({
+      startDate: startDate,
+      endDate: adjustedEndDate,
+      status,
+      paymentMethod,
+      searchTerm: selectedMember?.miembro_id || '',
+    })
+  }
+
+  const handleClearFilters = () => {
+    setStartDate(null)
+    setEndDate(null)
+    setStatus('ALL')
+    setPaymentMethod('ALL')
+    setSelectedMember(null)
+    onReset()
   }
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
-      <Paper sx={{ mb: 3, p: 3 }}>
-        <Grid container spacing={2} alignItems="center">
-          {/* Search field */}
-          <Grid item xs={12} md={3}>
-            <TextField
-              fullWidth
-              label={t('filters.searchPlaceholder')}
-              value={filters.searchTerm}
-              onChange={(e) => onFilterChange({ searchTerm: e.target.value })}
-              onKeyDown={handleKeyDown}
-              placeholder={t('filters.search')}
-              InputProps={{
-                endAdornment: (
-                  <IconButton edge="end" size="small">
-                    <SearchIcon />
-                  </IconButton>
-                ),
-              }}
-            />
-          </Grid>
-
-          {/* Status filter */}
-          <Grid item xs={6} md={2}>
-            <FormControl fullWidth>
-              <InputLabel>{t('filters.status.label')}</InputLabel>
-              <Select
-                value={filters.status}
-                onChange={(e) =>
-                  onFilterChange({ status: e.target.value as PaymentFiltersState['status'] })
-                }
-                label={t('filters.status.label')}
-              >
-                <MenuItem value="ALL">{t('filters.status.all')}</MenuItem>
-                <MenuItem value="PENDING">{t('filters.status.pending')}</MenuItem>
-                <MenuItem value="PAID">{t('filters.status.paid')}</MenuItem>
-                <MenuItem value="CANCELLED">{t('filters.status.cancelled')}</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-
-          {/* Payment method filter */}
-          <Grid item xs={6} md={2}>
-            <FormControl fullWidth>
-              <InputLabel>{t('filters.method.label')}</InputLabel>
-              <Select
-                value={filters.paymentMethod}
-                onChange={(e) => onFilterChange({ paymentMethod: e.target.value })}
-                label={t('filters.method.label')}
-              >
-                <MenuItem value="ALL">{t('filters.method.all')}</MenuItem>
-                {Object.entries(PAYMENT_METHODS).map(([key]) => (
-                  <MenuItem key={key} value={key}>
-                    {t(`filters.method.${key.toLowerCase()}`)}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-
-          {/* Start date */}
-          <Grid item xs={6} md={2}>
-            <DatePicker
-              label={t('filters.dateFrom')}
-              value={filters.startDate}
-              onChange={(date) => onFilterChange({ startDate: date })}
-              slotProps={{
-                textField: {
-                  fullWidth: true,
-                },
-              }}
-            />
-          </Grid>
-
-          {/* End date */}
-          <Grid item xs={6} md={2}>
-            <DatePicker
-              label={t('filters.dateTo')}
-              value={filters.endDate}
-              onChange={(date) => onFilterChange({ endDate: date })}
-              slotProps={{
-                textField: {
-                  fullWidth: true,
-                },
-              }}
-            />
-          </Grid>
-
-          {/* Action buttons */}
-          <Grid item xs={12} md={1}>
-            <Box display="flex" gap={1}>
-              <Button
-                fullWidth
-                variant="outlined"
-                onClick={onReset}
-                startIcon={<ClearIcon />}
-                title={t('filters.clearTooltip')}
-              >
-                {t('filters.clear')}
-              </Button>
-            </Box>
-          </Grid>
+    <Box sx={{ p: 2, bgcolor: 'background.paper', borderRadius: 1, mb: 3 }}>
+      <Grid container spacing={2}>
+        {/* Rango de fechas */}
+        <Grid item xs={12} md={3}>
+          <DatePicker
+            label={t('filters.dateFrom')}
+            value={startDate}
+            onChange={setStartDate}
+            slotProps={{
+              textField: { fullWidth: true, size: 'small' },
+            }}
+          />
         </Grid>
-      </Paper>
-    </LocalizationProvider>
+
+        <Grid item xs={12} md={3}>
+          <DatePicker
+            label={t('filters.dateTo')}
+            value={endDate}
+            onChange={setEndDate}
+            slotProps={{
+              textField: { fullWidth: true, size: 'small' },
+            }}
+          />
+        </Grid>
+
+        {/* Estado */}
+        <Grid item xs={12} md={3}>
+          <TextField
+            select
+            fullWidth
+            size="small"
+            label={t('filters.status.label')}
+            value={status}
+            onChange={(e) => setStatus(e.target.value as PaymentFiltersState['status'])}
+          >
+            <MenuItem value="ALL">{t('filters.status.all')}</MenuItem>
+            <MenuItem value="PENDING">{t('filters.status.pending')}</MenuItem>
+            <MenuItem value="PAID">{t('filters.status.paid')}</MenuItem>
+            <MenuItem value="CANCELLED">{t('filters.status.cancelled')}</MenuItem>
+          </TextField>
+        </Grid>
+
+        {/* Método de pago */}
+        <Grid item xs={12} md={3}>
+          <TextField
+            select
+            fullWidth
+            size="small"
+            label={t('filters.method.label')}
+            value={paymentMethod}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+          >
+            <MenuItem value="ALL">{t('filters.method.all')}</MenuItem>
+            {Object.entries(PAYMENT_METHODS).map(([key]) => (
+              <MenuItem key={key} value={key}>
+                {t(`filters.method.${key.toLowerCase()}`)}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+
+        {/* Búsqueda de socio */}
+        <Grid item xs={12} md={6}>
+          <MemberAutocomplete
+            value={selectedMember}
+            onChange={setSelectedMember}
+            label={t('filters.searchPlaceholder')}
+            size="small"
+          />
+        </Grid>
+
+        {/* Botones */}
+        <Grid item xs={12} md={6}>
+          <Box display="flex" gap={2}>
+            <Button variant="contained" onClick={handleApplyFilters}>
+              {t('filters.apply')}
+            </Button>
+            <Button variant="outlined" onClick={handleClearFilters}>
+              {t('filters.clear')}
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
+    </Box>
   )
 }

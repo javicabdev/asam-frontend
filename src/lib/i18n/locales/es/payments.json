@@ -154,6 +154,7 @@
     },
     "dateFrom": "Desde",
     "dateTo": "Hasta",
+    "apply": "Aplicar",
     "clear": "Limpiar",
     "clearTooltip": "Limpiar filtros"
   },

@@ -78,11 +78,25 @@ export function useDashboardStats(
     ? convertTrendsToChartData(stats.membershipTrend, stats.revenueTrend)
     : []
 
-  // Debug: Log membership trend data to verify backend is sending correct data
-  if (stats?.membershipTrend) {
-    console.log('📊 Dashboard - Membership Trend from backend:', stats.membershipTrend)
-    console.log('📊 Dashboard - Total members:', stats.totalMembers)
-    console.log('📊 Dashboard - New members this month:', stats.newMembersThisMonth)
+  // Debug: Log all dashboard data to verify backend is sending correct data
+  if (stats) {
+    console.group('📊 Dashboard Stats from Backend')
+    console.log('Full stats object:', stats)
+    console.groupEnd()
+
+    console.group('👥 Member Statistics')
+    console.log('Total members:', stats.totalMembers)
+    console.log('Active members:', stats.activeMembers)
+    console.log('New members this month:', stats.newMembersThisMonth)
+    console.log('Membership trend (by month):', stats.membershipTrend)
+    console.groupEnd()
+
+    console.group('💰 Payment Statistics')
+    console.log('Pending payments (COUNT):', stats.pendingPayments, typeof stats.pendingPayments)
+    console.log('Total revenue:', stats.totalRevenue)
+    console.log('Monthly revenue:', stats.monthlyRevenue)
+    console.log('Revenue trend (by month):', stats.revenueTrend)
+    console.groupEnd()
   }
 
   // Process recent activity - Fixed: mapping to handle null values

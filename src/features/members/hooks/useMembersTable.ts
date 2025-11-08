@@ -26,12 +26,14 @@ interface UseMembersTableResult {
 
 export function useMembersTable(): UseMembersTableResult {
   const navigate = useNavigate()
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(25)
   const [selectedMembers, setSelectedMembers] = useState<string[]>([])
   const [filter, setFilter] = useState<MemberFilter>({
     pagination: { page: 1, pageSize: 25 },
   })
+
+  // Derive page and pageSize from filter (Single Source of Truth)
+  const page = filter.pagination?.page || 1
+  const pageSize = filter.pagination?.pageSize || 25
 
   // Convert internal filter to GraphQL input format
   // Only include fields that are actually in the GraphQL schema
@@ -49,7 +51,6 @@ export function useMembersTable(): UseMembersTableResult {
   })
 
   const handlePageChange = useCallback((newPage: number) => {
-    setPage(newPage)
     setFilter((prev) => ({
       ...prev,
       pagination: { page: newPage, pageSize: prev.pagination?.pageSize || 25 },
@@ -57,8 +58,6 @@ export function useMembersTable(): UseMembersTableResult {
   }, [])
 
   const handlePageSizeChange = useCallback((newPageSize: number) => {
-    setPageSize(newPageSize)
-    setPage(1)
     setFilter((prev) => ({
       ...prev,
       pagination: { page: 1, pageSize: newPageSize },
@@ -89,13 +88,13 @@ export function useMembersTable(): UseMembersTableResult {
 
   const handleFilterChange = useCallback(
     (newFilter: Partial<MemberFilter>) => {
-      setPage(1)
       setSelectedMembers([]) // Clear selection on filter change
 
       // Always reset filter with only the provided values
       setFilter((prev) => {
+        const currentPageSize = prev.pagination?.pageSize || 25
         const baseFilter: MemberFilter = {
-          pagination: { page: 1, pageSize },
+          pagination: { page: 1, pageSize: currentPageSize },
         }
 
         // Only add fields that are explicitly provided
@@ -117,7 +116,7 @@ export function useMembersTable(): UseMembersTableResult {
         return baseFilter
       })
     },
-    [pageSize]
+    []
   )
 
   const handleSelectionChange = useCallback((selectedIds: string[]) => {

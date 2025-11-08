@@ -89,7 +89,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
   // Query for users
   const { data, loading, error, refetch } = useQuery<ListUsersResponse>(LIST_USERS, {
     variables: {
-      page: page + 1,
+      page: 1,
       pageSize: 100, // Get all users, we'll filter client-side
     },
   })

@@ -76,6 +76,8 @@ const ProfilePage = lazyWithPreload(() => import('@/pages/profile/ProfilePage'),
 
 const ReportsPage = lazyWithPreload(() => import('@/pages/ReportsPage'))
 
+const AnnualFeesPage = lazyWithPreload(() => import('@/pages/AnnualFeesPage'))
+
 // Layout components
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { MainLayout } from '@/layouts/MainLayout'
@@ -171,6 +173,7 @@ export const AppRoutes = () => {
               <Route path="/users" element={<UsersPage />} />
               <Route path="/reports" element={<ReportsPage />} />
               <Route path="/cash-flow" element={<CashFlowPage />} />
+              <Route path="/annual-fees" element={<AnnualFeesPage />} />
             </Route>
 
             {/* Routes accessible to all authenticated users */}

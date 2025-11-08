@@ -1,0 +1,58 @@
+{
+  "page": {
+    "title": "Cuotas Anuales",
+    "generateButton": "Generar Cuotas",
+    "about": {
+      "title": "Acerca de las Cuotas Anuales",
+      "description": "Las cuotas anuales se generan automáticamente para todos los socios activos al inicio de cada año.",
+      "howItWorks": "El sistema calcula el monto de la cuota según el tipo de membresía (individual o familiar) y crea pagos pendientes para cada socio."
+    }
+  },
+  "generation": {
+    "dialog": {
+      "title": "Generar Cuotas Anuales"
+    },
+    "steps": {
+      "configure": "Configurar",
+      "preview": "Vista Previa",
+      "generate": "Generar"
+    },
+    "form": {
+      "description": "Configure los montos para las cuotas anuales del año seleccionado.",
+      "year": "Año",
+      "yearHelp": "Año para el cual se generarán las cuotas",
+      "baseFeeAmount": "Cuota Base",
+      "baseFeeAmountHelp": "Monto base de la cuota anual",
+      "familyFeeExtra": "Extra Familiar",
+      "familyFeeExtraHelp": "Monto adicional para membresías familiares",
+      "continue": "Continuar"
+    },
+    "preview": {
+      "title": "Vista Previa - Año {{year}}",
+      "alreadyExistsWarning": "Ya existen cuotas generadas para este año. Al confirmar se crearán solo los pagos faltantes.",
+      "baseFeeAmount": "Cuota Base",
+      "familyFeeExtra": "Extra Familiar",
+      "individualMembers": "Socios Individuales",
+      "familyMembers": "Socios Familiares",
+      "totalMembers": "Total de Socios",
+      "totalExpected": "Total Esperado",
+      "confirm": "Confirmar y Generar"
+    },
+    "generating": {
+      "title": "Generando cuotas...",
+      "message": "Por favor espere mientras se generan los pagos para todos los socios activos."
+    },
+    "result": {
+      "success": "Cuotas Generadas Exitosamente",
+      "error": "Error al Generar Cuotas",
+      "summary": "Resumen",
+      "totalMembers": "Socios Procesados",
+      "paymentsCreated": "Pagos Creados",
+      "totalExpectedAmount": "Monto Total",
+      "close": "Cerrar"
+    }
+  },
+  "common": {
+    "back": "Volver"
+  }
+}

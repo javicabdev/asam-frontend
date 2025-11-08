@@ -39,6 +39,8 @@ import reportsEs from './locales/es/reports.json'
 import reportsFr from './locales/fr/reports.json'
 import reportsWo from './locales/wo/reports.json'
 
+import feesEs from './locales/es/fees.json'
+
 export const defaultNS = 'common'
 export const resources = {
   es: {
@@ -51,6 +53,7 @@ export const resources = {
     users: usersEs,
     cashflow: cashflowEs,
     reports: reportsEs,
+    fees: feesEs,
   },
   fr: {
     common: commonFr,
@@ -106,7 +109,7 @@ void i18n
     defaultNS,
     lng: 'es', // Default language
     fallbackLng: 'es',
-    ns: ['common', 'auth', 'dashboard', 'members', 'payments', 'navigation', 'users', 'cashflow', 'reports'],
+    ns: ['common', 'auth', 'dashboard', 'members', 'payments', 'navigation', 'users', 'cashflow', 'reports', 'fees'],
 
     interpolation: {
       escapeValue: false, // React already escapes values

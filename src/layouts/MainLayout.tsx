@@ -35,6 +35,7 @@ import {
   Settings as SettingsIcon,
   EmailOutlined as EmailIcon,
   VerifiedUser as VerifiedIcon,
+  CalendarMonth as CalendarIcon,
 } from '@mui/icons-material'
 import { useAuth } from '@/hooks/useAuth'
 import { PageTransition, LanguageSelector, ThemeToggle } from '@/components/common'
@@ -71,6 +72,12 @@ const navigationItems: NavItem[] = [
     text: 'menu.payments',
     icon: <PaymentIcon />,
     path: '/payments',
+  },
+  {
+    text: 'menu.annualFees',
+    icon: <CalendarIcon />,
+    path: '/annual-fees',
+    roles: ['admin'],
   },
   {
     text: 'menu.cashFlow',

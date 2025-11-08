@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   Box,
@@ -29,6 +29,14 @@ export function PaymentFilters({ filters, onFilterChange, onReset }: PaymentFilt
   const [status, setStatus] = useState<PaymentFiltersState['status']>(filters.status)
   const [paymentMethod, setPaymentMethod] = useState<string>(filters.paymentMethod)
   const [selectedMember, setSelectedMember] = useState<Member | null>(null)
+
+  // Sincronizar estado local con filtros externos cuando cambian
+  useEffect(() => {
+    setStartDate(filters.startDate)
+    setEndDate(filters.endDate)
+    setStatus(filters.status)
+    setPaymentMethod(filters.paymentMethod)
+  }, [filters])
 
   const handleApplyFilters = () => {
     // Ajustar endDate para incluir todo el día (hasta las 23:59:59.999)

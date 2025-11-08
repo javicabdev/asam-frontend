@@ -144,6 +144,15 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
           </Typography>
 
           <Typography variant="body2" color="text.secondary">
+            {t('confirmDialog.concept')}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            {payment.membershipFeeYear
+              ? t('confirmDialog.conceptAnnualFee', { year: payment.membershipFeeYear })
+              : t('confirmDialog.conceptOther')}
+          </Typography>
+
+          <Typography variant="body2" color="text.secondary">
             {t('confirmDialog.amount')}
           </Typography>
           <Typography variant="h5" color="success.main">

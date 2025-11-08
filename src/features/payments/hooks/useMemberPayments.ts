@@ -20,6 +20,10 @@ export interface MemberPayment {
   status: string
   payment_method: string | null  // Can be null for pending payments
   notes?: string | null
+  membership_fee?: {
+    id: string
+    year: number
+  } | null
 }
 
 interface UseMemberPaymentsResult {

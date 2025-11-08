@@ -109,6 +109,7 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
         status: payment.status as 'PENDING' | 'PAID' | 'CANCELLED',
         paymentMethod: payment.payment_method,
         notes: payment.notes,
+        membershipFeeYear: payment.membership_fee?.year ?? null,
       }
 
       await generateReceipt(paymentListItem, true)
@@ -138,6 +139,7 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
       status: payment.status as 'PENDING' | 'PAID' | 'CANCELLED',
       paymentMethod: payment.payment_method,
       notes: payment.notes,
+      membershipFeeYear: payment.membership_fee?.year ?? null,
     }
 
     setConfirmDialog({ open: true, payment: paymentListItem })
@@ -213,6 +215,7 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
             <Table size="small">
               <TableHead>
                 <TableRow>
+                  <TableCell>{t('history.columnAnnualFee')}</TableCell>
                   <TableCell>{t('history.columnDate')}</TableCell>
                   <TableCell>{t('history.columnMethod')}</TableCell>
                   <TableCell align="right">{t('history.columnAmount')}</TableCell>
@@ -230,6 +233,12 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
                       },
                     }}
                   >
+                    <TableCell>
+                      {payment.membership_fee?.year
+                        ? t('history.annualFeeYear', { year: payment.membership_fee.year })
+                        : t('history.otherPayment')
+                      }
+                    </TableCell>
                     <TableCell>{formatDate(payment.payment_date)}</TableCell>
                     <TableCell>{translateMethod(payment.payment_method)}</TableCell>
                     <TableCell align="right">

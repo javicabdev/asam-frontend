@@ -17,6 +17,7 @@ interface QuickAction {
   description: string
   icon: React.ReactNode
   path: string
+  state?: any // Optional navigation state
   color: 'primary' | 'secondary' | 'success' | 'warning' | 'info'
 }
 
@@ -45,6 +46,7 @@ export default function QuickActions() {
       description: t('quickActions.cashEntryDescription'),
       icon: <ReceiptLong />,
       path: '/cash-flow',
+      state: { openTransactionForm: true },
       color: 'secondary',
     },
     {
@@ -120,7 +122,7 @@ export default function QuickActions() {
               key={index}
               fullWidth
               variant="outlined"
-              onClick={() => navigate(action.path)}
+              onClick={() => navigate(action.path, { state: action.state })}
               sx={{
                 p: 2,
                 justifyContent: 'flex-start',

@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 import {
   Box,
   Typography,
@@ -26,12 +27,20 @@ export default function CashFlowPage() {
   const { t } = useTranslation('cashflow')
   const { user } = useAuth()
   const isAdmin = user?.role === 'admin'
+  const location = useLocation()
 
   // Estados para filtros y diálogos
   const [filters, setFilters] = useState<CashFlowFiltersType>({})
   const [openTransactionForm, setOpenTransactionForm] = useState(false)
   const [openRepatriationForm, setOpenRepatriationForm] = useState(false)
   const [transactionToEdit, setTransactionToEdit] = useState<any>(null)
+
+  // Abrir diálogo automáticamente si viene desde quick actions
+  useEffect(() => {
+    if (location.state?.openTransactionForm) {
+      setOpenTransactionForm(true)
+    }
+  }, [location.state])
 
   // Queries
   const { balance, loading: balanceLoading } = useBalance()

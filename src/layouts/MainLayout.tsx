@@ -352,7 +352,10 @@ export const MainLayout: React.FC = () => {
           <MenuItem
             onClick={() => {
               handleMenuClose()
-              navigate('/email-verification-check')
+              // Pequeño delay para asegurar que el menú se cierra antes de navegar
+              setTimeout(() => {
+                navigate('/email-verification-check')
+              }, 100)
             }}
           >
             <ListItemIcon>
@@ -367,7 +370,10 @@ export const MainLayout: React.FC = () => {
         <MenuItem
           onClick={() => {
             handleMenuClose()
-            navigate('/profile')
+            // Pequeño delay para asegurar que el menú se cierra antes de navegar
+            setTimeout(() => {
+              navigate('/profile')
+            }, 100)
           }}
         >
           <ListItemIcon>

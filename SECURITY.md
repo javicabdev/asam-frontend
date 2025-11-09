@@ -2,6 +2,19 @@
 
 Esta guía documenta las medidas de seguridad implementadas y pendientes en el frontend de ASAM.
 
+## 💰 Filosofía: 100% Gratuito
+
+**TODAS** las herramientas y servicios mencionados en esta guía son **completamente gratuitos**:
+- ✅ **npm audit**: Built-in con npm (gratuito)
+- ✅ **ESLint + plugins**: Open source (gratuito)
+- ✅ **OWASP ZAP**: Open source (gratuito)
+- ✅ **GitHub Dependabot**: Gratuito en todos los repos
+- ✅ **GitHub Actions**: Gratuito para repos públicos, 2000 min/mes para privados
+- ✅ **GitHub Advanced Security**: Gratuito para repos públicos
+- ✅ **Netlify**: Tier gratuito (suficiente para este proyecto)
+
+**No se requiere ninguna suscripción de pago.**
+
 ## 🛡️ SAST (Static Application Security Testing)
 
 ### ✅ Implementado
@@ -68,36 +81,20 @@ Luego actualizar `.eslintrc.json`:
 - ✅ `eval()` y `Function()` (Code Injection)
 - ✅ RegExp inseguros (ReDoS)
 
-#### 2. Análisis de Dependencias (SCA)
+#### 2. Análisis de Dependencias (SCA) - 100% Gratuito
 
-**Herramientas recomendadas:**
+**Herramientas gratuitas recomendadas:**
 
-1. **npm audit (Básico - KISS)**
+1. **npm audit (Built-in - GRATUITO)**
    ```bash
    npm audit
    npm audit fix
    ```
+   - Ya viene con npm, sin instalación adicional
+   - Base de datos de vulnerabilidades de npm
+   - Suficiente para el 90% de los casos
 
-2. **Snyk (Recomendado)**
-
-   a. Instalar CLI:
-   ```bash
-   npm install -g snyk
-   snyk auth
-   ```
-
-   b. Escanear proyecto:
-   ```bash
-   snyk test                    # Dependencias
-   snyk code test               # Código fuente (SAST)
-   ```
-
-   c. Integrar en GitHub:
-   - Ir a https://app.snyk.io
-   - Conectar repositorio
-   - Habilitar checks en PRs
-
-3. **GitHub Dependabot** (Gratuito)
+2. **GitHub Dependabot (GRATUITO)**
    - Crear `.github/dependabot.yml`:
    ```yaml
    version: 2
@@ -109,7 +106,13 @@ Luego actualizar `.eslintrc.json`:
        open-pull-requests-limit: 10
    ```
 
-#### 3. Scripts de Seguridad en package.json
+3. **GitHub Advanced Security (GRATUITO para repos públicos)**
+   - Code scanning automático
+   - Secret scanning
+   - Dependabot alerts
+   - Se habilita en Settings → Security → Code security and analysis
+
+#### 3. Scripts de Seguridad en package.json - 100% Gratuito
 
 Agregar al `package.json`:
 
@@ -118,7 +121,6 @@ Agregar al `package.json`:
   "scripts": {
     "security:audit": "npm audit --audit-level=moderate",
     "security:check": "npm run security:audit && npm run lint:strict",
-    "security:snyk": "snyk test && snyk code test",
     "precommit": "npm run type-check && npm run security:check"
   }
 }
@@ -153,13 +155,17 @@ Agregar al `package.json`:
 
 ### 📋 Pendiente de Implementación
 
-#### 1. OWASP ZAP Scanning
+#### 1. OWASP ZAP Scanning - 100% GRATUITO
+
+OWASP ZAP es completamente open source y gratuito.
 
 **Setup local (KISS):**
 
 ```bash
 # Instalar ZAP (macOS)
 brew install --cask owasp-zap
+
+# O descargar desde: https://www.zaproxy.org/download/
 
 # Ejecutar app localmente
 npm run dev
@@ -175,12 +181,14 @@ npm run dev
 - Cookies sin flags `Secure` o `HttpOnly`
 - CORS mal configurado
 
-#### 2. CI/CD Integration
+#### 2. CI/CD Integration - 100% GRATUITO (GitHub Actions)
 
-Agregar al pipeline de GitHub Actions (`.github/workflows/security.yml`):
+GitHub Actions es gratuito para repos públicos y tiene 2000 minutos/mes para repos privados.
+
+Agregar al pipeline (`.github/workflows/security.yml`):
 
 ```yaml
-name: Security Scan
+name: Security Scan - 100% Free Tools
 
 on:
   pull_request:
@@ -196,17 +204,21 @@ jobs:
         with:
           node-version: 18
       - run: npm ci
+
+      # npm audit es gratuito
       - name: Run npm audit
         run: npm audit --audit-level=moderate
-      - name: Run Snyk
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      # ESLint security checks (gratuito)
+      - name: Run ESLint security checks
+        run: npm run lint:strict
 
   dast:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      # OWASP ZAP es open source y gratuito
       - name: ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.7.0
         with:
@@ -352,29 +364,31 @@ useQuery(query, { variables: { userId } })
 
 ---
 
-## 📚 Recursos
+## 📚 Recursos Gratuitos
 
-- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
-- [React Security Best Practices](https://react.dev/learn/security)
-- [Snyk Learning](https://learn.snyk.io/)
-- [Content Security Policy Reference](https://content-security-policy.com/)
-- [Security Headers Check](https://securityheaders.com/)
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/) - Gratuito
+- [React Security Best Practices](https://react.dev/learn/security) - Gratuito
+- [Content Security Policy Reference](https://content-security-policy.com/) - Gratuito
+- [Security Headers Check](https://securityheaders.com/) - Gratuito
+- [OWASP ZAP Documentation](https://www.zaproxy.org/docs/) - Gratuito
+- [MDN Web Security](https://developer.mozilla.org/en-US/docs/Web/Security) - Gratuito
 
 ---
 
-## 🔄 Próximos Pasos
+## 🔄 Próximos Pasos (100% Gratuito)
 
-1. **Inmediato (Esta semana)**
-   - [ ] Instalar `eslint-plugin-react` y `eslint-plugin-security`
-   - [ ] Ejecutar `npm audit` y corregir vulnerabilidades críticas
-   - [ ] Crear cuenta en Snyk y escanear el proyecto
+1. **Inmediato (Esta semana) - Costo: $0**
+   - [ ] Instalar `eslint-plugin-react` y `eslint-plugin-security` (gratuito)
+   - [ ] Ejecutar `npm audit` y corregir vulnerabilidades críticas (gratuito)
+   - [ ] Verificar headers de seguridad en https://securityheaders.com/ (gratuito)
 
-2. **Corto plazo (Este mes)**
-   - [ ] Configurar Dependabot
-   - [ ] Ejecutar OWASP ZAP localmente
+2. **Corto plazo (Este mes) - Costo: $0**
+   - [ ] Configurar Dependabot (gratuito para todos los repos)
+   - [ ] Descargar y ejecutar OWASP ZAP localmente (gratuito)
    - [ ] Revisar código en busca de `dangerouslySetInnerHTML`
+   - [ ] Habilitar GitHub Advanced Security si el repo es público (gratuito)
 
-3. **Largo plazo (Este trimestre)**
-   - [ ] Integrar Snyk en CI/CD
+3. **Largo plazo (Este trimestre) - Costo: $0**
+   - [ ] Integrar npm audit en CI/CD con GitHub Actions (gratuito)
    - [ ] Mejorar CSP para eliminar `unsafe-*`
-   - [ ] Configurar ZAP baseline scan en staging
+   - [ ] Configurar ZAP baseline scan en staging con GitHub Actions (gratuito)

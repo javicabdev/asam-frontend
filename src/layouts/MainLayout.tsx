@@ -106,8 +106,11 @@ export const MainLayout: React.FC = () => {
 
   // Close menu when location changes
   useEffect(() => {
-    setAnchorEl(null)
-  }, [location.pathname])
+    if (anchorEl) {
+      console.log('🔍 Location changed, closing menu')
+      setAnchorEl(null)
+    }
+  }, [location.pathname, anchorEl])
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
@@ -310,6 +313,8 @@ export const MainLayout: React.FC = () => {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
         disableScrollLock={true}
+        disablePortal={false}
+        keepMounted={false}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'right',
@@ -351,11 +356,9 @@ export const MainLayout: React.FC = () => {
         {user && !user.emailVerified && (
           <MenuItem
             onClick={() => {
-              handleMenuClose()
-              // Pequeño delay para asegurar que el menú se cierra antes de navegar
-              setTimeout(() => {
-                navigate('/email-verification-check')
-              }, 100)
+              console.log('🔍 Email verification clicked')
+              setAnchorEl(null)
+              navigate('/email-verification-check', { replace: true })
             }}
           >
             <ListItemIcon>
@@ -369,11 +372,9 @@ export const MainLayout: React.FC = () => {
 
         <MenuItem
           onClick={() => {
-            handleMenuClose()
-            // Pequeño delay para asegurar que el menú se cierra antes de navegar
-            setTimeout(() => {
-              navigate('/profile')
-            }, 100)
+            console.log('🔍 Profile clicked')
+            setAnchorEl(null)
+            navigate('/profile', { replace: true })
           }}
         >
           <ListItemIcon>

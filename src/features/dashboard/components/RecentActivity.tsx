@@ -45,36 +45,36 @@ export default function RecentActivity({
   const { t, i18n } = useTranslation('dashboard')
 
   const getActivityIcon = (type: ActivityType) => {
-    const iconMap: Record<ActivityType, JSX.Element> = {
+    const iconMap: Record<string, JSX.Element> = {
       MEMBER_REGISTERED: <PersonAdd />,
       PAYMENT_RECEIVED: <Payment />,
       FAMILY_CREATED: <FamilyRestroom />,
       MEMBER_DEACTIVATED: <RemoveCircle />,
       TRANSACTION_RECORDED: <Receipt />,
     }
-    return iconMap[type] || <Edit />
+    return Object.prototype.hasOwnProperty.call(iconMap, type) ? iconMap[type] : <Edit />
   }
 
   const getActivityColor = (type: ActivityType) => {
-    const colorMap: Record<ActivityType, string> = {
+    const colorMap: Record<string, string> = {
       MEMBER_REGISTERED: theme.palette.success.main,
       PAYMENT_RECEIVED: theme.palette.primary.main,
       FAMILY_CREATED: theme.palette.secondary.main,
       MEMBER_DEACTIVATED: theme.palette.error.main,
       TRANSACTION_RECORDED: theme.palette.info.main,
     }
-    return colorMap[type] || theme.palette.grey[500]
+    return Object.prototype.hasOwnProperty.call(colorMap, type) ? colorMap[type] : theme.palette.grey[500]
   }
 
   const getActivityLabel = (type: ActivityType) => {
-    const labelMap: Record<ActivityType, string> = {
+    const labelMap: Record<string, string> = {
       MEMBER_REGISTERED: t('recentActivity.newMember'),
       PAYMENT_RECEIVED: t('recentActivity.paymentReceived'),
       FAMILY_CREATED: t('recentActivity.familyAdded'),
       MEMBER_DEACTIVATED: t('recentActivity.memberUpdated'),
       TRANSACTION_RECORDED: t('recentActivity.transactionRecorded'),
     }
-    return labelMap[type] || t('recentActivity.title')
+    return Object.prototype.hasOwnProperty.call(labelMap, type) ? labelMap[type] : t('recentActivity.title')
   }
 
   const formatTime = (timestamp: string) => {

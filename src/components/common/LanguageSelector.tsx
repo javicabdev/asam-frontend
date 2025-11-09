@@ -59,7 +59,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
     }
   }
 
-  const currentLanguage = languages[language] || languages.es
+  const currentLanguage = Object.prototype.hasOwnProperty.call(languages, language) ? languages[language] : languages.es
 
   // Determine icon color based on theme mode and context
   const getIconColor = (): 'primary' | 'inherit' => {

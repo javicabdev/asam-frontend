@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Alert, Snackbar, Button } from '@mui/material'
 import { useAuthStore } from '@/stores/authStore'
 import { useNavigate } from 'react-router-dom'
@@ -11,6 +11,14 @@ export const SessionExpirationWarning: React.FC = () => {
   const { expiresAt, isAuthenticated, logout } = useAuthStore()
   const [showWarning, setShowWarning] = useState(false)
   const navigate = useNavigate()
+
+  const handleLogout = useCallback(() => {
+    setShowWarning(false)
+    logout()
+    navigate('/login', {
+      state: { message: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.' },
+    })
+  }, [logout, navigate])
 
   useEffect(() => {
     if (!isAuthenticated || !expiresAt) {
@@ -40,15 +48,7 @@ export const SessionExpirationWarning: React.FC = () => {
     }, 30 * 1000)
 
     return () => clearInterval(intervalId)
-  }, [expiresAt, isAuthenticated])
-
-  const handleLogout = () => {
-    setShowWarning(false)
-    logout()
-    navigate('/login', {
-      state: { message: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.' },
-    })
-  }
+  }, [expiresAt, isAuthenticated, handleLogout])
 
   const handleStayLoggedIn = () => {
     setShowWarning(false)

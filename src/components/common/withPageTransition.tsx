@@ -7,11 +7,15 @@ export const withPageTransition = <P extends object>(
   Component: React.ComponentType<P>,
   transitionType: TransitionType = 'fade'
 ) => {
-  return (props: P) => (
+  const WrappedComponent = (props: P) => (
     <PageTransition type={transitionType}>
       <div>
         <Component {...props} />
       </div>
     </PageTransition>
   )
+
+  WrappedComponent.displayName = `withPageTransition(${Component.displayName || Component.name || 'Component'})`
+
+  return WrappedComponent
 }

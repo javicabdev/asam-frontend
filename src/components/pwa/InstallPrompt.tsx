@@ -138,8 +138,8 @@ export const InstallPrompt: React.FC = () => {
               <li>
                 Toca el botón compartir <span style={{ fontFamily: 'Arial' }}>⎘</span>
               </li>
-              <li>Selecciona "Añadir a pantalla de inicio"</li>
-              <li>Toca "Añadir"</li>
+              <li>Selecciona &ldquo;Añadir a pantalla de inicio&rdquo;</li>
+              <li>Toca &ldquo;Añadir&rdquo;</li>
             </ol>
           </Box>
         </Alert>

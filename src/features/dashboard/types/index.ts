@@ -156,10 +156,13 @@ export function convertTrendsToChartData(
   membershipTrend: MembershipTrendData[],
   revenueTrend: RevenueTrendData[]
 ): MonthlyStats[] {
-  return membershipTrend.map((trend, index) => ({
-    month: trend.month,
-    newMembers: trend.newMembers,
-    totalPayments: 0, // No disponible directamente
-    paymentAmount: revenueTrend[index]?.revenue || 0,
-  }))
+  return membershipTrend.map((trend, index) => {
+    const revenueItem = index < revenueTrend.length ? revenueTrend[index] : null
+    return {
+      month: trend.month,
+      newMembers: trend.newMembers,
+      totalPayments: 0, // No disponible directamente
+      paymentAmount: revenueItem?.revenue || 0,
+    }
+  })
 }

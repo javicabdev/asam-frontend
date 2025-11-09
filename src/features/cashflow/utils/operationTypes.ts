@@ -68,7 +68,13 @@ export const OPERATION_TYPES: Record<OperationType, OperationTypeConfig> = {
 }
 
 // Helper: obtener config de un tipo
-export const getOperationTypeConfig = (type: OperationType) => OPERATION_TYPES[type]
+export const getOperationTypeConfig = (type: OperationType) => {
+  if (Object.prototype.hasOwnProperty.call(OPERATION_TYPES, type)) {
+    return OPERATION_TYPES[type]
+  }
+  // Fallback por si acaso
+  return OPERATION_TYPES[OperationType.INGRESO_OTRO]
+}
 
 // Helper: obtener solo ingresos
 export const getIncomeTypes = (): OperationType[] => {
@@ -86,5 +92,8 @@ export const getExpenseTypes = (): OperationType[] => {
 
 // Helper: determinar categoría desde tipo
 export const getCategoryFromType = (type: OperationType): OperationCategory => {
-  return OPERATION_TYPES[type].category
+  if (Object.prototype.hasOwnProperty.call(OPERATION_TYPES, type)) {
+    return OPERATION_TYPES[type].category
+  }
+  return 'INGRESO'
 }

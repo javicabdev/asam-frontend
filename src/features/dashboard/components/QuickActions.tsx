@@ -57,14 +57,14 @@ export default function QuickActions() {
   ]
 
   const getColorValue = (color: QuickAction['color']) => {
-    const colorMap = {
+    const colorMap: Record<string, string> = {
       primary: theme.palette.primary.main,
       secondary: theme.palette.secondary.main,
       success: theme.palette.success.main,
       warning: theme.palette.warning.main,
       info: theme.palette.info.main,
     }
-    return colorMap[color]
+    return Object.prototype.hasOwnProperty.call(colorMap, color) ? colorMap[color] : theme.palette.primary.main
   }
 
   return (

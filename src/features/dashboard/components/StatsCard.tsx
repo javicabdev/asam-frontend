@@ -18,7 +18,7 @@ export default function StatsCard({
   const { i18n } = useTranslation()
 
   const getColorValue = () => {
-    const colorMap = {
+    const colorMap: Record<string, string> = {
       primary: theme.palette.primary.main,
       secondary: theme.palette.secondary.main,
       success: theme.palette.success.main,
@@ -26,18 +26,18 @@ export default function StatsCard({
       error: theme.palette.error.main,
       info: theme.palette.info.main,
     }
-    return colorMap[color]
+    return Object.prototype.hasOwnProperty.call(colorMap, color) ? colorMap[color] : theme.palette.primary.main
   }
 
   const formatValue = (val: number | string) => {
     if (typeof val === 'number') {
       // Mapear idioma a locale
-      const localeMap: { [key: string]: string } = {
+      const localeMap: Record<string, string> = {
         es: 'es-ES',
         fr: 'fr-FR',
         wo: 'fr-SN', // Usar formato francés para wolof en Senegal
       }
-      const locale = localeMap[i18n.language] || 'es-ES'
+      const locale = Object.prototype.hasOwnProperty.call(localeMap, i18n.language) ? localeMap[i18n.language] : 'es-ES'
       
       if (isCurrency) {
         return new Intl.NumberFormat(locale, {

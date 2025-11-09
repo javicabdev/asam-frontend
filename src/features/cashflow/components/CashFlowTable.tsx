@@ -10,6 +10,8 @@ import {
   GridToolbarFilterButton,
   GridToolbarDensitySelector,
   GridToolbarQuickFilter,
+  GridValueGetterParams,
+  GridRenderCellParams,
   esES,
 } from '@mui/x-data-grid'
 import { Box, Chip } from '@mui/material'
@@ -18,7 +20,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
-import { CashFlowTransaction } from '../types'
+import { CashFlowTransaction, OperationType } from '../types'
 import { formatTransactionDate, formatAmount, formatCurrency } from '../utils/formatters'
 import { getOperationTypeConfig } from '../utils/operationTypes'
 import { ConfirmDeleteDialog } from './ConfirmDeleteDialog'
@@ -166,15 +168,15 @@ export const CashFlowTable = ({
       headerName: t('table.columns.date'),
       width: 120,
       sortable: false,
-      valueGetter: (params) => formatTransactionDate(params.row.date),
+      valueGetter: (params: GridValueGetterParams<CashFlowTransaction>) => formatTransactionDate(params.row.date),
     },
     {
       field: 'operationType',
       headerName: t('table.columns.type'),
       width: 80,
       sortable: false,
-      renderCell: (params) => {
-        const config = getOperationTypeConfig(params.value)
+      renderCell: (params: GridRenderCellParams<CashFlowTransaction, OperationType>) => {
+        const config = getOperationTypeConfig(params.value as OperationType)
         return <span>{config.icon}</span>
       },
     },
@@ -183,7 +185,7 @@ export const CashFlowTable = ({
       headerName: t('table.columns.category'),
       width: 180,
       sortable: false,
-      renderCell: (params) => {
+      renderCell: (params: GridRenderCellParams<CashFlowTransaction>) => {
         const config = getOperationTypeConfig(params.row.operationType)
         return (
           <Chip

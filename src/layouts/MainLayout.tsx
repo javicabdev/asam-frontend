@@ -301,11 +301,6 @@ export const MainLayout: React.FC = () => {
                 vertical: 'top',
                 horizontal: 'right',
               }}
-              slotProps={{
-                backdrop: {
-                  invisible: false,
-                },
-              }}
             >
               <MenuItem disabled>
                 <ListItemIcon>

@@ -104,13 +104,10 @@ export const MainLayout: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
-  // Close menu when location changes
+  // Close menu when location changes (including browser back/forward navigation)
   useEffect(() => {
-    if (anchorEl) {
-      console.log('🔍 Location changed, closing menu')
-      setAnchorEl(null)
-    }
-  }, [location.pathname, anchorEl])
+    handleMenuClose()
+  }, [location.pathname])
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
@@ -356,8 +353,6 @@ export const MainLayout: React.FC = () => {
         {user && !user.emailVerified && (
           <MenuItem
             onClick={() => {
-              console.log('🔍 Email verification clicked')
-              setAnchorEl(null)
               navigate('/email-verification-check', { replace: true })
             }}
           >
@@ -372,8 +367,6 @@ export const MainLayout: React.FC = () => {
 
         <MenuItem
           onClick={() => {
-            console.log('🔍 Profile clicked')
-            setAnchorEl(null)
             navigate('/profile', { replace: true })
           }}
         >

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import {
   AppBar,
@@ -103,6 +103,11 @@ export const MainLayout: React.FC = () => {
 
   const [mobileOpen, setMobileOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+  // Close menu when location changes
+  useEffect(() => {
+    setAnchorEl(null)
+  }, [location.pathname])
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
@@ -271,7 +276,7 @@ export const MainLayout: React.FC = () => {
             </Box>
 
             {/* Avatar button - clickable anchor for menu */}
-            <Tooltip title={t('menu.profile', { ns: 'common' })}>
+            <Tooltip title={t('menu.profile', { ns: 'navigation' })}>
               <IconButton
                 onClick={handleMenuOpen}
                 size="small"
@@ -368,7 +373,7 @@ export const MainLayout: React.FC = () => {
           <ListItemIcon>
             <SettingsIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary={t('menu.profile')} />
+          <ListItemText primary={t('menu.profile', { ns: 'navigation' })} />
         </MenuItem>
 
         <MenuItem onClick={() => void handleLogout()}>

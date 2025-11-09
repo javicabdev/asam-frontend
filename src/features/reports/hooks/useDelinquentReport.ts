@@ -101,14 +101,29 @@ export function useDelinquentReport() {
   }
 
   // Recalcular el summary basándose en los deudores filtrados actuales
+  // y aplicar ordenamiento estable para evitar cambios aleatorios
   const recalculatedData = useMemo(() => {
     if (!data?.getDelinquentReport) return null
 
-    const debtors = data.getDelinquentReport.debtors || []
-    const recalculatedSummary = calculateSummaryFromDebtors(debtors)
+    // Ordenar deudores de forma estable
+    // Primario: oldestDebtDays (ya viene del backend)
+    // Secundario: ID del deudor (para consistencia)
+    const sortedDebtors = [...(data.getDelinquentReport.debtors || [])].sort((a, b) => {
+      // Ordenamiento primario por días de mora (descendente)
+      const daysDiff = b.oldestDebtDays - a.oldestDebtDays
+      if (daysDiff !== 0) return daysDiff
+
+      // Ordenamiento secundario por ID para consistencia (ascendente)
+      const idA = a.memberId || a.familyId || ''
+      const idB = b.memberId || b.familyId || ''
+      return idA.localeCompare(idB)
+    })
+
+    const recalculatedSummary = calculateSummaryFromDebtors(sortedDebtors)
 
     return {
       ...data.getDelinquentReport,
+      debtors: sortedDebtors,
       summary: recalculatedSummary,
     }
   }, [data])

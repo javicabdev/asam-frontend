@@ -32,17 +32,28 @@
   force = true
   headers = {X-From = "Netlify"}
 
-# Headers de seguridad
+# Headers de seguridad (DAST: Protección contra XSS, Clickjacking, etc.)
 [[headers]]
   for = "/*"
   [headers.values]
-    # Seguridad básica
+    # HSTS: Fuerza HTTPS por 1 año (DAST requerimiento crítico)
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+    # Previene clickjacking (DAST: X-Frame-Options)
     X-Frame-Options = "DENY"
+
+    # Previene MIME type sniffing (DAST requerimiento)
     X-Content-Type-Options = "nosniff"
+
+    # XSS Protection (legacy, pero aún útil para navegadores antiguos)
     X-XSS-Protection = "1; mode=block"
+
+    # Controla qué información de referrer se envía
     Referrer-Policy = "strict-origin-when-cross-origin"
-    
-    # Content Security Policy completa para Material-UI y Apollo
+
+    # Content Security Policy (DAST: Defensa principal contra XSS)
+    # NOTA: 'unsafe-inline' y 'unsafe-eval' son necesarios para Vite + Material-UI
+    # TODO SAST: Migrar a nonces o hashes para eliminar 'unsafe-inline'/'unsafe-eval'
     Content-Security-Policy = """
       default-src 'self';
       script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net;
@@ -57,9 +68,13 @@
       form-action 'self';
       base-uri 'self';
       manifest-src 'self';
+      upgrade-insecure-requests;
     """
-    
-    # Permisos de características
+
+    # CSP en modo reporte (descomentar para debugging sin bloquear)
+    # Content-Security-Policy-Report-Only = "...misma política... report-uri /csp-report"
+
+    # Permisos de características (Feature Policy / Permissions Policy)
     Permissions-Policy = """
       accelerometer=(),
       camera=(),

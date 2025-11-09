@@ -216,6 +216,8 @@ export type DelinquentReportInput = {
    * Default: 0
    */
   minAmount?: InputMaybe<Scalars['Float']['input']>;
+  /** Paginación */
+  pagination?: InputMaybe<PaginationInput>;
   /**
    * Ordenamiento de resultados
    * Valores: "AMOUNT_DESC" | "AMOUNT_ASC" | "DAYS_DESC" | "DAYS_ASC" | "NAME_ASC"
@@ -224,14 +226,16 @@ export type DelinquentReportInput = {
   sortBy?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** Respuesta del informe de morosos */
+/** Respuesta del informe de morosos con paginación */
 export type DelinquentReportResponse = {
   __typename?: 'DelinquentReportResponse';
-  /** Lista de deudores (socios o familias) */
+  /** Lista de deudores (socios o familias) paginados */
   debtors: Array<Debtor>;
   /** Fecha en que se generó el informe */
   generatedAt: Scalars['Time']['output'];
-  /** Estadísticas generales del informe */
+  /** Información de paginación */
+  pageInfo: PageInfo;
+  /** Estadísticas generales del informe (basadas en TODOS los deudores, no solo la página actual) */
   summary: DelinquentSummary;
 };
 
@@ -731,7 +735,7 @@ export type Query = {
   listMembers: MemberConnection;
   listMembershipFees: Array<MembershipFee>;
   listPayments: PaymentConnection;
-  listUsers: Array<User>;
+  listUsers: UserConnection;
   ping: Scalars['String']['output'];
   searchMembers: Array<Member>;
   searchMembersWithoutUser: Array<Member>;
@@ -990,6 +994,12 @@ export type User = {
   member?: Maybe<Member>;
   role: UserRole;
   username: Scalars['String']['output'];
+};
+
+export type UserConnection = {
+  __typename?: 'UserConnection';
+  nodes: Array<User>;
+  pageInfo: PageInfo;
 };
 
 export type UserRole =

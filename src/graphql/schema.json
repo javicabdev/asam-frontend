@@ -1951,6 +1951,18 @@
             "deprecationReason": null
           },
           {
+            "name": "pagination",
+            "description": "Paginación",
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "PaginationInput",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "sortBy",
             "description": "Ordenamiento de resultados\nValores: \"AMOUNT_DESC\" | \"AMOUNT_ASC\" | \"DAYS_DESC\" | \"DAYS_ASC\" | \"NAME_ASC\"\nDefault: \"DAYS_DESC\" (más antiguas primero)",
             "type": {
@@ -1970,12 +1982,12 @@
       {
         "kind": "OBJECT",
         "name": "DelinquentReportResponse",
-        "description": "Respuesta del informe de morosos",
+        "description": "Respuesta del informe de morosos con paginación",
         "isOneOf": null,
         "fields": [
           {
             "name": "debtors",
-            "description": "Lista de deudores (socios o familias)",
+            "description": "Lista de deudores (socios o familias) paginados",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -2014,8 +2026,24 @@
             "deprecationReason": null
           },
           {
+            "name": "pageInfo",
+            "description": "Información de paginación",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PageInfo",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "summary",
-            "description": "Estadísticas generales del informe",
+            "description": "Estadísticas generales del informe (basadas en TODOS los deudores, no solo la página actual)",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -6664,17 +6692,9 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "User",
-                    "ofType": null
-                  }
-                }
+                "kind": "OBJECT",
+                "name": "UserConnection",
+                "ofType": null
               }
             },
             "isDeprecated": false,
@@ -8012,6 +8032,58 @@
               "ofType": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "UserConnection",
+        "description": null,
+        "isOneOf": null,
+        "fields": [
+          {
+            "name": "nodes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "User",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pageInfo",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PageInfo",
                 "ofType": null
               }
             },

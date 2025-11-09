@@ -22,21 +22,28 @@ query GetUser($id: ID!) {
 
 query ListUsers($page: Int, $pageSize: Int) {
   listUsers(page: $page, pageSize: $pageSize) {
-    id
-    username
-    email
-    role
-    member {
-      miembro_id
-      numero_socio
-      nombre
-      apellidos
-      correo_electronico
+    nodes {
+      id
+      username
+      email
+      role
+      member {
+        miembro_id
+        numero_socio
+        nombre
+        apellidos
+        correo_electronico
+      }
+      isActive
+      lastLogin
+      emailVerified
+      emailVerifiedAt
     }
-    isActive
-    lastLogin
-    emailVerified
-    emailVerifiedAt
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      totalCount
+    }
   }
 }
 

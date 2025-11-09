@@ -219,6 +219,8 @@ export type DelinquentReportInput = {
    * Default: 0
    */
   minAmount?: InputMaybe<Scalars['Float']['input']>;
+  /** Paginación */
+  pagination?: InputMaybe<PaginationInput>;
   /**
    * Ordenamiento de resultados
    * Valores: "AMOUNT_DESC" | "AMOUNT_ASC" | "DAYS_DESC" | "DAYS_ASC" | "NAME_ASC"
@@ -227,14 +229,16 @@ export type DelinquentReportInput = {
   sortBy?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** Respuesta del informe de morosos */
+/** Respuesta del informe de morosos con paginación */
 export type DelinquentReportResponse = {
   __typename?: 'DelinquentReportResponse';
-  /** Lista de deudores (socios o familias) */
+  /** Lista de deudores (socios o familias) paginados */
   debtors: Array<Debtor>;
   /** Fecha en que se generó el informe */
   generatedAt: Scalars['Time']['output'];
-  /** Estadísticas generales del informe */
+  /** Información de paginación */
+  pageInfo: PageInfo;
+  /** Estadísticas generales del informe (basadas en TODOS los deudores, no solo la página actual) */
   summary: DelinquentSummary;
 };
 
@@ -734,7 +738,7 @@ export type Query = {
   listMembers: MemberConnection;
   listMembershipFees: Array<MembershipFee>;
   listPayments: PaymentConnection;
-  listUsers: Array<User>;
+  listUsers: UserConnection;
   ping: Scalars['String']['output'];
   searchMembers: Array<Member>;
   searchMembersWithoutUser: Array<Member>;
@@ -993,6 +997,12 @@ export type User = {
   member?: Maybe<Member>;
   role: UserRole;
   username: Scalars['String']['output'];
+};
+
+export type UserConnection = {
+  __typename?: 'UserConnection';
+  nodes: Array<User>;
+  pageInfo: PageInfo;
 };
 
 export type UserRole =
@@ -1405,7 +1415,7 @@ export type ListUsersQueryVariables = Exact<{
 }>;
 
 
-export type ListUsersQuery = { __typename?: 'Query', listUsers: Array<{ __typename?: 'User', id: string, username: string, email: string, role: UserRole, isActive: boolean, lastLogin?: string | null, emailVerified: boolean, emailVerifiedAt?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string, correo_electronico?: string | null } | null }> };
+export type ListUsersQuery = { __typename?: 'Query', listUsers: { __typename?: 'UserConnection', nodes: Array<{ __typename?: 'User', id: string, username: string, email: string, role: UserRole, isActive: boolean, lastLogin?: string | null, emailVerified: boolean, emailVerifiedAt?: string | null, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string, correo_electronico?: string | null } | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
 
 export type CreateUserMutationVariables = Exact<{
   input: CreateUserInput;
@@ -4134,21 +4144,28 @@ export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVa
 export const ListUsersDocument = gql`
     query ListUsers($page: Int, $pageSize: Int) {
   listUsers(page: $page, pageSize: $pageSize) {
-    id
-    username
-    email
-    role
-    member {
-      miembro_id
-      numero_socio
-      nombre
-      apellidos
-      correo_electronico
+    nodes {
+      id
+      username
+      email
+      role
+      member {
+        miembro_id
+        numero_socio
+        nombre
+        apellidos
+        correo_electronico
+      }
+      isActive
+      lastLogin
+      emailVerified
+      emailVerifiedAt
     }
-    isActive
-    lastLogin
-    emailVerified
-    emailVerifiedAt
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      totalCount
+    }
   }
 }
     `;

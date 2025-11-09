@@ -7,7 +7,8 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
-    "plugin:react-hooks/recommended"
+    "plugin:react-hooks/recommended",
+    "plugin:react/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -16,7 +17,12 @@
     "project": "./tsconfig.json",
     "warnOnUnsupportedTypeScriptVersion": false
   },
-  "plugins": ["react-refresh"],
+  "plugins": ["react-refresh", "react", "security"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "rules": {
     "react-refresh/only-export-components": [
       "warn",
@@ -35,7 +41,28 @@
     "@typescript-eslint/no-misused-promises": "error",
     "@typescript-eslint/await-thenable": "error",
     "@typescript-eslint/no-unnecessary-type-assertion": "error",
-    "@typescript-eslint/strict-boolean-expressions": "off"
+    "@typescript-eslint/strict-boolean-expressions": "off",
+
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+
+    "react/no-danger": "error",
+    "react/no-danger-with-children": "error",
+    "react/jsx-no-script-url": "error",
+    "react/jsx-no-target-blank": "error",
+
+    "security/detect-eval-with-expression": "error",
+    "security/detect-non-literal-regexp": "warn",
+    "security/detect-unsafe-regex": "error",
+    "security/detect-buffer-noassert": "error",
+    "security/detect-child-process": "warn",
+    "security/detect-disable-mustache-escape": "error",
+    "security/detect-no-csrf-before-method-override": "error",
+    "security/detect-non-literal-fs-filename": "warn",
+    "security/detect-non-literal-require": "warn",
+    "security/detect-object-injection": "warn",
+    "security/detect-possible-timing-attacks": "warn",
+    "security/detect-pseudoRandomBytes": "error"
   },
   "ignorePatterns": [
     "dist",

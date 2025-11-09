@@ -122,6 +122,7 @@ export const MainLayout: React.FC = () => {
   }
 
   const handleNavigate = (path: string) => {
+    console.log('🔍 Navigating to:', path, 'from:', location.pathname)
     navigate(path)
     if (isMobile) {
       setMobileOpen(false)
@@ -300,6 +301,11 @@ export const MainLayout: React.FC = () => {
                 vertical: 'top',
                 horizontal: 'right',
               }}
+              slotProps={{
+                backdrop: {
+                  invisible: false,
+                },
+              }}
             >
               <MenuItem disabled>
                 <ListItemIcon>
@@ -375,6 +381,7 @@ export const MainLayout: React.FC = () => {
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
               width: drawerWidth,
+              zIndex: 1200, // Ensure drawer is above content
             },
           }}
           open
@@ -392,6 +399,8 @@ export const MainLayout: React.FC = () => {
           width: { md: `calc(100% - ${drawerWidth}px)` },
           minHeight: '100vh',
           bgcolor: 'background.default',
+          position: 'relative', // Ensure proper stacking context
+          zIndex: 1, // Below drawer
         }}
       >
         <Toolbar />

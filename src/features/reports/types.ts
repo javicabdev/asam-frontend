@@ -20,6 +20,10 @@ export interface DelinquentReportInput {
   minAmount?: number
   debtorType?: DebtorType | null
   sortBy?: SortBy
+  pagination?: {
+    page?: number
+    pageSize?: number
+  }
 }
 
 export interface DebtorMemberInfo {

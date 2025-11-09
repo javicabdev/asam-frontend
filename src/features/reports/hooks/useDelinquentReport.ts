@@ -39,6 +39,12 @@ export function useDelinquentReport() {
     sortBy: 'DAYS_DESC' as SortBy, // Más antiguos primero por defecto
     minAmount: 0,
     debtorType: null,
+    // IMPORTANTE: Solicitar TODOS los deudores para el informe
+    // El informe no está diseñado para paginación en el frontend
+    pagination: {
+      page: 1,
+      pageSize: 1000, // Suficiente para todos los morosos
+    },
   })
 
   const { data, loading, error, refetch } = useGetDelinquentReportQuery({
@@ -87,6 +93,10 @@ export function useDelinquentReport() {
       sortBy: 'DAYS_DESC' as SortBy,
       minAmount: 0,
       debtorType: null,
+      pagination: {
+        page: 1,
+        pageSize: 1000,
+      },
     })
   }
 

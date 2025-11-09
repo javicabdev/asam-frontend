@@ -1395,7 +1395,7 @@ export type GetDelinquentReportQueryVariables = Exact<{
 }>;
 
 
-export type GetDelinquentReportQuery = { __typename?: 'Query', getDelinquentReport: { __typename?: 'DelinquentReportResponse', generatedAt: string, debtors: Array<{ __typename?: 'Debtor', memberId?: string | null, familyId?: string | null, type: string, totalDebt: number, oldestDebtDays: number, oldestDebtDate: string, lastPaymentDate?: string | null, lastPaymentAmount?: number | null, member?: { __typename?: 'DebtorMemberInfo', id: string, memberNumber: string, firstName: string, lastName: string, email?: string | null, phone?: string | null, status: string } | null, family?: { __typename?: 'DebtorFamilyInfo', id: string, familyName: string, totalMembers: number, primaryMember: { __typename?: 'DebtorMemberInfo', id: string, memberNumber: string, firstName: string, lastName: string, email?: string | null, phone?: string | null } } | null, pendingPayments: Array<{ __typename?: 'PendingPayment', id: string, amount: number, createdAt: string, daysOverdue: number, notes?: string | null }> }>, summary: { __typename?: 'DelinquentSummary', totalDebtors: number, individualDebtors: number, familyDebtors: number, totalDebtAmount: number, averageDaysOverdue: number, averageDebtPerDebtor: number } } };
+export type GetDelinquentReportQuery = { __typename?: 'Query', getDelinquentReport: { __typename?: 'DelinquentReportResponse', generatedAt: string, debtors: Array<{ __typename?: 'Debtor', memberId?: string | null, familyId?: string | null, type: string, totalDebt: number, oldestDebtDays: number, oldestDebtDate: string, lastPaymentDate?: string | null, lastPaymentAmount?: number | null, member?: { __typename?: 'DebtorMemberInfo', id: string, memberNumber: string, firstName: string, lastName: string, email?: string | null, phone?: string | null, status: string } | null, family?: { __typename?: 'DebtorFamilyInfo', id: string, familyName: string, totalMembers: number, primaryMember: { __typename?: 'DebtorMemberInfo', id: string, memberNumber: string, firstName: string, lastName: string, email?: string | null, phone?: string | null } } | null, pendingPayments: Array<{ __typename?: 'PendingPayment', id: string, amount: number, createdAt: string, daysOverdue: number, notes?: string | null }> }>, pageInfo: { __typename?: 'PageInfo', totalCount: number, hasNextPage: boolean, hasPreviousPage: boolean }, summary: { __typename?: 'DelinquentSummary', totalDebtors: number, individualDebtors: number, familyDebtors: number, totalDebtAmount: number, averageDaysOverdue: number, averageDebtPerDebtor: number } } };
 
 export type HealthCheckQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4004,6 +4004,11 @@ export const GetDelinquentReportDocument = gql`
       oldestDebtDate
       lastPaymentDate
       lastPaymentAmount
+    }
+    pageInfo {
+      totalCount
+      hasNextPage
+      hasPreviousPage
     }
     summary {
       totalDebtors

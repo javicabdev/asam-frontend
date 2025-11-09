@@ -40,6 +40,11 @@ query GetDelinquentReport($input: DelinquentReportInput) {
       lastPaymentDate
       lastPaymentAmount
     }
+    pageInfo {
+      totalCount
+      hasNextPage
+      hasPreviousPage
+    }
     summary {
       totalDebtors
       individualDebtors

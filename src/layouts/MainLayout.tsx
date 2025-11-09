@@ -304,7 +304,6 @@ export const MainLayout: React.FC = () => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
-        onClick={handleMenuClose}
         disableScrollLock={true}
         anchorOrigin={{
           vertical: 'bottom',

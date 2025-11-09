@@ -1092,14 +1092,14 @@ export type ResetPasswordWithTokenMutationVariables = Exact<{
 
 export type ResetPasswordWithTokenMutation = { __typename?: 'Mutation', resetPasswordWithToken: { __typename?: 'MutationResponse', success: boolean, message?: string | null, error?: string | null } };
 
-export type CashFlowTransactionFieldsFragment = { __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null };
+export type CashFlowTransactionFieldsFragment = { __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, running_balance: number, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null };
 
 export type GetCashFlowsQueryVariables = Exact<{
   filter?: InputMaybe<TransactionFilter>;
 }>;
 
 
-export type GetCashFlowsQuery = { __typename?: 'Query', getTransactions: { __typename?: 'TransactionConnection', nodes: Array<{ __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
+export type GetCashFlowsQuery = { __typename?: 'Query', getTransactions: { __typename?: 'TransactionConnection', nodes: Array<{ __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, running_balance: number, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
 
 export type GetCashFlowBalanceQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1111,14 +1111,14 @@ export type GetCashFlowQueryVariables = Exact<{
 }>;
 
 
-export type GetCashFlowQuery = { __typename?: 'Query', getCashFlow?: { __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null } | null };
+export type GetCashFlowQuery = { __typename?: 'Query', getCashFlow?: { __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, running_balance: number, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null } | null };
 
 export type CreateCashFlowMutationVariables = Exact<{
   input: CreateCashFlowInput;
 }>;
 
 
-export type CreateCashFlowMutation = { __typename?: 'Mutation', createCashFlow: { __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null } };
+export type CreateCashFlowMutation = { __typename?: 'Mutation', createCashFlow: { __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, running_balance: number, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null } };
 
 export type UpdateCashFlowMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1126,7 +1126,7 @@ export type UpdateCashFlowMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCashFlowMutation = { __typename?: 'Mutation', updateCashFlow: { __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null } };
+export type UpdateCashFlowMutation = { __typename?: 'Mutation', updateCashFlow: { __typename?: 'CashFlow', id: string, date: string, operation_type: OperationType, amount: number, detail: string, running_balance: number, created_at: string, member?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, payment?: { __typename?: 'Payment', id: string } | null } };
 
 export type DeleteCashFlowMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1551,6 +1551,7 @@ export const CashFlowTransactionFieldsFragmentDoc = gql`
   operation_type
   amount
   detail
+  running_balance
   created_at
   member {
     miembro_id

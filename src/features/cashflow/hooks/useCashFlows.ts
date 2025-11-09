@@ -29,21 +29,18 @@ export const useCashFlows = (
     fetchPolicy: 'cache-and-network',
   })
 
-  // Transformar datos del backend a nuestro tipo y calcular runningBalance
-  // TODO: Cuando el backend exponga running_balance en schema, usarlo directamente
+  // Transformar datos del backend a nuestro tipo
+  // El backend ya calcula y devuelve running_balance correctamente
   const nodes = data?.getTransactions?.nodes || []
-  let runningBalance = 0
 
   const cashFlows: CashFlowTransaction[] = nodes.map((node) => {
-    runningBalance += node.amount
-
     return {
       id: node.id,
       date: node.date,
       operationType: node.operation_type as any,
       amount: node.amount,
       detail: node.detail,
-      runningBalance, // Calculado en frontend temporalmente
+      runningBalance: node.running_balance, // Viene del backend
       member: node.member
         ? ({
             id: node.member.miembro_id,

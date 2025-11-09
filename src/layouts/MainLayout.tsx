@@ -246,107 +246,139 @@ export const MainLayout: React.FC = () => {
               </Tooltip>
             )}
 
-            {/* User info */}
+            {/* User name - decorative, not clickable */}
             <Box
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                cursor: 'pointer',
+                display: { xs: 'none', sm: 'flex' },
+                flexDirection: 'column',
+                alignItems: 'flex-end',
+                mr: 0.5,
+                color: theme.palette.mode === 'light' ? theme.palette.primary.main : 'inherit',
               }}
-              onClick={handleMenuOpen}
             >
-              <Avatar
+              <Typography variant="body2">{user?.username}</Typography>
+              <Typography
+                variant="caption"
                 sx={{
-                  width: 32,
-                  height: 32,
-                  bgcolor:
+                  color:
                     theme.palette.mode === 'light'
-                      ? theme.palette.primary.main
-                      : theme.palette.primary.dark,
+                      ? theme.palette.text.secondary
+                      : 'text.secondary',
                 }}
               >
-                {getUserInitials()}
-              </Avatar>
-              <Box
-                sx={{
-                  display: { xs: 'none', sm: 'block' },
-                  color: theme.palette.mode === 'light' ? theme.palette.primary.main : 'inherit',
-                }}
-              >
-                <Typography variant="body2">{user?.username}</Typography>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    color:
-                      theme.palette.mode === 'light'
-                        ? theme.palette.text.secondary
-                        : 'text.secondary',
-                  }}
-                >
-                  {user?.role}
-                </Typography>
-              </Box>
+                {user?.role}
+              </Typography>
             </Box>
 
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-            >
-              <MenuItem disabled>
-                <ListItemIcon>
-                  <AccountCircleIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary={user?.username} secondary={user?.role} />
-              </MenuItem>
-
-              {user && !user.emailVerified && (
-                <MenuItem
-                  onClick={() => {
-                    handleMenuClose()
-                    navigate('/email-verification-check')
+            {/* Avatar button - clickable anchor for menu */}
+            <Tooltip title={t('menu.profile', { ns: 'common' })}>
+              <IconButton
+                onClick={handleMenuOpen}
+                size="small"
+                sx={{ ml: 0.5 }}
+                aria-controls={Boolean(anchorEl) ? 'account-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
+              >
+                <Avatar
+                  sx={{
+                    width: 32,
+                    height: 32,
+                    bgcolor:
+                      theme.palette.mode === 'light'
+                        ? theme.palette.primary.main
+                        : theme.palette.primary.dark,
                   }}
                 >
-                  <ListItemIcon>
-                    <VerifiedIcon fontSize="small" color="warning" />
-                  </ListItemIcon>
-                  <ListItemText primary={t('auth:emailVerification.pending.title')} />
-                </MenuItem>
-              )}
-
-              <Divider />
-
-              <MenuItem
-                onClick={() => {
-                  handleMenuClose()
-                  navigate('/profile')
-                }}
-              >
-                <ListItemIcon>
-                  <SettingsIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary={t('menu.profile')} />
-              </MenuItem>
-
-              <MenuItem onClick={() => void handleLogout()}>
-                <ListItemIcon>
-                  <LogoutIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary={t('auth:logout.title')} />
-              </MenuItem>
-            </Menu>
+                  {getUserInitials()}
+                </Avatar>
+              </IconButton>
+            </Tooltip>
           </Box>
         </Toolbar>
       </AppBar>
+
+      {/* User Menu */}
+      <Menu
+        id="account-menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        onClick={handleMenuClose}
+        disableScrollLock={true}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        slotProps={{
+          paper: {
+            elevation: 0,
+            sx: {
+              overflow: 'visible',
+              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              mt: 1.5,
+              '&::before': {
+                content: '""',
+                display: 'block',
+                position: 'absolute',
+                top: 0,
+                right: 14,
+                width: 10,
+                height: 10,
+                bgcolor: 'background.paper',
+                transform: 'translateY(-50%) rotate(45deg)',
+                zIndex: 0,
+              },
+            },
+          },
+        }}
+      >
+        <MenuItem disabled>
+          <ListItemIcon>
+            <AccountCircleIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary={user?.username} secondary={user?.role} />
+        </MenuItem>
+
+        {user && !user.emailVerified && (
+          <MenuItem
+            onClick={() => {
+              handleMenuClose()
+              navigate('/email-verification-check')
+            }}
+          >
+            <ListItemIcon>
+              <VerifiedIcon fontSize="small" color="warning" />
+            </ListItemIcon>
+            <ListItemText primary={t('auth:emailVerification.pending.title')} />
+          </MenuItem>
+        )}
+
+        <Divider />
+
+        <MenuItem
+          onClick={() => {
+            handleMenuClose()
+            navigate('/profile')
+          }}
+        >
+          <ListItemIcon>
+            <SettingsIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary={t('menu.profile')} />
+        </MenuItem>
+
+        <MenuItem onClick={() => void handleLogout()}>
+          <ListItemIcon>
+            <LogoutIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary={t('auth:logout.title')} />
+        </MenuItem>
+      </Menu>
 
       <Box component="nav" sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}>
         {/* Mobile drawer */}

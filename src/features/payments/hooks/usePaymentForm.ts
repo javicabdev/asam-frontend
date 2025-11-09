@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { ApolloError } from '@apollo/client'
 import { useConfirmPayment } from './useConfirmPayment'
 import type { InitialPaymentFormData } from '../types'
+import type { ConfirmPaymentMutation } from '../api/mutations'
+
+type ConfirmedPayment = ConfirmPaymentMutation['confirmPayment']
 
 /**
  * Parse and extract meaningful error messages from various error types
@@ -76,7 +79,7 @@ interface UsePaymentFormOptions {
   pendingPaymentId: string
   getFamilyId?: () => string | null | undefined
   isFamily: boolean
-  onSuccess?: (payment: any) => void
+  onSuccess?: (payment: ConfirmedPayment) => void | Promise<void>
 }
 
 export const usePaymentForm = (options: UsePaymentFormOptions) => {
@@ -98,14 +101,14 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
 
       // Confirm payment with all data in a single operation
       // Backend will update: status, payment_method, payment_date, and notes
-      const confirmed = await confirmPayment(
+      const confirmedPayment = await confirmPayment(
         pendingPaymentId,
         'CASH', // Always CASH for initial payments
         undefined, // Use current date/time
         formData.notes?.trim() || undefined
       )
 
-      if (!confirmed) {
+      if (!confirmedPayment) {
         throw new Error('Error al confirmar el pago')
       }
 
@@ -113,10 +116,10 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
 
       // Success callback
       if (onSuccess) {
-        onSuccess(null)
+        onSuccess(confirmedPayment)
       }
 
-      return null
+      return confirmedPayment
     } catch (err) {
       console.error('❌ [usePaymentForm] Error processing payment:', err)
       const errorMessage = parseErrorMessage(err)

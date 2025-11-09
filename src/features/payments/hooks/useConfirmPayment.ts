@@ -1,6 +1,8 @@
 import { useCallback } from 'react'
-import { useConfirmPaymentMutation } from '../api/mutations'
+import { useConfirmPaymentMutation, type ConfirmPaymentMutation } from '../api/mutations'
 import type { ApolloError } from '@apollo/client'
+
+type ConfirmedPayment = ConfirmPaymentMutation['confirmPayment']
 
 interface UseConfirmPaymentResult {
   confirmPayment: (
@@ -8,7 +10,7 @@ interface UseConfirmPaymentResult {
     paymentMethod: string,
     paymentDate?: string | null,
     notes?: string | null
-  ) => Promise<boolean>
+  ) => Promise<ConfirmedPayment | null>
   loading: boolean
   error: ApolloError | undefined
 }
@@ -23,13 +25,13 @@ interface UseConfirmPaymentResult {
  * const { confirmPayment, loading, error } = useConfirmPayment()
  *
  * const handleConfirm = async () => {
- *   const success = await confirmPayment(
+ *   const payment = await confirmPayment(
  *     payment.id,
  *     'CASH',
  *     '2025-11-02T10:30:00Z', // Optional: custom date
  *     'Pago recibido en efectivo' // Optional: notes
  *   )
- *   if (success) {
+ *   if (payment) {
  *     // Show success notification
  *     // Close dialog
  *   }
@@ -47,7 +49,7 @@ export function useConfirmPayment(): UseConfirmPaymentResult {
    * @param paymentMethod - The payment method (CASH, TRANSFER, CARD)
    * @param paymentDate - Optional: custom payment date (ISO 8601 string), uses NOW if not provided
    * @param notes - Optional: payment notes
-   * @returns Promise<boolean> - true if successful, false otherwise
+   * @returns Promise<ConfirmedPayment | null> - the confirmed payment object if successful, null otherwise
    */
   const confirmPayment = useCallback(
     async (
@@ -55,7 +57,7 @@ export function useConfirmPayment(): UseConfirmPaymentResult {
       paymentMethod: string,
       paymentDate?: string | null,
       notes?: string | null
-    ): Promise<boolean> => {
+    ): Promise<ConfirmedPayment | null> => {
       try {
         const result = await confirmPaymentMutation({
           variables: {
@@ -78,13 +80,13 @@ export function useConfirmPayment(): UseConfirmPaymentResult {
             console.error('   El backend debe preservar payment_method al confirmar el pago')
           }
 
-          return true
+          return result.data.confirmPayment
         }
 
-        return false
+        return null
       } catch (err) {
         console.error('Error confirming payment:', err)
-        return false
+        return null
       }
     },
     [confirmPaymentMutation]

@@ -21,12 +21,15 @@ import { useMemberPayments } from '@/features/payments/hooks/useMemberPayments'
 import { usePaymentForm } from '@/features/payments/hooks/usePaymentForm'
 import { useReceiptGenerator } from '@/features/payments/hooks/useReceiptGenerator'
 import type { InitialPaymentFormData, PaymentListItem } from '@/features/payments/types'
+import type { ConfirmPaymentMutation } from '@/features/payments/api/mutations'
+
+type ConfirmedPayment = ConfirmPaymentMutation['confirmPayment']
 
 export const InitialPaymentPage: React.FC = () => {
   const { memberId } = useParams<{ memberId: string }>()
   const navigate = useNavigate()
   const [paymentRegistered, setPaymentRegistered] = useState(false)
-  const [paymentData, setPaymentData] = useState<any>(null)
+  const [paymentData, setPaymentData] = useState<ConfirmedPayment | null>(null)
   const [hasWaitedEnough, setHasWaitedEnough] = useState(false)
 
   // Get member data
@@ -103,7 +106,7 @@ export const InitialPaymentPage: React.FC = () => {
     pendingPaymentId: pendingPayment?.id || '',
     isFamily,
     onSuccess: async (payment) => {
-      console.log('✅ Payment confirmed, generating receipt...')
+      console.log('✅ Payment confirmed, generating receipt...', payment)
 
       // Mark as registered and show summary
       setPaymentData(payment)
@@ -111,22 +114,26 @@ export const InitialPaymentPage: React.FC = () => {
 
       // Transform payment to PaymentListItem for receipt generation
       try {
-        const isFamilyPayment = payment.member?.tipo_membresia === 'FAMILY'
+        // Validate that we have member data
+        if (!payment.member) {
+          console.error('❌ Payment confirmed but member data is missing')
+          throw new Error('No se pudo obtener la información del socio')
+        }
+
+        const isFamilyPayment = payment.member.tipo_membresia === 'FAMILY'
         const paymentForReceipt: PaymentListItem = {
           id: payment.id,
-          memberId: payment.member?.miembro_id || '',
-          memberName: payment.member
-            ? `${payment.member.nombre} ${payment.member.apellidos}`
-            : '',
-          memberNumber: payment.member?.numero_socio || '',
+          memberId: payment.member.miembro_id,
+          memberName: `${payment.member.nombre} ${payment.member.apellidos}`,
+          memberNumber: payment.member.numero_socio,
           familyName: isFamilyPayment
-            ? `Familia ${payment.member?.numero_socio}`
+            ? `Familia ${payment.member.numero_socio}`
             : undefined,
           amount: payment.amount,
-          paymentDate: payment.payment_date,
+          paymentDate: payment.payment_date ?? null,
           status: 'PAID',
-          paymentMethod: payment.payment_method,
-          notes: payment.notes,
+          paymentMethod: payment.payment_method ?? null,
+          notes: payment.notes ?? null,
         }
 
         await generateReceipt(paymentForReceipt, true)
@@ -366,7 +373,7 @@ export const InitialPaymentPage: React.FC = () => {
             </Typography>
           </Alert>
 
-          {paymentData && (
+          {paymentData && paymentData.payment_method && paymentData.payment_date && (
             <PaymentSummary
               amount={paymentData.amount}
               paymentMethod={paymentData.payment_method}

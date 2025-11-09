@@ -237,13 +237,6 @@ export const LoginPage: React.FC = () => {
               >
                 {t('login.forgotPassword')}
               </Link>
-
-              <Typography variant="body2" color="text.secondary">
-                {t('login.noAccount')}{' '}
-                <Link component={RouterLink} to="/contact" variant="body2">
-                  {t('login.contactUs')}
-                </Link>
-              </Typography>
             </Box>
           </Box>
         </Paper>

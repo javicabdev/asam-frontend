@@ -1,6 +1,35 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useGetDelinquentReportQuery } from '@/graphql/generated/operations'
-import type { DelinquentReportInput, SortBy } from '../types'
+import type { DelinquentReportInput, SortBy, DelinquentSummary } from '../types'
+
+/**
+ * Recalcula el summary basándose en los deudores filtrados
+ * Esto asegura que las estadísticas coincidan con lo que se muestra en la tabla
+ */
+function calculateSummaryFromDebtors(debtors: any[]): DelinquentSummary {
+  const totalDebtors = debtors.length
+  const individualDebtors = debtors.filter(d => d.type === 'INDIVIDUAL').length
+  const familyDebtors = debtors.filter(d => d.type === 'FAMILY').length
+
+  const totalDebtAmount = debtors.reduce((sum, d) => sum + d.totalDebt, 0)
+
+  const averageDaysOverdue = totalDebtors > 0
+    ? Math.round(debtors.reduce((sum, d) => sum + d.oldestDebtDays, 0) / totalDebtors)
+    : 0
+
+  const averageDebtPerDebtor = totalDebtors > 0
+    ? totalDebtAmount / totalDebtors
+    : 0
+
+  return {
+    totalDebtors,
+    individualDebtors,
+    familyDebtors,
+    totalDebtAmount,
+    averageDaysOverdue,
+    averageDebtPerDebtor,
+  }
+}
 
 /**
  * Hook principal para obtener el informe de morosos
@@ -61,8 +90,21 @@ export function useDelinquentReport() {
     })
   }
 
+  // Recalcular el summary basándose en los deudores filtrados actuales
+  const recalculatedData = useMemo(() => {
+    if (!data?.getDelinquentReport) return null
+
+    const debtors = data.getDelinquentReport.debtors || []
+    const recalculatedSummary = calculateSummaryFromDebtors(debtors)
+
+    return {
+      ...data.getDelinquentReport,
+      summary: recalculatedSummary,
+    }
+  }, [data])
+
   return {
-    data: data?.getDelinquentReport,
+    data: recalculatedData,
     loading,
     error,
     filters,

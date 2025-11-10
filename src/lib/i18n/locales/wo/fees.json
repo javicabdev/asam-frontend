@@ -25,7 +25,8 @@
       "baseFeeAmountHelp": "Royuwaay bu njëkk ci kotisaasioŋ bu bes bi",
       "familyFeeExtra": "Yokk bu Ndey ak Doom",
       "familyFeeExtraHelp": "Royuwaay bu yokk ngir mbooloo bu ndey ak doom",
-      "continue": "Jël"
+      "continue": "Jël",
+      "validationError": "Bul soppi njuumte yi ba di jëkk"
     },
     "preview": {
       "title": "Xoolal - At {{year}}",

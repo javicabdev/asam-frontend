@@ -156,7 +156,7 @@ export const FeeGenerationForm: React.FC<FeeGenerationFormProps> = ({
 
         {Object.keys(errors).length > 0 && (
           <Alert severity="error">
-            Por favor, corrige los errores antes de continuar
+            {t('generation.form.validationError')}
           </Alert>
         )}
 

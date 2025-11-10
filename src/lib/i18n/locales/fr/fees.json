@@ -25,7 +25,8 @@
       "baseFeeAmountHelp": "Montant de base de la cotisation annuelle",
       "familyFeeExtra": "Supplément Familial",
       "familyFeeExtraHelp": "Montant supplémentaire pour les adhésions familiales",
-      "continue": "Continuer"
+      "continue": "Continuer",
+      "validationError": "Veuillez corriger les erreurs avant de continuer"
     },
     "preview": {
       "title": "Aperçu - Année {{year}}",

@@ -25,7 +25,8 @@
       "baseFeeAmountHelp": "Monto base de la cuota anual",
       "familyFeeExtra": "Extra Familiar",
       "familyFeeExtraHelp": "Monto adicional para membresías familiares",
-      "continue": "Continuar"
+      "continue": "Continuar",
+      "validationError": "Por favor, corrige los errores antes de continuar"
     },
     "preview": {
       "title": "Vista Previa - Año {{year}}",

@@ -10,7 +10,6 @@ import {
 } from '@mui/material'
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { useTranslation } from 'react-i18next'
 import type { InitialPaymentFormData } from '../types'
@@ -51,7 +50,7 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
     e.preventDefault()
 
     await onSubmit({
-      payment_date: format(paymentDate, "yyyy-MM-dd'T'HH:mm:ss"),
+      payment_date: paymentDate.toISOString(), // ISO 8601 format with timezone
       notes: notes.trim() || undefined,
     })
   }

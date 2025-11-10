@@ -50,7 +50,7 @@ export const FeeGenerationPreviewComponent: React.FC<FeeGenerationPreviewProps> 
         <Paper variant="outlined" sx={{ p: 3 }}>
           <Stack spacing={2}>
             <Typography variant="subtitle2" color="text.secondary">
-              Configuración de Montos
+              {t('generation.preview.amountConfig')}
             </Typography>
 
             <Grid container spacing={2}>
@@ -76,7 +76,7 @@ export const FeeGenerationPreviewComponent: React.FC<FeeGenerationPreviewProps> 
             <Divider />
 
             <Typography variant="subtitle2" color="text.secondary">
-              Estimación de Pagos
+              {t('generation.preview.paymentsEstimate')}
             </Typography>
 
             <Grid container spacing={2}>
@@ -122,8 +122,7 @@ export const FeeGenerationPreviewComponent: React.FC<FeeGenerationPreviewProps> 
         </Paper>
 
         <Alert severity="info">
-          Al confirmar, se generarán pagos pendientes para todos los socios
-          activos. Esta operación es reversible.
+          {t('generation.preview.confirmMessage')}
         </Alert>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

@@ -48,8 +48,22 @@
       "summary": "Resumen",
       "totalMembers": "Socios Procesados",
       "paymentsCreated": "Pagos Creados",
+      "paymentsExisting": "Pagos Existentes",
       "totalExpectedAmount": "Monto Total",
-      "close": "Cerrar"
+      "close": "Cerrar",
+      "year": "Año",
+      "errorsWarning": "{{count}} pago no pudo ser creado. Ver detalles abajo.",
+      "errorsWarning_plural": "{{count}} pagos no pudieron ser creados. Ver detalles abajo.",
+      "showDetails": "Ver Detalles",
+      "hideDetails": "Ocultar Detalles",
+      "statusCreated": "Creado",
+      "statusError": "Error",
+      "statusExisting": "Existente"
+    },
+    "preview": {
+      "amountConfig": "Configuración de Montos",
+      "paymentsEstimate": "Estimación de Pagos",
+      "confirmMessage": "Al confirmar, se generarán pagos pendientes para todos los socios activos. Esta operación es reversible."
     }
   },
   "common": {

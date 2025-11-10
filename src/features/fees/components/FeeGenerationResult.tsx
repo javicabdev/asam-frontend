@@ -74,7 +74,7 @@ export const FeeGenerationResult: React.FC<FeeGenerationResultProps> = ({
             {t('generation.result.success')}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Año {result.year}
+            {t('generation.result.year')} {result.year}
           </Typography>
         </Box>
 
@@ -103,7 +103,7 @@ export const FeeGenerationResult: React.FC<FeeGenerationResultProps> = ({
 
               <Grid item xs={6} sm={3}>
                 <Typography variant="body2" color="text.secondary">
-                  Pagos Existentes
+                  {t('generation.result.paymentsExisting')}
                 </Typography>
                 <Typography variant="h6" color="info.main">
                   {result.payments_existing}
@@ -124,7 +124,7 @@ export const FeeGenerationResult: React.FC<FeeGenerationResultProps> = ({
 
         {errorCount > 0 && (
           <Alert severity="warning">
-            {errorCount} pagos no pudieron ser creados. Ver detalles abajo.
+            {t('generation.result.errorsWarning', { count: errorCount })}
           </Alert>
         )}
 
@@ -143,7 +143,7 @@ export const FeeGenerationResult: React.FC<FeeGenerationResultProps> = ({
                 />
               }
             >
-              {showDetails ? 'Ocultar Detalles' : 'Ver Detalles'} ({result.details.length})
+              {showDetails ? t('generation.result.hideDetails') : t('generation.result.showDetails')} ({result.details.length})
             </Button>
 
             <Collapse in={showDetails}>
@@ -154,11 +154,11 @@ export const FeeGenerationResult: React.FC<FeeGenerationResultProps> = ({
                       key={index}
                       secondaryAction={
                         detail.was_created ? (
-                          <Chip label="Creado" color="success" size="small" />
+                          <Chip label={t('generation.result.statusCreated')} color="success" size="small" />
                         ) : detail.error ? (
-                          <Chip label="Error" color="error" size="small" />
+                          <Chip label={t('generation.result.statusError')} color="error" size="small" />
                         ) : (
-                          <Chip label="Existente" color="info" size="small" />
+                          <Chip label={t('generation.result.statusExisting')} color="info" size="small" />
                         )
                       }
                     >

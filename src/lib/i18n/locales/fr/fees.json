@@ -48,11 +48,43 @@
       "summary": "Résumé",
       "totalMembers": "Membres Traités",
       "paymentsCreated": "Paiements Créés",
+      "paymentsExisting": "Paiements Existants",
       "totalExpectedAmount": "Montant Total",
-      "close": "Fermer"
+      "close": "Fermer",
+      "year": "Année",
+      "errorsWarning": "{{count}} paiement n'a pas pu être créé. Voir les détails ci-dessous.",
+      "errorsWarning_plural": "{{count}} paiements n'ont pas pu être créés. Voir les détails ci-dessous.",
+      "showDetails": "Voir les Détails",
+      "hideDetails": "Masquer les Détails",
+      "statusCreated": "Créé",
+      "statusError": "Erreur",
+      "statusExisting": "Existant"
+    },
+    "preview": {
+      "amountConfig": "Configuration des Montants",
+      "paymentsEstimate": "Estimation des Paiements",
+      "confirmMessage": "En confirmant, des paiements en attente seront générés pour tous les membres actifs. Cette opération est réversible."
     }
   },
   "common": {
     "back": "Retour"
+  },
+  "list": {
+    "title": "Cotisations Annuelles Enregistrées",
+    "subtitle": "Liste de toutes les cotisations annuelles configurées dans le système",
+    "columns": {
+      "year": "Année",
+      "individualAmount": "Cotisation Individuelle",
+      "familyAmount": "Cotisation Familiale",
+      "dueDate": "Date d'Échéance",
+      "status": "Statut"
+    },
+    "currentYear": "Année Actuelle",
+    "futureYear": "Futur",
+    "statusActive": "Active",
+    "total": "Total : {{count}} cotisation",
+    "total_plural": "Total : {{count}} cotisations",
+    "empty": "Aucune cotisation annuelle enregistrée. Utilisez le bouton 'Générer des Cotisations' pour créer de nouvelles cotisations.",
+    "error": "Erreur lors du chargement des cotisations annuelles"
   }
 }

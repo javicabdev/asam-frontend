@@ -48,11 +48,43 @@
       "summary": "Résimee",
       "totalMembers": "Nit ñu Wax",
       "paymentsCreated": "Fayamaanu ñu Defar",
+      "paymentsExisting": "Fayamaanu ñu Am Ba",
       "totalExpectedAmount": "Limu Lépp",
-      "close": "Tëj"
+      "close": "Tëj",
+      "year": "At",
+      "errorsWarning": "{{count}} fay mënul ko defar. Xool bu yomb ci suuf.",
+      "errorsWarning_plural": "{{count}} fay mënul leen defar. Xool bu yomb ci suuf.",
+      "showDetails": "Xool Détails",
+      "hideDetails": "Nëbb Détails",
+      "statusCreated": "Defar na",
+      "statusError": "Njumte",
+      "statusExisting": "Am na ba"
+    },
+    "preview": {
+      "amountConfig": "Yëgle Limu yi",
+      "paymentsEstimate": "Xibaar Fayamaanu",
+      "confirmMessage": "Su tëkkee, fayamaanu yu baaxul dina leen defar ci yëp nit ñi am liggéey. Jëf bii mën na ko soppi."
     }
   },
   "common": {
     "back": "Dellu"
+  },
+  "list": {
+    "title": "Kotisaasioŋ bu At yi Bind",
+    "subtitle": "Limu yëp kotisaasioŋ bu at yi am ci sisteem bi",
+    "columns": {
+      "year": "At",
+      "individualAmount": "Kotisaasioŋ Kenn",
+      "familyAmount": "Kotisaasioŋ Njaboot",
+      "dueDate": "Bés bu War",
+      "status": "Yaatu"
+    },
+    "currentYear": "At bu Leegi",
+    "futureYear": "Kanam",
+    "statusActive": "Liggéey",
+    "total": "Lépp: {{count}} kotisaasioŋ",
+    "total_plural": "Lépp: {{count}} kotisaasioŋ",
+    "empty": "Amul kotisaasioŋ bu at yi bind. Jëfandikoo butoon 'Defar Kotisaasioŋ' ngir sos bees.",
+    "error": "Njumte ci yabb kotisaasioŋ bu at yi"
   }
 }

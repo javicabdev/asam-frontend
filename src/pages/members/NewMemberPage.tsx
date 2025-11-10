@@ -348,6 +348,18 @@ export const NewMemberPage: React.FC = () => {
             missingYears: graphQLErrorDetails.missing_years
           })
         }
+        // Detectar error de cuotas faltantes por el mensaje (fallback si el backend no envía missing_years)
+        else if (graphQLErrorMessage.toLowerCase().includes('no existen cuotas') ||
+                 graphQLErrorMessage.toLowerCase().includes('cuotas para los años') ||
+                 graphQLErrorMessage.toLowerCase().includes('missing annual fees')) {
+          // Intentar extraer los años del mensaje
+          const yearsMatch = graphQLErrorMessage.match(/años?:\s*([\d,\s-]+)/i) ||
+                           graphQLErrorMessage.match(/years?:\s*([\d,\s-]+)/i)
+          const years = yearsMatch ? yearsMatch[1].trim() : '?'
+          errorMessage = t('newMemberPage.errors.missingAnnualFeesDetailed', {
+            missingYears: years
+          })
+        }
         // Detect duplicate number error
         else if (graphQLErrorMessage.toLowerCase().includes('duplicate') ||
             graphQLErrorMessage.toLowerCase().includes('duplicado') ||

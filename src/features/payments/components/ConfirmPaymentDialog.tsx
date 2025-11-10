@@ -15,6 +15,7 @@ import {
   FormControl,
   InputLabel,
 } from '@mui/material'
+import { DateTimePicker } from '@mui/x-date-pickers'
 import { CheckCircleOutline as CheckIcon } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
 import { format } from 'date-fns'
@@ -44,7 +45,7 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
   const { confirmPayment, loading, error } = useConfirmPayment()
 
   // Form state
-  const [paymentDate, setPaymentDate] = useState<string>('')
+  const [paymentDate, setPaymentDate] = useState<Date>(new Date())
   const [paymentMethod, setPaymentMethod] = useState<string>('CASH')
   const [notes, setNotes] = useState<string>('')
 
@@ -52,8 +53,8 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
   useEffect(() => {
     if (payment && open) {
       // Set payment date to today if not set
-      const today = format(new Date(), 'yyyy-MM-dd')
-      setPaymentDate(payment.paymentDate ? format(new Date(payment.paymentDate), 'yyyy-MM-dd') : today)
+      const initialDate = payment.paymentDate ? new Date(payment.paymentDate) : new Date()
+      setPaymentDate(initialDate)
       setPaymentMethod(payment.paymentMethod || 'CASH')
       setNotes(payment.notes || '')
     }
@@ -71,9 +72,9 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
     if (!payment) return
 
     try {
-      // Format date to ISO 8601 if provided
+      // Format date to ISO 8601 with full timestamp
       const formattedDate = paymentDate
-        ? new Date(paymentDate).toISOString()
+        ? format(paymentDate, "yyyy-MM-dd'T'HH:mm:ss")
         : undefined
 
       // Confirm payment with all data in a single operation
@@ -163,16 +164,19 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
         {/* Editable fields */}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {/* Payment Date */}
-          <TextField
+          <DateTimePicker
             label={t('confirmDialog.paymentDateLabel')}
-            type="date"
             value={paymentDate}
-            onChange={(e) => setPaymentDate(e.target.value)}
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
+            onChange={(newValue) => newValue && setPaymentDate(newValue)}
+            maxDateTime={new Date()}
+            ampm={false}
+            format="dd/MM/yyyy HH:mm"
+            slotProps={{
+              textField: {
+                fullWidth: true,
+                helperText: t('confirmDialog.paymentDateHelper'),
+              },
             }}
-            helperText={t('confirmDialog.paymentDateHelper')}
           />
 
           {/* Payment Method */}

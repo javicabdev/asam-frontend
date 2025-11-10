@@ -18,7 +18,6 @@ import {
 import { DateTimePicker } from '@mui/x-date-pickers'
 import { CheckCircleOutline as CheckIcon } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
-import { format } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 
 import { useConfirmPayment } from '../hooks/useConfirmPayment'

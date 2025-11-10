@@ -223,6 +223,10 @@ export const TransactionFormDialog = ({
                     type="number"
                     fullWidth
                     label={`${t('form.fields.amount')} *`}
+                    inputProps={{
+                      step: '0.01',
+                      min: '0',
+                    }}
                     InputProps={{
                       startAdornment: category === 'INGRESO' ? '+' : '-',
                       endAdornment: '€',

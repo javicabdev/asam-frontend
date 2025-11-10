@@ -137,6 +137,10 @@ export const RepatriationFormDialog = ({
                     type="number"
                     fullWidth
                     label={`${t('repatriation.form.amount')} *`}
+                    inputProps={{
+                      step: '0.01',
+                      min: '0',
+                    }}
                     InputProps={{
                       startAdornment: '-',
                       endAdornment: '€',

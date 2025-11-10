@@ -286,5 +286,44 @@
     "cash": "Espèces",
     "transfer": "Virement Bancaire",
     "card": "Carte"
+  },
+  "initialPaymentPage": {
+    "breadcrumbs": {
+      "dashboard": "Tableau de bord",
+      "members": "Membres",
+      "initialPayment": "Paiement Initial"
+    },
+    "title": "Paiement Initial - Cotisation d'Adhésion",
+    "errors": {
+      "invalidMemberId": "ID de membre non valide",
+      "memberNotFound": "Impossible de charger les informations du membre. Veuillez vérifier que l'ID est correct.",
+      "paymentsError": "Erreur lors du chargement des paiements du membre. Veuillez réessayer.",
+      "noPendingPayment": "Aucun paiement en attente trouvé pour ce membre. Veuillez contacter l'administrateur du système."
+    },
+    "loading": {
+      "preparingPayment": "Préparation du paiement initial..."
+    },
+    "memberInfo": {
+      "title": "Membre",
+      "memberNumber": "Numéro de Membre",
+      "membershipType": "Type d'Adhésion",
+      "typeFamily": "Familial",
+      "typeIndividual": "Individuel",
+      "family": "Famille"
+    },
+    "alert": {
+      "cashPaymentTitle": "Paiement en espèces :",
+      "cashPaymentMessage": "Confirmez que vous avez reçu le paiement de la cotisation initiale en espèces. Le paiement sera marqué comme PAYÉ après confirmation."
+    },
+    "success": {
+      "title": "✓ Paiement Confirmé",
+      "message": "Le paiement en espèces a été enregistré avec succès.",
+      "amount": "Montant :",
+      "receiptGenerated": "Le reçu a été généré automatiquement.",
+      "redirecting": "Redirection vers les détails du membre..."
+    },
+    "actions": {
+      "backToMembers": "Retour aux Membres"
+    }
   }
 }

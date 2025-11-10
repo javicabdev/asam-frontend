@@ -294,7 +294,11 @@
       "networkError": "Erreur de connexion. Veuillez vérifier votre connexion internet.",
       "internalServerError": "Erreur du serveur. Le membre peut avoir été créé partiellement. Vérifiez dans la liste des membres avant de réessayer.",
       "mustLogin": "Vous devez vous connecter pour accéder à cette page",
-      "noPermissionMessage": "Vous n'avez pas les permissions d'administrateur pour créer des membres. Contactez un administrateur si vous avez besoin de créer un nouveau membre."
+      "noPermissionMessage": "Vous n'avez pas les permissions d'administrateur pour créer des membres. Contactez un administrateur si vous avez besoin de créer un nouveau membre.",
+      "missingAnnualFees": "Impossible d'enregistrer le membre car il manque des cotisations annuelles",
+      "generateAnnualFeesFirst": "Veuillez générer les cotisations annuelles d'abord",
+      "missingAnnualFeesDetailed": "Impossible de créer le membre car il manque des cotisations annuelles pour les années : {{missingYears}}. Vous devez générer les cotisations annuelles avant de créer des membres avec des dates historiques.",
+      "goToAnnualFees": "Aller aux Cotisations Annuelles"
     }
   },
   "editMemberPage": {
@@ -343,7 +347,8 @@
       "paisRequired": "Le pays est obligatoire",
       "documentoIdentidadRequired": "Le document d'identité est obligatoire",
       "emailRequired": "L'email est obligatoire",
-      "emailInvalid": "Email invalide. Format attendu: utilisateur@domaine.com"
+      "emailInvalid": "Email invalide. Format attendu: utilisateur@domaine.com",
+      "fechaAltaFuture": "La date d'adhésion ne peut pas être dans le futur"
     },
     "errors": {
       "numeroSocioDuplicate": "Ce numéro de membre existe déjà",
@@ -360,6 +365,7 @@
     "fields": {
       "tipoMembresia": "Type d'Adhésion",
       "numeroSocio": "Numéro de Membre",
+      "fechaAlta": "Date d'Adhésion",
       "nombre": "Prénom",
       "apellidos": "Nom",
       "fechaNacimiento": "Date de Naissance",
@@ -390,7 +396,8 @@
       "numeroSocioFormat": "Vous pouvez écrire seulement le numéro (ex: 2) et il sera formaté automatiquement",
       "fieldDisabled": "Ce champ ne peut pas être modifié",
       "dniNieHelper": "Entrez le DNI ou NIE",
-      "familyDataOptional": "Les données de l'épouse et des membres additionnels sont optionnelles."
+      "familyDataOptional": "Les données de l'épouse et des membres additionnels sont optionnelles.",
+      "fechaAltaOptional": "Si le membre a adhéré dans le passé, spécifiez la date. Laissez vide pour utiliser la date actuelle."
     },
     "placeholders": {
       "numeroSocioFamily": "ex: 2 → A00002",
@@ -400,6 +407,12 @@
       "cancel": "Annuler",
       "continue": "Continuer",
       "saveChanges": "Enregistrer les Modifications"
+    },
+    "alerts": {
+      "historicalDate": {
+        "title": "Paiements Historiques",
+        "description": "Des paiements en attente seront générés pour les années {{years}}. Assurez-vous que les cotisations annuelles existent pour toutes ces années."
+      }
     }
   },
   "details": {

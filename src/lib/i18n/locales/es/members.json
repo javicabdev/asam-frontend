@@ -365,7 +365,7 @@
     "fields": {
       "tipoMembresia": "Tipo de Membresía",
       "numeroSocio": "Número de Socio",
-      "fechaAlta": "Fecha de Alta (Opcional)",
+      "fechaAlta": "Fecha de Alta",
       "nombre": "Nombre",
       "apellidos": "Apellidos",
       "fechaNacimiento": "Fecha de Nacimiento",

@@ -286,5 +286,44 @@
     "cash": "Xaalis",
     "transfer": "Yóbbale Bank",
     "card": "Kaar"
+  },
+  "initialPaymentPage": {
+    "breadcrumbs": {
+      "dashboard": "Tablo bu gën",
+      "members": "Mbooloo",
+      "initialPayment": "Fay bu Njëkk"
+    },
+    "title": "Fay bu Njëkk - Aatal Bokk",
+    "errors": {
+      "invalidMemberId": "ID mbooloo baaxul",
+      "memberNotFound": "Mënul yab xibaar mbooloo bi. Tëkki ne ID bi baax na.",
+      "paymentsError": "Njuumte ci yab fay yu mbooloo bi. Jéemaalee.",
+      "noPendingPayment": "Gisul fay bu mungi xaar ci mbooloo bii. Jokkoo ak kilifa sistema bi."
+    },
+    "loading": {
+      "preparingPayment": "Yam samp fay bu njëkk..."
+    },
+    "memberInfo": {
+      "title": "Mbooloo",
+      "memberNumber": "Limu Mbooloo",
+      "membershipType": "Xeetu Bokk",
+      "typeFamily": "Njaboot",
+      "typeIndividual": "Kenn",
+      "family": "Njaboot"
+    },
+    "alert": {
+      "cashPaymentTitle": "Fay ci xaalis:",
+      "cashPaymentMessage": "Tëkki ne jël na nga fay bu aatal bokk ci xaalis. Fay bi dina ko tëral ni FAY NA léegi."
+    },
+    "success": {
+      "title": "✓ Fay bi Tëkki na",
+      "message": "Fay ci xaalis bi bind na bu baax.",
+      "amount": "Njëkkaale:",
+      "receiptGenerated": "Kàddu bi def na otomatik.",
+      "redirecting": "Yam dem ci faramfacce mbooloo..."
+    },
+    "actions": {
+      "backToMembers": "Dellu ci Mbooloo"
+    }
   }
 }

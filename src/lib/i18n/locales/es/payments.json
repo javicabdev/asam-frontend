@@ -286,5 +286,44 @@
     "cash": "Efectivo",
     "transfer": "Transferencia Bancaria",
     "card": "Tarjeta"
+  },
+  "initialPaymentPage": {
+    "breadcrumbs": {
+      "dashboard": "Dashboard",
+      "members": "Socios",
+      "initialPayment": "Pago Inicial"
+    },
+    "title": "Pago Inicial - Cuota de Alta",
+    "errors": {
+      "invalidMemberId": "ID de socio no válido",
+      "memberNotFound": "No se pudo cargar la información del socio. Por favor, verifica que el ID sea correcto.",
+      "paymentsError": "Error al cargar los pagos del socio. Por favor, intente nuevamente.",
+      "noPendingPayment": "No se encontró un pago pendiente para este socio. Por favor, contacte al administrador del sistema."
+    },
+    "loading": {
+      "preparingPayment": "Preparando el pago inicial..."
+    },
+    "memberInfo": {
+      "title": "Socio",
+      "memberNumber": "Número de Socio",
+      "membershipType": "Tipo de Membresía",
+      "typeFamily": "Familiar",
+      "typeIndividual": "Individual",
+      "family": "Familia"
+    },
+    "alert": {
+      "cashPaymentTitle": "Pago en efectivo:",
+      "cashPaymentMessage": "Confirme que ha recibido el pago de la cuota inicial en efectivo. El pago se marcará como PAGADO tras la confirmación."
+    },
+    "success": {
+      "title": "✓ Pago Confirmado",
+      "message": "El pago en efectivo ha sido registrado correctamente.",
+      "amount": "Monto:",
+      "receiptGenerated": "El recibo se ha generado automáticamente.",
+      "redirecting": "Redirigiendo al detalle del socio..."
+    },
+    "actions": {
+      "backToMembers": "Volver a Socios"
+    }
   }
 }

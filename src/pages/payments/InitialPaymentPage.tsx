@@ -13,6 +13,7 @@ import {
   Button,
 } from '@mui/material'
 import { NavigateNext } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
 
 import { InitialPaymentForm } from '@/features/payments/components/InitialPaymentForm'
 import { PaymentSummary } from '@/features/payments/components/PaymentSummary'
@@ -26,6 +27,7 @@ import type { ConfirmPaymentMutation } from '@/features/payments/api/mutations'
 type ConfirmedPayment = ConfirmPaymentMutation['confirmPayment']
 
 export const InitialPaymentPage: React.FC = () => {
+  const { t } = useTranslation('payments')
   const { memberId } = useParams<{ memberId: string }>()
   const navigate = useNavigate()
   const [paymentRegistered, setPaymentRegistered] = useState(false)
@@ -197,7 +199,7 @@ export const InitialPaymentPage: React.FC = () => {
   if (!memberId) {
     return (
       <Container maxWidth="md" sx={{ py: 4 }}>
-        <Alert severity="error">ID de socio no válido</Alert>
+        <Alert severity="error">{t('initialPaymentPage.errors.invalidMemberId')}</Alert>
       </Container>
     )
   }
@@ -216,10 +218,10 @@ export const InitialPaymentPage: React.FC = () => {
     return (
       <Container maxWidth="md" sx={{ py: 4 }}>
         <Alert severity="error">
-          No se pudo cargar la información del socio. Por favor, verifica que el ID sea correcto.
+          {t('initialPaymentPage.errors.memberNotFound')}
         </Alert>
         <Button onClick={handleGoToMembers} sx={{ mt: 2 }}>
-          Volver a Socios
+          {t('initialPaymentPage.actions.backToMembers')}
         </Button>
       </Container>
     )
@@ -229,10 +231,10 @@ export const InitialPaymentPage: React.FC = () => {
     return (
       <Container maxWidth="md" sx={{ py: 4 }}>
         <Alert severity="error">
-          Error al cargar los pagos del socio. Por favor, intente nuevamente.
+          {t('initialPaymentPage.errors.paymentsError')}
         </Alert>
         <Button onClick={handleGoToMembers} sx={{ mt: 2 }}>
-          Volver a Socios
+          {t('initialPaymentPage.actions.backToMembers')}
         </Button>
       </Container>
     )
@@ -245,7 +247,7 @@ export const InitialPaymentPage: React.FC = () => {
         <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
           <CircularProgress />
           <Typography variant="body1" color="text.secondary">
-            Preparando el pago inicial...
+            {t('initialPaymentPage.loading.preparingPayment')}
           </Typography>
         </Box>
       </Container>
@@ -258,11 +260,10 @@ export const InitialPaymentPage: React.FC = () => {
     return (
       <Container maxWidth="md" sx={{ py: 4 }}>
         <Alert severity="error">
-          No se encontró un pago pendiente para este socio.
-          Por favor, contacte al administrador del sistema.
+          {t('initialPaymentPage.errors.noPendingPayment')}
         </Alert>
         <Button onClick={handleGoToMembers} sx={{ mt: 2 }}>
-          Volver a Socios
+          {t('initialPaymentPage.actions.backToMembers')}
         </Button>
       </Container>
     )
@@ -293,7 +294,7 @@ export const InitialPaymentPage: React.FC = () => {
               navigate('/dashboard')
             }}
           >
-            Dashboard
+            {t('initialPaymentPage.breadcrumbs.dashboard')}
           </Link>
           <Link
             underline="hover"
@@ -304,32 +305,32 @@ export const InitialPaymentPage: React.FC = () => {
               navigate('/members')
             }}
           >
-            Socios
+            {t('initialPaymentPage.breadcrumbs.members')}
           </Link>
-          <Typography color="text.primary">Pago Inicial</Typography>
+          <Typography color="text.primary">{t('initialPaymentPage.breadcrumbs.initialPayment')}</Typography>
         </Breadcrumbs>
       </Box>
 
       {/* Title */}
       <Typography variant="h4" component="h1" gutterBottom>
-        Pago Inicial - Cuota de Alta
+        {t('initialPaymentPage.title')}
       </Typography>
 
       {/* Member Information */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Typography variant="h6" gutterBottom>
-            Socio: {member.nombre} {member.apellidos}
+            {t('initialPaymentPage.memberInfo.title')}: {member.nombre} {member.apellidos}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Número de Socio: {member.numero_socio}
+            {t('initialPaymentPage.memberInfo.memberNumber')}: {member.numero_socio}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Tipo de Membresía: {member.tipo_membresia === 'FAMILY' ? 'Familiar' : 'Individual'}
+            {t('initialPaymentPage.memberInfo.membershipType')}: {member.tipo_membresia === 'FAMILY' ? t('initialPaymentPage.memberInfo.typeFamily') : t('initialPaymentPage.memberInfo.typeIndividual')}
           </Typography>
           {isFamily && family && (
             <Typography variant="body2" color="text.secondary">
-              Familia: {family.esposo_nombre} {family.esposo_apellidos} y {family.esposa_nombre}{' '}
+              {t('initialPaymentPage.memberInfo.family')}: {family.esposo_nombre} {family.esposo_apellidos} y {family.esposa_nombre}{' '}
               {family.esposa_apellidos}
             </Typography>
           )}
@@ -341,8 +342,7 @@ export const InitialPaymentPage: React.FC = () => {
         <>
           <Alert severity="info" sx={{ mb: 3 }}>
             <Typography variant="body2">
-              <strong>Pago en efectivo:</strong> Confirme que ha recibido el pago de la cuota inicial en efectivo.
-              El pago se marcará como PAGADO tras la confirmación.
+              <strong>{t('initialPaymentPage.alert.cashPaymentTitle')}</strong> {t('initialPaymentPage.alert.cashPaymentMessage')}
             </Typography>
           </Alert>
 
@@ -360,21 +360,21 @@ export const InitialPaymentPage: React.FC = () => {
         <>
           <Alert severity="success" sx={{ mb: 3 }}>
             <Typography variant="h6">
-              ✓ Pago Confirmado
+              {t('initialPaymentPage.success.title')}
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
-              El pago en efectivo ha sido registrado correctamente.
-              {paymentData && ` Monto: ${new Intl.NumberFormat('es-ES', {
+              {t('initialPaymentPage.success.message')}
+              {paymentData && ` ${t('initialPaymentPage.success.amount')} ${new Intl.NumberFormat('es-ES', {
                 style: 'currency',
                 currency: 'EUR',
                 useGrouping: true,
               }).format(paymentData.amount)}`}
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
-              El recibo se ha generado automáticamente.
+              {t('initialPaymentPage.success.receiptGenerated')}
             </Typography>
             <Typography variant="body2" sx={{ mt: 1, fontWeight: 'bold' }}>
-              Redirigiendo al detalle del socio...
+              {t('initialPaymentPage.success.redirecting')}
             </Typography>
           </Alert>
 

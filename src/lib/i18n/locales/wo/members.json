@@ -294,7 +294,11 @@
       "networkError": "Njuumte ci jokkoo. Tëkki sa jokkoo internet.",
       "internalServerError": "Njuumte ci serveur bi. Mbooloo bi mën na sos ko ci yëpp. Xool limu mbooloo yi ba dugg leegi.",
       "mustLogin": "War nga dugg ngir jëfandikoo bët bii",
-      "noPermissionMessage": "Amul kilifa bu kilifa ngir sos mbooloo. Jokkoo ak kilifa bu gën su fekkee daal la bëgg sos mbooloo bu bees."
+      "noPermissionMessage": "Amul kilifa bu kilifa ngir sos mbooloo. Jokkoo ak kilifa bu gën su fekkee daal la bëgg sos mbooloo bu bees.",
+      "missingAnnualFees": "Mënul sos mbooloo ndax amul aatal at yi",
+      "generateAnnualFeesFirst": "Bul génne aatal at yi ba njëkk",
+      "missingAnnualFeesDetailed": "Mënul sos mbooloo ndax amul aatal at yi ci at yi : {{missingYears}}. War nga génne aatal at yi ba sos mbooloo yi am bésu wees.",
+      "goToAnnualFees": "Dem ci Aatal At"
     }
   },
   "editMemberPage": {
@@ -343,7 +347,8 @@
       "paisRequired": "Réew dafa war",
       "documentoIdentidadRequired": "Kàddu bu ñakkite dafa war",
       "emailRequired": "Email dafa war",
-      "emailInvalid": "Email baaxul. Jëm bu war: jëfandikukat@domain.com"
+      "emailInvalid": "Email baaxul. Jëm bu war: jëfandikukat@domain.com",
+      "fechaAltaFuture": "Bésu bokk mënul doon ci kanam"
     },
     "errors": {
       "numeroSocioDuplicate": "Limu mbooloo bii am na ba",
@@ -360,6 +365,7 @@
     "fields": {
       "tipoMembresia": "Xeetu Bokk",
       "numeroSocio": "Limu Mbooloo",
+      "fechaAlta": "Bésu Bokk",
       "nombre": "Tur",
       "apellidos": "Sant",
       "fechaNacimiento": "Bésu Juddu",
@@ -390,7 +396,8 @@
       "numeroSocioFormat": "Mën nga bind limu rekk (mb: 2) te dina ko soppi otomatik",
       "fieldDisabled": "Njàngat bii mënul ko soppi",
       "dniNieHelper": "Dugal DNI walla NIE",
-      "familyDataOptional": "Xibaar jabar ak mbooloo yu njaboot yu yokk doo waar."
+      "familyDataOptional": "Xibaar jabar ak mbooloo yu njaboot yu yokk doo waar.",
+      "fechaAltaOptional": "Su mbooloo bi bokkoon ci démb bi wees, teral bésu bi. Bàyyi ko ngir jëfandikoo bésu bu leeb."
     },
     "placeholders": {
       "numeroSocioFamily": "mb: 2 → A00002",
@@ -400,6 +407,12 @@
       "cancel": "Neenal",
       "continue": "Jëkk",
       "saveChanges": "Dakk Soppi Yi"
+    },
+    "alerts": {
+      "historicalDate": {
+        "title": "Fey yu Wees",
+        "description": "Fey yu baaxul dañu bind at yi {{years}}. Ñakk ne aatal at bu nekk ci yépp."
+      }
     }
   },
   "details": {

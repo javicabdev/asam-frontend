@@ -127,10 +127,16 @@ export const MainLayout: React.FC = () => {
   }
 
   const handleMenuNavigate = (path: string) => {
-    // 1. Close menu IMMEDIATELY to prevent race condition
+    // 1. Inicia la animación de cierre del menú
     handleMenuClose()
-    // 2. Navigate
-    navigate(path, { replace: true })
+
+    // 2. Serializa: Espera a que el menú se cierre completamente y el DOM se actualice
+    //    antes de iniciar la navegación y su transición de página.
+    //    Esto previene la condición de carrera entre animaciones.
+    setTimeout(() => {
+      // 3. Ahora que el menú ya no está en el DOM, navega de forma segura
+      navigate(path, { replace: true })
+    }, 250) // Valor seguro que garantiza que el menú está completamente cerrado
   }
 
   const handleNavigate = (path: string) => {
@@ -317,9 +323,6 @@ export const MainLayout: React.FC = () => {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
         disableScrollLock={true}
-        disablePortal={false}
-        keepMounted={false}
-        transitionDuration={0}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'right',

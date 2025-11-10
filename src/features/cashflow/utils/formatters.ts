@@ -1,12 +1,19 @@
 // Formatear monto con signo y color
 export const formatAmount = (amount: number): string => {
-  const formatted = Math.abs(amount).toFixed(2)
+  const formatted = new Intl.NumberFormat('es-ES', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Math.abs(amount))
   return amount >= 0 ? `+${formatted} €` : `-${formatted} €`
 }
 
 // Formatear monto sin signo
 export const formatCurrency = (amount: number): string => {
-  return `${Math.abs(amount).toFixed(2)} €`
+  const formatted = new Intl.NumberFormat('es-ES', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Math.abs(amount))
+  return `${formatted} €`
 }
 
 // Determinar color según monto

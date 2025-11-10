@@ -53,7 +53,11 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
 
       <Alert severity="info" sx={{ mb: 3 }}>
         <Typography variant="body2">
-          <strong>{t('initialPaymentForm.amountToPay')}</strong> {pendingPayment.amount.toFixed(2)} €
+          <strong>{t('initialPaymentForm.amountToPay')}</strong>{' '}
+          {new Intl.NumberFormat('es-ES', {
+            style: 'currency',
+            currency: 'EUR',
+          }).format(pendingPayment.amount)}
         </Typography>
         <Typography variant="body2" sx={{ mt: 1 }}>
           <strong>{t('initialPaymentForm.paymentMethod')}</strong> {t('initialPaymentForm.cash')}

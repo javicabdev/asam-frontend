@@ -148,7 +148,10 @@ export const ConfirmDeactivateDialog: React.FC<ConfirmDeactivateDialogProps> = (
             <Typography variant="body2">
               {t('deactivateDialog.errorPendingPayments', {
                 count: pendingPayments.length,
-                amount: totalPendingAmount.toFixed(2),
+                amount: new Intl.NumberFormat('es-ES', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(totalPendingAmount),
               })}
             </Typography>
           </Alert>

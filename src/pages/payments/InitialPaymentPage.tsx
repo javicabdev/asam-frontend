@@ -363,7 +363,10 @@ export const InitialPaymentPage: React.FC = () => {
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
               El pago en efectivo ha sido registrado correctamente.
-              {paymentData && ` Monto: ${paymentData.amount.toFixed(2)} €`}
+              {paymentData && ` Monto: ${new Intl.NumberFormat('es-ES', {
+                style: 'currency',
+                currency: 'EUR',
+              }).format(paymentData.amount)}`}
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
               El recibo se ha generado automáticamente.

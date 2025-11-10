@@ -6,7 +6,10 @@ import i18n from '@/lib/i18n'
  * Format a payment amount with currency symbol
  */
 export const formatAmount = (amount: number): string => {
-  return `${amount.toFixed(2)} €`
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'EUR',
+  }).format(amount)
 }
 
 /**

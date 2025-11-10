@@ -3,6 +3,7 @@ export const formatAmount = (amount: number): string => {
   const formatted = new Intl.NumberFormat('es-ES', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
+    useGrouping: true,
   }).format(Math.abs(amount))
   return amount >= 0 ? `+${formatted} €` : `-${formatted} €`
 }
@@ -12,6 +13,7 @@ export const formatCurrency = (amount: number): string => {
   const formatted = new Intl.NumberFormat('es-ES', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
+    useGrouping: true,
   }).format(Math.abs(amount))
   return `${formatted} €`
 }

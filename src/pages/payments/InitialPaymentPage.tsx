@@ -366,6 +366,7 @@ export const InitialPaymentPage: React.FC = () => {
               {paymentData && ` Monto: ${new Intl.NumberFormat('es-ES', {
                 style: 'currency',
                 currency: 'EUR',
+                useGrouping: true,
               }).format(paymentData.amount)}`}
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>

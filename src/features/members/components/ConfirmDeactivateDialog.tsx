@@ -151,6 +151,7 @@ export const ConfirmDeactivateDialog: React.FC<ConfirmDeactivateDialogProps> = (
                 amount: new Intl.NumberFormat('es-ES', {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
+                  useGrouping: true,
                 }).format(totalPendingAmount),
               })}
             </Typography>

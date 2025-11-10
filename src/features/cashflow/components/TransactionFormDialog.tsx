@@ -12,7 +12,7 @@ import {
   ToggleButtonGroup,
   ToggleButton,
 } from '@mui/material'
-import { DatePicker } from '@mui/x-date-pickers'
+import { DateTimePicker } from '@mui/x-date-pickers'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import AddIcon from '@mui/icons-material/Add'
@@ -168,11 +168,13 @@ export const TransactionFormDialog = ({
                 name="date"
                 control={control}
                 render={({ field }) => (
-                  <DatePicker
+                  <DateTimePicker
                     label={`${t('form.fields.date')} *`}
                     value={field.value}
                     onChange={field.onChange}
-                    maxDate={new Date()}
+                    maxDateTime={new Date()}
+                    ampm={false}
+                    format="dd/MM/yyyy HH:mm"
                     slotProps={{
                       textField: {
                         fullWidth: true,

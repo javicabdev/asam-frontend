@@ -87,14 +87,14 @@ export function PaymentsTable({
     }).format(amount)
   }
 
-  // Format date to DD/MM/YYYY
+  // Format date to DD/MM/YYYY HH:mm
   const formatDate = (dateString: string | null): string => {
     if (!dateString) return ''
     try {
       const date = new Date(dateString)
       // Check if date is valid
       if (isNaN(date.getTime())) return ''
-      return format(date, 'dd/MM/yyyy', { locale: es })
+      return format(date, 'dd/MM/yyyy HH:mm', { locale: es })
     } catch {
       return ''
     }
@@ -159,7 +159,7 @@ export function PaymentsTable({
     {
       field: 'paymentDate',
       headerName: t('table.date'),
-      width: 120,
+      width: 150,
       sortable: true,
       renderCell: (params) => formatDate(params.value),
     },

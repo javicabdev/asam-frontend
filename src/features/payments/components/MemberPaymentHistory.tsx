@@ -67,7 +67,7 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
       if (date.getFullYear() < 1900 || isNaN(date.getTime())) {
         return ''
       }
-      return format(date, 'dd/MM/yyyy', { locale: es })
+      return format(date, 'dd/MM/yyyy HH:mm', { locale: es })
     } catch {
       return ''
     }

@@ -263,12 +263,18 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
       {
         field: 'lastLogin',
         headerName: t('table.columns.lastLogin'),
-        width: 140,
+        width: 170,
         sortable: true,
         renderCell: (params) =>
           params.value ? (
             <Typography variant="body2">
-              {new Date(params.value).toLocaleDateString('es-ES')}
+              {new Date(params.value).toLocaleString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
             </Typography>
           ) : (
             <Typography variant="body2" color="text.secondary">

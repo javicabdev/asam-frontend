@@ -8,7 +8,7 @@ import {
   Alert,
   CircularProgress,
 } from '@mui/material'
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
+import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -38,9 +38,9 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     await onSubmit({
-      payment_date: format(paymentDate, 'yyyy-MM-dd'),
+      payment_date: format(paymentDate, "yyyy-MM-dd'T'HH:mm:ss"),
       notes: notes.trim() || undefined,
     })
   }
@@ -68,11 +68,13 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
 
       <Box component="form" onSubmit={handleSubmit}>
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
-          <DatePicker
+          <DateTimePicker
             label={t('initialPaymentForm.paymentDateLabel')}
             value={paymentDate}
             onChange={(date) => date && setPaymentDate(date)}
-            maxDate={new Date()}
+            maxDateTime={new Date()}
+            ampm={false}
+            format="dd/MM/yyyy HH:mm"
             slotProps={{
               textField: {
                 fullWidth: true,

@@ -166,7 +166,7 @@ export const CashFlowTable = ({
     {
       field: 'date',
       headerName: t('table.columns.date'),
-      width: 120,
+      width: 150,
       sortable: false,
       valueGetter: (params: GridValueGetterParams<CashFlowTransaction>) => formatTransactionDate(params.row.date),
     },

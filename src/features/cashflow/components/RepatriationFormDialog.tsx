@@ -10,7 +10,7 @@ import {
   Grid,
   Alert,
 } from '@mui/material'
-import { DatePicker } from '@mui/x-date-pickers'
+import { DateTimePicker } from '@mui/x-date-pickers'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { repatriationSchema } from '../utils/validation'
@@ -92,11 +92,13 @@ export const RepatriationFormDialog = ({
                 name="date"
                 control={control}
                 render={({ field }) => (
-                  <DatePicker
+                  <DateTimePicker
                     label={`${t('repatriation.form.date')} *`}
                     value={field.value}
                     onChange={field.onChange}
-                    maxDate={new Date()}
+                    maxDateTime={new Date()}
+                    ampm={false}
+                    format="dd/MM/yyyy HH:mm"
                     slotProps={{
                       textField: {
                         fullWidth: true,

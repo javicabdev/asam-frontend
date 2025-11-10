@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { useGenerateAnnualFeesMutation } from '@/graphql/generated/operations'
+import { LIST_ANNUAL_FEES_QUERY } from '../api/queries'
 import type {
   FeeGenerationState,
   FeeGenerationFormData,
@@ -24,6 +25,8 @@ export const useFeeGeneration = () => {
 
   // Mutation for generating annual fees
   const [generateFeesMutation, { loading: generating }] = useGenerateAnnualFeesMutation({
+    refetchQueries: [{ query: LIST_ANNUAL_FEES_QUERY }],
+    awaitRefetchQueries: true,
     onCompleted: (data) => {
       setState((prev) => ({
         ...prev,

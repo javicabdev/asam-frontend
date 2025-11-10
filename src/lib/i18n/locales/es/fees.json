@@ -54,5 +54,23 @@
   },
   "common": {
     "back": "Volver"
+  },
+  "list": {
+    "title": "Cuotas Anuales Registradas",
+    "subtitle": "Listado de todas las cuotas anuales configuradas en el sistema",
+    "columns": {
+      "year": "Año",
+      "individualAmount": "Cuota Individual",
+      "familyAmount": "Cuota Familiar",
+      "status": "Estado",
+      "createdAt": "Fecha de Creación"
+    },
+    "currentYear": "Año Actual",
+    "futureYear": "Futuro",
+    "statusActive": "Activa",
+    "total": "Total: {{count}} cuota",
+    "total_plural": "Total: {{count}} cuotas",
+    "empty": "No hay cuotas anuales registradas. Utilice el botón 'Generar Cuotas' para crear nuevas cuotas.",
+    "error": "Error al cargar las cuotas anuales"
   }
 }

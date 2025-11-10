@@ -1,16 +1,18 @@
 /**
  * Queries for annual fees
- *
- * Note: Currently the backend only has the generateAnnualFees mutation.
- * Additional queries (like listing fees, checking existence) will be added
- * when the backend implements them.
- *
- * Placeholder for future queries:
- * - LIST_MEMBERSHIP_FEES
- * - GET_MEMBERSHIP_FEE
- * - CHECK_FEE_EXISTS
- * - GET_PENDING_FEES_FOR_MEMBER
  */
 
-// Currently no queries available in backend
-export {}
+import { gql } from '@apollo/client'
+
+export const LIST_ANNUAL_FEES_QUERY = gql`
+  query ListAnnualFees {
+    listAnnualFees {
+      id
+      year
+      individual_amount
+      family_amount
+      created_at
+      updated_at
+    }
+  }
+`

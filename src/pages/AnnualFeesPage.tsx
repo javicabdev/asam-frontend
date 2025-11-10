@@ -9,7 +9,7 @@ import {
 } from '@mui/material'
 import { Add as AddIcon } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
-import { FeeGenerationDialog } from '@/features/fees/components'
+import { FeeGenerationDialog, AnnualFeesList } from '@/features/fees/components'
 
 export default function AnnualFeesPage() {
   const { t } = useTranslation('fees')
@@ -53,6 +53,9 @@ export default function AnnualFeesPage() {
             </Typography>
           </Stack>
         </Paper>
+
+        {/* Lista de cuotas anuales existentes */}
+        <AnnualFeesList />
       </Stack>
 
       <FeeGenerationDialog

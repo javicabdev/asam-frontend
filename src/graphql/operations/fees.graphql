@@ -1,4 +1,20 @@
 # ============================================
+# QUERIES - Annual Membership Fees
+# ============================================
+
+# List all annual fees
+query ListAnnualFees {
+  listAnnualFees {
+    id
+    year
+    individual_amount
+    family_amount
+    created_at
+    updated_at
+  }
+}
+
+# ============================================
 # MUTATIONS - Annual Membership Fees
 # ============================================
 

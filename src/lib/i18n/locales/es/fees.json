@@ -62,8 +62,8 @@
       "year": "Año",
       "individualAmount": "Cuota Individual",
       "familyAmount": "Cuota Familiar",
-      "status": "Estado",
-      "createdAt": "Fecha de Creación"
+      "dueDate": "Fecha de Vencimiento",
+      "status": "Estado"
     },
     "currentYear": "Año Actual",
     "futureYear": "Futuro",

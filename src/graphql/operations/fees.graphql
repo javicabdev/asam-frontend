@@ -7,10 +7,9 @@ query ListAnnualFees {
   listAnnualFees {
     id
     year
-    individual_amount
-    family_amount
-    created_at
-    updated_at
+    base_fee_amount
+    family_fee_extra
+    due_date
   }
 }
 

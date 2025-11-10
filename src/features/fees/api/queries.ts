@@ -9,10 +9,9 @@ export const LIST_ANNUAL_FEES_QUERY = gql`
     listAnnualFees {
       id
       year
-      individual_amount
-      family_amount
-      created_at
-      updated_at
+      base_fee_amount
+      family_fee_extra
+      due_date
     }
   }
 `

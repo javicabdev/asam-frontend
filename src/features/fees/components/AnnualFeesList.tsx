@@ -22,10 +22,17 @@ import { LIST_ANNUAL_FEES_QUERY } from '../api/queries'
 interface AnnualFee {
   id: string
   year: number
-  individual_amount: number
-  family_amount: number
-  created_at: string
-  updated_at: string
+  base_fee_amount: number
+  family_fee_extra: number
+  due_date: string
+}
+
+interface MappedAnnualFee {
+  id: string
+  year: number
+  individualAmount: number
+  familyAmount: number
+  dueDate: Date
 }
 
 interface ListAnnualFeesQueryResponse {
@@ -41,6 +48,19 @@ export const AnnualFeesList: React.FC = () => {
       fetchPolicy: 'cache-and-network',
     }
   )
+
+  // Mapear los campos del backend a los nombres que usa el frontend
+  const mappedFees = React.useMemo<MappedAnnualFee[]>(() => {
+    if (!data?.listAnnualFees) return []
+
+    return data.listAnnualFees.map((fee) => ({
+      id: fee.id,
+      year: fee.year,
+      individualAmount: fee.base_fee_amount,
+      familyAmount: fee.base_fee_amount + fee.family_fee_extra,
+      dueDate: new Date(fee.due_date),
+    }))
+  }, [data])
 
   if (loading) {
     return (
@@ -58,9 +78,7 @@ export const AnnualFeesList: React.FC = () => {
     )
   }
 
-  const annualFees = data?.listAnnualFees || []
-
-  if (annualFees.length === 0) {
+  if (mappedFees.length === 0) {
     return (
       <Alert severity="info" sx={{ mb: 2 }}>
         {t('list.empty')}
@@ -69,7 +87,7 @@ export const AnnualFeesList: React.FC = () => {
   }
 
   // Sort by year descending (most recent first)
-  const sortedFees = [...annualFees].sort((a, b) => b.year - a.year)
+  const sortedFees = [...mappedFees].sort((a, b) => b.year - a.year)
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('es-ES', {
@@ -110,11 +128,11 @@ export const AnnualFeesList: React.FC = () => {
               <TableCell align="right">
                 <strong>{t('list.columns.familyAmount')}</strong>
               </TableCell>
+              <TableCell>
+                <strong>{t('list.columns.dueDate')}</strong>
+              </TableCell>
               <TableCell align="center">
                 <strong>{t('list.columns.status')}</strong>
-              </TableCell>
-              <TableCell>
-                <strong>{t('list.columns.createdAt')}</strong>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -150,12 +168,17 @@ export const AnnualFeesList: React.FC = () => {
                   </TableCell>
                   <TableCell align="right">
                     <Typography variant="body1" fontWeight="medium">
-                      {formatCurrency(fee.individual_amount)}
+                      {formatCurrency(fee.individualAmount)}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
                     <Typography variant="body1" fontWeight="medium">
-                      {formatCurrency(fee.family_amount)}
+                      {formatCurrency(fee.familyAmount)}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" color="text.secondary">
+                      {formatDate(fee.dueDate.toISOString())}
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
@@ -165,11 +188,6 @@ export const AnnualFeesList: React.FC = () => {
                       size="small"
                       variant="outlined"
                     />
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="body2" color="text.secondary">
-                      {formatDate(fee.created_at)}
-                    </Typography>
                   </TableCell>
                 </TableRow>
               )

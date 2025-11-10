@@ -109,6 +109,7 @@ export type CreateMemberInput = {
   codigo_postal: Scalars['String']['input'];
   correo_electronico?: InputMaybe<Scalars['String']['input']>;
   documento_identidad?: InputMaybe<Scalars['String']['input']>;
+  fecha_alta?: InputMaybe<Scalars['Time']['input']>;
   fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
   nacionalidad?: InputMaybe<Scalars['String']['input']>;
   nombre: Scalars['String']['input'];
@@ -734,6 +735,7 @@ export type Query = {
   getTransactions: TransactionConnection;
   getUser?: Maybe<User>;
   health: Scalars['String']['output'];
+  listAnnualFees: Array<MembershipFee>;
   listFamilies: FamilyConnection;
   listMembers: MemberConnection;
   listMembershipFees: Array<MembershipFee>;
@@ -1226,6 +1228,11 @@ export type RemoveFamilyMemberMutationVariables = Exact<{
 
 
 export type RemoveFamilyMemberMutation = { __typename?: 'Mutation', removeFamilyMember: { __typename?: 'MutationResponse', success: boolean, message?: string | null, error?: string | null } };
+
+export type ListAnnualFeesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ListAnnualFeesQuery = { __typename?: 'Query', listAnnualFees: Array<{ __typename?: 'MembershipFee', id: string, year: number, base_fee_amount: number, family_fee_extra: number, due_date: string }> };
 
 export type GenerateAnnualFeesMutationVariables = Exact<{
   input: GenerateAnnualFeesInput;
@@ -2860,6 +2867,49 @@ export function useRemoveFamilyMemberMutation(baseOptions?: Apollo.MutationHookO
 export type RemoveFamilyMemberMutationHookResult = ReturnType<typeof useRemoveFamilyMemberMutation>;
 export type RemoveFamilyMemberMutationResult = Apollo.MutationResult<RemoveFamilyMemberMutation>;
 export type RemoveFamilyMemberMutationOptions = Apollo.BaseMutationOptions<RemoveFamilyMemberMutation, RemoveFamilyMemberMutationVariables>;
+export const ListAnnualFeesDocument = gql`
+    query ListAnnualFees {
+  listAnnualFees {
+    id
+    year
+    base_fee_amount
+    family_fee_extra
+    due_date
+  }
+}
+    `;
+
+/**
+ * __useListAnnualFeesQuery__
+ *
+ * To run a query within a React component, call `useListAnnualFeesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListAnnualFeesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListAnnualFeesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListAnnualFeesQuery(baseOptions?: Apollo.QueryHookOptions<ListAnnualFeesQuery, ListAnnualFeesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListAnnualFeesQuery, ListAnnualFeesQueryVariables>(ListAnnualFeesDocument, options);
+      }
+export function useListAnnualFeesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListAnnualFeesQuery, ListAnnualFeesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListAnnualFeesQuery, ListAnnualFeesQueryVariables>(ListAnnualFeesDocument, options);
+        }
+export function useListAnnualFeesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ListAnnualFeesQuery, ListAnnualFeesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ListAnnualFeesQuery, ListAnnualFeesQueryVariables>(ListAnnualFeesDocument, options);
+        }
+export type ListAnnualFeesQueryHookResult = ReturnType<typeof useListAnnualFeesQuery>;
+export type ListAnnualFeesLazyQueryHookResult = ReturnType<typeof useListAnnualFeesLazyQuery>;
+export type ListAnnualFeesSuspenseQueryHookResult = ReturnType<typeof useListAnnualFeesSuspenseQuery>;
+export type ListAnnualFeesQueryResult = Apollo.QueryResult<ListAnnualFeesQuery, ListAnnualFeesQueryVariables>;
 export const GenerateAnnualFeesDocument = gql`
     mutation GenerateAnnualFees($input: GenerateAnnualFeesInput!) {
   generateAnnualFees(input: $input) {

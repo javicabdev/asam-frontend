@@ -106,6 +106,7 @@ export type CreateMemberInput = {
   codigo_postal: Scalars['String']['input'];
   correo_electronico?: InputMaybe<Scalars['String']['input']>;
   documento_identidad?: InputMaybe<Scalars['String']['input']>;
+  fecha_alta?: InputMaybe<Scalars['Time']['input']>;
   fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
   nacionalidad?: InputMaybe<Scalars['String']['input']>;
   nombre: Scalars['String']['input'];
@@ -731,6 +732,7 @@ export type Query = {
   getTransactions: TransactionConnection;
   getUser?: Maybe<User>;
   health: Scalars['String']['output'];
+  listAnnualFees: Array<MembershipFee>;
   listFamilies: FamilyConnection;
   listMembers: MemberConnection;
   listMembershipFees: Array<MembershipFee>;

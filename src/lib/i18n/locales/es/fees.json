@@ -31,12 +31,15 @@
     "preview": {
       "title": "Vista Previa - Año {{year}}",
       "alreadyExistsWarning": "Ya existen cuotas generadas para este año. Al confirmar se crearán solo los pagos faltantes.",
+      "amountConfig": "Configuración de Montos",
       "baseFeeAmount": "Cuota Base",
       "familyFeeExtra": "Extra Familiar",
+      "paymentsEstimate": "Estimación de Pagos",
       "individualMembers": "Socios Individuales",
       "familyMembers": "Socios Familiares",
       "totalMembers": "Total de Socios",
       "totalExpected": "Total Esperado",
+      "confirmMessage": "Al confirmar, se generarán pagos pendientes para todos los socios activos. Esta operación es reversible.",
       "confirm": "Confirmar y Generar"
     },
     "generating": {
@@ -60,11 +63,6 @@
       "statusCreated": "Creado",
       "statusError": "Error",
       "statusExisting": "Existente"
-    },
-    "preview": {
-      "amountConfig": "Configuración de Montos",
-      "paymentsEstimate": "Estimación de Pagos",
-      "confirmMessage": "Al confirmar, se generarán pagos pendientes para todos los socios activos. Esta operación es reversible."
     }
   },
   "common": {

@@ -31,12 +31,15 @@
     "preview": {
       "title": "Aperçu - Année {{year}}",
       "alreadyExistsWarning": "Il existe déjà des cotisations générées pour cette année. En confirmant, seuls les paiements manquants seront créés.",
+      "amountConfig": "Configuration des Montants",
       "baseFeeAmount": "Cotisation de Base",
       "familyFeeExtra": "Supplément Familial",
+      "paymentsEstimate": "Estimation des Paiements",
       "individualMembers": "Membres Individuels",
       "familyMembers": "Membres Familiaux",
       "totalMembers": "Total des Membres",
       "totalExpected": "Total Attendu",
+      "confirmMessage": "En confirmant, des paiements en attente seront générés pour tous les membres actifs. Cette opération est réversible.",
       "confirm": "Confirmer et Générer"
     },
     "generating": {
@@ -60,11 +63,6 @@
       "statusCreated": "Créé",
       "statusError": "Erreur",
       "statusExisting": "Existant"
-    },
-    "preview": {
-      "amountConfig": "Configuration des Montants",
-      "paymentsEstimate": "Estimation des Paiements",
-      "confirmMessage": "En confirmant, des paiements en attente seront générés pour tous les membres actifs. Cette opération est réversible."
     }
   },
   "common": {

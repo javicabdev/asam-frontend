@@ -12,8 +12,9 @@ import {
   esES,
 } from '@mui/x-data-grid'
 import { useTranslation } from 'react-i18next'
-import { Visibility } from '@mui/icons-material'
-import { IconButton } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { Visibility, Person } from '@mui/icons-material'
+import { IconButton, Tooltip } from '@mui/material'
 import { DebtorType } from '../types'
 import type { Debtor } from '../types'
 import { DebtorTypeChip } from './DebtorTypeChip'
@@ -67,6 +68,18 @@ function getDebtorContact(debtor: Debtor): string {
 }
 
 /**
+ * Obtiene el ID del socio para navegar a sus detalles
+ */
+function getMemberId(debtor: Debtor): string | null {
+  if (debtor.type === 'INDIVIDUAL' && debtor.member) {
+    return debtor.member.id
+  } else if (debtor.type === 'FAMILY' && debtor.family) {
+    return debtor.family.primaryMember.id
+  }
+  return null
+}
+
+/**
  * Tabla principal del informe de morosos usando DataGrid
  */
 export function DelinquentTable({
@@ -75,6 +88,7 @@ export function DelinquentTable({
   onViewDetails,
 }: DelinquentTableProps) {
   const { t } = useTranslation('reports')
+  const navigate = useNavigate()
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 10,
     page: 0,
@@ -185,19 +199,41 @@ export function DelinquentTable({
     {
       field: 'actions',
       headerName: t('delinquent.table.actions'),
-      width: 100,
+      width: 120,
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      renderCell: (params: GridRenderCellParams<Debtor>) => (
-        <IconButton
-          size="small"
-          onClick={() => onViewDetails(params.row)}
-          title={t('delinquent.actions.viewDetails')}
-        >
-          <Visibility />
-        </IconButton>
-      ),
+      renderCell: (params: GridRenderCellParams<Debtor>) => {
+        const memberId = getMemberId(params.row)
+        return (
+          <Box sx={{ display: 'flex', gap: 0.5 }}>
+            <Tooltip title={t('delinquent.actions.viewDebtDetails')}>
+              <IconButton
+                size="small"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onViewDetails(params.row)
+                }}
+              >
+                <Visibility />
+              </IconButton>
+            </Tooltip>
+            {memberId && (
+              <Tooltip title={t('delinquent.actions.viewMemberDetails')}>
+                <IconButton
+                  size="small"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    navigate(`/members/${memberId}`)
+                  }}
+                >
+                  <Person />
+                </IconButton>
+              </Tooltip>
+            )}
+          </Box>
+        )
+      },
     },
   ]
 
@@ -220,6 +256,7 @@ export function DelinquentTable({
             pageSizeOptions={[10, 25, 50, 100]}
             disableRowSelectionOnClick
             getRowId={(row) => getDebtorId(row)}
+            onRowClick={(params) => onViewDetails(params.row as Debtor)}
             autoHeight
             slots={{
               toolbar: CustomToolbar,

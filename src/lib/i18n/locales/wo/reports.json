@@ -86,7 +86,8 @@
     "actions": {
       "exportPDF": "Jëfeeleel PDF",
       "exportCSV": "Jëfeeleel CSV",
-      "viewDetails": "Gis li ci ànd",
+      "viewDebtDetails": "Gis li ci ànd ci xaalis",
+      "viewMemberDetails": "Gis li ci ànd ci mbokk",
       "close": "Tëj"
     },
 

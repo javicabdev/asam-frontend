@@ -86,7 +86,8 @@
     "actions": {
       "exportPDF": "Exportar PDF",
       "exportCSV": "Exportar CSV",
-      "viewDetails": "Ver Detalles",
+      "viewDebtDetails": "Ver Detalles de Deuda",
+      "viewMemberDetails": "Ver Detalles del Socio",
       "close": "Cerrar"
     },
 

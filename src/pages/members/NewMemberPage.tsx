@@ -168,23 +168,51 @@ export const NewMemberPage: React.FC = () => {
         // Check for GraphQL errors
         if (memberResult.errors && memberResult.errors.length > 0) {
           const graphQLError = memberResult.errors[0]
-          
+
           // Extract field-specific errors
           const extractedFieldErrors = extractFieldErrors(graphQLError)
           setFieldErrors(extractedFieldErrors)
 
-          // Set general error message
-          const errorMessage = graphQLError.message || t('newMemberPage.errors.createMember')
-          if (graphQLError.extensions?.fields) {
+          // Translate error message
+          let errorMessage = graphQLError.message || t('newMemberPage.errors.createMember')
+          const graphQLErrorCode = graphQLError.extensions?.code as string | undefined
+          const graphQLErrorDetails = graphQLError.extensions?.details as any
+          const graphQLErrorMessage = graphQLError.message || ''
+
+          // ⭐ Detectar error específico de cuotas faltantes
+          if (graphQLErrorCode === 'VALIDATION_ERROR' && graphQLErrorDetails?.missing_years) {
+            errorMessage = t('newMemberPage.errors.missingAnnualFeesDetailed', {
+              missingYears: graphQLErrorDetails.missing_years
+            })
+          }
+          // Detectar error de cuotas faltantes por el mensaje (fallback si el backend no envía missing_years)
+          else if (graphQLErrorMessage.toLowerCase().includes('no existen cuotas') ||
+                   graphQLErrorMessage.toLowerCase().includes('cuotas para los años') ||
+                   graphQLErrorMessage.toLowerCase().includes('missing annual fees')) {
+            // Intentar extraer los años del mensaje
+            const yearsMatch = graphQLErrorMessage.match(/años?:\s*([\d,\s-]+)/i) ||
+                             graphQLErrorMessage.match(/years?:\s*([\d,\s-]+)/i)
+            const years = yearsMatch ? yearsMatch[1].trim() : '?'
+            errorMessage = t('newMemberPage.errors.missingAnnualFeesDetailed', {
+              missingYears: years
+            })
+          }
+          // Detect duplicate number error
+          else if (graphQLErrorMessage.toLowerCase().includes('duplicate') ||
+              graphQLErrorMessage.toLowerCase().includes('duplicado') ||
+              graphQLErrorMessage.toLowerCase().includes('already exists')) {
+            errorMessage = t('newMemberPage.errors.duplicateNumber', { numeroSocio: data.numero_socio })
+          }
+          // Check for field-specific errors
+          else if (graphQLError.extensions?.fields) {
             const fields = graphQLError.extensions.fields as Record<string, string>
             const fieldErrorsText = Object.entries(fields)
               .map(([_field, msg]) => msg)
               .join('. ')
-            setError(fieldErrorsText || errorMessage)
-          } else {
-            setError(errorMessage)
+            errorMessage = fieldErrorsText || errorMessage
           }
-          
+
+          setError(errorMessage)
           setLoading(false)
           return
         }
@@ -251,23 +279,51 @@ export const NewMemberPage: React.FC = () => {
       // Check for GraphQL errors
       if (familyResult.errors && familyResult.errors.length > 0) {
         const graphQLError = familyResult.errors[0]
-        
+
         // Extract field-specific errors
         const extractedFieldErrors = extractFieldErrors(graphQLError)
         setFieldErrors(extractedFieldErrors)
 
-        // Set general error message
-        const errorMessage = graphQLError.message || t('newMemberPage.errors.createFamily')
-        if (graphQLError.extensions?.fields) {
+        // Translate error message
+        let errorMessage = graphQLError.message || t('newMemberPage.errors.createFamily')
+        const graphQLErrorCode = graphQLError.extensions?.code as string | undefined
+        const graphQLErrorDetails = graphQLError.extensions?.details as any
+        const graphQLErrorMessage = graphQLError.message || ''
+
+        // ⭐ Detectar error específico de cuotas faltantes
+        if (graphQLErrorCode === 'VALIDATION_ERROR' && graphQLErrorDetails?.missing_years) {
+          errorMessage = t('newMemberPage.errors.missingAnnualFeesDetailed', {
+            missingYears: graphQLErrorDetails.missing_years
+          })
+        }
+        // Detectar error de cuotas faltantes por el mensaje (fallback si el backend no envía missing_years)
+        else if (graphQLErrorMessage.toLowerCase().includes('no existen cuotas') ||
+                 graphQLErrorMessage.toLowerCase().includes('cuotas para los años') ||
+                 graphQLErrorMessage.toLowerCase().includes('missing annual fees')) {
+          // Intentar extraer los años del mensaje
+          const yearsMatch = graphQLErrorMessage.match(/años?:\s*([\d,\s-]+)/i) ||
+                           graphQLErrorMessage.match(/years?:\s*([\d,\s-]+)/i)
+          const years = yearsMatch ? yearsMatch[1].trim() : '?'
+          errorMessage = t('newMemberPage.errors.missingAnnualFeesDetailed', {
+            missingYears: years
+          })
+        }
+        // Detect duplicate number error
+        else if (graphQLErrorMessage.toLowerCase().includes('duplicate') ||
+            graphQLErrorMessage.toLowerCase().includes('duplicado') ||
+            graphQLErrorMessage.toLowerCase().includes('already exists')) {
+          errorMessage = t('newMemberPage.errors.duplicateNumber', { numeroSocio: data.numero_socio })
+        }
+        // Check for field-specific errors
+        else if (graphQLError.extensions?.fields) {
           const fields = graphQLError.extensions.fields as Record<string, string>
           const fieldErrorsText = Object.entries(fields)
             .map(([_field, msg]) => msg)
             .join('. ')
-          setError(fieldErrorsText || errorMessage)
-        } else {
-          setError(errorMessage)
+          errorMessage = fieldErrorsText || errorMessage
         }
-        
+
+        setError(errorMessage)
         setLoading(false)
         return
       }

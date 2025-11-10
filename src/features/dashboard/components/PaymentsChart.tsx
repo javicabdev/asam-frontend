@@ -60,7 +60,8 @@ export default function PaymentsChart({ data, loading = false, height = 300 }: P
           >
             {t('charts.monthlyRevenue')}: {formatCurrencyValue(payload[0].value)}
           </Typography>
-          <Typography
+          {/* TODO: Backend needs to provide paymentCount in RevenueTrendData */}
+          {/* <Typography
             variant="caption"
             sx={{
               display: 'block',
@@ -69,7 +70,7 @@ export default function PaymentsChart({ data, loading = false, height = 300 }: P
             }}
           >
             {t('charts.numberOfPayments')}: {(payload[0].payload[t('charts.numberOfPayments')] as number) || 0}
-          </Typography>
+          </Typography> */}
         </Box>
       )
     }
@@ -78,7 +79,8 @@ export default function PaymentsChart({ data, loading = false, height = 300 }: P
 
   // Calcular totales para mostrar en el header
   const totalIngresos = data.reduce((sum, item) => sum + item.paymentAmount, 0)
-  const totalPagos = data.reduce((sum, item) => sum + item.totalPayments, 0)
+  // TODO: Backend needs to provide paymentCount in RevenueTrendData
+  // const totalPagos = data.reduce((sum, item) => sum + item.totalPayments, 0)
 
   // Generar colores dinámicos para las barras
   const getBarColor = (value: number, max: number) => {
@@ -130,11 +132,12 @@ export default function PaymentsChart({ data, loading = false, height = 300 }: P
               color="primary"
               variant="outlined"
             />
-            <Chip 
-              label={`${totalPagos} ${t('charts.numberOfPayments').toLowerCase()}`} 
-              size="small" 
-              variant="outlined" 
-            />
+            {/* TODO: Backend needs to provide paymentCount in RevenueTrendData */}
+            {/* <Chip
+              label={`${totalPagos} ${t('charts.numberOfPayments').toLowerCase()}`}
+              size="small"
+              variant="outlined"
+            /> */}
           </Box>
         </Box>
 

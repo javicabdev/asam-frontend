@@ -15,7 +15,7 @@ import {
   Divider,
 } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { Receipt as ReceiptIcon, Launch as LaunchIcon, CheckCircleOutline as ConfirmIcon } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
@@ -57,17 +57,25 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
     }).format(amount)
   }
 
-  // Format date to DD/MM/YYYY
+  // Format date to DD/MM/YYYY HH:mm or DD/MM/YYYY
   const formatDate = (dateString: string | null | undefined): string => {
     if (!dateString) return ''
 
     try {
-      const date = new Date(dateString)
+      // Use parseISO to correctly parse ISO date strings
+      const date = parseISO(dateString)
       // Check if date is valid (not 0001-01-01 or other invalid dates)
       if (date.getFullYear() < 1900 || isNaN(date.getTime())) {
         return ''
       }
-      return format(date, 'dd/MM/yyyy HH:mm', { locale: es })
+
+      // Check if the date has time information (not midnight)
+      const hasTime = date.getHours() !== 0 || date.getMinutes() !== 0 || date.getSeconds() !== 0
+
+      // If no time info, show only date; otherwise show date and time
+      return hasTime
+        ? format(date, 'dd/MM/yyyy HH:mm', { locale: es })
+        : format(date, 'dd/MM/yyyy', { locale: es })
     } catch {
       return ''
     }

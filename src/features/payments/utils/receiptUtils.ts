@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { es, fr } from 'date-fns/locale'
 import type { PaymentListItem, ReceiptData } from '../types'
 
@@ -31,7 +31,7 @@ export function formatCurrency(amount: number): string {
  */
 export function formatReceiptDate(dateString: string | null, language: string = 'es-ES'): string {
   if (!dateString) return ''
-  const date = new Date(dateString)
+  const date = parseISO(dateString)
 
   // Wolof uses French locale since date-fns doesn't have Wolof
   const locale = language === 'fr-FR' || language === 'fr-SN' ? fr : es

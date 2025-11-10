@@ -18,7 +18,7 @@ import {
   CheckCircleOutline as ConfirmIcon,
   Receipt as ReceiptIcon,
 } from '@mui/icons-material'
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
 
 import { PaymentStatusChip } from './PaymentStatusChip'
@@ -91,10 +91,18 @@ export function PaymentsTable({
   const formatDate = (dateString: string | null): string => {
     if (!dateString) return ''
     try {
-      const date = new Date(dateString)
+      // Use parseISO to correctly parse ISO date strings
+      const date = parseISO(dateString)
       // Check if date is valid
       if (isNaN(date.getTime())) return ''
-      return format(date, 'dd/MM/yyyy HH:mm', { locale: es })
+
+      // Check if the date has time information (not midnight)
+      const hasTime = date.getHours() !== 0 || date.getMinutes() !== 0 || date.getSeconds() !== 0
+
+      // If no time info, show only date; otherwise show date and time
+      return hasTime
+        ? format(date, 'dd/MM/yyyy HH:mm', { locale: es })
+        : format(date, 'dd/MM/yyyy', { locale: es })
     } catch {
       return ''
     }

@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
 import i18n from '@/lib/i18n'
 
@@ -18,7 +18,7 @@ export const formatAmount = (amount: number): string => {
  */
 export const formatPaymentDate = (dateString: string): string => {
   try {
-    return format(new Date(dateString), "d 'de' MMMM 'de' yyyy", { locale: es })
+    return format(parseISO(dateString), "d 'de' MMMM 'de' yyyy", { locale: es })
   } catch (error) {
     console.error('Error formatting date:', error)
     return dateString
@@ -72,7 +72,7 @@ import type { PaymentListItem, ReceiptData } from './types'
  * Example: ASAM-2025-00142
  */
 export function generateReceiptNumber(paymentId: string, paymentDate: string | null): string {
-  const date = paymentDate ? new Date(paymentDate) : new Date()
+  const date = paymentDate ? parseISO(paymentDate) : new Date()
   const year = date.getFullYear()
 
   // Use payment ID as unique identifier (remove hyphens and take last 5 chars)
@@ -96,7 +96,7 @@ export function formatCurrency(amount: number): string {
  */
 export function formatReceiptDate(dateString: string | null): string {
   if (!dateString) return ''
-  const date = new Date(dateString)
+  const date = parseISO(dateString)
   return format(date, "d 'de' MMMM 'de' yyyy", { locale: es })
 }
 

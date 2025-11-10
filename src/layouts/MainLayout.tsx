@@ -126,6 +126,13 @@ export const MainLayout: React.FC = () => {
     await logout()
   }
 
+  const handleMenuNavigate = (path: string) => {
+    // 1. Close menu IMMEDIATELY to prevent race condition
+    handleMenuClose()
+    // 2. Navigate
+    navigate(path, { replace: true })
+  }
+
   const handleNavigate = (path: string) => {
     console.log('🔍 Navigating to:', path, 'from:', location.pathname)
     navigate(path)
@@ -351,11 +358,7 @@ export const MainLayout: React.FC = () => {
         </MenuItem>
 
         {user && !user.emailVerified && (
-          <MenuItem
-            onClick={() => {
-              navigate('/email-verification-check', { replace: true })
-            }}
-          >
+          <MenuItem onClick={() => handleMenuNavigate('/email-verification-check')}>
             <ListItemIcon>
               <VerifiedIcon fontSize="small" color="warning" />
             </ListItemIcon>
@@ -365,11 +368,7 @@ export const MainLayout: React.FC = () => {
 
         <Divider />
 
-        <MenuItem
-          onClick={() => {
-            navigate('/profile', { replace: true })
-          }}
-        >
+        <MenuItem onClick={() => handleMenuNavigate('/profile')}>
           <ListItemIcon>
             <SettingsIcon fontSize="small" />
           </ListItemIcon>

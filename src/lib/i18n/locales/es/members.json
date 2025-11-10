@@ -296,7 +296,9 @@
       "mustLogin": "Debes iniciar sesión para acceder a esta página",
       "noPermissionMessage": "No tienes permisos de administrador para crear socios. Contacta con un administrador si necesitas crear un nuevo socio.",
       "missingAnnualFees": "No se puede dar de alta el socio porque faltan cuotas anuales",
-      "generateAnnualFeesFirst": "Por favor, genere las cuotas anuales primero"
+      "generateAnnualFeesFirst": "Por favor, genere las cuotas anuales primero",
+      "missingAnnualFeesDetailed": "No se puede crear el socio porque faltan cuotas anuales para los años: {{missingYears}}. Debe generar las cuotas anuales antes de crear socios con fechas históricas.",
+      "goToAnnualFees": "Ir a Cuotas Anuales"
     }
   },
   "editMemberPage": {

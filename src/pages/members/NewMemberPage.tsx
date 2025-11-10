@@ -13,6 +13,7 @@ import {
   Snackbar,
   CircularProgress,
   Backdrop,
+  Button,
 } from '@mui/material'
 import { NavigateNext } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
@@ -343,7 +344,9 @@ export const NewMemberPage: React.FC = () => {
 
         // ⭐ Detectar error específico de cuotas faltantes
         if (graphQLErrorCode === 'VALIDATION_ERROR' && graphQLErrorDetails?.missing_years) {
-          errorMessage = `${t('newMemberPage.errors.missingAnnualFees')}: ${graphQLErrorDetails.missing_years}. ${t('newMemberPage.errors.generateAnnualFeesFirst')}`
+          errorMessage = t('newMemberPage.errors.missingAnnualFeesDetailed', {
+            missingYears: graphQLErrorDetails.missing_years
+          })
         }
         // Detect duplicate number error
         else if (graphQLErrorMessage.toLowerCase().includes('duplicate') ||
@@ -411,9 +414,33 @@ export const NewMemberPage: React.FC = () => {
         </CardContent>
       </Card>
 
+      {/* ⭐ Mostrar error de forma prominente y persistente */}
+      {error && (
+        <Alert
+          severity="error"
+          sx={{ mb: 3 }}
+          onClose={() => setError(null)}
+        >
+          <Typography variant="body1" sx={{ fontWeight: 'bold', mb: 1 }}>
+            {error}
+          </Typography>
+          {/* Si es error de cuotas faltantes, mostrar enlace a la página de cuotas */}
+          {error.toLowerCase().includes('cuotas') && (
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => navigate('/annual-fees')}
+              sx={{ mt: 1 }}
+            >
+              {t('newMemberPage.errors.goToAnnualFees')}
+            </Button>
+          )}
+        </Alert>
+      )}
+
       {user?.role === 'admin' ? (
-        <MemberForm 
-          onCancel={handleCancel} 
+        <MemberForm
+          onCancel={handleCancel}
           onSubmit={(data) => void handleSubmit(data)}
           externalErrors={fieldErrors}
         />
@@ -429,8 +456,14 @@ export const NewMemberPage: React.FC = () => {
         <CircularProgress color="inherit" />
       </Backdrop>
 
-      <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
-        <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%' }}>
+      {/* Snackbar adicional para notificación temporal */}
+      <Snackbar
+        open={!!error}
+        autoHideDuration={null} // No auto-cerrar, el usuario debe cerrar manualmente
+        onClose={() => setError(null)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setError(null)} severity="error" sx={{ width: '100%', maxWidth: 600 }}>
           {error}
         </Alert>
       </Snackbar>

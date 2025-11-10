@@ -79,12 +79,11 @@ interface UsePaymentFormOptions {
   pendingPaymentId: string
   getFamilyId?: () => string | null | undefined
   isFamily: boolean
-  memberRegistrationDate?: string | null // ⭐ NUEVO - Fecha de alta del socio para pagos históricos
   onSuccess?: (payment: ConfirmedPayment) => void | Promise<void>
 }
 
 export const usePaymentForm = (options: UsePaymentFormOptions) => {
-  const { pendingPaymentId, memberRegistrationDate, onSuccess } = options
+  const { pendingPaymentId, onSuccess } = options
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -98,16 +97,15 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
       console.log('💳 [usePaymentForm] Confirming payment:', {
         pendingPaymentId,
         formData,
-        memberRegistrationDate,
       })
 
       // Confirm payment with all data in a single operation
       // Backend will update: status, payment_method, payment_date, and notes
-      // ⭐ Si hay fecha de alta del socio, usar esa fecha para el pago (altas históricas)
+      // ⭐ Usar la fecha que viene del formulario (puede ser fecha histórica o actual)
       const confirmedPayment = await confirmPayment(
         pendingPaymentId,
         'CASH', // Always CASH for initial payments
-        memberRegistrationDate || undefined, // Usar fecha de alta del socio si existe, sino fecha actual
+        formData.payment_date, // Usar fecha del formulario (ya viene como string ISO)
         formData.notes?.trim() || undefined
       )
 

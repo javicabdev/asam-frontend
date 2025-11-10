@@ -319,6 +319,7 @@ export const MainLayout: React.FC = () => {
         disableScrollLock={true}
         disablePortal={false}
         keepMounted={false}
+        transitionDuration={0}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'right',

@@ -105,6 +105,7 @@ export const InitialPaymentPage: React.FC = () => {
     memberId: memberId || '',
     pendingPaymentId: pendingPayment?.id || '',
     isFamily,
+    memberRegistrationDate: member?.fecha_alta || null, // ⭐ Pasar fecha de alta para recibos históricos
     onSuccess: async (payment) => {
       console.log('✅ Payment confirmed, generating receipt...', payment)
 

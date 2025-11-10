@@ -92,12 +92,25 @@ export function formatCurrency(amount: number): string {
 }
 
 /**
- * Formats date for receipt display (long format)
+ * Formats date for receipt display (long format, Spanish only)
+ * Includes time if the payment has a specific time (not midnight UTC conversion)
  */
 export function formatReceiptDate(dateString: string | null): string {
   if (!dateString) return ''
   const date = parseISO(dateString)
-  return format(date, "d 'de' MMMM 'de' yyyy", { locale: es })
+
+  // Check if this looks like a date-only value (stored as UTC midnight)
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
+  const seconds = date.getSeconds()
+
+  const isProbablyDateOnly =
+    (hours === 0 && minutes === 0 && seconds === 0) ||
+    ((hours === 1 || hours === 2) && minutes === 0 && seconds === 0)
+
+  return isProbablyDateOnly
+    ? format(date, "d 'de' MMMM 'de' yyyy", { locale: es })
+    : format(date, "d 'de' MMMM 'de' yyyy 'a las' HH:mm", { locale: es })
 }
 
 /**

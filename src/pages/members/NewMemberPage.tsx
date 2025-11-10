@@ -43,6 +43,7 @@ interface MemberFormSubmitData {
   poblacion: string
   provincia: string
   pais: string
+  fecha_alta: string | null // ⭐ NUEVO CAMPO
   fecha_nacimiento: string | null
   documento_identidad: string
   correo_electronico: string
@@ -146,6 +147,7 @@ export const NewMemberPage: React.FC = () => {
           poblacion: data.poblacion,
           provincia: data.provincia,
           pais: data.pais || 'España',
+          fecha_alta: data.fecha_alta || undefined, // ⭐ NUEVO CAMPO
           fecha_nacimiento: formatDateToRFC3339(data.fecha_nacimiento),
           documento_identidad: data.documento_identidad,
           correo_electronico: data.correo_electronico,
@@ -331,17 +333,25 @@ export const NewMemberPage: React.FC = () => {
 
       if (err instanceof ApolloError) {
         // Check for specific error types
-        const graphQLError = err.graphQLErrors && err.graphQLErrors.length > 0
-          ? err.graphQLErrors[0].message
-          : ''
+        const firstGraphQLError = err.graphQLErrors && err.graphQLErrors.length > 0
+          ? err.graphQLErrors[0]
+          : null
 
+        const graphQLErrorMessage = firstGraphQLError?.message || ''
+        const graphQLErrorCode = firstGraphQLError?.extensions?.code as string | undefined
+        const graphQLErrorDetails = firstGraphQLError?.extensions?.details as any
+
+        // ⭐ Detectar error específico de cuotas faltantes
+        if (graphQLErrorCode === 'VALIDATION_ERROR' && graphQLErrorDetails?.missing_years) {
+          errorMessage = `${t('newMemberPage.errors.missingAnnualFees')}: ${graphQLErrorDetails.missing_years}. ${t('newMemberPage.errors.generateAnnualFeesFirst')}`
+        }
         // Detect duplicate number error
-        if (graphQLError.toLowerCase().includes('duplicate') ||
-            graphQLError.toLowerCase().includes('duplicado') ||
-            graphQLError.toLowerCase().includes('already exists')) {
+        else if (graphQLErrorMessage.toLowerCase().includes('duplicate') ||
+            graphQLErrorMessage.toLowerCase().includes('duplicado') ||
+            graphQLErrorMessage.toLowerCase().includes('already exists')) {
           errorMessage = t('newMemberPage.errors.duplicateNumber', { numeroSocio: data.numero_socio })
-        } else if (graphQLError) {
-          errorMessage = graphQLError
+        } else if (graphQLErrorMessage) {
+          errorMessage = graphQLErrorMessage
         } else if (err.networkError) {
           errorMessage = t('newMemberPage.errors.networkError')
         } else if (err.message.toLowerCase().includes('internal server error')) {

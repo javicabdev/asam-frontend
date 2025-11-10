@@ -18,6 +18,7 @@ export interface CreateMemberInput {
   poblacion: string
   provincia?: string
   pais?: string
+  fecha_alta?: string // ⭐ NUEVO CAMPO - Fecha de alta histórica (opcional)
   fecha_nacimiento?: string
   documento_identidad?: string
   correo_electronico?: string

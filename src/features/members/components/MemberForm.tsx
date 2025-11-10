@@ -54,6 +54,7 @@ interface MemberFormData {
   poblacion: string
   provincia: string
   pais: string
+  fecha_alta: Date | null | undefined // ⭐ NUEVO - Fecha de alta histórica
   fecha_nacimiento: Date | null | undefined
   documento_identidad: string
   correo_electronico: string
@@ -69,7 +70,8 @@ interface MemberFormData {
 }
 
 // Tipo extendido con campos adicionales que se añaden en el submit
-interface MemberFormSubmitData extends Omit<MemberFormData, 'fecha_nacimiento' | 'esposa_fecha_nacimiento'> {
+interface MemberFormSubmitData extends Omit<MemberFormData, 'fecha_alta' | 'fecha_nacimiento' | 'esposa_fecha_nacimiento'> {
+  fecha_alta: string | null // ⭐ Convertido a string ISO
   fecha_nacimiento: string | null
   // Campos generados en submit para el backend
   esposo_nombre: string
@@ -115,6 +117,9 @@ const getValidationSchema = (t: any) => Yup.object({
       return EMAIL_REGEX.test(value)
     }),
   // Campos opcionales
+  fecha_alta: Yup.date()
+    .nullable()
+    .max(new Date(), t('memberForm.validation.fechaAltaFuture')),
   fecha_nacimiento: Yup.date().nullable(),
   profesion: Yup.string().nullable(),
   nacionalidad: Yup.string().nullable(),
@@ -179,6 +184,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
         poblacion: initialData.poblacion || '',
         provincia: initialData.provincia || 'Barcelona',
         pais: initialData.pais || 'España',
+        fecha_alta: initialData.fecha_alta ? new Date(initialData.fecha_alta) : null,
         fecha_nacimiento: initialData.fecha_nacimiento ? new Date(initialData.fecha_nacimiento) : null,
         documento_identidad: initialData.documento_identidad || '',
         correo_electronico: initialData.correo_electronico || '',
@@ -203,6 +209,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       poblacion: '',
       provincia: 'Barcelona',
       pais: 'España',
+      fecha_alta: null,
       fecha_nacimiento: null,
       documento_identidad: '',
       correo_electronico: '',
@@ -236,6 +243,24 @@ export const MemberForm: React.FC<MemberFormProps> = ({
   const tipoMembresia = watch('tipo_membresia')
   const isFamily = tipoMembresia === MembershipType.FAMILY
   const numeroSocio = watch('numero_socio')
+  const fechaAlta = watch('fecha_alta')
+
+  // Helper: Verificar si es una fecha histórica
+  const isHistoricalDate = (date: Date | null | undefined): boolean => {
+    if (!date) return false
+    const today = new Date()
+    const oneYearAgo = new Date(today.getFullYear() - 1, today.getMonth(), today.getDate())
+    return date < oneYearAgo
+  }
+
+  // Helper: Obtener rango de años desde fecha_alta hasta hoy
+  const getYearRange = (date: Date | null | undefined): string => {
+    if (!date) return ''
+    const startYear = date.getFullYear()
+    const endYear = new Date().getFullYear()
+    if (startYear === endYear) return `${startYear}`
+    return `${startYear}-${endYear}`
+  }
 
   // Track whether family members have been initialized
   const familyMembersInitialized = React.useRef(false)
@@ -353,14 +378,17 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       ...data,
       // Use normalized document if available
       documento_identidad: documentValidation?.normalizedValue || data.documento_identidad,
-      
+
+      // ⭐ Convertir fecha_alta a formato ISO (si está presente)
+      fecha_alta: data.fecha_alta ? format(data.fecha_alta, "yyyy-MM-dd'T'HH:mm:ss'Z'") : null,
+
       // Mapear datos del titular a campos esposo_* para el backend
       esposo_nombre: data.nombre,
       esposo_apellidos: data.apellidos,
       esposo_fecha_nacimiento: data.fecha_nacimiento ? format(data.fecha_nacimiento, 'yyyy-MM-dd') : null,
       esposo_documento_identidad: documentValidation?.normalizedValue || data.documento_identidad,
       esposo_correo_electronico: data.correo_electronico,
-      
+
       // Campos de esposa
       esposa_documento_identidad: esposaDocValidation?.normalizedValue || data.esposa_documento_identidad,
       fecha_nacimiento: data.fecha_nacimiento ? format(data.fecha_nacimiento, 'yyyy-MM-dd') : null,
@@ -472,6 +500,44 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                 )}
               />
             </Grid>
+
+            {/* ⭐ Campo de Fecha de Alta Histórica (opcional) */}
+            <Grid item xs={12} sm={6}>
+              <Controller
+                name="fecha_alta"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker
+                    label={t('memberForm.fields.fechaAlta')}
+                    value={field.value}
+                    onChange={field.onChange}
+                    disabled={mode === 'edit'}
+                    slotProps={{
+                      textField: {
+                        fullWidth: true,
+                        error: !!errors.fecha_alta,
+                        helperText: errors.fecha_alta?.message || t('memberForm.helpers.fechaAltaOptional'),
+                      },
+                    }}
+                    maxDate={new Date()}
+                  />
+                )}
+              />
+            </Grid>
+
+            {/* Mensaje informativo para fechas históricas */}
+            {fechaAlta && isHistoricalDate(fechaAlta) && (
+              <Grid item xs={12}>
+                <Alert severity="info" sx={{ mt: 1 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold', mb: 0.5 }}>
+                    {t('memberForm.alerts.historicalDate.title')}
+                  </Typography>
+                  <Typography variant="body2">
+                    {t('memberForm.alerts.historicalDate.description', { years: getYearRange(fechaAlta) })}
+                  </Typography>
+                </Alert>
+              </Grid>
+            )}
 
             {/* Datos Personales del Socio Principal */}
             <Grid item xs={12}>

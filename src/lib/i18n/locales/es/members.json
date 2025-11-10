@@ -294,7 +294,9 @@
       "networkError": "Error de conexión. Por favor verifica tu conexión a internet.",
       "internalServerError": "Error del servidor. El socio puede haber sido creado parcialmente. Verifica en la lista de socios antes de intentar de nuevo.",
       "mustLogin": "Debes iniciar sesión para acceder a esta página",
-      "noPermissionMessage": "No tienes permisos de administrador para crear socios. Contacta con un administrador si necesitas crear un nuevo socio."
+      "noPermissionMessage": "No tienes permisos de administrador para crear socios. Contacta con un administrador si necesitas crear un nuevo socio.",
+      "missingAnnualFees": "No se puede dar de alta el socio porque faltan cuotas anuales",
+      "generateAnnualFeesFirst": "Por favor, genere las cuotas anuales primero"
     }
   },
   "editMemberPage": {
@@ -343,7 +345,8 @@
       "paisRequired": "El país es obligatorio",
       "documentoIdentidadRequired": "El documento de identidad es obligatorio",
       "emailRequired": "El email es obligatorio",
-      "emailInvalid": "Email inválido. Formato esperado: usuario@dominio.com"
+      "emailInvalid": "Email inválido. Formato esperado: usuario@dominio.com",
+      "fechaAltaFuture": "La fecha de alta no puede ser futura"
     },
     "errors": {
       "numeroSocioDuplicate": "Este número de socio ya existe",
@@ -360,6 +363,7 @@
     "fields": {
       "tipoMembresia": "Tipo de Membresía",
       "numeroSocio": "Número de Socio",
+      "fechaAlta": "Fecha de Alta (Opcional)",
       "nombre": "Nombre",
       "apellidos": "Apellidos",
       "fechaNacimiento": "Fecha de Nacimiento",
@@ -390,7 +394,8 @@
       "numeroSocioFormat": "Puede escribir solo el número (ej: 2) y se formateará automáticamente",
       "fieldDisabled": "Este campo no puede modificarse",
       "dniNieHelper": "Introduzca el DNI o NIE",
-      "familyDataOptional": "Los datos de la esposa y familiares adicionales son opcionales."
+      "familyDataOptional": "Los datos de la esposa y familiares adicionales son opcionales.",
+      "fechaAltaOptional": "Si el socio se dio de alta en el pasado, especificar la fecha. Dejar vacío para usar la fecha actual."
     },
     "placeholders": {
       "numeroSocioFamily": "ej: 2 → A00002",
@@ -400,6 +405,12 @@
       "cancel": "Cancelar",
       "continue": "Continuar",
       "saveChanges": "Guardar Cambios"
+    },
+    "alerts": {
+      "historicalDate": {
+        "title": "Pagos Históricos",
+        "description": "Se generarán pagos pendientes para los años {{years}}. Asegúrese de que existan cuotas anuales para todos estos años."
+      }
     }
   },
   "details": {

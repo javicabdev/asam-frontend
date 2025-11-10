@@ -72,9 +72,9 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
     if (!payment) return
 
     try {
-      // Format date to ISO 8601 with full timestamp
+      // Format date to ISO 8601 RFC3339 with timezone (backend expects this format)
       const formattedDate = paymentDate
-        ? format(paymentDate, "yyyy-MM-dd'T'HH:mm:ss")
+        ? paymentDate.toISOString()
         : undefined
 
       // Confirm payment with all data in a single operation

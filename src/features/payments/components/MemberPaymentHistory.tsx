@@ -69,13 +69,21 @@ export function MemberPaymentHistory({ memberId, membershipType, maxRows = 10 }:
         return ''
       }
 
-      // Check if the date has time information (not midnight)
-      const hasTime = date.getHours() !== 0 || date.getMinutes() !== 0 || date.getSeconds() !== 0
+      // Check if this looks like a date-only value (stored as UTC midnight)
+      // When backend stores a date without time as UTC 00:00:00Z, it becomes 01:00 or 02:00 in local time
+      const hours = date.getHours()
+      const minutes = date.getMinutes()
+      const seconds = date.getSeconds()
 
-      // If no time info, show only date; otherwise show date and time
-      return hasTime
-        ? format(date, 'dd/MM/yyyy HH:mm', { locale: es })
-        : format(date, 'dd/MM/yyyy', { locale: es })
+      // If it's midnight (00:00:00) or 01:00:00/02:00:00 with no minutes/seconds (UTC conversion artifact)
+      const isProbablyDateOnly =
+        (hours === 0 && minutes === 0 && seconds === 0) || // Midnight local
+        ((hours === 1 || hours === 2) && minutes === 0 && seconds === 0) // UTC midnight -> local conversion
+
+      // If it looks like a date-only, show only date; otherwise show date and time
+      return isProbablyDateOnly
+        ? format(date, 'dd/MM/yyyy', { locale: es })
+        : format(date, 'dd/MM/yyyy HH:mm', { locale: es })
     } catch {
       return ''
     }

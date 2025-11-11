@@ -31,6 +31,8 @@ export default function CashFlowPage() {
 
   // Estados para filtros y diálogos
   const [filters, setFilters] = useState<CashFlowFiltersType>({})
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(25)
   const [openTransactionForm, setOpenTransactionForm] = useState(false)
   const [openRepatriationForm, setOpenRepatriationForm] = useState(false)
   const [transactionToEdit, setTransactionToEdit] = useState<any>(null)
@@ -42,9 +44,17 @@ export default function CashFlowPage() {
     }
   }, [location.state])
 
+  // Resetear página cuando cambien los filtros
+  useEffect(() => {
+    setPage(1)
+  }, [filters])
+
   // Queries
   const { balance, loading: balanceLoading } = useBalance()
-  const { cashFlows, totalCount, loading: cashFlowsLoading } = useCashFlows(filters)
+  const { cashFlows, totalCount, loading: cashFlowsLoading } = useCashFlows(
+    filters,
+    { page, pageSize }
+  )
 
   // Exportar CSV
   const handleExportCSV = () => {
@@ -108,6 +118,10 @@ export default function CashFlowPage() {
           cashFlows={cashFlows}
           loading={cashFlowsLoading}
           totalCount={totalCount}
+          page={page}
+          pageSize={pageSize}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
           onEditClick={(transaction) => {
             setTransactionToEdit(transaction)
             setOpenTransactionForm(true)

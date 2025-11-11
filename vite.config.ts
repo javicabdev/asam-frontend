@@ -110,30 +110,13 @@ export default defineConfig(({ mode }) => {
                 }
               }
             },
-            // GraphQL API - Strategy: StaleWhileRevalidate for better offline UX
-            // This allows showing cached data immediately while fetching fresh data in background
+            // GraphQL API - Network only strategy
+            // Apollo Client uses POST for all operations (queries + mutations)
+            // Using NetworkOnly to prevent authentication and mutation caching issues
+            // Future improvement: Implement smart caching that inspects operation type
             {
               urlPattern: /\/graphql/,
-              handler: 'StaleWhileRevalidate',
-              options: {
-                cacheName: 'graphql-cache',
-                expiration: {
-                  maxEntries: 100, // Increased from 50 to cache more queries
-                  maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days for better offline experience
-                },
-                cacheableResponse: {
-                  statuses: [0, 200]
-                },
-                plugins: [
-                  {
-                    // Custom plugin to add request method to cache key
-                    // This ensures GET and POST requests are cached separately
-                    cacheKeyWillBeUsed: async ({ request }) => {
-                      return request.url + '|' + request.method
-                    }
-                  }
-                ]
-              }
+              handler: 'NetworkOnly'
             },
             // Images - Cache first for performance
             {

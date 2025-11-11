@@ -96,7 +96,6 @@ export default defineConfig(({ mode }) => {
               handler: 'StaleWhileRevalidate',
               options: {
                 cacheName: 'graphql-cache',
-                networkTimeoutSeconds: 3, // Show cached data after 3s if network is slow
                 expiration: {
                   maxEntries: 100, // Increased from 50 to cache more queries
                   maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days for better offline experience

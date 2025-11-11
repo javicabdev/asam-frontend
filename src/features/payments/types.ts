@@ -1,8 +1,8 @@
 export interface InitialPaymentFormData {
   payment_date?: string  // Optional, defaults to today
   notes?: string         // Optional notes
+  amount?: number        // Optional, allows modifying the payment amount
   // payment_method removed - always CASH
-  // amount removed - comes from pending payment
 }
 
 export interface PaymentFormProps {

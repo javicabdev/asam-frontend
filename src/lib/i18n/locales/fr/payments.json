@@ -216,9 +216,10 @@
   },
   "initialPaymentForm": {
     "title": "Confirmer le Paiement en Espèces",
-    "amountToPay": "Montant à payer :",
     "paymentMethod": "Méthode de paiement :",
     "cash": "Espèces",
+    "amountLabel": "Montant à payer",
+    "amountHelper": "Vous pouvez modifier le montant si nécessaire",
     "paymentDateLabel": "Date du Paiement",
     "paymentDateHelper": "Date à laquelle le paiement en espèces a été reçu",
     "notesLabel": "Notes (optionnel)",

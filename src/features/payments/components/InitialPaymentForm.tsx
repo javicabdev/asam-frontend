@@ -45,6 +45,7 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
 
   const [paymentDate, setPaymentDate] = React.useState<Date>(initialDate)
   const [notes, setNotes] = React.useState('')
+  const [amount, setAmount] = React.useState<number>(pendingPayment.amount)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -52,6 +53,7 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
     await onSubmit({
       payment_date: paymentDate.toISOString(), // ISO 8601 format with timezone
       notes: notes.trim() || undefined,
+      amount,
     })
   }
 
@@ -63,13 +65,6 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
 
       <Alert severity="info" sx={{ mb: 3 }}>
         <Typography variant="body2">
-          <strong>{t('initialPaymentForm.amountToPay')}</strong>{' '}
-          {new Intl.NumberFormat('es-ES', {
-            style: 'currency',
-            currency: 'EUR',
-          }).format(pendingPayment.amount)}
-        </Typography>
-        <Typography variant="body2" sx={{ mt: 1 }}>
           <strong>{t('initialPaymentForm.paymentMethod')}</strong> {t('initialPaymentForm.cash')}
         </Typography>
       </Alert>
@@ -81,6 +76,22 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
       )}
 
       <Box component="form" onSubmit={handleSubmit}>
+        {/* Amount field */}
+        <TextField
+          label={t('initialPaymentForm.amountLabel')}
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(parseFloat(e.target.value) || 0)}
+          fullWidth
+          required
+          margin="normal"
+          inputProps={{
+            min: 0,
+            step: 0.01,
+          }}
+          helperText={t('initialPaymentForm.amountHelper')}
+        />
+
         <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
           <DateTimePicker
             label={t('initialPaymentForm.paymentDateLabel')}

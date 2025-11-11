@@ -216,9 +216,10 @@
   },
   "initialPaymentForm": {
     "title": "Confirmar Pago en Efectivo",
-    "amountToPay": "Monto a pagar:",
     "paymentMethod": "Método de pago:",
     "cash": "Efectivo",
+    "amountLabel": "Importe a pagar",
+    "amountHelper": "Puede modificar el importe si es necesario",
     "paymentDateLabel": "Fecha del Pago",
     "paymentDateHelper": "Fecha en que se recibió el pago en efectivo",
     "notesLabel": "Notas (opcional)",

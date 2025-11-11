@@ -100,13 +100,14 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
       })
 
       // Confirm payment with all data in a single operation
-      // Backend will update: status, payment_method, payment_date, and notes
+      // Backend will update: status, payment_method, payment_date, notes, and amount
       // ⭐ Usar la fecha que viene del formulario (puede ser fecha histórica o actual)
       const confirmedPayment = await confirmPayment(
         pendingPaymentId,
         'CASH', // Always CASH for initial payments
         formData.payment_date, // Usar fecha del formulario (ya viene como string ISO)
-        formData.notes?.trim() || undefined
+        formData.notes?.trim() || undefined,
+        formData.amount // Pass the amount (can be modified from the original)
       )
 
       if (!confirmedPayment) {

@@ -41,13 +41,19 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
       const registrationDate = new Date(memberRegistrationDate)
       const now = new Date()
 
-      // If registration date is in the past, use it
-      if (registrationDate < now) {
+      // Check if registration date is on a different day (in the past)
+      const isSameDay =
+        registrationDate.getFullYear() === now.getFullYear() &&
+        registrationDate.getMonth() === now.getMonth() &&
+        registrationDate.getDate() === now.getDate()
+
+      // If registration is from a previous day, use that date/time
+      if (registrationDate < now && !isSameDay) {
         return registrationDate
       }
     }
 
-    // Otherwise use current date/time
+    // Otherwise use current date/time (includes today's registrations)
     return new Date()
   }, [memberRegistrationDate])
 

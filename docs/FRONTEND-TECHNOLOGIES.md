@@ -715,4 +715,4 @@ La aplicación está optimizada para navegadores modernos:
 
 ---
 
-**Última actualización**: Enero 2025
+**Última actualización**: Noviembre 2025

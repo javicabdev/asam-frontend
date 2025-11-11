@@ -6,7 +6,7 @@ import {
   Payment,
   People,
   ArrowForward,
-  ReceiptLong,
+  PointOfSale,
 } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 
@@ -42,7 +42,7 @@ export default function QuickActions() {
     {
       title: t('quickActions.cashEntry'),
       description: t('quickActions.cashEntryDescription'),
-      icon: <ReceiptLong />,
+      icon: <PointOfSale />,
       path: '/cash-flow',
       state: { openTransactionForm: true },
       color: 'secondary',

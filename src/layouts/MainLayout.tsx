@@ -28,7 +28,7 @@ import {
   People as PeopleIcon,
   SupervisedUserCircle as UsersIcon,
   Payment as PaymentIcon,
-  AccountBalance as AccountBalanceIcon,
+  PointOfSale as PointOfSaleIcon,
   Assessment as AssessmentIcon,
   AccountCircle as AccountCircleIcon,
   Logout as LogoutIcon,
@@ -83,7 +83,7 @@ const navigationItems: NavItem[] = [
   },
   {
     text: 'menu.cashFlow',
-    icon: <AccountBalanceIcon />,
+    icon: <PointOfSaleIcon />,
     path: '/cash-flow',
     roles: ['admin'],
   },

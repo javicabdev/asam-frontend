@@ -13,12 +13,33 @@ export default defineConfig(({ mode }) => {
       // Configuración optimizada para producción
       rollupOptions: {
         output: {
-          // Desactivar code splitting temporal para depuración
-          manualChunks: undefined,
-          // Un solo archivo JS
-          inlineDynamicImports: true,
+          // Code splitting estratégico para mejor rendimiento
+          manualChunks: (id) => {
+            // Vendor chunks - librerías grandes en chunks separados
+            if (id.includes('node_modules')) {
+              // React core y relacionados
+              if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+                return 'vendor-react'
+              }
+              // Material UI
+              if (id.includes('@mui') || id.includes('@emotion')) {
+                return 'vendor-mui'
+              }
+              // Apollo y GraphQL
+              if (id.includes('@apollo') || id.includes('graphql')) {
+                return 'vendor-graphql'
+              }
+              // i18next
+              if (id.includes('i18next') || id.includes('react-i18next')) {
+                return 'vendor-i18n'
+              }
+              // Otras dependencias
+              return 'vendor-misc'
+            }
+          },
           // Configuración de nombres de archivo
           entryFileNames: 'js/[name]-[hash].js',
+          chunkFileNames: 'js/[name]-[hash].js',
           assetFileNames: 'assets/[name]-[hash].[ext]'
         }
       },

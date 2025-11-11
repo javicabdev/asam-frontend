@@ -4,6 +4,7 @@ export type { TransitionType } from './PageTransition'
 export { LanguageSelector } from './LanguageSelector'
 export { ThemeToggle } from './ThemeToggle'
 export { LoadingOverlay } from './LoadingOverlay'
+export { LoadingScreen } from './LoadingScreen'
 export { SkipLink } from './SkipLink'
 // Hooks are now exported from src/hooks
 export { usePageTransition } from '@/hooks/usePageTransition'

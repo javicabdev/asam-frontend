@@ -1,8 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Suspense, useEffect } from 'react'
-import { CircularProgress, Box } from '@mui/material'
 import { lazyWithPreload, preloadOnIdle } from '@/utils/lazyWithPreload'
 import { useAuth } from '@/hooks/useAuth'
+import { LoadingScreen } from '@/components/common'
 
 // Lazy load pages with preload capability
 const LoginPage = lazyWithPreload(() => import('@/pages/auth/LoginPage'), 'LoginPage')
@@ -86,13 +86,6 @@ import { MainLayout } from '@/layouts/MainLayout'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { AdminRoute } from '@/components/auth/AdminRoute'
 
-// Loading component
-const LoadingScreen = () => (
-  <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-    <CircularProgress />
-  </Box>
-)
-
 // Role-based redirect component
 const RoleBasedRedirect = () => {
   const { user } = useAuth()
@@ -145,7 +138,7 @@ export const AppRoutes = () => {
   usePreloadStrategy()
 
   return (
-    <Suspense fallback={<LoadingScreen />}>
+    <Suspense fallback={<LoadingScreen message="Cargando página..." />}>
       <Routes>
         {/* Public routes */}
         <Route element={<AuthLayout />}>

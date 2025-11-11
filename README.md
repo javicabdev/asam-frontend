@@ -4,17 +4,20 @@ Frontend web progresiva para el sistema de gestión ASAM - Asociación de miembr
 
 ## 🚀 Características
 
-- ✅ Aplicación Web Progresiva (PWA)
-- ✅ Gestión de miembros individuales y familiares
-- ✅ Control de pagos y cuotas con filtrado por usuario
-- ✅ Flujo de caja (entradas y salidas) - Solo administradores
-- ✅ Reportes y listado de morosos - Solo administradores
-- ✅ Sistema de permisos basado en roles (admin/user)
-- ✅ Interfaz responsive y moderna
-- ✅ Funcionalidad offline
-- ✅ Autenticación con JWT y verificación de email
-- ✅ Generación automática de cuotas anuales
-- ✅ Generación de recibos en PDF
+- ✅ **Aplicación Web Progresiva (PWA)** - Instalable en móviles y desktop
+- ✅ **Gestión de miembros** - Individuales y familiares completa
+- ✅ **Control de pagos y cuotas** - Con filtrado por usuario
+- ✅ **Flujo de caja** - Entradas y salidas (solo administradores)
+- ✅ **Reportes y morosos** - Análisis detallado (solo administradores)
+- ✅ **Sistema de permisos** - Basado en roles (admin/user)
+- ✅ **Interfaz responsive** - Diseño moderno con Material-UI
+- ✅ **Funcionalidad offline** - Assets estáticos disponibles sin conexión
+- ✅ **Autenticación segura** - JWT con refresh automático
+- ✅ **Verificación de email** - Proceso completo implementado
+- ✅ **Cuotas anuales** - Generación automática masiva
+- ✅ **Recibos PDF** - Generación profesional multiidioma
+- ✅ **Internacionalización** - 3 idiomas (Español, Francés, Wolof)
+- ✅ **Accesibilidad WCAG 2.1** - Level A compliant
 
 ## 🛠️ Tecnologías
 
@@ -215,10 +218,51 @@ VITE_APP_VERSION=0.1.0
 
 ## 📱 PWA Features
 
-- Instalable en dispositivos móviles y desktop
-- Funciona offline (modo lectura)
-- Sincronización automática cuando vuelve la conexión
-- Notificaciones push (próximamente)
+### ✅ Implementado
+- **Instalable** en dispositivos móviles y desktop
+- **Manifest completo** con iconos, screenshots y shortcuts
+- **Service Worker** con Workbox para caché de assets
+- **Offline mode** para assets estáticos (imágenes, fuentes, CSS/JS)
+- **Indicador de conectividad** con banner cuando estás offline
+- **Prompt de instalación** discreto y personalizable
+- **Accesibilidad WCAG 2.1 Level A** con skip links y focus indicators
+- **Internacionalización** completa en 3 idiomas (ES/FR/WO)
+
+### 📋 Características de la PWA
+
+#### Instalación
+- Prompt automático de instalación en navegadores compatibles
+- Opción "No mostrar de nuevo" que se recuerda
+- Iconos optimizados para todos los tamaños de pantalla
+- Splash screens para iOS
+
+#### Funcionamiento Offline
+- **Assets estáticos**: Siempre disponibles offline (CSS, JS, imágenes)
+- **Fuentes**: Google Fonts cacheadas durante 1 año
+- **Imágenes**: Cacheadas durante 30 días
+- **GraphQL**: Requiere conexión (NetworkOnly para evitar problemas de auth)
+
+#### Shortcuts de la App
+Al instalar la PWA, dispondrás de accesos rápidos a:
+- **Nuevo Pago**: Registrar un pago directamente
+- **Nuevo Miembro**: Alta de socio directa
+
+#### Accesibilidad
+- Skip links para navegación por teclado
+- Focus indicators visibles (WCAG 2.1)
+- Soporte de preferencias de color del sistema
+- Navegación completa por teclado
+
+### 🚫 Limitaciones Actuales
+- Datos de GraphQL no disponibles offline (requiere conexión)
+- Operaciones de escritura (crear/editar/eliminar) requieren conexión
+- Notificaciones push pendientes de implementación
+
+### 🔮 Próximas Mejoras
+- Caching inteligente de queries GraphQL
+- Sincronización en background
+- Notificaciones push
+- Optimización de rendimiento con code splitting
 
 ## 🤝 Contribuir
 

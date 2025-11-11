@@ -88,7 +88,16 @@
     "close": "Tëj",
     "offline": {
       "title": "Amul jokkoo",
-      "message": "Danga jokkoo te amul internet. Yeen yépp du nekk."
+      "message": "Danga jokkoo te amul internet. Yeen yépp du nekk.",
+      "showFeatures": "Xool lu mën a jëfandikoo",
+      "hideFeatures": "Nëbb jëf yi",
+      "availableFeatures": "Lu mën a jëfandikoo bu amul internet",
+      "writeDisabled": "Jëf yu sos, soppi ak far dañu tëj.",
+      "features": {
+        "viewMembers": "Xool listu members yi",
+        "viewPayments": "Xool listu payments yi",
+        "viewDetails": "Xool details yu members yi ñu gis leegi"
+      }
     },
     "online": {
       "title": "Jokkoo delloo"

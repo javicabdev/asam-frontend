@@ -6,6 +6,7 @@
   "delete": "Eliminar",
   "refresh": "Actualizar",
   "adminOnly": "Solo los administradores pueden crear nuevos socios",
+  "offlineDisabled": "Función no disponible sin conexión",
   "newMember": "Nuevo Socio",
   "loadError": "Error al cargar los socios",
   "filters": {

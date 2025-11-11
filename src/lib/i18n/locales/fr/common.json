@@ -88,7 +88,16 @@
     "close": "Fermer",
     "offline": {
       "title": "Hors ligne",
-      "message": "Vous naviguez hors ligne. Certaines fonctionnalités peuvent ne pas être disponibles."
+      "message": "Vous naviguez hors ligne. Certaines fonctionnalités peuvent ne pas être disponibles.",
+      "showFeatures": "Voir les fonctions disponibles",
+      "hideFeatures": "Masquer les fonctions",
+      "availableFeatures": "Fonctions disponibles hors ligne",
+      "writeDisabled": "Les actions de création, modification et suppression sont désactivées.",
+      "features": {
+        "viewMembers": "Voir la liste des membres",
+        "viewPayments": "Voir l'historique des paiements",
+        "viewDetails": "Voir les détails des membres récemment visités"
+      }
     },
     "online": {
       "title": "Connexion rétablie"

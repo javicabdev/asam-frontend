@@ -88,7 +88,16 @@
     "close": "Cerrar",
     "offline": {
       "title": "Sin conexión",
-      "message": "Estás navegando sin conexión. Algunas funciones pueden no estar disponibles."
+      "message": "Estás navegando sin conexión. Algunas funciones pueden no estar disponibles.",
+      "showFeatures": "Ver funciones disponibles",
+      "hideFeatures": "Ocultar funciones",
+      "availableFeatures": "Funciones disponibles sin conexión",
+      "writeDisabled": "Las acciones de creación, edición y eliminación están deshabilitadas.",
+      "features": {
+        "viewMembers": "Ver lista de socios",
+        "viewPayments": "Ver historial de pagos",
+        "viewDetails": "Ver detalles de socios visitados recientemente"
+      }
     },
     "online": {
       "title": "Conexión restablecida"

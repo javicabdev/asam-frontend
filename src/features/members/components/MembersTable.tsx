@@ -47,6 +47,7 @@ import { es } from 'date-fns/locale'
 import { Member, MemberStatus, MembershipType } from '../types'
 import { useExportMembers } from '@/features/members/hooks'
 import { MemberFilter } from '@/graphql/generated/operations'
+import { useOnlineStatus } from '@/hooks/useOnlineStatus'
 
 interface MembersTableProps {
   members: Member[]
@@ -92,6 +93,7 @@ function CustomToolbar({
   isAdmin,
 }: CustomToolbarProps) {
   const { t } = useTranslation('members')
+  const { isOnline } = useOnlineStatus()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
@@ -149,7 +151,13 @@ function CustomToolbar({
         <GridToolbarQuickFilter debounceMs={500} />
         {onAddMember && (
           <Tooltip
-            title={!isAdmin ? t('adminOnly', 'Solo los administradores pueden crear nuevos socios') : ''}
+            title={
+              !isOnline
+                ? t('offlineDisabled', 'Función no disponible sin conexión')
+                : !isAdmin
+                  ? t('adminOnly', 'Solo los administradores pueden crear nuevos socios')
+                  : ''
+            }
             arrow
           >
             <span>
@@ -157,7 +165,7 @@ function CustomToolbar({
                 variant="contained"
                 startIcon={<PersonAddIcon />}
                 onClick={onAddMember}
-                disabled={!isAdmin}
+                disabled={!isAdmin || !isOnline}
                 size="small"
               >
                 {t('newMember', 'Nuevo Socio')}
@@ -227,6 +235,7 @@ export function MembersTable({
 }: MembersTableProps) {
   const { t } = useTranslation('members')
   const theme = useTheme()
+  const { isOnline } = useOnlineStatus()
   const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([])
 
   // Track if we initiated the change (to ignore reflection events)
@@ -490,25 +499,28 @@ export function MembersTable({
 
             {isAdmin && (
               <>
-                <Tooltip title={t('list.actions.edit')}>
-                  <IconButton
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      if (params.row) {
-                        onEditClick(params.row)
-                      }
-                    }}
-                  >
-                    <EditIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title={t('table.deactivate')}>
+                <Tooltip title={!isOnline ? t('offlineDisabled', 'Función no disponible sin conexión') : t('list.actions.edit')}>
                   <span>
                     <IconButton
                       size="small"
-                      disabled={params.row?.estado === MemberStatus.INACTIVE}
+                      disabled={!isOnline}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        if (params.row) {
+                          onEditClick(params.row)
+                        }
+                      }}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </span>
+                </Tooltip>
+
+                <Tooltip title={!isOnline ? t('offlineDisabled', 'Función no disponible sin conexión') : t('table.deactivate')}>
+                  <span>
+                    <IconButton
+                      size="small"
+                      disabled={params.row?.estado === MemberStatus.INACTIVE || !isOnline}
                       onClick={(e) => {
                         e.stopPropagation()
                         if (params.row) {
@@ -526,7 +538,7 @@ export function MembersTable({
         ),
       },
     ],
-    [onRowClick, onEditClick, onDeactivateClick, isAdmin, t]
+    [onRowClick, onEditClick, onDeactivateClick, isAdmin, isOnline, t]
   )
 
   const handlePaginationModelChange = useCallback((model: GridPaginationModel) => {

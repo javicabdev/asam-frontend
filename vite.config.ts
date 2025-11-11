@@ -59,6 +59,7 @@ export default defineConfig(({ mode }) => {
           navigateFallback: '/index.html',
           navigateFallbackDenylist: [/^\/api/, /^\/graphql/],
           runtimeCaching: [
+            // Google Fonts CSS
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
               handler: 'CacheFirst',
@@ -73,6 +74,7 @@ export default defineConfig(({ mode }) => {
                 }
               }
             },
+            // Google Fonts Files
             {
               urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
               handler: 'CacheFirst',
@@ -87,15 +89,41 @@ export default defineConfig(({ mode }) => {
                 }
               }
             },
+            // GraphQL API - Strategy: StaleWhileRevalidate for better offline UX
+            // This allows showing cached data immediately while fetching fresh data in background
             {
               urlPattern: /\/graphql/,
-              handler: 'NetworkFirst',
+              handler: 'StaleWhileRevalidate',
               options: {
-                cacheName: 'api-cache',
-                networkTimeoutSeconds: 10,
+                cacheName: 'graphql-cache',
+                networkTimeoutSeconds: 3, // Show cached data after 3s if network is slow
                 expiration: {
-                  maxEntries: 50,
-                  maxAgeSeconds: 60 * 5 // 5 minutes
+                  maxEntries: 100, // Increased from 50 to cache more queries
+                  maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days for better offline experience
+                },
+                cacheableResponse: {
+                  statuses: [0, 200]
+                },
+                plugins: [
+                  {
+                    // Custom plugin to add request method to cache key
+                    // This ensures GET and POST requests are cached separately
+                    cacheKeyWillBeUsed: async ({ request }) => {
+                      return request.url + '|' + request.method
+                    }
+                  }
+                ]
+              }
+            },
+            // Images - Cache first for performance
+            {
+              urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|ico)$/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'images-cache',
+                expiration: {
+                  maxEntries: 60,
+                  maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
                 },
                 cacheableResponse: {
                   statuses: [0, 200]

@@ -6,6 +6,7 @@
   "delete": "Supprimer",
   "refresh": "Actualiser",
   "adminOnly": "Seuls les administrateurs peuvent créer de nouveaux membres",
+  "offlineDisabled": "Fonction non disponible hors ligne",
   "newMember": "Nouveau Membre",
   "loadError": "Erreur lors du chargement des membres",
   "filters": {

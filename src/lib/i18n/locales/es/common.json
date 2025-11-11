@@ -79,5 +79,19 @@
     "dark": "Oscuro",
     "system": "Sistema",
     "select": "Seleccionar tema"
+  },
+  "pwa": {
+    "install": "Instalar",
+    "installTitle": "Instala ASAM en tu dispositivo",
+    "installMessage": "Accede más rápido y úsala sin conexión",
+    "dontShowAgain": "No mostrar de nuevo",
+    "close": "Cerrar",
+    "offline": {
+      "title": "Sin conexión",
+      "message": "Estás navegando sin conexión. Algunas funciones pueden no estar disponibles."
+    },
+    "online": {
+      "title": "Conexión restablecida"
+    }
   }
 }

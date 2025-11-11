@@ -39,6 +39,8 @@ import {
 } from '@mui/icons-material'
 import { useAuth } from '@/hooks/useAuth'
 import { PageTransition, LanguageSelector, ThemeToggle } from '@/components/common'
+import { InstallPrompt } from '@/components/common/InstallPrompt'
+import { OfflineIndicator } from '@/components/common/OfflineIndicator'
 import { useTranslation } from 'react-i18next'
 
 const drawerWidth = 240
@@ -444,6 +446,10 @@ export const MainLayout: React.FC = () => {
           </Box>
         </PageTransition>
       </Box>
+
+      {/* PWA components */}
+      <OfflineIndicator />
+      <InstallPrompt />
     </Box>
   )
 }

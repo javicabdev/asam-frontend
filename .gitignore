@@ -33,3 +33,4 @@ dev-dist/
 
 # Temporary/deleted files
 *.deleted
+/docstemp/

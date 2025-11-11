@@ -79,5 +79,19 @@
     "dark": "Sombre",
     "system": "Système",
     "select": "Sélectionner le thème"
+  },
+  "pwa": {
+    "install": "Installer",
+    "installTitle": "Installez ASAM sur votre appareil",
+    "installMessage": "Accédez plus rapidement et utilisez-la hors ligne",
+    "dontShowAgain": "Ne plus afficher",
+    "close": "Fermer",
+    "offline": {
+      "title": "Hors ligne",
+      "message": "Vous naviguez hors ligne. Certaines fonctionnalités peuvent ne pas être disponibles."
+    },
+    "online": {
+      "title": "Connexion rétablie"
+    }
   }
 }

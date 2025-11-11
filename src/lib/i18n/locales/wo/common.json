@@ -79,5 +79,19 @@
     "dark": "Lëndëm",
     "system": "Sisteem",
     "select": "Tànn melokaan"
+  },
+  "pwa": {
+    "install": "Jëfandikoo",
+    "installTitle": "Jëfandikoo ASAM ci sa jumtukaay",
+    "installMessage": "Dugg gaaw te jëfandikoo bu amul internet",
+    "dontShowAgain": "Bul wone tuuti",
+    "close": "Tëj",
+    "offline": {
+      "title": "Amul jokkoo",
+      "message": "Danga jokkoo te amul internet. Yeen yépp du nekk."
+    },
+    "online": {
+      "title": "Jokkoo delloo"
+    }
   }
 }

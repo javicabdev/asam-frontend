@@ -52,8 +52,21 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
   // Initialize form when dialog opens or payment changes
   useEffect(() => {
     if (payment && open) {
-      // Set payment date to today if not set
-      const initialDate = payment.paymentDate ? new Date(payment.paymentDate) : new Date()
+      // Always use current date/time as default
+      // If payment has a recent date (less than 1 hour old), use that instead
+      let initialDate = new Date()
+      if (payment.paymentDate) {
+        const paymentDateObj = new Date(payment.paymentDate)
+        const now = new Date()
+        const hoursDiff = (now.getTime() - paymentDateObj.getTime()) / (1000 * 60 * 60)
+
+        // Only use payment date if it's recent (less than 1 hour old)
+        // This indicates it was set intentionally in a previous screen
+        if (hoursDiff < 1) {
+          initialDate = paymentDateObj
+        }
+      }
+
       setPaymentDate(initialDate)
       setPaymentMethod(payment.paymentMethod || 'CASH')
       setNotes(payment.notes || '')

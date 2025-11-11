@@ -18,7 +18,6 @@ import type { MemberPayment } from '../hooks/useMemberPayments'
 interface InitialPaymentFormComponentProps {
   memberId: string
   pendingPayment: MemberPayment
-  memberRegistrationDate?: string | null // ⭐ NUEVO - Fecha de alta del socio
   onSubmit: (data: InitialPaymentFormData) => void | Promise<void>
   onCancel?: () => void
   loading: boolean
@@ -27,7 +26,6 @@ interface InitialPaymentFormComponentProps {
 
 export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
   pendingPayment,
-  memberRegistrationDate,
   onSubmit,
   onCancel,
   loading,
@@ -35,13 +33,12 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
 }) => {
   const { t } = useTranslation('payments')
 
-  // ⭐ Usar fecha de alta del socio si existe, sino usar fecha actual
+  // ⭐ Always use current date/time for payment
+  // If member was registered recently (same day), use current time
+  // Otherwise, still use current time as payment is happening now
   const initialDate = React.useMemo(() => {
-    if (memberRegistrationDate) {
-      return new Date(memberRegistrationDate)
-    }
-    return new Date()
-  }, [memberRegistrationDate])
+    return new Date() // Always use current date/time
+  }, [])
 
   const [paymentDate, setPaymentDate] = React.useState<Date>(initialDate)
   const [notes, setNotes] = React.useState('')

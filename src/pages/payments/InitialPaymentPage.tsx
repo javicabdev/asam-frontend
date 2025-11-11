@@ -349,7 +349,6 @@ export const InitialPaymentPage: React.FC = () => {
           <InitialPaymentForm
             memberId={memberId}
             pendingPayment={pendingPayment}
-            memberRegistrationDate={member.fecha_alta} // ⭐ Pasar fecha de alta para mostrar en el formulario
             onSubmit={onPaymentSubmit}
             onCancel={handleGoToMembers}
             loading={paymentLoading}

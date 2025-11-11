@@ -38,7 +38,7 @@ import {
   CalendarMonth as CalendarIcon,
 } from '@mui/icons-material'
 import { useAuth } from '@/hooks/useAuth'
-import { PageTransition, LanguageSelector, ThemeToggle } from '@/components/common'
+import { PageTransition, LanguageSelector, ThemeToggle, SkipLink } from '@/components/common'
 import { InstallPrompt } from '@/components/common/InstallPrompt'
 import { OfflineIndicator } from '@/components/common/OfflineIndicator'
 import { useTranslation } from 'react-i18next'
@@ -206,6 +206,7 @@ export const MainLayout: React.FC = () => {
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <CssBaseline />
+      <SkipLink />
       <AppBar
         position="fixed"
         sx={{
@@ -428,7 +429,9 @@ export const MainLayout: React.FC = () => {
 
       {/* Main content */}
       <Box
+        id="main-content"
         component="main"
+        tabIndex={-1}
         sx={{
           flexGrow: 1,
           p: 3,
@@ -437,6 +440,9 @@ export const MainLayout: React.FC = () => {
           bgcolor: 'background.default',
           position: 'relative', // Ensure proper stacking context
           zIndex: 1, // Below drawer
+          '&:focus': {
+            outline: 'none', // Skip link handles focus, no outline needed
+          },
         }}
       >
         <Toolbar />

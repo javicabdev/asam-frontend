@@ -224,6 +224,11 @@ const getDesignTokens = (mode: 'light' | 'dark'): ThemeOptions => ({
             borderRadius: 8,
             backgroundColor: mode === 'light' ? '#f5f5f5' : '#2b2b2b',
           },
+          // Enhanced focus indicators for accessibility
+          '*:focus-visible': {
+            outline: `3px solid ${mode === 'light' ? asamColors.warning : '#ffef64'}`,
+            outlineOffset: '2px',
+          },
         },
       },
     },

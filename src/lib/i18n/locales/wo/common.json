@@ -80,6 +80,9 @@
     "system": "Sisteem",
     "select": "Tànn melokaan"
   },
+  "accessibility": {
+    "skipToContent": "Jeex ci diir bi"
+  },
   "pwa": {
     "install": "Jëfandikoo",
     "installTitle": "Jëfandikoo ASAM ci sa jumtukaay",

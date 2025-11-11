@@ -3,9 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    
+
+    <!-- Accessibility Meta Tags -->
+    <meta name="color-scheme" content="light dark" />
+
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#1976d2" />
+    <meta name="theme-color" content="#1976d2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d47a1" media="(prefers-color-scheme: dark)" />
     <meta name="description" content="Mutua ASAM - Sistema de gestión para la asociación de repatriación de socios fallecidos" />
     <meta name="application-name" content="Mutua ASAM" />
     <meta name="mobile-web-app-capable" content="yes" />

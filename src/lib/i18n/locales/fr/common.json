@@ -80,6 +80,9 @@
     "system": "Système",
     "select": "Sélectionner le thème"
   },
+  "accessibility": {
+    "skipToContent": "Aller au contenu principal"
+  },
   "pwa": {
     "install": "Installer",
     "installTitle": "Installez ASAM sur votre appareil",

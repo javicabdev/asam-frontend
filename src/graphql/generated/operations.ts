@@ -487,6 +487,7 @@ export type MutationChangePasswordArgs = {
 
 
 export type MutationConfirmPaymentArgs = {
+  amount?: InputMaybe<Scalars['Float']['input']>;
   id: Scalars['ID']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
   paymentDate?: InputMaybe<Scalars['Time']['input']>;
@@ -1384,6 +1385,7 @@ export type ConfirmPaymentMutationVariables = Exact<{
   paymentMethod: Scalars['String']['input'];
   paymentDate?: InputMaybe<Scalars['Time']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
+  amount?: InputMaybe<Scalars['Float']['input']>;
 }>;
 
 
@@ -3926,12 +3928,13 @@ export type UpdatePaymentMutationHookResult = ReturnType<typeof useUpdatePayment
 export type UpdatePaymentMutationResult = Apollo.MutationResult<UpdatePaymentMutation>;
 export type UpdatePaymentMutationOptions = Apollo.BaseMutationOptions<UpdatePaymentMutation, UpdatePaymentMutationVariables>;
 export const ConfirmPaymentDocument = gql`
-    mutation ConfirmPayment($id: ID!, $paymentMethod: String!, $paymentDate: Time, $notes: String) {
+    mutation ConfirmPayment($id: ID!, $paymentMethod: String!, $paymentDate: Time, $notes: String, $amount: Float) {
   confirmPayment(
     id: $id
     paymentMethod: $paymentMethod
     paymentDate: $paymentDate
     notes: $notes
+    amount: $amount
   ) {
     id
     member {
@@ -3968,6 +3971,7 @@ export type ConfirmPaymentMutationFn = Apollo.MutationFunction<ConfirmPaymentMut
  *      paymentMethod: // value for 'paymentMethod'
  *      paymentDate: // value for 'paymentDate'
  *      notes: // value for 'notes'
+ *      amount: // value for 'amount'
  *   },
  * });
  */

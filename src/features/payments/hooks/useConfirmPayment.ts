@@ -9,7 +9,8 @@ interface UseConfirmPaymentResult {
     paymentId: string,
     paymentMethod: string,
     paymentDate?: string | null,
-    notes?: string | null
+    notes?: string | null,
+    amount?: number | null
   ) => Promise<ConfirmedPayment | null>
   loading: boolean
   error: ApolloError | undefined
@@ -17,9 +18,9 @@ interface UseConfirmPaymentResult {
 
 /**
  * Custom hook to confirm a pending payment (PENDING → PAID)
- * 
+ *
  * @returns Object with confirmPayment function, loading and error states
- * 
+ *
  * @example
  * ```tsx
  * const { confirmPayment, loading, error } = useConfirmPayment()
@@ -29,7 +30,8 @@ interface UseConfirmPaymentResult {
  *     payment.id,
  *     'CASH',
  *     '2025-11-02T10:30:00Z', // Optional: custom date
- *     'Pago recibido en efectivo' // Optional: notes
+ *     'Pago recibido en efectivo', // Optional: notes
+ *     50.00 // Optional: custom amount
  *   )
  *   if (payment) {
  *     // Show success notification
@@ -49,6 +51,7 @@ export function useConfirmPayment(): UseConfirmPaymentResult {
    * @param paymentMethod - The payment method (CASH, TRANSFER, CARD)
    * @param paymentDate - Optional: custom payment date (ISO 8601 string), uses NOW if not provided
    * @param notes - Optional: payment notes
+   * @param amount - Optional: custom amount (if different from the original payment amount)
    * @returns Promise<ConfirmedPayment | null> - the confirmed payment object if successful, null otherwise
    */
   const confirmPayment = useCallback(
@@ -56,7 +59,8 @@ export function useConfirmPayment(): UseConfirmPaymentResult {
       paymentId: string,
       paymentMethod: string,
       paymentDate?: string | null,
-      notes?: string | null
+      notes?: string | null,
+      amount?: number | null
     ): Promise<ConfirmedPayment | null> => {
       try {
         const result = await confirmPaymentMutation({
@@ -65,6 +69,7 @@ export function useConfirmPayment(): UseConfirmPaymentResult {
             paymentMethod: paymentMethod,
             paymentDate: paymentDate || undefined,
             notes: notes || undefined,
+            amount: amount || undefined,
           },
         })
 

@@ -47,6 +47,7 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
   const [paymentDate, setPaymentDate] = useState<Date>(new Date())
   const [paymentMethod, setPaymentMethod] = useState<string>('CASH')
   const [notes, setNotes] = useState<string>('')
+  const [amount, setAmount] = useState<number>(0)
 
   // Initialize form when dialog opens or payment changes
   useEffect(() => {
@@ -56,16 +57,9 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
       setPaymentDate(initialDate)
       setPaymentMethod(payment.paymentMethod || 'CASH')
       setNotes(payment.notes || '')
+      setAmount(payment.amount)
     }
   }, [payment, open])
-
-  // Format currency
-  const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat('es-ES', {
-      style: 'currency',
-      currency: 'EUR',
-    }).format(amount)
-  }
 
   const handleConfirm = async () => {
     if (!payment) return
@@ -77,12 +71,13 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
         : undefined
 
       // Confirm payment with all data in a single operation
-      // Backend will update: status, payment_method, payment_date, and notes
+      // Backend will update: status, payment_method, payment_date, notes, and amount
       const success = await confirmPayment(
         payment.id,
         paymentMethod,
         formattedDate,
-        notes.trim() || undefined
+        notes.trim() || undefined,
+        amount
       )
 
       if (success) {
@@ -146,22 +141,30 @@ export const ConfirmPaymentDialog: React.FC<ConfirmPaymentDialogProps> = ({
           <Typography variant="body2" color="text.secondary">
             {t('confirmDialog.concept')}
           </Typography>
-          <Typography variant="body1" gutterBottom>
+          <Typography variant="body1">
             {payment.membershipFeeYear
               ? t('confirmDialog.conceptAnnualFee', { year: payment.membershipFeeYear })
               : t('confirmDialog.conceptOther')}
-          </Typography>
-
-          <Typography variant="body2" color="text.secondary">
-            {t('confirmDialog.amount')}
-          </Typography>
-          <Typography variant="h5" color="success.main">
-            {formatCurrency(payment.amount)}
           </Typography>
         </Box>
 
         {/* Editable fields */}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {/* Amount */}
+          <TextField
+            label={t('confirmDialog.amount')}
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(parseFloat(e.target.value) || 0)}
+            fullWidth
+            required
+            inputProps={{
+              min: 0,
+              step: 0.01,
+            }}
+            helperText={t('confirmDialog.amountHelper')}
+          />
+
           {/* Payment Date */}
           <DateTimePicker
             label={t('confirmDialog.paymentDateLabel')}

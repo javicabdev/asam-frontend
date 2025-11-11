@@ -484,6 +484,7 @@ export type MutationChangePasswordArgs = {
 
 
 export type MutationConfirmPaymentArgs = {
+  amount?: InputMaybe<Scalars['Float']['input']>;
   id: Scalars['ID']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
   paymentDate?: InputMaybe<Scalars['Time']['input']>;

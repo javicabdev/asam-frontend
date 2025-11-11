@@ -236,6 +236,7 @@
     "conceptAnnualFee": "Cotisation Annuelle {{year}}",
     "conceptOther": "Autre paiement",
     "amount": "Montant :",
+    "amountHelper": "Vous pouvez modifier le montant si nécessaire",
     "paymentDateLabel": "Date de paiement",
     "paymentDateHelper": "Date à laquelle le paiement a été effectué",
     "paymentMethodLabel": "Mode de paiement",

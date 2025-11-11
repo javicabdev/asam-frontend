@@ -349,6 +349,7 @@ export const InitialPaymentPage: React.FC = () => {
           <InitialPaymentForm
             memberId={memberId}
             pendingPayment={pendingPayment}
+            memberRegistrationDate={member.fecha_alta}
             onSubmit={onPaymentSubmit}
             onCancel={handleGoToMembers}
             loading={paymentLoading}

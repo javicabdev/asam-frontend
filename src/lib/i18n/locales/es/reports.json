@@ -1,12 +1,12 @@
 {
   "delinquent": {
-    "title": "Informe de Morosos",
-    "subtitle": "Lista de socios y familias con pagos pendientes",
+    "title": "Informe de Cuotas Pendientes",
+    "subtitle": "Lista de socios y familias con cuotas pendientes de pago",
     "generateReport": "Generar Informe",
     "exportPDF": "Exportar PDF",
     "exportCSV": "Exportar CSV",
     "generatedAt": "Generado el",
-    "noData": "No hay socios morosos en este momento",
+    "noData": "No hay cuotas pendientes en este momento",
     "noDataDescription": "Todos los pagos están al día. ¡Excelente trabajo!",
 
     "filters": {
@@ -29,8 +29,8 @@
     },
 
     "table": {
-      "title": "Lista de Morosos",
-      "debtor": "Deudor",
+      "title": "Lista de Cuotas Pendientes",
+      "debtor": "Socio/Familia",
       "type": "Tipo",
       "memberNumber": "Nº Socio",
       "contact": "Contacto",
@@ -75,12 +75,12 @@
 
     "summary": {
       "title": "Resumen",
-      "totalDebtors": "Total Morosos",
+      "totalDebtors": "Total con Cuotas Pendientes",
       "individualDebtors": "Socios Individuales",
       "familyDebtors": "Familias",
-      "totalDebt": "Deuda Total",
+      "totalDebt": "Importe Total Pendiente",
       "avgDaysOverdue": "Promedio Días Atraso",
-      "avgDebtPerDebtor": "Deuda Promedio"
+      "avgDebtPerDebtor": "Importe Promedio Pendiente"
     },
 
     "actions": {
@@ -92,12 +92,12 @@
     },
 
     "details": {
-      "title": "Detalles de Deuda",
+      "title": "Detalles de Cuotas Pendientes",
       "generalInfo": "Información General",
-      "debtSummary": "Resumen de Deuda",
-      "oldestDebtDate": "Fecha de Deuda Más Antigua",
+      "debtSummary": "Resumen de Cuotas Pendientes",
+      "oldestDebtDate": "Fecha de Cuota Más Antigua",
       "createdAt": "Creado el",
-      "debtorInfo": "Información del Deudor",
+      "debtorInfo": "Información del Socio/Familia",
       "memberNumber": "Número de Socio",
       "name": "Nombre",
       "email": "Email",
@@ -116,14 +116,14 @@
     },
 
     "export": {
-      "pdfFilename": "informe-morosos-{{date}}.pdf",
-      "csvFilename": "morosos-{{date}}.csv",
+      "pdfFilename": "informe-cuotas-pendientes-{{date}}.pdf",
+      "csvFilename": "cuotas-pendientes-{{date}}.csv",
       "success": "Informe exportado correctamente",
       "error": "Error al exportar el informe"
     },
 
     "errors": {
-      "loadFailed": "Error al cargar el informe de morosos",
+      "loadFailed": "Error al cargar el informe de cuotas pendientes",
       "unauthorized": "No tienes permisos para ver este informe",
       "retry": "Reintentar"
     }

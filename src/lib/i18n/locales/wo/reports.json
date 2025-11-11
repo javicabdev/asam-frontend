@@ -1,12 +1,12 @@
 {
   "delinquent": {
-    "title": "Rapport yu njëkk xaalis",
-    "subtitle": "Limu mbokk yi ak mbootaay yi ànd na xaalis bu tùn",
+    "title": "Rapport Kotisaasioŋ yu am",
+    "subtitle": "Limu mbokk yi ak mbootaay yi ànd na kotisaasioŋ bu tùn ci fay",
     "generateReport": "Sos Rapport bi",
     "exportPDF": "Jox ci PDF",
     "exportCSV": "Jox ci CSV",
     "generatedAt": "Sosoon",
-    "noData": "Amul njëkk xaalis ci wakhtoo wii",
+    "noData": "Amul kotisaasioŋ yu tùn ci wakhtoo wii",
     "noDataDescription": "Yépp fay xaalis yi. Liggéey bu baax!",
 
     "filters": {
@@ -29,8 +29,8 @@
     },
 
     "table": {
-      "title": "Limu njëkk xaalis yi",
-      "debtor": "Njëkk xaalis",
+      "title": "Limu Kotisaasioŋ yu am",
+      "debtor": "Mbokk/Mbootaay",
       "type": "Xeet",
       "memberNumber": "Limu mbokk",
       "contact": "Jokkale",
@@ -75,12 +75,12 @@
 
     "summary": {
       "title": "Résumé",
-      "totalDebtors": "Yépp njëkk xaalis",
+      "totalDebtors": "Yépp ak kotisaasioŋ yu am",
       "individualDebtors": "Mbokk yi ñeneen",
       "familyDebtors": "Mbootaay yi",
-      "totalDebt": "Yépp ci xaalis",
+      "totalDebt": "Xaalis bu yépp bu tùn",
       "avgDaysOverdue": "Njëkkaleen fan yu wajur",
-      "avgDebtPerDebtor": "Xaalis wu njëkkaleen"
+      "avgDebtPerDebtor": "Xaalis wu njëkkaleen bu tùn"
     },
 
     "actions": {
@@ -92,12 +92,12 @@
     },
 
     "details": {
-      "title": "Li ci ànd ci xaalis",
+      "title": "Li ci ànd ci Kotisaasioŋ yu am",
       "generalInfo": "Xibaar Bu Yàgg",
-      "debtSummary": "Résumé Xaalis",
-      "oldestDebtDate": "Bësu Xaalis Bu Mag",
+      "debtSummary": "Résumé Kotisaasioŋ yu am",
+      "oldestDebtDate": "Bësu Kotisaasioŋ Bu Mag",
       "createdAt": "Sosal ci",
-      "debtorInfo": "Xëtu njëkk xaalis bi",
+      "debtorInfo": "Xëtu Mbokk/Mbootaay bi",
       "memberNumber": "Limu mbokk",
       "name": "Tur",
       "email": "Email",
@@ -116,14 +116,14 @@
     },
 
     "export": {
-      "pdfFilename": "rapport-njekk-xaalis-{{date}}.pdf",
-      "csvFilename": "njekk-xaalis-{{date}}.csv",
+      "pdfFilename": "rapport-kotisaasion-am-{{date}}.pdf",
+      "csvFilename": "kotisaasion-am-{{date}}.csv",
       "success": "Rapport bi joxe na",
       "error": "Njumte ci joxe rapport bi"
     },
 
     "errors": {
-      "loadFailed": "Njumte ci yeb rapport bi",
+      "loadFailed": "Njumte ci yeb rapport kotisaasioŋ yu am",
       "unauthorized": "Amul seen ay baraama ngir xool rapport bii",
       "retry": "Jéema"
     }

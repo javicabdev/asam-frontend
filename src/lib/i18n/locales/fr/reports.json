@@ -1,12 +1,12 @@
 {
   "delinquent": {
-    "title": "Rapport des Débiteurs",
-    "subtitle": "Liste des membres et familles avec paiements en retard",
+    "title": "Rapport des Cotisations en Attente",
+    "subtitle": "Liste des membres et familles avec cotisations en attente de paiement",
     "generateReport": "Générer le Rapport",
     "exportPDF": "Exporter PDF",
     "exportCSV": "Exporter CSV",
     "generatedAt": "Généré le",
-    "noData": "Aucun débiteur actuellement",
+    "noData": "Aucune cotisation en attente actuellement",
     "noDataDescription": "Tous les paiements sont à jour. Excellent travail!",
 
     "filters": {
@@ -29,8 +29,8 @@
     },
 
     "table": {
-      "title": "Liste des Débiteurs",
-      "debtor": "Débiteur",
+      "title": "Liste des Cotisations en Attente",
+      "debtor": "Membre/Famille",
       "type": "Type",
       "memberNumber": "Nº Membre",
       "contact": "Contact",
@@ -75,12 +75,12 @@
 
     "summary": {
       "title": "Résumé",
-      "totalDebtors": "Total Débiteurs",
+      "totalDebtors": "Total avec Cotisations en Attente",
       "individualDebtors": "Membres Individuels",
       "familyDebtors": "Familles",
-      "totalDebt": "Dette Totale",
+      "totalDebt": "Montant Total en Attente",
       "avgDaysOverdue": "Moyenne Jours de Retard",
-      "avgDebtPerDebtor": "Dette Moyenne"
+      "avgDebtPerDebtor": "Montant Moyen en Attente"
     },
 
     "actions": {
@@ -92,12 +92,12 @@
     },
 
     "details": {
-      "title": "Détails de la Dette",
+      "title": "Détails des Cotisations en Attente",
       "generalInfo": "Informations Générales",
-      "debtSummary": "Résumé de la Dette",
-      "oldestDebtDate": "Date de la Dette la Plus Ancienne",
+      "debtSummary": "Résumé des Cotisations en Attente",
+      "oldestDebtDate": "Date de la Cotisation la Plus Ancienne",
       "createdAt": "Créé le",
-      "debtorInfo": "Information du Débiteur",
+      "debtorInfo": "Information du Membre/Famille",
       "memberNumber": "Numéro de Membre",
       "name": "Nom",
       "email": "Email",
@@ -116,14 +116,14 @@
     },
 
     "export": {
-      "pdfFilename": "rapport-debiteurs-{{date}}.pdf",
-      "csvFilename": "debiteurs-{{date}}.csv",
+      "pdfFilename": "rapport-cotisations-attente-{{date}}.pdf",
+      "csvFilename": "cotisations-attente-{{date}}.csv",
       "success": "Rapport exporté avec succès",
       "error": "Erreur lors de l'exportation du rapport"
     },
 
     "errors": {
-      "loadFailed": "Erreur lors du chargement du rapport des débiteurs",
+      "loadFailed": "Erreur lors du chargement du rapport des cotisations en attente",
       "unauthorized": "Vous n'avez pas les permissions pour voir ce rapport",
       "retry": "Réessayer"
     }

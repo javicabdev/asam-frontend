@@ -36,6 +36,8 @@ import {
   EmailOutlined as EmailIcon,
   VerifiedUser as VerifiedIcon,
   CalendarMonth as CalendarIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
 } from '@mui/icons-material'
 import { useAuth } from '@/hooks/useAuth'
 import { PageTransition, LanguageSelector, ThemeToggle, SkipLink } from '@/components/common'
@@ -44,6 +46,7 @@ import { OfflineIndicator } from '@/components/common/OfflineIndicator'
 import { useTranslation } from 'react-i18next'
 
 const drawerWidth = 240
+const drawerCollapsedWidth = 64
 
 interface NavItem {
   text: string
@@ -106,10 +109,25 @@ export const MainLayout: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
+  // Drawer collapsed state with localStorage persistence
+  const [collapsed, setCollapsed] = useState(() => {
+    const saved = localStorage.getItem('drawer-collapsed')
+    return saved ? JSON.parse(saved) : false
+  })
+
+  // Persist collapsed state to localStorage
+  useEffect(() => {
+    localStorage.setItem('drawer-collapsed', JSON.stringify(collapsed))
+  }, [collapsed])
+
   // Close menu when location changes (including browser back/forward navigation)
   useEffect(() => {
     handleMenuClose()
   }, [location.pathname])
+
+  const handleDrawerCollapse = () => {
+    setCollapsed(!collapsed)
+  }
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
@@ -160,8 +178,8 @@ export const MainLayout: React.FC = () => {
   )
 
   const drawer = (
-    <Box>
-      <Toolbar sx={{ justifyContent: 'center', py: 2 }}>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Toolbar sx={{ justifyContent: 'center', py: 2, minHeight: 64 }}>
         <Tooltip title={t('menu.goToDashboard', { ns: 'navigation', defaultValue: 'Ir al Dashboard' })}>
           <Box
             onClick={() => handleNavigate('/dashboard')}
@@ -173,48 +191,91 @@ export const MainLayout: React.FC = () => {
               },
             }}
           >
-            <Box
-              component="img"
-              src="/icons/original-logo.png"
-              alt="ASAM"
-              sx={{
-                height: 48,
-                width: 'auto',
-                objectFit: 'contain',
-              }}
-            />
+            {collapsed ? (
+              <Typography
+                variant="h5"
+                sx={{
+                  fontWeight: 'bold',
+                  color: 'primary.main',
+                }}
+              >
+                A
+              </Typography>
+            ) : (
+              <Box
+                component="img"
+                src="/icons/original-logo.png"
+                alt="ASAM"
+                sx={{
+                  height: 48,
+                  width: 'auto',
+                  objectFit: 'contain',
+                }}
+              />
+            )}
           </Box>
         </Tooltip>
       </Toolbar>
       <Divider />
-      <List>
+      <List sx={{ flexGrow: 1 }}>
         {visibleNavigationItems.map((item) => (
           <ListItem key={item.path} disablePadding>
-            <ListItemButton
-              selected={location.pathname === item.path}
-              onClick={() => handleNavigate(item.path)}
+            <Tooltip
+              title={collapsed ? t(item.text) : ''}
+              placement="right"
             >
-              <ListItemIcon
+              <ListItemButton
+                selected={location.pathname === item.path}
+                onClick={() => handleNavigate(item.path)}
                 sx={{
-                  color: location.pathname === item.path ? 'primary.main' : 'inherit',
+                  justifyContent: collapsed ? 'center' : 'initial',
+                  px: collapsed ? 0 : 2,
                 }}
               >
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText
-                primary={t(item.text)}
-                sx={{
-                  '& .MuiListItemText-primary': {
+                <ListItemIcon
+                  sx={{
                     color: location.pathname === item.path ? 'primary.main' : 'inherit',
-                  },
-                }}
-              />
-            </ListItemButton>
+                    minWidth: collapsed ? 'auto' : 56,
+                    justifyContent: 'center',
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
+                {!collapsed && (
+                  <ListItemText
+                    primary={t(item.text)}
+                    sx={{
+                      '& .MuiListItemText-primary': {
+                        color: location.pathname === item.path ? 'primary.main' : 'inherit',
+                      },
+                    }}
+                  />
+                )}
+              </ListItemButton>
+            </Tooltip>
           </ListItem>
         ))}
       </List>
+      <Divider />
+      {/* Collapse/Expand Button */}
+      <Box sx={{ p: 1 }}>
+        <Tooltip title={collapsed ? 'Expandir menú' : 'Contraer menú'}>
+          <IconButton
+            onClick={handleDrawerCollapse}
+            sx={{
+              width: '100%',
+              borderRadius: 1,
+            }}
+          >
+            {collapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          </IconButton>
+        </Tooltip>
+      </Box>
     </Box>
   )
+
+  // Calculate current drawer width
+  const currentDrawerWidth = collapsed ? drawerCollapsedWidth : drawerWidth
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
@@ -223,8 +284,12 @@ export const MainLayout: React.FC = () => {
       <AppBar
         position="fixed"
         sx={{
-          width: { md: `calc(100% - ${drawerWidth}px)` },
-          ml: { md: `${drawerWidth}px` },
+          width: { md: `calc(100% - ${currentDrawerWidth}px)` },
+          ml: { md: `${currentDrawerWidth}px` },
+          transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+          }),
         }}
       >
         <Toolbar>
@@ -403,7 +468,7 @@ export const MainLayout: React.FC = () => {
         </MenuItem>
       </Menu>
 
-      <Box component="nav" sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}>
+      <Box component="nav" sx={{ width: { md: currentDrawerWidth }, flexShrink: { md: 0 } }}>
         {/* Mobile drawer */}
         <Drawer
           variant="temporary"
@@ -430,8 +495,13 @@ export const MainLayout: React.FC = () => {
             display: { xs: 'none', md: 'block' },
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
-              width: drawerWidth,
+              width: currentDrawerWidth,
               zIndex: 1200, // Ensure drawer is above content
+              transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+              }),
+              overflowX: 'hidden',
             },
           }}
           open
@@ -448,11 +518,15 @@ export const MainLayout: React.FC = () => {
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { md: `calc(100% - ${drawerWidth}px)` },
+          width: { md: `calc(100% - ${currentDrawerWidth}px)` },
           minHeight: '100vh',
           bgcolor: 'background.default',
           position: 'relative', // Ensure proper stacking context
           zIndex: 1, // Below drawer
+          transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+          }),
           '&:focus': {
             outline: 'none', // Skip link handles focus, no outline needed
           },

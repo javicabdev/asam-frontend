@@ -185,14 +185,26 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
   const loading = createLoading || updateLoading
   const error = createError || updateError
 
-  // Translate error messages with role names
+  // Translate error messages with role names and password requirements
   const getTranslatedErrorMessage = (errorMessage?: string) => {
     if (!errorMessage) return ''
 
+    let translatedMessage = errorMessage
+
     // Replace role enum values with translated names
-    return errorMessage
-      .replace(/\bUSER\b/g, 'Usuario')
-      .replace(/\bADMIN\b/g, 'Administrador')
+    translatedMessage = translatedMessage
+      .replace(/\bUSER\b/g, t('table.roles.user', 'Usuario'))
+      .replace(/\bADMIN\b/g, t('table.roles.admin', 'Administrador'))
+
+    // Replace password complexity error with detailed requirements
+    if (/password does not meet complexity requirements/i.test(translatedMessage)) {
+      translatedMessage = t(
+        'form.errors.passwordComplexity',
+        'La contraseña debe tener: mínimo 8 caracteres, al menos una mayúscula, una minúscula y un número'
+      )
+    }
+
+    return translatedMessage
   }
 
   const handleClose = () => {

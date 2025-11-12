@@ -118,7 +118,8 @@
       "createFailed": "Error al crear el usuario",
       "updateFailed": "Error al actualizar el usuario",
       "usernameTaken": "El nombre de usuario ya está en uso",
-      "emailTaken": "El correo electrónico ya está en uso"
+      "emailTaken": "El correo electrónico ya está en uso",
+      "passwordComplexity": "La contraseña debe tener: mínimo 8 caracteres, al menos una mayúscula, una minúscula y un número"
     },
     "success": {
       "created": "Usuario creado exitosamente",

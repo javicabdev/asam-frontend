@@ -118,7 +118,8 @@
       "createFailed": "Njuumte ci sos jëfandikukat bi",
       "updateFailed": "Njuumte ci soppi jëfandikukat bi",
       "usernameTaken": "Turu jëfandikukat bi ñu ngi koy jëfandikoo",
-      "emailTaken": "Màkkaanu email bi ñu ngi koy jëfandikoo"
+      "emailTaken": "Màkkaanu email bi ñu ngi koy jëfandikoo",
+      "passwordComplexity": "Baatu jàmm war na am: lu ëpp 8 araf, araf bu gëna mag, bu ndaw ak lim"
     },
     "success": {
       "created": "Jëfandikukat bi sos na bu baax",

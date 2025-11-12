@@ -118,7 +118,8 @@
       "createFailed": "Erreur lors de la création de l'utilisateur",
       "updateFailed": "Erreur lors de la mise à jour de l'utilisateur",
       "usernameTaken": "Le nom d'utilisateur est déjà utilisé",
-      "emailTaken": "L'adresse email est déjà utilisée"
+      "emailTaken": "L'adresse email est déjà utilisée",
+      "passwordComplexity": "Le mot de passe doit avoir : minimum 8 caractères, au moins une majuscule, une minuscule et un chiffre"
     },
     "success": {
       "created": "Utilisateur créé avec succès",

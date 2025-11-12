@@ -129,6 +129,10 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
   })
 
   const watchRole = watch('role')
+  const watchEmail = watch('email')
+
+  // Check if email has changed
+  const emailChanged = isEditMode && user && watchEmail !== user.email
 
   // Reset form when user changes
   useEffect(() => {
@@ -258,6 +262,12 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {getTranslatedErrorMessage(error.message)}
+          </Alert>
+        )}
+
+        {emailChanged && (
+          <Alert severity="warning" sx={{ mb: 2 }}>
+            {t('form.warnings.emailChanged', 'Al cambiar el email, el usuario deberá verificar la nueva dirección de correo')}
           </Alert>
         )}
 

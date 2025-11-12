@@ -111,6 +111,9 @@
       "passwordsNotMatch": "Les mots de passe ne correspondent pas",
       "roleRequired": "Le rôle est requis"
     },
+    "warnings": {
+      "emailChanged": "En changeant l'email, l'utilisateur devra vérifier la nouvelle adresse email"
+    },
     "errors": {
       "createFailed": "Erreur lors de la création de l'utilisateur",
       "updateFailed": "Erreur lors de la mise à jour de l'utilisateur",

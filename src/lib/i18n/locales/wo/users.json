@@ -111,6 +111,9 @@
       "passwordsNotMatch": "Baatu jàmm yi bokkuñu",
       "roleRequired": "Anam lu laaj la"
     },
+    "warnings": {
+      "emailChanged": "Su soppaleel email bi, jëfandikukat bi war na saytu màkkaanu email bu bees bi"
+    },
     "errors": {
       "createFailed": "Njuumte ci sos jëfandikukat bi",
       "updateFailed": "Njuumte ci soppi jëfandikukat bi",

@@ -70,16 +70,9 @@ export default function PaymentsPage() {
   }
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        gap: 3,
-      }}
-    >
+    <Box>
       {/* Header */}
-      <Box>
+      <Box mb={3}>
         <Typography
           variant="h4"
           component="h1"
@@ -97,13 +90,13 @@ export default function PaymentsPage() {
 
       {/* Error Alert */}
       {error && (
-        <Alert severity="error">
+        <Alert severity="error" sx={{ mb: 3 }}>
           {t('error.load')}: {error.message}
         </Alert>
       )}
 
       {/* Filters */}
-      <Paper sx={{ p: 2 }}>
+      <Paper sx={{ p: 2, mb: 3 }}>
         <Typography variant="h6" gutterBottom>
           🔍 {t('filters.title', 'Filtros')}
         </Typography>
@@ -111,24 +104,15 @@ export default function PaymentsPage() {
       </Paper>
 
       {/* Table */}
-      <Paper
-        sx={{
-          p: 2,
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: 0,
-        }}
-      >
+      <Paper sx={{ p: 2, mb: 3 }}>
         <Typography variant="h6" gutterBottom>
           📊 {t('table.title', 'Listado de Pagos')} ({pageInfo.totalCount})
         </Typography>
         <Box
           sx={{
-            flex: 1,
+            height: 'calc(100vh - 500px)',
             minHeight: 400,
             width: '100%',
-            height: '100%',
           }}
         >
           <PaymentsTable

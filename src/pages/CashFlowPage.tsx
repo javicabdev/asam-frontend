@@ -62,7 +62,7 @@ export default function CashFlowPage() {
   }
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* Header */}
       <Box mb={3} display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h4" component="h1">
@@ -110,17 +110,11 @@ export default function CashFlowPage() {
       </Paper>
 
       {/* Tabla de Transacciones */}
-      <Paper sx={{ mt: 3, p: 2, mb: 3 }}>
+      <Paper sx={{ mt: 3, p: 2, mb: 3, display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
         <Typography variant="h6" gutterBottom>
           📊 {t('table.title')} ({totalCount})
         </Typography>
-        <Box
-          sx={{
-            height: 'calc(100vh - 550px)',
-            minHeight: 400,
-            width: '100%'
-          }}
-        >
+        <Box sx={{ flex: 1, minHeight: 0, width: '100%' }}>
           <CashFlowTable
             cashFlows={cashFlows}
             loading={cashFlowsLoading}

@@ -40,7 +40,7 @@ export default function UsersPage() {
   }
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <Typography variant="h4" component="h1" gutterBottom>
         {t('title')}
       </Typography>
@@ -51,8 +51,8 @@ export default function UsersPage() {
       <Box
         sx={{
           mt: 3,
-          height: 'calc(100vh - 280px)',
-          minHeight: 400,
+          flex: 1,
+          minHeight: 0,
           width: '100%',
           mb: 3
         }}

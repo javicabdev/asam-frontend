@@ -35,8 +35,8 @@ export default function ReportsPage() {
   }
 
   return (
-    <Container maxWidth="xl">
-      <Box sx={{ py: 4 }}>
+    <Container maxWidth="xl" sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ py: 4, display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
         {/* Header */}
         <Box
           sx={{
@@ -112,8 +112,8 @@ export default function ReportsPage() {
             ) : (
               <Box
                 sx={{
-                  height: 'calc(100vh - 580px)',
-                  minHeight: 400,
+                  flex: 1,
+                  minHeight: 0,
                   width: '100%',
                   mb: 3
                 }}

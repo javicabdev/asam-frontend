@@ -51,7 +51,7 @@ export default function UsersPage() {
       <Box
         sx={{
           mt: 3,
-          height: 'calc(100vh - 280px)',
+          height: '100%',
           minHeight: 400,
           width: '100%',
           mb: 3

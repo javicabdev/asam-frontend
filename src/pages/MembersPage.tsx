@@ -114,8 +114,9 @@ export default function MembersPage() {
         <Box
           sx={{
             flex: 1,
-            minHeight: 0,
+            minHeight: 400,
             width: '100%',
+            height: '100%',
           }}
         >
           <MembersTable

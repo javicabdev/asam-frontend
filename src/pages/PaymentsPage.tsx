@@ -88,7 +88,14 @@ export default function PaymentsPage() {
       )}
 
       {/* Table */}
-      <Box sx={{ height: 600, width: '100%' }}>
+      <Box
+        sx={{
+          height: 'calc(100vh - 380px)',
+          minHeight: 400,
+          width: '100%',
+          mb: 3
+        }}
+      >
         <PaymentsTable
           payments={payments}
           totalCount={pageInfo.totalCount}

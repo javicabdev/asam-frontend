@@ -110,11 +110,17 @@ export default function CashFlowPage() {
       </Paper>
 
       {/* Tabla de Transacciones */}
-      <Paper sx={{ mt: 3, p: 2 }}>
+      <Paper sx={{ mt: 3, p: 2, mb: 3 }}>
         <Typography variant="h6" gutterBottom>
           📊 {t('table.title')} ({totalCount})
         </Typography>
-        <Box sx={{ height: 600, width: '100%' }}>
+        <Box
+          sx={{
+            height: 'calc(100vh - 550px)',
+            minHeight: 400,
+            width: '100%'
+          }}
+        >
           <CashFlowTable
             cashFlows={cashFlows}
             loading={cashFlowsLoading}

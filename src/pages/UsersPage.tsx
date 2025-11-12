@@ -48,7 +48,7 @@ export default function UsersPage() {
         {t('subtitle')}
       </Typography>
 
-      <Box sx={{ mt: 3 }}>
+      <Box sx={{ mt: 3, height: 600, width: '100%' }}>
         <UsersTable
           onEditUser={handleEditUser}
           onAddUser={handleAddUser}

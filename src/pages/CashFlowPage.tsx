@@ -114,19 +114,21 @@ export default function CashFlowPage() {
         <Typography variant="h6" gutterBottom>
           📊 {t('table.title')} ({totalCount})
         </Typography>
-        <CashFlowTable
-          cashFlows={cashFlows}
-          loading={cashFlowsLoading}
-          totalCount={totalCount}
-          page={page}
-          pageSize={pageSize}
-          onPageChange={setPage}
-          onPageSizeChange={setPageSize}
-          onEditClick={(transaction) => {
-            setTransactionToEdit(transaction)
-            setOpenTransactionForm(true)
-          }}
-        />
+        <Box sx={{ height: 600, width: '100%' }}>
+          <CashFlowTable
+            cashFlows={cashFlows}
+            loading={cashFlowsLoading}
+            totalCount={totalCount}
+            page={page}
+            pageSize={pageSize}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+            onEditClick={(transaction) => {
+              setTransactionToEdit(transaction)
+              setOpenTransactionForm(true)
+            }}
+          />
+        </Box>
       </Paper>
 
       {/* Diálogos */}

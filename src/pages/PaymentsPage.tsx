@@ -88,20 +88,22 @@ export default function PaymentsPage() {
       )}
 
       {/* Table */}
-      <PaymentsTable
-        payments={payments}
-        totalCount={pageInfo.totalCount}
-        loading={loading || isGeneratingReceipt}
-        page={filters.page}
-        pageSize={filters.pageSize}
-        onPageChange={setPage}
-        onPageSizeChange={setPageSize}
-        onSortChange={setSort}
-        onRowClick={handleRowClick}
-        onConfirmClick={handleConfirmClick}
-        onDownloadReceipt={handleDownloadReceipt}
-        isAdmin={isAdmin}
-      />
+      <Box sx={{ height: 600, width: '100%' }}>
+        <PaymentsTable
+          payments={payments}
+          totalCount={pageInfo.totalCount}
+          loading={loading || isGeneratingReceipt}
+          page={filters.page}
+          pageSize={filters.pageSize}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+          onSortChange={setSort}
+          onRowClick={handleRowClick}
+          onConfirmClick={handleConfirmClick}
+          onDownloadReceipt={handleDownloadReceipt}
+          isAdmin={isAdmin}
+        />
+      </Box>
 
       {/* Confirm Payment Dialog */}
       <ConfirmPaymentDialog

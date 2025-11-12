@@ -88,24 +88,26 @@ export default function MembersPage() {
       )}
 
       {/* Table */}
-      <MembersTable
-        members={members}
-        totalCount={totalCount}
-        loading={loading}
-        page={page}
-        pageSize={pageSize}
-        filters={filter}
-        onPageChange={handlePageChange}
-        onPageSizeChange={handlePageSizeChange}
-        onSortChange={handleSortChange}
-        onRowClick={handleRowClick}
-        onEditClick={handleEditClick}
-        onDeactivateClick={handleDeactivateClick}
-        onSelectionChange={handleSelectionChange}
-        selectable={true}
-        isAdmin={isAdmin}
-        onAddMember={() => navigate('/members/new')}
-      />
+      <Box sx={{ height: 600, width: '100%' }}>
+        <MembersTable
+          members={members}
+          totalCount={totalCount}
+          loading={loading}
+          page={page}
+          pageSize={pageSize}
+          filters={filter}
+          onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
+          onSortChange={handleSortChange}
+          onRowClick={handleRowClick}
+          onEditClick={handleEditClick}
+          onDeactivateClick={handleDeactivateClick}
+          onSelectionChange={handleSelectionChange}
+          selectable={true}
+          isAdmin={isAdmin}
+          onAddMember={() => navigate('/members/new')}
+        />
+      </Box>
 
       {/* Deactivate Confirmation Dialog */}
       <ConfirmDeactivateDialog

@@ -110,11 +110,13 @@ export default function ReportsPage() {
                 {t('delinquent.errors.noDebtors')}
               </Alert>
             ) : (
-              <DelinquentTable
-                debtors={data.debtors}
-                loading={loading}
-                onViewDetails={handleViewDetails}
-              />
+              <Box sx={{ height: 600, width: '100%' }}>
+                <DelinquentTable
+                  debtors={data.debtors}
+                  loading={loading}
+                  onViewDetails={handleViewDetails}
+                />
+              </Box>
             )}
           </>
         )}

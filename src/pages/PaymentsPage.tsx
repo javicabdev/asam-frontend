@@ -117,7 +117,6 @@ export default function PaymentsPage() {
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          overflow: 'hidden',
           minHeight: 0,
         }}
       >
@@ -129,9 +128,6 @@ export default function PaymentsPage() {
             flex: 1,
             minHeight: 0,
             width: '100%',
-            '& .MuiDataGrid-root': {
-              height: '100%',
-            },
           }}
         >
           <PaymentsTable

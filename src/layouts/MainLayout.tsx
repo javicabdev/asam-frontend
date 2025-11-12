@@ -162,16 +162,29 @@ export const MainLayout: React.FC = () => {
   const drawer = (
     <Box>
       <Toolbar sx={{ justifyContent: 'center', py: 2 }}>
-        <Box
-          component="img"
-          src="/icons/original-logo.png"
-          alt="ASAM"
-          sx={{
-            height: 48,
-            width: 'auto',
-            objectFit: 'contain',
-          }}
-        />
+        <Tooltip title={t('menu.goToDashboard', { ns: 'navigation', defaultValue: 'Ir al Dashboard' })}>
+          <Box
+            onClick={() => handleNavigate('/dashboard')}
+            sx={{
+              cursor: 'pointer',
+              transition: 'opacity 0.2s ease-in-out',
+              '&:hover': {
+                opacity: 0.8,
+              },
+            }}
+          >
+            <Box
+              component="img"
+              src="/icons/original-logo.png"
+              alt="ASAM"
+              sx={{
+                height: 48,
+                width: 'auto',
+                objectFit: 'contain',
+              }}
+            />
+          </Box>
+        </Tooltip>
       </Toolbar>
       <Divider />
       <List>

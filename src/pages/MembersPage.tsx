@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography, Alert, Chip, Stack, useTheme } from '@mui/material'
+import { Box, Typography, Alert, Chip, Stack, useTheme, Paper } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/stores/authStore'
 import { useTranslation } from 'react-i18next'
@@ -55,15 +55,14 @@ export default function MembersPage() {
         <Typography
           variant="h4"
           component="h1"
-          gutterBottom
           sx={{
             color: theme.palette.text.primary,
             fontWeight: 600,
           }}
         >
-          {t('title', 'Gestión de Socios')}
+          👥 {t('title', 'Gestión de Socios')}
         </Typography>
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 1 }}>
           <Typography variant="body2" color="text.secondary">
             {t('total', 'Total')}: {totalCount} {t('members', 'socios')}
           </Typography>
@@ -77,44 +76,53 @@ export default function MembersPage() {
         </Stack>
       </Box>
 
-      {/* Filters */}
-      <MembersFilters onFilterChange={handleFilterChange} />
-
       {/* Error Alert */}
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
+        <Alert severity="error" sx={{ mb: 3 }}>
           {t('loadError', 'Error al cargar los socios')}: {error.message}
         </Alert>
       )}
 
+      {/* Filters */}
+      <Paper sx={{ p: 2, mb: 3 }}>
+        <Typography variant="h6" gutterBottom>
+          🔍 {t('filters.title', 'Filtros')}
+        </Typography>
+        <MembersFilters onFilterChange={handleFilterChange} />
+      </Paper>
+
       {/* Table */}
-      <Box
-        sx={{
-          height: 'calc(100vh - 380px)',
-          minHeight: 400,
-          width: '100%',
-          mb: 3
-        }}
-      >
-        <MembersTable
-          members={members}
-          totalCount={totalCount}
-          loading={loading}
-          page={page}
-          pageSize={pageSize}
-          filters={filter}
-          onPageChange={handlePageChange}
-          onPageSizeChange={handlePageSizeChange}
-          onSortChange={handleSortChange}
-          onRowClick={handleRowClick}
-          onEditClick={handleEditClick}
-          onDeactivateClick={handleDeactivateClick}
-          onSelectionChange={handleSelectionChange}
-          selectable={true}
-          isAdmin={isAdmin}
-          onAddMember={() => navigate('/members/new')}
-        />
-      </Box>
+      <Paper sx={{ p: 2, mb: 3 }}>
+        <Typography variant="h6" gutterBottom>
+          📊 {t('table.title', 'Listado de Socios')} ({totalCount})
+        </Typography>
+        <Box
+          sx={{
+            height: 'calc(100vh - 450px)',
+            minHeight: 400,
+            width: '100%'
+          }}
+        >
+          <MembersTable
+            members={members}
+            totalCount={totalCount}
+            loading={loading}
+            page={page}
+            pageSize={pageSize}
+            filters={filter}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+            onSortChange={handleSortChange}
+            onRowClick={handleRowClick}
+            onEditClick={handleEditClick}
+            onDeactivateClick={handleDeactivateClick}
+            onSelectionChange={handleSelectionChange}
+            selectable={true}
+            isAdmin={isAdmin}
+            onAddMember={() => navigate('/members/new')}
+          />
+        </Box>
+      </Paper>
 
       {/* Deactivate Confirmation Dialog */}
       <ConfirmDeactivateDialog

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box, Typography, Alert, useTheme, Snackbar } from '@mui/material'
+import { Box, Typography, Alert, useTheme, Snackbar, Paper } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '@/stores/authStore'
@@ -64,53 +64,61 @@ export default function PaymentsPage() {
         <Typography
           variant="h4"
           component="h1"
-          gutterBottom
           sx={{
             color: theme.palette.text.primary,
             fontWeight: 600,
           }}
         >
-          {t('title')}
+          💳 {t('title')}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
           {t('stats.total')}: {pageInfo.totalCount}
         </Typography>
       </Box>
 
-      {/* Filters */}
-      <PaymentFilters filters={filters} onFilterChange={updateFilters} onReset={resetFilters} />
-
       {/* Error Alert */}
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
+        <Alert severity="error" sx={{ mb: 3 }}>
           {t('error.load')}: {error.message}
         </Alert>
       )}
 
+      {/* Filters */}
+      <Paper sx={{ p: 2, mb: 3 }}>
+        <Typography variant="h6" gutterBottom>
+          🔍 {t('filters.title', 'Filtros')}
+        </Typography>
+        <PaymentFilters filters={filters} onFilterChange={updateFilters} onReset={resetFilters} />
+      </Paper>
+
       {/* Table */}
-      <Box
-        sx={{
-          height: 'calc(100vh - 380px)',
-          minHeight: 400,
-          width: '100%',
-          mb: 3
-        }}
-      >
-        <PaymentsTable
-          payments={payments}
-          totalCount={pageInfo.totalCount}
-          loading={loading || isGeneratingReceipt}
-          page={filters.page}
-          pageSize={filters.pageSize}
-          onPageChange={setPage}
-          onPageSizeChange={setPageSize}
-          onSortChange={setSort}
-          onRowClick={handleRowClick}
-          onConfirmClick={handleConfirmClick}
-          onDownloadReceipt={handleDownloadReceipt}
-          isAdmin={isAdmin}
-        />
-      </Box>
+      <Paper sx={{ p: 2, mb: 3 }}>
+        <Typography variant="h6" gutterBottom>
+          📊 {t('table.title', 'Listado de Pagos')} ({pageInfo.totalCount})
+        </Typography>
+        <Box
+          sx={{
+            height: 'calc(100vh - 450px)',
+            minHeight: 400,
+            width: '100%'
+          }}
+        >
+          <PaymentsTable
+            payments={payments}
+            totalCount={pageInfo.totalCount}
+            loading={loading || isGeneratingReceipt}
+            page={filters.page}
+            pageSize={filters.pageSize}
+            onPageChange={setPage}
+            onPageSizeChange={setPageSize}
+            onSortChange={setSort}
+            onRowClick={handleRowClick}
+            onConfirmClick={handleConfirmClick}
+            onDownloadReceipt={handleDownloadReceipt}
+            isAdmin={isAdmin}
+          />
+        </Box>
+      </Paper>
 
       {/* Confirm Payment Dialog */}
       <ConfirmPaymentDialog

@@ -18,7 +18,7 @@ export const createCashFlowSchema = yup.object().shape({
     .required('El importe es obligatorio')
     .test('valid-amount', 'El importe debe ser mayor que 0', function (value) {
       return value !== undefined && value !== 0
-lo q    })
+    })
     .min(-999999.99, 'El importe no puede ser menor a -999,999.99 €')
     .max(999999.99, 'El importe no puede ser mayor a 999,999.99 €'),
 

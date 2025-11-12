@@ -49,7 +49,7 @@ export default function MembersPage() {
   }
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* Header */}
       <Box mb={3}>
         <Typography
@@ -92,17 +92,11 @@ export default function MembersPage() {
       </Paper>
 
       {/* Table */}
-      <Paper sx={{ p: 2, mb: 3 }}>
+      <Paper sx={{ p: 2, mb: 3, display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
         <Typography variant="h6" gutterBottom>
           📊 {t('table.title', 'Listado de Socios')} ({totalCount})
         </Typography>
-        <Box
-          sx={{
-            height: 'calc(100vh - 600px)',
-            minHeight: 400,
-            width: '100%',
-          }}
-        >
+        <Box sx={{ flex: 1, minHeight: 0, width: '100%' }}>
           <MembersTable
             members={members}
             totalCount={totalCount}

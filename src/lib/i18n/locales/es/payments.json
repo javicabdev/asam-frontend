@@ -1,5 +1,5 @@
 {
-  "title": "Gestión de Pagos",
+  "title": "Gestión de cuotas de socios",
   "list": {
     "title": "Lista de Pagos",
     "search": "Buscar pagos...",
@@ -160,6 +160,7 @@
     "clearTooltip": "Limpiar filtros"
   },
   "table": {
+    "title": "Listado de cuotas de socio",
     "memberNumber": "Nº Socio",
     "member": "Socio",
     "family": "Familia",

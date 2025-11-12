@@ -1,5 +1,5 @@
 {
-  "title": "Saytu Fay",
+  "title": "Saytu Kotisaasioŋ yu Mbooloo yi",
   "list": {
     "title": "Limu Fay",
     "search": "Seet fay...",
@@ -160,6 +160,7 @@
     "clearTooltip": "Soppee filtar yi"
   },
   "table": {
+    "title": "Limu Kotisaasioŋ yu Mbooloo yi",
     "memberNumber": "Nimero mbooloo",
     "member": "Mbooloo",
     "family": "Njaboot",

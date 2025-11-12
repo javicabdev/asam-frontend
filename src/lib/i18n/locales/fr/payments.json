@@ -1,5 +1,5 @@
 {
-  "title": "Gestion des Paiements",
+  "title": "Gestion des cotisations des membres",
   "list": {
     "title": "Liste des Paiements",
     "search": "Rechercher des paiements...",
@@ -160,6 +160,7 @@
     "clearTooltip": "Effacer les filtres"
   },
   "table": {
+    "title": "Liste des cotisations des membres",
     "memberNumber": "Nº Membre",
     "member": "Membre",
     "family": "Famille",

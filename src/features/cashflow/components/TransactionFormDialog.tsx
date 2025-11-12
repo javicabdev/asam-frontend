@@ -219,31 +219,36 @@ export const TransactionFormDialog = ({
               <Controller
                 name="amount"
                 control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    type="number"
-                    fullWidth
-                    label={`${t('form.fields.amount')} *`}
-                    inputProps={{
-                      step: '0.01',
-                      min: '0',
-                    }}
-                    InputProps={{
-                      startAdornment: category === 'INGRESO' ? '+' : '-',
-                      endAdornment: '€',
-                    }}
-                    error={!!errors.amount}
-                    helperText={errors.amount?.message}
-                    onChange={(e) => {
-                      const value = parseFloat(e.target.value)
-                      field.onChange(
-                        category === 'GASTO' ? -Math.abs(value) : Math.abs(value)
-                      )
-                    }}
-                    value={Math.abs(field.value || 0)}
-                  />
-                )}
+                render={({ field }) => {
+                  const absValue = Math.abs(field.value || 0)
+                  const hasValue = absValue > 0
+
+                  return (
+                    <TextField
+                      {...field}
+                      type="number"
+                      fullWidth
+                      label={`${t('form.fields.amount')} *`}
+                      inputProps={{
+                        step: '0.01',
+                        min: '0',
+                      }}
+                      InputProps={{
+                        startAdornment: hasValue ? (category === 'INGRESO' ? '+' : '-') : undefined,
+                        endAdornment: '€',
+                      }}
+                      error={!!errors.amount}
+                      helperText={errors.amount?.message}
+                      onChange={(e) => {
+                        const value = parseFloat(e.target.value)
+                        field.onChange(
+                          category === 'GASTO' ? -Math.abs(value) : Math.abs(value)
+                        )
+                      }}
+                      value={absValue || ''}
+                    />
+                  )
+                }}
               />
             </Grid>
 

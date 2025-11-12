@@ -645,7 +645,6 @@ export function MembersTable({
         rowSelectionModel={rowSelectionModel}
         onRowSelectionModelChange={handleSelectionModelChange}
         getRowClassName={getRowClassName}
-        autoHeight
         density="comfortable"
         slots={{
           toolbar: CustomToolbar,
@@ -666,6 +665,7 @@ export function MembersTable({
         }}
         localeText={customLocaleText}
         sx={{
+          height: '100%',
           '& .MuiDataGrid-row': {
             cursor: 'pointer',
             '&:hover': {

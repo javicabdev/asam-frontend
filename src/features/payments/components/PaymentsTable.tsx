@@ -374,12 +374,12 @@ export function PaymentsTable({
         onSortModelChange={handleSortChange}
         onRowClick={handleRowClick}
         disableRowSelectionOnClick
-        autoHeight
         slots={{
           toolbar: CustomToolbar,
         }}
         localeText={customLocaleText}
         sx={{
+          height: '100%',
           cursor: 'pointer',
           '& .MuiDataGrid-row': {
             '&:hover': {

@@ -142,6 +142,7 @@ export const RepatriationFormDialog = ({
                     inputProps={{
                       step: '0.01',
                       min: '0',
+                      max: '999999.99',
                     }}
                     InputProps={{
                       startAdornment: '-',

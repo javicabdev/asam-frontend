@@ -173,6 +173,7 @@
     "actions": "Jëf",
     "viewDetails": "Xool faramfacce",
     "downloadReceipt": "Yeb kàddu",
+    "editPayment": "Soppi fay bi",
     "confirmPayment": "Tànnee fay bi",
     "empty": "Amul fay bu bindu",
     "toolbar": {
@@ -252,6 +253,30 @@
     "confirmButton": "Tànnee Fay Bi",
     "successMessage": "Tànnee nañu fay bi bu baax",
     "errorMessage": "Njuumte ci tànnee fay bi"
+  },
+  "editDialog": {
+    "title": "Soppi Fay Bi",
+    "subtitle": "Soppi faramfacce yu fay:",
+    "member": "Mbooloo:",
+    "memberNumber": "Nimero Mbooloo:",
+    "concept": "Lu muy:",
+    "conceptAnnualFee": "Kotisaasioŋ bu Bes bi {{year}}",
+    "conceptOther": "Beneen fay",
+    "paymentDate": "Bisu fay:",
+    "amount": "Dayoo:",
+    "amountHelper": "Man nga soppi dayoo bi su la bëggee",
+    "paymentMethodLabel": "Anamu fay",
+    "methodCash": "Xaalis",
+    "methodTransfer": "Yóbbale",
+    "methodCard": "Kaar",
+    "notesLabel": "Karmat",
+    "notesPlaceholder": "Yokk karmat yu amul solo ci fay bi...",
+    "infoMessage": "Coppite yi dina ñu dugg te bindu ci sistem bi ci kàddu.",
+    "cancel": "Neenal",
+    "updating": "Mungi soppi...",
+    "updateButton": "Dugg Coppite Yi",
+    "successMessage": "Soppi nañu fay bi bu baax",
+    "errorMessage": "Njuumte ci soppi fay bi"
   },
   "history": {
     "title": "Jaar-jaar Yu Fay",

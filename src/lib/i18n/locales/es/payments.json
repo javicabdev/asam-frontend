@@ -173,6 +173,7 @@
     "actions": "Acciones",
     "viewDetails": "Ver detalles",
     "downloadReceipt": "Descargar recibo",
+    "editPayment": "Editar pago",
     "confirmPayment": "Confirmar pago",
     "empty": "No hay pagos registrados",
     "toolbar": {
@@ -252,6 +253,30 @@
     "confirmButton": "Confirmar Pago",
     "successMessage": "Pago confirmado correctamente",
     "errorMessage": "Error al confirmar el pago"
+  },
+  "editDialog": {
+    "title": "Editar Pago",
+    "subtitle": "Modifique los detalles del pago:",
+    "member": "Socio:",
+    "memberNumber": "Número de Socio:",
+    "concept": "Concepto:",
+    "conceptAnnualFee": "Cuota Anual {{year}}",
+    "conceptOther": "Otro pago",
+    "paymentDate": "Fecha de pago:",
+    "amount": "Importe:",
+    "amountHelper": "Puede modificar el importe si es necesario",
+    "paymentMethodLabel": "Forma de pago",
+    "methodCash": "Efectivo",
+    "methodTransfer": "Transferencia",
+    "methodCard": "Tarjeta",
+    "notesLabel": "Notas",
+    "notesPlaceholder": "Añadir notas opcionales sobre el pago...",
+    "infoMessage": "Los cambios se guardarán y se reflejarán en el sistema inmediatamente.",
+    "cancel": "Cancelar",
+    "updating": "Actualizando...",
+    "updateButton": "Guardar Cambios",
+    "successMessage": "Pago actualizado correctamente",
+    "errorMessage": "Error al actualizar el pago"
   },
   "history": {
     "title": "Historial de Pagos",

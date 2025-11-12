@@ -17,6 +17,7 @@ import {
   Visibility as VisibilityIcon,
   CheckCircleOutline as ConfirmIcon,
   Receipt as ReceiptIcon,
+  Edit as EditIcon,
 } from '@mui/icons-material'
 import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -35,6 +36,7 @@ interface PaymentsTableProps {
   onSortChange?: (field: string, direction: 'ASC' | 'DESC' | null) => void
   onRowClick?: (payment: PaymentListItem) => void
   onConfirmClick?: (payment: PaymentListItem) => void
+  onEditClick?: (payment: PaymentListItem) => void
   onDownloadReceipt?: (payment: PaymentListItem) => void
   isAdmin?: boolean
 }
@@ -69,6 +71,7 @@ export function PaymentsTable({
   onSortChange,
   onRowClick,
   onConfirmClick,
+  onEditClick,
   onDownloadReceipt,
   isAdmin = false,
 }: PaymentsTableProps) {
@@ -199,7 +202,7 @@ export function PaymentsTable({
     {
       field: 'actions',
       headerName: t('table.actions'),
-      width: isAdmin ? 180 : 110,
+      width: isAdmin ? 220 : 150,
       sortable: false,
       align: 'center',
       headerAlign: 'center',
@@ -218,18 +221,35 @@ export function PaymentsTable({
           </Tooltip>
 
           {params.row.status.toUpperCase() === 'PAID' && (
-            <Tooltip title={t('table.downloadReceipt')}>
-              <IconButton
-                size="small"
-                color="primary"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onDownloadReceipt?.(params.row)
-                }}
-              >
-                <ReceiptIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
+            <>
+              <Tooltip title={t('table.downloadReceipt')}>
+                <IconButton
+                  size="small"
+                  color="primary"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onDownloadReceipt?.(params.row)
+                  }}
+                >
+                  <ReceiptIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+
+              {isAdmin && (
+                <Tooltip title={t('table.editPayment')}>
+                  <IconButton
+                    size="small"
+                    color="primary"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onEditClick?.(params.row)
+                    }}
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              )}
+            </>
           )}
 
           {isAdmin && params.row.status.toUpperCase() === 'PENDING' && (

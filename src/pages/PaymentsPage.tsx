@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { PaymentFilters } from '@/features/payments/components/PaymentFilters'
 import { PaymentsTable } from '@/features/payments/components/PaymentsTable'
 import { ConfirmPaymentDialog } from '@/features/payments/components/ConfirmPaymentDialog'
+import { EditPaymentDialog } from '@/features/payments/components/EditPaymentDialog'
 import { usePaymentFilters } from '@/features/payments/hooks/usePaymentFilters'
 import { usePayments } from '@/features/payments/hooks/usePayments'
 import { useReceiptGenerator } from '@/features/payments/hooks/useReceiptGenerator'
@@ -21,6 +22,12 @@ export default function PaymentsPage() {
 
   // State for confirm dialog
   const [confirmDialog, setConfirmDialog] = useState<{
+    open: boolean
+    payment: PaymentListItem | null
+  }>({ open: false, payment: null })
+
+  // State for edit dialog
+  const [editDialog, setEditDialog] = useState<{
     open: boolean
     payment: PaymentListItem | null
   }>({ open: false, payment: null })
@@ -46,6 +53,11 @@ export default function PaymentsPage() {
   // Handle confirm payment - open dialog
   const handleConfirmClick = (payment: PaymentListItem) => {
     setConfirmDialog({ open: true, payment })
+  }
+
+  // Handle edit payment - open dialog
+  const handleEditClick = (payment: PaymentListItem) => {
+    setEditDialog({ open: true, payment })
   }
 
   // Handle download receipt
@@ -114,6 +126,7 @@ export default function PaymentsPage() {
             onSortChange={setSort}
             onRowClick={handleRowClick}
             onConfirmClick={handleConfirmClick}
+            onEditClick={handleEditClick}
             onDownloadReceipt={handleDownloadReceipt}
             isAdmin={isAdmin}
           />
@@ -127,6 +140,17 @@ export default function PaymentsPage() {
         onClose={() => setConfirmDialog({ open: false, payment: null })}
         onSuccess={() => {
           // Reload the page to refresh data after successful payment confirmation
+          window.location.reload()
+        }}
+      />
+
+      {/* Edit Payment Dialog */}
+      <EditPaymentDialog
+        open={editDialog.open}
+        payment={editDialog.payment}
+        onClose={() => setEditDialog({ open: false, payment: null })}
+        onSuccess={() => {
+          // Reload the page to refresh data after successful payment update
           window.location.reload()
         }}
       />

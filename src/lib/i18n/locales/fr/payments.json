@@ -173,6 +173,7 @@
     "actions": "Actions",
     "viewDetails": "Voir les détails",
     "downloadReceipt": "Télécharger le reçu",
+    "editPayment": "Modifier le paiement",
     "confirmPayment": "Confirmer le paiement",
     "empty": "Aucun paiement enregistré",
     "toolbar": {
@@ -252,6 +253,30 @@
     "confirmButton": "Confirmer le Paiement",
     "successMessage": "Paiement confirmé avec succès",
     "errorMessage": "Erreur lors de la confirmation du paiement"
+  },
+  "editDialog": {
+    "title": "Modifier le Paiement",
+    "subtitle": "Modifiez les détails du paiement :",
+    "member": "Membre :",
+    "memberNumber": "Numéro de Membre :",
+    "concept": "Concept :",
+    "conceptAnnualFee": "Cotisation Annuelle {{year}}",
+    "conceptOther": "Autre paiement",
+    "paymentDate": "Date de paiement :",
+    "amount": "Montant :",
+    "amountHelper": "Vous pouvez modifier le montant si nécessaire",
+    "paymentMethodLabel": "Mode de paiement",
+    "methodCash": "Espèces",
+    "methodTransfer": "Virement",
+    "methodCard": "Carte",
+    "notesLabel": "Notes",
+    "notesPlaceholder": "Ajouter des notes optionnelles sur le paiement...",
+    "infoMessage": "Les modifications seront enregistrées et reflétées dans le système immédiatement.",
+    "cancel": "Annuler",
+    "updating": "Mise à jour...",
+    "updateButton": "Enregistrer les Modifications",
+    "successMessage": "Paiement mis à jour avec succès",
+    "errorMessage": "Erreur lors de la mise à jour du paiement"
   },
   "history": {
     "title": "Historique des Paiements",

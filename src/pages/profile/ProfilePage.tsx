@@ -34,7 +34,7 @@ const passwordSchema = yup.object({
     .min(8, 'La contraseña debe tener al menos 8 caracteres')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
-      'La contraseña debe contener mayúsculas, minúsculas, números y caracteres especiales'
+      'La contraseña debe tener: mínimo 8 caracteres, al menos una mayúscula, una minúscula, un número y un carácter especial (@$!%*?&)'
     ),
   confirmPassword: yup
     .string()

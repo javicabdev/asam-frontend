@@ -519,10 +519,13 @@ export const MainLayout: React.FC = () => {
           flexGrow: 1,
           p: 3,
           width: { md: `calc(100% - ${currentDrawerWidth}px)` },
-          minHeight: '100vh',
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
           bgcolor: 'background.default',
           position: 'relative', // Ensure proper stacking context
           zIndex: 1, // Below drawer
+          overflow: 'hidden',
           transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
@@ -534,7 +537,14 @@ export const MainLayout: React.FC = () => {
       >
         <Toolbar />
         <PageTransition type="fade" duration={300}>
-          <Box key={location.pathname}>
+          <Box
+            key={location.pathname}
+            sx={{
+              flex: 1,
+              minHeight: 0,
+              overflow: 'auto',
+            }}
+          >
             <Outlet />
           </Box>
         </PageTransition>

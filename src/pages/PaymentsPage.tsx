@@ -70,9 +70,16 @@ export default function PaymentsPage() {
   }
 
   return (
-    <Box>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        gap: 3,
+      }}
+    >
       {/* Header */}
-      <Box mb={3}>
+      <Box>
         <Typography
           variant="h4"
           component="h1"
@@ -90,13 +97,13 @@ export default function PaymentsPage() {
 
       {/* Error Alert */}
       {error && (
-        <Alert severity="error" sx={{ mb: 3 }}>
+        <Alert severity="error">
           {t('error.load')}: {error.message}
         </Alert>
       )}
 
       {/* Filters */}
-      <Paper sx={{ p: 2, mb: 3 }}>
+      <Paper sx={{ p: 2 }}>
         <Typography variant="h6" gutterBottom>
           🔍 {t('filters.title', 'Filtros')}
         </Typography>
@@ -104,15 +111,27 @@ export default function PaymentsPage() {
       </Paper>
 
       {/* Table */}
-      <Paper sx={{ p: 2, mb: 3 }}>
+      <Paper
+        sx={{
+          p: 2,
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          minHeight: 0,
+        }}
+      >
         <Typography variant="h6" gutterBottom>
           📊 {t('table.title', 'Listado de Pagos')} ({pageInfo.totalCount})
         </Typography>
         <Box
           sx={{
-            height: 'calc(100vh - 500px)',
-            minHeight: 400,
-            width: '100%'
+            flex: 1,
+            minHeight: 0,
+            width: '100%',
+            '& .MuiDataGrid-root': {
+              height: '100%',
+            },
           }}
         >
           <PaymentsTable

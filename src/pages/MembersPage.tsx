@@ -98,7 +98,7 @@ export default function MembersPage() {
         </Typography>
         <Box
           sx={{
-            height: 'calc(100vh - 450px)',
+            height: 'calc(100vh - 500px)',
             minHeight: 400,
             width: '100%'
           }}

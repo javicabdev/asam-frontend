@@ -181,6 +181,16 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
   const loading = createLoading || updateLoading
   const error = createError || updateError
 
+  // Translate error messages with role names
+  const getTranslatedErrorMessage = (errorMessage?: string) => {
+    if (!errorMessage) return ''
+
+    // Replace role enum values with translated names
+    return errorMessage
+      .replace(/\bUSER\b/g, 'Usuario')
+      .replace(/\bADMIN\b/g, 'Administrador')
+  }
+
   const handleClose = () => {
     reset()
     onClose()
@@ -247,7 +257,7 @@ export const UserFormDialog: React.FC<UserFormDialogProps> = ({
       <DialogContent dividers>
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
-            {error.message}
+            {getTranslatedErrorMessage(error.message)}
           </Alert>
         )}
 

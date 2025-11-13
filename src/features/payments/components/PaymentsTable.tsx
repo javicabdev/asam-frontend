@@ -357,7 +357,7 @@ export function PaymentsTable({
   )
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', height: '100%' }}>
       <DataGrid
         rows={payments}
         columns={columns}
@@ -379,7 +379,6 @@ export function PaymentsTable({
         }}
         localeText={customLocaleText}
         sx={{
-          height: '100%',
           cursor: 'pointer',
           '& .MuiDataGrid-row': {
             '&:hover': {

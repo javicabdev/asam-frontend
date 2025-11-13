@@ -618,7 +618,7 @@ export function MembersTable({
   }
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', height: '100%' }}>
       <DataGrid
         rows={members}
         columns={columns}
@@ -665,7 +665,6 @@ export function MembersTable({
         }}
         localeText={customLocaleText}
         sx={{
-          height: '100%',
           '& .MuiDataGrid-row': {
             cursor: 'pointer',
             '&:hover': {

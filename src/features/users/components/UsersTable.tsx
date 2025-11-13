@@ -332,7 +332,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
   }
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Tabs para filtrar por rol */}
       <Paper sx={{ mb: 2 }}>
         <Tabs value={tabValue} onChange={(_, value) => setTabValue(value as UserRole)}>
@@ -371,10 +371,10 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
           },
         }}
         localeText={customLocaleText}
-        autoHeight
         density="comfortable"
         disableRowSelectionOnClick
         sx={{
+          height: '100%',
           '& .MuiDataGrid-row': {
             cursor: 'default',
           },

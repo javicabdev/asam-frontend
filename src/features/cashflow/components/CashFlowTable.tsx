@@ -283,6 +283,9 @@ export const CashFlowTable = ({
       headerName: t('table.columns.actions'),
       width: 120,
       getActions: (params: GridRowParams) => {
+        const transaction = params.row as CashFlowTransaction
+        const isPayment = !!transaction.payment
+
         const actions = [
           <GridActionsCellItem
             key="view"
@@ -297,13 +300,23 @@ export const CashFlowTable = ({
             <GridActionsCellItem
               key="edit"
               icon={<EditIcon />}
-              label={t('table.actions.edit')}
+              label={
+                isPayment
+                  ? t('table.actions.cannotEditPayment')
+                  : t('table.actions.edit')
+              }
+              disabled={isPayment}
               onClick={() => onEditClick?.(params.row)}
             />,
             <GridActionsCellItem
               key="delete"
               icon={<DeleteIcon />}
-              label={t('table.actions.delete')}
+              label={
+                isPayment
+                  ? t('table.actions.cannotDeletePayment')
+                  : t('table.actions.delete')
+              }
+              disabled={isPayment}
               onClick={() => handleDeleteClick(params.row)}
             />
           )

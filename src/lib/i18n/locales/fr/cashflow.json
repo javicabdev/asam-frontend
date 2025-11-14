@@ -32,7 +32,9 @@
     "actions": {
       "view": "Voir",
       "edit": "Modifier",
-      "delete": "Supprimer"
+      "delete": "Supprimer",
+      "cannotEditPayment": "Impossible de modifier un paiement de cotisation",
+      "cannotDeletePayment": "Impossible de supprimer un paiement de cotisation"
     },
     "toolbar": {
       "columns": "Colonnes",

@@ -32,7 +32,9 @@
     "actions": {
       "view": "Xool",
       "edit": "Soppi",
-      "delete": "Fey"
+      "delete": "Fey",
+      "cannotEditPayment": "Du mën a soppi payment bu cotisation",
+      "cannotDeletePayment": "Du mën a fey payment bu cotisation"
     },
     "toolbar": {
       "columns": "Njàll",

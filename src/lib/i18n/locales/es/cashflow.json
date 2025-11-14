@@ -32,7 +32,9 @@
     "actions": {
       "view": "Ver",
       "edit": "Editar",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "cannotEditPayment": "No se puede editar un pago de cuota",
+      "cannotDeletePayment": "No se puede eliminar un pago de cuota"
     },
     "toolbar": {
       "columns": "Columnas",

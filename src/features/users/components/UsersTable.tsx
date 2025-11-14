@@ -34,6 +34,7 @@ import { LIST_USERS, DELETE_USER } from '../api/userQueries'
 import { useAuthStore } from '@/stores/authStore'
 import type { User, UserRole } from '@/graphql/generated/operations'
 import { useTranslation } from 'react-i18next'
+import { useSnackbar } from 'notistack'
 
 interface UsersTableProps {
   onEditUser: (user: User) => void
@@ -89,6 +90,7 @@ function CustomToolbar({ onAddUser }: { onAddUser: () => void }) {
 export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, onRefetchReady }) => {
   const { t } = useTranslation('users')
   const theme = useTheme()
+  const { enqueueSnackbar } = useSnackbar()
   const [tabValue, setTabValue] = useState<UserRole>('admin')
 
   const currentUser = useAuthStore((state) => state.user)
@@ -111,11 +113,26 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
 
   // Delete mutation
   const [deleteUser, { loading: deleteLoading }] = useMutation<DeleteUserResponse>(DELETE_USER, {
-    onCompleted: () => {
-      void refetch()
+    onCompleted: (data) => {
+      if (data.deleteUser.success) {
+        enqueueSnackbar(
+          data.deleteUser.message || t('table.actions.deleteSuccess', 'Usuario eliminado correctamente'),
+          { variant: 'success' }
+        )
+        void refetch()
+      } else {
+        enqueueSnackbar(
+          data.deleteUser.error || t('table.actions.deleteError', 'Error al eliminar usuario'),
+          { variant: 'error' }
+        )
+      }
     },
     onError: (error) => {
       console.error('Error deleting user:', error)
+      enqueueSnackbar(
+        error.message || t('table.actions.deleteError', 'Error al eliminar usuario'),
+        { variant: 'error' }
+      )
     },
   })
 

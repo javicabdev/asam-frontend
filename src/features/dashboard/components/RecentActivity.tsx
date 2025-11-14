@@ -265,6 +265,8 @@ export default function RecentActivity({
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
+                  primaryTypographyProps={{ component: 'div' }}
+                  secondaryTypographyProps={{ component: 'div' }}
                   primary={
                     <Box display="flex" alignItems="center" gap={1}>
                       <Typography variant="body2" component="span">

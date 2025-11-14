@@ -120,9 +120,10 @@ export const MainLayout: React.FC = () => {
     localStorage.setItem('drawer-collapsed', JSON.stringify(collapsed))
   }, [collapsed])
 
-  // Close menu when location changes (including browser back/forward navigation)
+  // Close menu and mobile drawer when location changes (including browser back/forward navigation)
   useEffect(() => {
     handleMenuClose()
+    setMobileOpen(false)
   }, [location.pathname])
 
   const handleDrawerCollapse = () => {
@@ -474,6 +475,7 @@ export const MainLayout: React.FC = () => {
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
+          disableScrollLock={true}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
           }}

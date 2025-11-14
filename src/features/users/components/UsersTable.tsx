@@ -28,9 +28,11 @@ import {
   PersonAdd as PersonAddIcon,
   AdminPanelSettings as AdminIcon,
   Person as UserIcon,
+  PersonOff as PersonOffIcon,
+  PersonAddAlt as PersonAddAltIcon,
 } from '@mui/icons-material'
 import { useQuery, useMutation } from '@apollo/client'
-import { LIST_USERS, DELETE_USER } from '../api/userQueries'
+import { LIST_USERS, DELETE_USER, UPDATE_USER } from '../api/userQueries'
 import { useAuthStore } from '@/stores/authStore'
 import type { User, UserRole } from '@/graphql/generated/operations'
 import { useTranslation } from 'react-i18next'
@@ -136,6 +138,27 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
     },
   })
 
+  // Toggle active status mutation
+  const [toggleUserStatus, { loading: toggleLoading }] = useMutation(UPDATE_USER, {
+    onCompleted: (data) => {
+      const isActive = data.updateUser.isActive
+      enqueueSnackbar(
+        isActive
+          ? t('table.actions.activateSuccess', 'Usuario activado correctamente')
+          : t('table.actions.deactivateSuccess', 'Usuario desactivado correctamente'),
+        { variant: 'success' }
+      )
+      void refetch()
+    },
+    onError: (error) => {
+      console.error('Error toggling user status:', error)
+      enqueueSnackbar(
+        error.message || t('table.actions.statusError', 'Error al cambiar el estado del usuario'),
+        { variant: 'error' }
+      )
+    },
+  })
+
   // Get users and filter by role and exclude "javi" admin
   const users = useMemo(() => {
     if (!data?.listUsers?.nodes) return []
@@ -161,10 +184,34 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
     }
   }
 
+  const handleToggleStatus = (user: User) => {
+    const confirmMessage = user.isActive
+      ? t('table.actions.deactivateConfirm', `¿Estás seguro de que deseas desactivar este usuario?`)
+      : t('table.actions.activateConfirm', `¿Estás seguro de que deseas activar este usuario?`)
+
+    if (window.confirm(confirmMessage)) {
+      void toggleUserStatus({
+        variables: {
+          input: {
+            id: user.id,
+            isActive: !user.isActive,
+          },
+        },
+      })
+    }
+  }
+
   const canDeleteUser = (user: User) => {
     // Cannot delete yourself
     if (currentUser?.id === user.id) return false
     // Cannot delete admin "javi"
+    return !(user.role === 'admin' && user.username.toLowerCase() === 'javi')
+  }
+
+  const canToggleStatus = (user: User) => {
+    // Cannot deactivate yourself
+    if (currentUser?.id === user.id) return false
+    // Cannot deactivate admin "javi"
     return !(user.role === 'admin' && user.username.toLowerCase() === 'javi')
   }
 
@@ -302,7 +349,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
       {
         field: 'actions',
         headerName: t('table.columns.actions'),
-        width: 120,
+        width: 160,
         sortable: false,
         filterable: false,
         disableColumnMenu: true,
@@ -312,6 +359,32 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
               <IconButton size="small" onClick={() => onEditUser(params.row)} color="primary">
                 <EditIcon fontSize="small" />
               </IconButton>
+            </Tooltip>
+            <Tooltip
+              title={
+                !canToggleStatus(params.row)
+                  ? params.row.id === currentUser?.id
+                    ? t('table.actions.cannotToggleSelf', 'No puedes cambiar tu propio estado')
+                    : t('table.actions.cannotToggle', 'No se puede cambiar el estado de este usuario')
+                  : params.row.isActive
+                    ? t('table.actions.deactivate', 'Desactivar')
+                    : t('table.actions.activate', 'Activar')
+              }
+            >
+              <span>
+                <IconButton
+                  size="small"
+                  onClick={() => handleToggleStatus(params.row)}
+                  disabled={!canToggleStatus(params.row) || toggleLoading}
+                  color={params.row.isActive ? 'warning' : 'success'}
+                >
+                  {params.row.isActive ? (
+                    <PersonOffIcon fontSize="small" />
+                  ) : (
+                    <PersonAddAltIcon fontSize="small" />
+                  )}
+                </IconButton>
+              </span>
             </Tooltip>
             <Tooltip
               title={
@@ -337,7 +410,7 @@ export const UsersTable: React.FC<UsersTableProps> = ({ onEditUser, onAddUser, o
         ),
       },
     ],
-    [t, tabValue, currentUser, deleteLoading, onEditUser]
+    [t, tabValue, currentUser, deleteLoading, toggleLoading, onEditUser]
   )
 
   if (error) {

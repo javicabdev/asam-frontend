@@ -114,7 +114,7 @@ export default function CashFlowPage() {
         <Typography variant="h6" gutterBottom>
           📊 {t('table.title')} ({totalCount})
         </Typography>
-        <Box sx={{ flex: 1, minHeight: 0, width: '100%' }}>
+        <Box sx={{ flex: 1, minHeight: 400, width: '100%' }}>
           <CashFlowTable
             cashFlows={cashFlows}
             loading={cashFlowsLoading}

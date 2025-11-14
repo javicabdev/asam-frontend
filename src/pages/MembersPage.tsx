@@ -96,7 +96,7 @@ export default function MembersPage() {
         <Typography variant="h6" gutterBottom>
           📊 {t('table.title', 'Listado de Socios')} ({totalCount})
         </Typography>
-        <Box sx={{ flex: 1, minHeight: 0, width: '100%' }}>
+        <Box sx={{ flex: 1, minHeight: 400, width: '100%' }}>
           <MembersTable
             members={members}
             totalCount={totalCount}

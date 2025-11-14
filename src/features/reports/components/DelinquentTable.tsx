@@ -239,14 +239,14 @@ export function DelinquentTable({
 
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <CardContent sx={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+      <CardContent sx={{ flex: 1, minHeight: 300, display: 'flex', flexDirection: 'column' }}>
         <Box sx={{ mb: 2 }}>
           <Typography variant="h6">
             {t('delinquent.table.title')} ({debtors.length})
           </Typography>
         </Box>
 
-        <Box sx={{ width: '100%', height: '100%', flex: 1, minHeight: 0 }}>
+        <Box sx={{ width: '100%', height: '100%', flex: 1, minHeight: 300 }}>
           <DataGrid
             rows={debtors}
             columns={columns}

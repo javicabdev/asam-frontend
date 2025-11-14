@@ -52,7 +52,7 @@ export default function UsersPage() {
         sx={{
           mt: 3,
           flex: 1,
-          minHeight: 0,
+          minHeight: 400,
           width: '100%',
           mb: 3
         }}

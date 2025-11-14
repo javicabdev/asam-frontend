@@ -113,7 +113,7 @@ export default function ReportsPage() {
               <Box
                 sx={{
                   flex: 1,
-                  minHeight: 0,
+                  minHeight: 400,
                   width: '100%',
                   mb: 3
                 }}

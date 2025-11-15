@@ -28,15 +28,15 @@ function getDebtorMemberNumber(debtor: Debtor): string {
 }
 
 /**
- * Obtiene la información de contacto del deudor
+ * Obtiene la información de contacto del deudor (teléfono prioritario)
  */
 function getDebtorContact(debtor: Debtor): string {
   if (debtor.type === 'INDIVIDUAL' && debtor.member) {
-    return debtor.member.email || debtor.member.phone || '-'
+    return debtor.member.phone || debtor.member.email || '-'
   } else if (debtor.type === 'FAMILY' && debtor.family) {
     return (
-      debtor.family.primaryMember.email ||
       debtor.family.primaryMember.phone ||
+      debtor.family.primaryMember.email ||
       '-'
     )
   }

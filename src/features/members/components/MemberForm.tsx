@@ -417,7 +417,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       await onSubmit(formattedData)
     }
     },
-    [isFamily, familyMembers, isDuplicate, documentValidation, esposaDocValidation, onSubmit, setError, t]
+    [isFamily, familyMembers, isDuplicate, documentValidation, esposaDocValidation, onSubmit, setError, t, telefonos]
   )
 
   // Wrapper para manejar correctamente el evento del formulario

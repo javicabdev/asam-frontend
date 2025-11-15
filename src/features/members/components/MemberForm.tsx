@@ -217,7 +217,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       apellidos: '',
       calle_numero_piso: '',
       codigo_postal: '',
-      poblacion: '',
+      poblacion: 'Terrassa',
       provincia: 'Barcelona',
       pais: 'España',
       fecha_alta: null,

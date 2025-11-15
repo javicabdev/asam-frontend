@@ -34,7 +34,7 @@ import {
   Visibility as VisibilityIcon,
   Edit as EditIcon,
   PersonRemove as PersonRemoveIcon,
-  Email as EmailIcon,
+  Phone as PhoneIcon,
   FileDownload as FileDownloadIcon,
   ExpandMore as ExpandMoreIcon,
   TableChart as TableChartIcon,
@@ -423,19 +423,26 @@ export function MembersTable({
         },
       },
       {
-        field: 'correo_electronico',
-        headerName: t('list.columns.email'),
+        field: 'telefonos',
+        headerName: t('list.columns.phone'),
         width: 200,
         sortable: false,
-        filterable: true,
+        filterable: false,
         renderCell: (params) => {
-          if (!params.value) return '-'
+          const telefonos = params.row?.telefonos
+          if (!telefonos || telefonos.length === 0) return '-'
+
+          // Show first phone number, with tooltip showing all if multiple
+          const firstPhone = telefonos[0].numero_telefono
+          const allPhones = telefonos.map(t => t.numero_telefono).join(', ')
+
           return (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <EmailIcon sx={{ fontSize: 16, mr: 0.5, color: 'text.secondary' }} />
-              <Tooltip title={params.value as string}>
+              <PhoneIcon sx={{ fontSize: 16, mr: 0.5, color: 'text.secondary' }} />
+              <Tooltip title={allPhones}>
                 <Typography variant="body2" noWrap>
-                  {params.value as string}
+                  {firstPhone}
+                  {telefonos.length > 1 && ` (+${telefonos.length - 1})`}
                 </Typography>
               </Tooltip>
             </Box>

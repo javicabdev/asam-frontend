@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Dialog,
   DialogTitle,
@@ -15,6 +15,7 @@ import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { useTranslation } from 'react-i18next'
 import { FamilyMember } from '../types'
+import { TelephoneInput } from './TelephoneInput'
 import { useDocumentValidation } from '../hooks'
 import { isValidEmail } from '@/utils/validation'
 
@@ -57,6 +58,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
 
   const [fechaNacimiento, setFechaNacimiento] = React.useState<Date | null>(null)
   const [emailError, setEmailError] = React.useState<string>('')
+  const [telefonos, setTelefonos] = useState<string[]>([])
 
   // Validación de DNI
   const {
@@ -71,6 +73,12 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
       setFormData(member)
       if (member.fecha_nacimiento) {
         setFechaNacimiento(new Date(member.fecha_nacimiento))
+      }
+      // Inicializar teléfonos
+      if (member.telefonos && member.telefonos.length > 0) {
+        setTelefonos(member.telefonos.map((t: any) => t.numero_telefono))
+      } else {
+        setTelefonos([])
       }
       // Validar DNI si existe
       if (member.dni_nie) {
@@ -92,10 +100,11 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
         parentesco: 'child',
       })
       setFechaNacimiento(null)
+      setTelefonos([])
       clearValidation()
       setEmailError('')
     }
-  }, [member, open, validateDocument, clearValidation])
+  }, [member, open, validateDocument, clearValidation, t])
 
   const handleChange =
     (field: keyof FamilyMember) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,10 +177,12 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
       return
     }
 
-    // Usar el DNI normalizado si está disponible
+    // Usar el DNI normalizado si está disponible y agregar teléfonos
     const dataToSave = {
       ...formData,
       dni_nie: documentValidation?.normalizedValue || formData.dni_nie,
+      // @ts-expect-error - telefonos se agrega dinámicamente
+      telefonos: telefonos.filter(t => t.trim() !== '').map(numero_telefono => ({ numero_telefono })),
     }
 
     onSave(dataToSave)
@@ -276,6 +287,9 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
                   </MenuItem>
                 ))}
               </TextField>
+            </Grid>
+            <Grid item xs={12}>
+              <TelephoneInput telefonos={telefonos} onChange={setTelefonos} />
             </Grid>
           </Grid>
         </DialogContent>

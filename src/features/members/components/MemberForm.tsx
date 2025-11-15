@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Paper,
   Typography,
@@ -24,6 +24,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import { MembershipType } from '../types'
 import { FamilyMembersList } from './FamilyMembersList'
+import { TelephoneInput } from './TelephoneInput'
 import { EMAIL_REGEX } from '@/utils/validation'
 import {
   useFamilyForm,
@@ -170,6 +171,16 @@ export const MemberForm: React.FC<MemberFormProps> = ({
     validateDocument: validateEsposaDoc,
     clearValidation: clearEsposaDocValidation,
   } = useDocumentValidation()
+
+  // Estado para teléfonos
+  const [telefonos, setTelefonos] = useState<string[]>([])
+
+  // Inicializar teléfonos desde initialData
+  useEffect(() => {
+    if (mode === 'edit' && initialData?.telefonos) {
+      setTelefonos(initialData.telefonos.map((t: any) => t.numero_telefono))
+    }
+  }, [mode, initialData])
 
   // Get default values based on mode
   const getDefaultValues = (): MemberFormData => {
@@ -396,6 +407,8 @@ export const MemberForm: React.FC<MemberFormProps> = ({
         ? format(data.esposa_fecha_nacimiento, 'yyyy-MM-dd')
         : null,
       familyMembers: isFamily ? familyMembers : [],
+      // @ts-expect-error - telefonos se agrega dinámicamente
+      telefonos: telefonos.filter(t => t.trim() !== '').map(numero_telefono => ({ numero_telefono })),
     } as MemberFormSubmitData
 
     if (onSubmit) {
@@ -679,6 +692,10 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   />
                 )}
               />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TelephoneInput telefonos={telefonos} onChange={setTelefonos} />
             </Grid>
 
             <Grid item xs={12} sm={6}>

@@ -31,6 +31,14 @@ export const SortDirection = {
 
 export type SortDirection = (typeof SortDirection)[keyof typeof SortDirection]
 
+export const DocumentType = {
+  DNI_NIE: 'DNI_NIE',
+  PASSPORT_SENEGAL: 'PASSPORT_SENEGAL',
+  OTHER: 'OTHER',
+} as const
+
+export type DocumentType = (typeof DocumentType)[keyof typeof DocumentType]
+
 export interface Member {
   miembro_id: string
   numero_socio: string
@@ -46,6 +54,7 @@ export interface Member {
   fecha_alta: string
   fecha_baja?: string | null
   fecha_nacimiento?: string | null
+  tipo_documento?: DocumentType | null
   documento_identidad?: string | null
   correo_electronico?: string | null
   profesion?: string | null
@@ -93,6 +102,7 @@ export interface FamilyMember {
   nombre: string
   apellidos: string
   fecha_nacimiento?: string
+  tipo_documento?: DocumentType
   dni_nie?: string
   correo_electronico?: string
   parentesco?: string
@@ -121,11 +131,13 @@ export interface CreateFamilyInput {
   esposo_nombre?: string
   esposo_apellidos?: string
   esposo_fecha_nacimiento?: string
+  esposo_tipo_documento?: DocumentType
   esposo_documento_identidad?: string
   esposo_correo_electronico?: string
   esposa_nombre?: string
   esposa_apellidos?: string
   esposa_fecha_nacimiento?: string
+  esposa_tipo_documento?: DocumentType
   esposa_documento_identidad?: string
   esposa_correo_electronico?: string
 }
@@ -134,6 +146,7 @@ export interface FamiliarInput {
   nombre: string
   apellidos: string
   fecha_nacimiento?: string
+  tipo_documento?: DocumentType
   dni_nie?: string
   correo_electronico?: string
   parentesco: string

@@ -22,10 +22,10 @@ import { useTranslation } from 'react-i18next'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
-import { MembershipType } from '../types'
+import { MembershipType, DocumentType } from '../types'
 import { FamilyMembersList } from './FamilyMembersList'
 import { TelephoneInput } from './TelephoneInput'
-import { EMAIL_REGEX } from '@/utils/validation'
+import { EMAIL_REGEX, normalizeDocument } from '@/utils/validation'
 import {
   useFamilyForm,
   useNextMemberNumber,
@@ -57,6 +57,7 @@ interface MemberFormData {
   pais: string
   fecha_alta: Date | null | undefined // ⭐ NUEVO - Fecha de alta histórica
   fecha_nacimiento: Date | null | undefined
+  tipo_documento: string
   documento_identidad: string
   correo_electronico: string | null | undefined
   profesion: string | null | undefined
@@ -66,6 +67,7 @@ interface MemberFormData {
   esposa_nombre: string | null | undefined
   esposa_apellidos: string | null | undefined
   esposa_fecha_nacimiento: Date | null | undefined
+  esposa_tipo_documento: string | null | undefined
   esposa_documento_identidad: string | null | undefined
   esposa_correo_electronico: string | null | undefined
 }
@@ -78,9 +80,11 @@ interface MemberFormSubmitData extends Omit<MemberFormData, 'fecha_alta' | 'fech
   esposo_nombre: string
   esposo_apellidos: string
   esposo_fecha_nacimiento: string | null
+  esposo_tipo_documento: string | null
   esposo_documento_identidad: string | null
   esposo_correo_electronico: string | null
   esposa_fecha_nacimiento: string | null
+  esposa_tipo_documento: string | null
   familyMembers: FamilyMember[]
 }
 
@@ -156,20 +160,18 @@ export const MemberForm: React.FC<MemberFormProps> = ({
   const [memberNumberManuallyEdited, setMemberNumberManuallyEdited] = React.useState(false)
   const { isValidating, isDuplicate, validateMemberNumber, clearValidation } =
     useMemberNumberValidation()
-  
-  // Validación de DNI para socio principal
+
+  // Validación de documentos (solo para DNI/NIE y Pasaporte Senegal, no para "Otro")
   const {
     isValidating: isValidatingDocument,
     validationResult: documentValidation,
     validateDocument,
   } = useDocumentValidation()
-  
-  // Validación de DNI para esposa
+
   const {
     isValidating: isValidatingEsposaDoc,
     validationResult: esposaDocValidation,
-    validateDocument: validateEsposaDoc,
-    clearValidation: clearEsposaDocValidation,
+    validateDocument: validateEsposaDocument,
   } = useDocumentValidation()
 
   // Estado para teléfonos
@@ -197,6 +199,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
         pais: initialData.pais || 'España',
         fecha_alta: initialData.fecha_alta ? new Date(initialData.fecha_alta) : null,
         fecha_nacimiento: initialData.fecha_nacimiento ? new Date(initialData.fecha_nacimiento) : null,
+        tipo_documento: initialData.tipo_documento || DocumentType.DNI_NIE,
         documento_identidad: initialData.documento_identidad || '',
         correo_electronico: initialData.correo_electronico || '',
         profesion: initialData.profesion || '',
@@ -205,6 +208,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
         esposa_nombre: initialData.esposa_nombre || '',
         esposa_apellidos: initialData.esposa_apellidos || '',
         esposa_fecha_nacimiento: initialData.esposa_fecha_nacimiento ? new Date(initialData.esposa_fecha_nacimiento) : null,
+        esposa_tipo_documento: initialData.esposa_tipo_documento || DocumentType.DNI_NIE,
         esposa_documento_identidad: initialData.esposa_documento_identidad || '',
         esposa_correo_electronico: initialData.esposa_correo_electronico || '',
       }
@@ -222,6 +226,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       pais: 'España',
       fecha_alta: null,
       fecha_nacimiento: null,
+      tipo_documento: DocumentType.OTHER,
       documento_identidad: '',
       correo_electronico: '',
       profesion: '',
@@ -230,6 +235,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       esposa_nombre: '',
       esposa_apellidos: '',
       esposa_fecha_nacimiento: null,
+      esposa_tipo_documento: DocumentType.OTHER,
       esposa_documento_identidad: '',
       esposa_correo_electronico: '',
     }
@@ -336,13 +342,6 @@ export const MemberForm: React.FC<MemberFormProps> = ({
     clearErrors('numero_socio')
   }, [isFamily, clearValidation, clearErrors])
 
-  // Limpiar validaciones de DNI de esposa cuando se cambia a individual
-  React.useEffect(() => {
-    if (!isFamily) {
-      clearEsposaDocValidation()
-    }
-  }, [isFamily, clearEsposaDocValidation])
-
   // Apply external errors from parent component (e.g., GraphQL validation errors)
   React.useEffect(() => {
     if (externalErrors && externalErrors.length > 0) {
@@ -367,8 +366,8 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       return
     }
 
-    // Don't submit if document is invalid
-    if (documentValidation && !documentValidation.isValid) {
+    // Check document validation results
+    if (data.tipo_documento !== DocumentType.OTHER && documentValidation && !documentValidation.isValid) {
       setError('documento_identidad', {
         type: 'manual',
         message: documentValidation.errorMessage || t('memberForm.errors.documentoInvalido'),
@@ -376,8 +375,14 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       return
     }
 
-    // Validar DNI de la esposa si se proporcionó
-    if (isFamily && data.esposa_documento_identidad && esposaDocValidation && !esposaDocValidation.isValid) {
+    // Check spouse document validation if provided
+    if (
+      isFamily &&
+      data.esposa_documento_identidad &&
+      data.esposa_tipo_documento !== DocumentType.OTHER &&
+      esposaDocValidation &&
+      !esposaDocValidation.isValid
+    ) {
       setError('esposa_documento_identidad', {
         type: 'manual',
         message: esposaDocValidation.errorMessage || t('memberForm.errors.documentoInvalido'),
@@ -385,12 +390,13 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       return
     }
 
+    // Validation is done on blur, so just normalize documents here
     const telefonosFormateados = telefonos.filter(t => t.trim() !== '').map(numero_telefono => ({ numero_telefono }))
 
     const formattedData: MemberFormSubmitData = {
       ...data,
-      // Use normalized document if available
-      documento_identidad: documentValidation?.normalizedValue || data.documento_identidad,
+      // Normalize documents
+      documento_identidad: normalizeDocument(data.documento_identidad),
 
       // ⭐ Convertir fecha_alta a formato ISO (si está presente)
       fecha_alta: data.fecha_alta ? format(data.fecha_alta, "yyyy-MM-dd'T'HH:mm:ss'Z'") : null,
@@ -399,11 +405,13 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       esposo_nombre: data.nombre,
       esposo_apellidos: data.apellidos,
       esposo_fecha_nacimiento: data.fecha_nacimiento ? format(data.fecha_nacimiento, 'yyyy-MM-dd') : null,
-      esposo_documento_identidad: documentValidation?.normalizedValue || data.documento_identidad,
+      esposo_tipo_documento: data.tipo_documento,
+      esposo_documento_identidad: normalizeDocument(data.documento_identidad),
       esposo_correo_electronico: data.correo_electronico,
 
       // Campos de esposa
-      esposa_documento_identidad: esposaDocValidation?.normalizedValue || data.esposa_documento_identidad,
+      esposa_tipo_documento: data.esposa_tipo_documento,
+      esposa_documento_identidad: data.esposa_documento_identidad ? normalizeDocument(data.esposa_documento_identidad) : null,
       fecha_nacimiento: data.fecha_nacimiento ? format(data.fecha_nacimiento, 'yyyy-MM-dd') : null,
       esposa_fecha_nacimiento: data.esposa_fecha_nacimiento
         ? format(data.esposa_fecha_nacimiento, 'yyyy-MM-dd')
@@ -416,7 +424,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       await onSubmit(formattedData)
     }
     },
-    [isFamily, familyMembers, isDuplicate, documentValidation, esposaDocValidation, onSubmit, setError, t, telefonos]
+    [isFamily, familyMembers, isDuplicate, onSubmit, setError, t, telefonos, documentValidation, esposaDocValidation]
   )
 
   // Wrapper para manejar correctamente el evento del formulario
@@ -621,6 +629,23 @@ export const MemberForm: React.FC<MemberFormProps> = ({
 
             <Grid item xs={12} sm={6}>
               <Controller
+                name="tipo_documento"
+                control={control}
+                render={({ field }) => (
+                  <FormControl fullWidth required>
+                    <InputLabel id="tipo-documento-label">{t('memberForm.fields.tipoDocumento')}</InputLabel>
+                    <Select {...field} labelId="tipo-documento-label" label={t('memberForm.fields.tipoDocumento')}>
+                      <MenuItem value={DocumentType.DNI_NIE}>{t('memberForm.documentTypes.dniNie')}</MenuItem>
+                      <MenuItem value={DocumentType.PASSPORT_SENEGAL}>{t('memberForm.documentTypes.passportSenegal')}</MenuItem>
+                      <MenuItem value={DocumentType.OTHER}>{t('memberForm.documentTypes.other')}</MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <Controller
                 name="documento_identidad"
                 control={control}
                 render={({ field }) => (
@@ -634,42 +659,24 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                     }
                     helperText={
                       errors.documento_identidad?.message ||
-                      (documentValidation &&
-                        !documentValidation.isValid &&
-                        documentValidation.errorMessage) ||
+                      (documentValidation && !documentValidation.isValid && documentValidation.errorMessage) ||
                       (isValidatingDocument && t('memberForm.helpers.validating')) ||
-                      t('memberForm.helpers.dniNieHelper')
+                      (watch('tipo_documento') === DocumentType.DNI_NIE && t('memberForm.helpers.documentHelperDniNie')) ||
+                      (watch('tipo_documento') === DocumentType.PASSPORT_SENEGAL && t('memberForm.helpers.documentHelperPassportSenegal')) ||
+                      (watch('tipo_documento') === DocumentType.OTHER && t('memberForm.helpers.documentHelperOther'))
                     }
                     required
                     onChange={(e) => {
-                      clearErrors('documento_identidad') // Clear external errors when user edits
-                      field.onChange(e)
-                      // Validate document when user types
-                      if (e.target.value.length >= 8) {
-                        void validateDocument(e.target.value)
-                      }
+                      clearErrors('documento_identidad')
+                      const normalized = normalizeDocument(e.target.value)
+                      field.onChange(normalized)
                     }}
-                    onBlur={(e) => {
+                    onBlur={() => {
                       field.onBlur()
-                      // Validate on blur if not already validated
-                      if (e.target.value && !documentValidation) {
-                        void validateDocument(e.target.value).then((result) => {
-                          if (
-                            result &&
-                            result.normalizedValue &&
-                            result.normalizedValue !== e.target.value
-                          ) {
-                            setValue('documento_identidad', result.normalizedValue)
-                          }
-                          if (result && !result.isValid) {
-                            setError('documento_identidad', {
-                              type: 'manual',
-                              message: result.errorMessage || t('memberForm.errors.documentoInvalido'),
-                            })
-                          } else {
-                            clearErrors('documento_identidad')
-                          }
-                        })
+                      // Only validate if not type OTHER
+                      const tipoDoc = watch('tipo_documento')
+                      if (tipoDoc !== DocumentType.OTHER && field.value) {
+                        void validateDocument(field.value)
                       }
                     }}
                   />
@@ -888,7 +895,24 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={6}>
+                  <Controller
+                    name="esposa_tipo_documento"
+                    control={control}
+                    render={({ field }) => (
+                      <FormControl fullWidth>
+                        <InputLabel id="esposa-tipo-documento-label">{t('memberForm.fields.esposa.tipoDocumento')}</InputLabel>
+                        <Select {...field} labelId="esposa-tipo-documento-label" label={t('memberForm.fields.esposa.tipoDocumento')}>
+                          <MenuItem value={DocumentType.DNI_NIE}>{t('memberForm.documentTypes.dniNie')}</MenuItem>
+                          <MenuItem value={DocumentType.PASSPORT_SENEGAL}>{t('memberForm.documentTypes.passportSenegal')}</MenuItem>
+                          <MenuItem value={DocumentType.OTHER}>{t('memberForm.documentTypes.other')}</MenuItem>
+                        </Select>
+                      </FormControl>
+                    )}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
                   <Controller
                     name="esposa_documento_identidad"
                     control={control}
@@ -897,26 +921,29 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                         {...field}
                         fullWidth
                         label={t('memberForm.fields.esposa.dniNie')}
-                        error={esposaDocValidation ? !esposaDocValidation.isValid : false}
+                        error={
+                          !!errors.esposa_documento_identidad ||
+                          (esposaDocValidation ? !esposaDocValidation.isValid : false)
+                        }
                         helperText={
+                          errors.esposa_documento_identidad?.message ||
                           (esposaDocValidation && !esposaDocValidation.isValid && esposaDocValidation.errorMessage) ||
-                          (isValidatingEsposaDoc && t('memberForm.helpers.validating'))
+                          (isValidatingEsposaDoc && t('memberForm.helpers.validating')) ||
+                          (watch('esposa_tipo_documento') === DocumentType.DNI_NIE && t('memberForm.helpers.documentHelperDniNie')) ||
+                          (watch('esposa_tipo_documento') === DocumentType.PASSPORT_SENEGAL && t('memberForm.helpers.documentHelperPassportSenegal')) ||
+                          (watch('esposa_tipo_documento') === DocumentType.OTHER && t('memberForm.helpers.documentHelperOther'))
                         }
                         onChange={(e) => {
-                          clearErrors('esposa_documento_identidad') // Clear external errors when user edits
-                          field.onChange(e)
-                          if (e.target.value.length >= 8) {
-                            void validateEsposaDoc(e.target.value)
-                          }
+                          clearErrors('esposa_documento_identidad')
+                          const normalized = normalizeDocument(e.target.value)
+                          field.onChange(normalized)
                         }}
-                        onBlur={(e) => {
+                        onBlur={() => {
                           field.onBlur()
-                          if (e.target.value) {
-                            void validateEsposaDoc(e.target.value).then((result) => {
-                              if (result && result.normalizedValue && result.normalizedValue !== e.target.value) {
-                                setValue('esposa_documento_identidad', result.normalizedValue)
-                              }
-                            })
+                          // Only validate if not type OTHER
+                          const tipoDoc = watch('esposa_tipo_documento')
+                          if (tipoDoc !== DocumentType.OTHER && field.value) {
+                            void validateEsposaDocument(field.value)
                           }
                         }}
                       />
@@ -924,7 +951,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   />
                 </Grid>
 
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={6}>
                   <Controller
                     name="esposa_correo_electronico"
                     control={control}

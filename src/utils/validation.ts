@@ -55,3 +55,21 @@ export function validateEmail(email: string): string | undefined {
 
   return undefined
 }
+
+/**
+ * Document validation utilities
+ */
+
+/**
+ * Normalizes a document number (converts to uppercase, trims, removes spaces and hyphens)
+ *
+ * @param document - The document number to normalize
+ * @returns Normalized document number
+ */
+export function normalizeDocument(document: string): string {
+  if (!document || typeof document !== 'string') {
+    return ''
+  }
+  // Remove spaces and hyphens, convert to uppercase, and trim
+  return document.replace(/[\s-]/g, '').toUpperCase().trim()
+}

@@ -241,8 +241,9 @@
       "firstName": "Nombre",
       "lastName": "Apellidos",
       "birthDate": "Fecha de Nacimiento",
-      "dni": "DNI/NIE",
-      "dniPlaceholder": "Introduzca el DNI o NIE",
+      "documentType": "Tipo de Documento",
+      "dni": "Número de Documento",
+      "dniPlaceholder": "Introduzca el número de documento",
       "email": "Correo Electrónico",
       "emailPlaceholder": "Formato: usuario@dominio.com",
       "relationship": "Parentesco"
@@ -374,7 +375,8 @@
       "nombre": "Nombre",
       "apellidos": "Apellidos",
       "fechaNacimiento": "Fecha de Nacimiento",
-      "dniNie": "DNI/NIE",
+      "tipoDocumento": "Tipo de Documento",
+      "dniNie": "Número de Documento",
       "correoElectronico": "Correo Electrónico",
       "profesion": "Profesión",
       "calleNumeroPiso": "Calle, Número, Piso",
@@ -387,7 +389,8 @@
       "esposa": {
         "nombre": "Nombre de la Esposa",
         "apellidos": "Apellidos de la Esposa",
-        "dniNie": "DNI/NIE de la Esposa",
+        "tipoDocumento": "Tipo de Documento",
+        "dniNie": "Número de Documento",
         "email": "Email de la Esposa"
       }
     },
@@ -395,12 +398,20 @@
       "individual": "Individual",
       "family": "Familiar"
     },
+    "documentTypes": {
+      "dniNie": "DNI/NIE",
+      "passportSenegal": "Pasaporte Senegal",
+      "other": "Otro"
+    },
     "helpers": {
       "validating": "Validando...",
       "numeroSocioError": "Error al obtener el número. Puede introducirlo manualmente.",
       "numeroSocioFormat": "Puede escribir solo el número (ej: 2) y se formateará automáticamente",
       "fieldDisabled": "Este campo no puede modificarse",
-      "dniNieHelper": "Introduzca el DNI o NIE",
+      "dniNieHelper": "Seleccione el tipo de documento e introduzca el número",
+      "documentHelperDniNie": "Formato: 12345678A o X1234567A (se validará automáticamente)",
+      "documentHelperPassportSenegal": "Introduzca los 10 caracteres de la Zona de Lectura Mecánica (MRZ) del pasaporte (se validará automáticamente)",
+      "documentHelperOther": "Introduzca el número sin validación. Puede validar DNI/NIE o Pasaporte Senegal cambiando el tipo de documento",
       "familyDataOptional": "Los datos de la esposa y familiares adicionales son opcionales.",
       "fechaAltaOptional": "Si el socio se dio de alta en el pasado, especificar la fecha. Dejar vacío para usar la fecha actual."
     },

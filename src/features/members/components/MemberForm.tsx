@@ -409,7 +409,6 @@ export const MemberForm: React.FC<MemberFormProps> = ({
         ? format(data.esposa_fecha_nacimiento, 'yyyy-MM-dd')
         : null,
       familyMembers: isFamily ? familyMembers : [],
-      // @ts-expect-error - telefonos se agrega dinámicamente
       telefonos: telefonosFormateados,
     } as MemberFormSubmitData
 

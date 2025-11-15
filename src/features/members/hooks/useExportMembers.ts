@@ -74,7 +74,7 @@ export const useExportMembers = (options: UseExportMembersOptions = {}) => {
             })
 
             if (data?.listMembers?.nodes) {
-              membersToExport.push(...data.listMembers.nodes)
+              membersToExport.push(...(data.listMembers.nodes as Partial<Member>[]))
             }
 
             processedChunks++
@@ -100,7 +100,7 @@ export const useExportMembers = (options: UseExportMembersOptions = {}) => {
             })
 
             if (data?.listMembers?.nodes && data.listMembers.nodes.length > 0) {
-              membersToExport.push(...data.listMembers.nodes)
+              membersToExport.push(...(data.listMembers.nodes as Partial<Member>[]))
 
               const totalCount = data.listMembers.pageInfo?.totalCount || 0
               const totalPages = Math.ceil(totalCount / pageSize)

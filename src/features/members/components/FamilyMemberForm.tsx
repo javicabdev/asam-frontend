@@ -181,7 +181,6 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
     const dataToSave = {
       ...formData,
       dni_nie: documentValidation?.normalizedValue || formData.dni_nie,
-      // @ts-expect-error - telefonos se agrega dinámicamente
       telefonos: telefonos.filter(t => t.trim() !== '').map(numero_telefono => ({ numero_telefono })),
     }
 

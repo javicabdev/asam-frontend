@@ -47,7 +47,7 @@ interface MemberFormSubmitData {
   fecha_alta: string | null // ⭐ NUEVO CAMPO
   fecha_nacimiento: string | null
   documento_identidad: string
-  correo_electronico: string
+  correo_electronico: string | null | undefined
   profesion: string | null | undefined
   nacionalidad: string | null | undefined
   observaciones: string | null | undefined

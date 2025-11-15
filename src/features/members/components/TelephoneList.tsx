@@ -28,8 +28,8 @@ export function TelephoneList({ telefonos, label }: TelephoneListProps) {
         </Typography>
       )}
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-        {telefonos.map((tel) => (
-          <Box key={tel.id} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        {telefonos.map((tel, index) => (
+          <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <PhoneIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
             <Link href={`tel:${tel.numero_telefono}`} underline="hover" color="primary">
               {tel.numero_telefono}

@@ -43,6 +43,7 @@ interface MemberFormSubmitData {
   profesion: string | null | undefined
   nacionalidad: string | null | undefined
   observaciones: string | null | undefined
+  telefonos?: Array<{ numero_telefono: string }> // ⭐ NUEVO CAMPO
 }
 
 export const EditMemberPage: React.FC = () => {
@@ -144,6 +145,7 @@ export const EditMemberPage: React.FC = () => {
         documento_identidad: data.documento_identidad || null,
         profesion: data.profesion || null,
         observaciones: data.observaciones || null,
+        telefonos: data.telefonos || [], // ⭐ NUEVO CAMPO
       }
 
       console.log('Updating member with input:', memberInput)

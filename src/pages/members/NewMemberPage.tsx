@@ -61,6 +61,7 @@ interface MemberFormSubmitData {
   esposa_fecha_nacimiento: string | null
   esposa_documento_identidad: string | null | undefined
   esposa_correo_electronico: string | null | undefined
+  telefonos?: Array<{ numero_telefono: string }> // ⭐ NUEVO CAMPO
   familyMembers: Array<{
     nombre: string
     apellidos: string
@@ -68,6 +69,7 @@ interface MemberFormSubmitData {
     dni_nie?: string
     correo_electronico?: string
     parentesco?: string
+    telefonos?: Array<{ numero_telefono: string }> // ⭐ NUEVO CAMPO
   }>
 }
 
@@ -155,6 +157,7 @@ export const NewMemberPage: React.FC = () => {
           profesion: data.profesion || null,
           nacionalidad: data.nacionalidad || null,
           observaciones: data.observaciones || null,
+          telefonos: data.telefonos || [], // ⭐ NUEVO CAMPO
         }
 
         console.log('Creating individual member with input:', memberInput)
@@ -234,21 +237,21 @@ export const NewMemberPage: React.FC = () => {
       const familyInput = {
         numero_socio: data.numero_socio,
         // DO NOT pass miembro_origen_id - let backend create it automatically
-        
+
         // Husband data (using main form fields)
         esposo_nombre: data.nombre,
         esposo_apellidos: data.apellidos,
         esposo_fecha_nacimiento: formatDateToRFC3339(data.fecha_nacimiento),
         esposo_documento_identidad: data.documento_identidad || undefined,
         esposo_correo_electronico: data.correo_electronico || undefined,
-        
+
         // Wife data (optional)
         esposa_nombre: data.esposa_nombre || undefined,
         esposa_apellidos: data.esposa_apellidos || undefined,
         esposa_fecha_nacimiento: formatDateToRFC3339(data.esposa_fecha_nacimiento),
         esposa_documento_identidad: data.esposa_documento_identidad || undefined,
         esposa_correo_electronico: data.esposa_correo_electronico || undefined,
-        
+
         // 🔑 ARRAY OF CHILDREN - ALL IN ONE CALL
         familiares: (data.familyMembers || []).map(fm => ({
           nombre: fm.nombre,
@@ -257,14 +260,16 @@ export const NewMemberPage: React.FC = () => {
           dni_nie: fm.dni_nie || null,
           correo_electronico: fm.correo_electronico || null,
           parentesco: fm.parentesco || 'Hijo/a', // Required field
+          telefonos: fm.telefonos || [], // ⭐ NUEVO CAMPO
         })),
-        
+
         // Address data to create member automatically
         direccion: data.calle_numero_piso,
         codigo_postal: data.codigo_postal,
         poblacion: data.poblacion,
         provincia: data.provincia || 'Barcelona',
         pais: data.pais || 'España',
+        telefonos: data.telefonos || [], // ⭐ NUEVO CAMPO
       }
 
       console.log('Creating family atomically with input:', familyInput)

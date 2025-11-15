@@ -1210,7 +1210,7 @@ export type ListFamiliesQueryVariables = Exact<{
 }>;
 
 
-export type ListFamiliesQuery = { __typename?: 'Query', listFamilies: { __typename?: 'FamilyConnection', nodes: Array<{ __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, telefonos?: Array<{ __typename?: 'Telephone', numero_telefono: string }> | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null }> | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
+export type ListFamiliesQuery = { __typename?: 'Query', listFamilies: { __typename?: 'FamilyConnection', nodes: Array<{ __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, telefonos?: Array<{ __typename?: 'Telephone', numero_telefono: string }> | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null, telefonos?: Array<{ __typename?: 'Telephone', numero_telefono: string }> | null }> | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
 
 export type GetFamilyMembersQueryVariables = Exact<{
   familyId: Scalars['ID']['input'];
@@ -1303,7 +1303,7 @@ export type ListMembersQueryVariables = Exact<{
 }>;
 
 
-export type ListMembersQuery = { __typename?: 'Query', listMembers: { __typename?: 'MemberConnection', nodes: Array<{ __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
+export type ListMembersQuery = { __typename?: 'Query', listMembers: { __typename?: 'MemberConnection', nodes: Array<{ __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, telefonos?: Array<{ __typename?: 'Telephone', numero_telefono: string }> | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
 
 export type SearchMembersQueryVariables = Exact<{
   criteria: Scalars['String']['input'];
@@ -2623,7 +2623,6 @@ export const ListFamiliesDocument = gql`
         dni_nie
         correo_electronico
         telefonos {
-          id
           numero_telefono
         }
       }
@@ -3293,7 +3292,6 @@ export const ListMembersDocument = gql`
       nacionalidad
       observaciones
       telefonos {
-        id
         numero_telefono
       }
     }

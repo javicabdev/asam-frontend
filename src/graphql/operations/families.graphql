@@ -91,7 +91,6 @@ query ListFamilies($filter: FamilyFilter) {
         dni_nie
         correo_electronico
         telefonos {
-          id
           numero_telefono
         }
       }

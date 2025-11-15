@@ -67,7 +67,6 @@ query ListMembers($filter: MemberFilter) {
       nacionalidad
       observaciones
       telefonos {
-        id
         numero_telefono
       }
     }

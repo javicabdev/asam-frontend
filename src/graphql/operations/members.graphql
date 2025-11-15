@@ -39,7 +39,6 @@ query GetMember($id: ID!) {
     nacionalidad
     observaciones
     telefonos {
-      id
       numero_telefono
     }
   }
@@ -102,7 +101,6 @@ query SearchMembers($criteria: String!) {
     nacionalidad
     observaciones
     telefonos {
-      id
       numero_telefono
     }
   }
@@ -145,7 +143,6 @@ mutation CreateMember($input: CreateMemberInput!) {
     nacionalidad
     observaciones
     telefonos {
-      id
       numero_telefono
     }
   }
@@ -173,7 +170,6 @@ mutation UpdateMember($input: UpdateMemberInput!) {
     nacionalidad
     observaciones
     telefonos {
-      id
       numero_telefono
     }
   }
@@ -209,7 +205,6 @@ mutation ChangeMemberStatus($id: ID!, $status: MemberStatus!) {
     nacionalidad
     observaciones
     telefonos {
-      id
       numero_telefono
     }
   }

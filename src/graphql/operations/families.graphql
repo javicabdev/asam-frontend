@@ -15,7 +15,6 @@ query GetFamily($id: ID!) {
     esposa_nombre
     esposa_apellidos
     telefonos {
-      id
       numero_telefono
     }
     familiares {
@@ -26,7 +25,6 @@ query GetFamily($id: ID!) {
       dni_nie
       correo_electronico
       telefonos {
-        id
         numero_telefono
       }
     }
@@ -51,7 +49,6 @@ query GetFamilyByOriginMember($memberId: ID!) {
     esposa_documento_identidad
     esposa_correo_electronico
     telefonos {
-      id
       numero_telefono
     }
     familiares {
@@ -62,7 +59,6 @@ query GetFamilyByOriginMember($memberId: ID!) {
       dni_nie
       correo_electronico
       telefonos {
-        id
         numero_telefono
       }
     }
@@ -85,7 +81,6 @@ query ListFamilies($filter: FamilyFilter) {
       esposa_nombre
       esposa_apellidos
       telefonos {
-        id
         numero_telefono
       }
       familiares {
@@ -118,7 +113,6 @@ query GetFamilyMembers($familyId: ID!) {
     dni_nie
     correo_electronico
     telefonos {
-      id
       numero_telefono
     }
   }
@@ -139,7 +133,6 @@ mutation CreateFamily($input: CreateFamilyInput!) {
     esposa_nombre
     esposa_apellidos
     telefonos {
-      id
       numero_telefono
     }
     familiares {
@@ -150,7 +143,6 @@ mutation CreateFamily($input: CreateFamilyInput!) {
       dni_nie
       correo_electronico
       telefonos {
-        id
         numero_telefono
       }
     }
@@ -172,7 +164,6 @@ mutation UpdateFamily($input: UpdateFamilyInput!) {
     esposa_nombre
     esposa_apellidos
     telefonos {
-      id
       numero_telefono
     }
     familiares {
@@ -183,7 +174,6 @@ mutation UpdateFamily($input: UpdateFamilyInput!) {
       dni_nie
       correo_electronico
       telefonos {
-        id
         numero_telefono
       }
     }
@@ -205,7 +195,6 @@ mutation AddFamilyMember($family_id: ID!, $familiar: FamiliarInput!) {
     esposa_nombre
     esposa_apellidos
     telefonos {
-      id
       numero_telefono
     }
     familiares {
@@ -216,7 +205,6 @@ mutation AddFamilyMember($family_id: ID!, $familiar: FamiliarInput!) {
       dni_nie
       correo_electronico
       telefonos {
-        id
         numero_telefono
       }
     }

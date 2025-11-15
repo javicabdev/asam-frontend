@@ -2,7 +2,6 @@
 
 // Telephone types
 export interface Telephone {
-  id: string
   numero_telefono: string
 }
 

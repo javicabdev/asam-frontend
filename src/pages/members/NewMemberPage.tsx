@@ -153,7 +153,7 @@ export const NewMemberPage: React.FC = () => {
           fecha_alta: data.fecha_alta || undefined, // ⭐ NUEVO CAMPO
           fecha_nacimiento: formatDateToRFC3339(data.fecha_nacimiento),
           documento_identidad: data.documento_identidad,
-          correo_electronico: data.correo_electronico,
+          correo_electronico: data.correo_electronico || null,
           profesion: data.profesion || null,
           nacionalidad: data.nacionalidad || null,
           observaciones: data.observaciones || null,

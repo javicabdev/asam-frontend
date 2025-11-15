@@ -58,7 +58,7 @@ interface MemberFormData {
   fecha_alta: Date | null | undefined // ⭐ NUEVO - Fecha de alta histórica
   fecha_nacimiento: Date | null | undefined
   documento_identidad: string
-  correo_electronico: string
+  correo_electronico: string | null | undefined
   profesion: string | null | undefined
   nacionalidad: string | null | undefined
   observaciones: string | null | undefined
@@ -112,9 +112,9 @@ const getValidationSchema = (t: any) => Yup.object({
   pais: Yup.string().required(t('memberForm.validation.paisRequired')),
   documento_identidad: Yup.string().required(t('memberForm.validation.documentoIdentidadRequired')),
   correo_electronico: Yup.string()
-    .required(t('memberForm.validation.emailRequired'))
+    .nullable()
     .test('email-format', t('memberForm.validation.emailInvalid'), (value) => {
-      if (!value) return false // Required ya maneja esto
+      if (!value) return true // Email es opcional
       return EMAIL_REGEX.test(value)
     }),
   // Campos opcionales
@@ -690,7 +690,6 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                     type="email"
                     error={!!errors.correo_electronico}
                     helperText={errors.correo_electronico?.message}
-                    required
                   />
                 )}
               />

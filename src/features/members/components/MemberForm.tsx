@@ -676,7 +676,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                       // Only validate if not type OTHER
                       const tipoDoc = watch('tipo_documento')
                       if (tipoDoc !== DocumentType.OTHER && field.value) {
-                        void validateDocument(field.value)
+                        void validateDocument(field.value, tipoDoc)
                       }
                     }}
                   />
@@ -942,8 +942,8 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                           field.onBlur()
                           // Only validate if not type OTHER
                           const tipoDoc = watch('esposa_tipo_documento')
-                          if (tipoDoc !== DocumentType.OTHER && field.value) {
-                            void validateEsposaDocument(field.value)
+                          if (tipoDoc && tipoDoc !== DocumentType.OTHER && field.value) {
+                            void validateEsposaDocument(field.value, tipoDoc)
                           }
                         }}
                       />

@@ -1,7 +1,7 @@
 # Member validation queries
 
-query ValidateDocument($documentNumber: String!) {
-  checkDocumentValidity(documentNumber: $documentNumber) {
+query ValidateDocument($documentNumber: String!, $documentType: DocumentType!) {
+  checkDocumentValidity(documentNumber: $documentNumber, documentType: $documentType) {
     isValid
     normalizedValue
     errorMessage

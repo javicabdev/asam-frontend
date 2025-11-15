@@ -135,7 +135,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
   const handleDniBlur = () => {
     // Only validate if not type OTHER
     if (formData.dni_nie && formData.tipo_documento && formData.tipo_documento !== DocumentType.OTHER) {
-      void validateDocument(formData.dni_nie)
+      void validateDocument(formData.dni_nie, formData.tipo_documento)
     }
   }
 

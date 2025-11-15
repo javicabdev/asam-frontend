@@ -16,12 +16,12 @@ interface UseDocumentValidationResult {
   isValidating: boolean
   validationResult: DocumentValidationResult | null
   error: string | null
-  validateDocument: (documentNumber: string) => Promise<DocumentValidationResult | null>
+  validateDocument: (documentNumber: string, documentType: string) => Promise<DocumentValidationResult | null>
   clearValidation: () => void
 }
 
 /**
- * Hook to validate Spanish DNI/NIE documents
+ * Hook to validate documents (DNI/NIE, Senegal Passport)
  * @returns Validation state and methods
  */
 export function useDocumentValidation(): UseDocumentValidationResult {
@@ -41,7 +41,7 @@ export function useDocumentValidation(): UseDocumentValidationResult {
   )
 
   const validateDocument = useCallback(
-    async (documentNumber: string): Promise<DocumentValidationResult | null> => {
+    async (documentNumber: string, documentType: string): Promise<DocumentValidationResult | null> => {
       // Clear any existing timeout
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
@@ -64,7 +64,10 @@ export function useDocumentValidation(): UseDocumentValidationResult {
           void (async () => {
             try {
               const { data, error: queryError } = await checkDocument({
-                variables: { documentNumber: documentNumber.trim() },
+                variables: {
+                  documentNumber: documentNumber.trim(),
+                  documentType,
+                } as any,
               })
 
               if (queryError) {
@@ -82,7 +85,7 @@ export function useDocumentValidation(): UseDocumentValidationResult {
                     errorMessage: validationData.errorMessage || undefined,
                   }
                 : null
-              
+
               setValidationResult(result)
               setIsValidating(false)
               resolve(result)

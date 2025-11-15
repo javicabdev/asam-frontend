@@ -98,6 +98,7 @@ export type CreateFamilyInput = {
   pais?: InputMaybe<Scalars['String']['input']>;
   poblacion?: InputMaybe<Scalars['String']['input']>;
   provincia?: InputMaybe<Scalars['String']['input']>;
+  telefonos?: InputMaybe<Array<TelephoneInput>>;
 };
 
 export type CreateMemberInput = {
@@ -116,6 +117,7 @@ export type CreateMemberInput = {
   poblacion: Scalars['String']['input'];
   profesion?: InputMaybe<Scalars['String']['input']>;
   provincia?: InputMaybe<Scalars['String']['input']>;
+  telefonos?: InputMaybe<Array<TelephoneInput>>;
   tipo_membresia: MembershipType;
 };
 
@@ -273,6 +275,7 @@ export type Familiar = {
   id: Scalars['ID']['output'];
   nombre: Scalars['String']['output'];
   parentesco: Scalars['String']['output'];
+  telefonos?: Maybe<Array<Telephone>>;
 };
 
 export type FamiliarInput = {
@@ -282,6 +285,7 @@ export type FamiliarInput = {
   fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
   nombre: Scalars['String']['input'];
   parentesco: Scalars['String']['input'];
+  telefonos?: InputMaybe<Array<TelephoneInput>>;
 };
 
 export type Family = {
@@ -300,6 +304,7 @@ export type Family = {
   id: Scalars['ID']['output'];
   miembro_origen?: Maybe<Member>;
   numero_socio: Scalars['String']['output'];
+  telefonos?: Maybe<Array<Telephone>>;
 };
 
 export type FamilyConnection = {
@@ -361,6 +366,7 @@ export type Member = {
   poblacion: Scalars['String']['output'];
   profesion?: Maybe<Scalars['String']['output']>;
   provincia: Scalars['String']['output'];
+  telefonos?: Maybe<Array<Telephone>>;
   tipo_membresia: MembershipType;
 };
 
@@ -903,6 +909,16 @@ export type SortInput = {
   field: Scalars['String']['input'];
 };
 
+export type Telephone = {
+  __typename?: 'Telephone';
+  id: Scalars['ID']['output'];
+  numero_telefono: Scalars['String']['output'];
+};
+
+export type TelephoneInput = {
+  numero_telefono: Scalars['String']['input'];
+};
+
 export type TokenResponse = {
   __typename?: 'TokenResponse';
   accessToken: Scalars['JWT']['output'];
@@ -957,6 +973,7 @@ export type UpdateFamilyInput = {
   esposo_documento_identidad?: InputMaybe<Scalars['String']['input']>;
   esposo_nombre?: InputMaybe<Scalars['String']['input']>;
   familia_id: Scalars['ID']['input'];
+  telefonos?: InputMaybe<Array<TelephoneInput>>;
 };
 
 export type UpdateMemberInput = {
@@ -974,6 +991,7 @@ export type UpdateMemberInput = {
   poblacion?: InputMaybe<Scalars['String']['input']>;
   profesion?: InputMaybe<Scalars['String']['input']>;
   provincia?: InputMaybe<Scalars['String']['input']>;
+  telefonos?: InputMaybe<Array<TelephoneInput>>;
 };
 
 export type UpdateUserInput = {

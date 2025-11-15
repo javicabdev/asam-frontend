@@ -38,6 +38,10 @@ query GetMember($id: ID!) {
     profesion
     nacionalidad
     observaciones
+    telefonos {
+      id
+      numero_telefono
+    }
   }
 }
 
@@ -63,6 +67,10 @@ query ListMembers($filter: MemberFilter) {
       profesion
       nacionalidad
       observaciones
+      telefonos {
+        id
+        numero_telefono
+      }
     }
     pageInfo {
       hasNextPage
@@ -93,6 +101,10 @@ query SearchMembers($criteria: String!) {
     profesion
     nacionalidad
     observaciones
+    telefonos {
+      id
+      numero_telefono
+    }
   }
 }
 
@@ -132,6 +144,10 @@ mutation CreateMember($input: CreateMemberInput!) {
     profesion
     nacionalidad
     observaciones
+    telefonos {
+      id
+      numero_telefono
+    }
   }
 }
 
@@ -156,6 +172,10 @@ mutation UpdateMember($input: UpdateMemberInput!) {
     profesion
     nacionalidad
     observaciones
+    telefonos {
+      id
+      numero_telefono
+    }
   }
 }
 
@@ -188,5 +208,9 @@ mutation ChangeMemberStatus($id: ID!, $status: MemberStatus!) {
     profesion
     nacionalidad
     observaciones
+    telefonos {
+      id
+      numero_telefono
+    }
   }
 }

@@ -101,6 +101,7 @@ export type CreateFamilyInput = {
   pais?: InputMaybe<Scalars['String']['input']>;
   poblacion?: InputMaybe<Scalars['String']['input']>;
   provincia?: InputMaybe<Scalars['String']['input']>;
+  telefonos?: InputMaybe<Array<TelephoneInput>>;
 };
 
 export type CreateMemberInput = {
@@ -119,6 +120,7 @@ export type CreateMemberInput = {
   poblacion: Scalars['String']['input'];
   profesion?: InputMaybe<Scalars['String']['input']>;
   provincia?: InputMaybe<Scalars['String']['input']>;
+  telefonos?: InputMaybe<Array<TelephoneInput>>;
   tipo_membresia: MembershipType;
 };
 
@@ -276,6 +278,7 @@ export type Familiar = {
   id: Scalars['ID']['output'];
   nombre: Scalars['String']['output'];
   parentesco: Scalars['String']['output'];
+  telefonos?: Maybe<Array<Telephone>>;
 };
 
 export type FamiliarInput = {
@@ -285,6 +288,7 @@ export type FamiliarInput = {
   fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
   nombre: Scalars['String']['input'];
   parentesco: Scalars['String']['input'];
+  telefonos?: InputMaybe<Array<TelephoneInput>>;
 };
 
 export type Family = {
@@ -303,6 +307,7 @@ export type Family = {
   id: Scalars['ID']['output'];
   miembro_origen?: Maybe<Member>;
   numero_socio: Scalars['String']['output'];
+  telefonos?: Maybe<Array<Telephone>>;
 };
 
 export type FamilyConnection = {
@@ -364,6 +369,7 @@ export type Member = {
   poblacion: Scalars['String']['output'];
   profesion?: Maybe<Scalars['String']['output']>;
   provincia: Scalars['String']['output'];
+  telefonos?: Maybe<Array<Telephone>>;
   tipo_membresia: MembershipType;
 };
 
@@ -906,6 +912,16 @@ export type SortInput = {
   field: Scalars['String']['input'];
 };
 
+export type Telephone = {
+  __typename?: 'Telephone';
+  id: Scalars['ID']['output'];
+  numero_telefono: Scalars['String']['output'];
+};
+
+export type TelephoneInput = {
+  numero_telefono: Scalars['String']['input'];
+};
+
 export type TokenResponse = {
   __typename?: 'TokenResponse';
   accessToken: Scalars['JWT']['output'];
@@ -960,6 +976,7 @@ export type UpdateFamilyInput = {
   esposo_documento_identidad?: InputMaybe<Scalars['String']['input']>;
   esposo_nombre?: InputMaybe<Scalars['String']['input']>;
   familia_id: Scalars['ID']['input'];
+  telefonos?: InputMaybe<Array<TelephoneInput>>;
 };
 
 export type UpdateMemberInput = {
@@ -977,6 +994,7 @@ export type UpdateMemberInput = {
   poblacion?: InputMaybe<Scalars['String']['input']>;
   profesion?: InputMaybe<Scalars['String']['input']>;
   provincia?: InputMaybe<Scalars['String']['input']>;
+  telefonos?: InputMaybe<Array<TelephoneInput>>;
 };
 
 export type UpdateUserInput = {
@@ -1178,42 +1196,42 @@ export type GetFamilyQueryVariables = Exact<{
 }>;
 
 
-export type GetFamilyQuery = { __typename?: 'Query', getFamily?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> | null } | null };
+export type GetFamilyQuery = { __typename?: 'Query', getFamily?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null }> | null } | null };
 
 export type GetFamilyByOriginMemberQueryVariables = Exact<{
   memberId: Scalars['ID']['input'];
 }>;
 
 
-export type GetFamilyByOriginMemberQuery = { __typename?: 'Query', getFamilyByOriginMember?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, esposa_fecha_nacimiento?: string | null, esposa_documento_identidad?: string | null, esposa_correo_electronico?: string | null, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> | null } | null };
+export type GetFamilyByOriginMemberQuery = { __typename?: 'Query', getFamilyByOriginMember?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, esposa_fecha_nacimiento?: string | null, esposa_documento_identidad?: string | null, esposa_correo_electronico?: string | null, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null }> | null } | null };
 
 export type ListFamiliesQueryVariables = Exact<{
   filter?: InputMaybe<FamilyFilter>;
 }>;
 
 
-export type ListFamiliesQuery = { __typename?: 'Query', listFamilies: { __typename?: 'FamilyConnection', nodes: Array<{ __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
+export type ListFamiliesQuery = { __typename?: 'Query', listFamilies: { __typename?: 'FamilyConnection', nodes: Array<{ __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null }> | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
 
 export type GetFamilyMembersQueryVariables = Exact<{
   familyId: Scalars['ID']['input'];
 }>;
 
 
-export type GetFamilyMembersQuery = { __typename?: 'Query', getFamilyMembers: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> };
+export type GetFamilyMembersQuery = { __typename?: 'Query', getFamilyMembers: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null }> };
 
 export type CreateFamilyMutationVariables = Exact<{
   input: CreateFamilyInput;
 }>;
 
 
-export type CreateFamilyMutation = { __typename?: 'Mutation', createFamily: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> | null } };
+export type CreateFamilyMutation = { __typename?: 'Mutation', createFamily: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null }> | null } };
 
 export type UpdateFamilyMutationVariables = Exact<{
   input: UpdateFamilyInput;
 }>;
 
 
-export type UpdateFamilyMutation = { __typename?: 'Mutation', updateFamily: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> | null } };
+export type UpdateFamilyMutation = { __typename?: 'Mutation', updateFamily: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null }> | null } };
 
 export type AddFamilyMemberMutationVariables = Exact<{
   family_id: Scalars['ID']['input'];
@@ -1221,7 +1239,7 @@ export type AddFamilyMemberMutationVariables = Exact<{
 }>;
 
 
-export type AddFamilyMemberMutation = { __typename?: 'Mutation', addFamilyMember: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null }> | null } };
+export type AddFamilyMemberMutation = { __typename?: 'Mutation', addFamilyMember: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null }> | null } };
 
 export type RemoveFamilyMemberMutationVariables = Exact<{
   familiar_id: Scalars['ID']['input'];
@@ -1278,21 +1296,21 @@ export type GetMemberQueryVariables = Exact<{
 }>;
 
 
-export type GetMemberQuery = { __typename?: 'Query', getMember?: { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null } | null };
+export type GetMemberQuery = { __typename?: 'Query', getMember?: { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null } | null };
 
 export type ListMembersQueryVariables = Exact<{
   filter?: InputMaybe<MemberFilter>;
 }>;
 
 
-export type ListMembersQuery = { __typename?: 'Query', listMembers: { __typename?: 'MemberConnection', nodes: Array<{ __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
+export type ListMembersQuery = { __typename?: 'Query', listMembers: { __typename?: 'MemberConnection', nodes: Array<{ __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, totalCount: number } } };
 
 export type SearchMembersQueryVariables = Exact<{
   criteria: Scalars['String']['input'];
 }>;
 
 
-export type SearchMembersQuery = { __typename?: 'Query', searchMembers: Array<{ __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null }> };
+export type SearchMembersQuery = { __typename?: 'Query', searchMembers: Array<{ __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null }> };
 
 export type SearchMembersWithoutUserQueryVariables = Exact<{
   criteria: Scalars['String']['input'];
@@ -1306,14 +1324,14 @@ export type CreateMemberMutationVariables = Exact<{
 }>;
 
 
-export type CreateMemberMutation = { __typename?: 'Mutation', createMember: { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null } };
+export type CreateMemberMutation = { __typename?: 'Mutation', createMember: { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null } };
 
 export type UpdateMemberMutationVariables = Exact<{
   input: UpdateMemberInput;
 }>;
 
 
-export type UpdateMemberMutation = { __typename?: 'Mutation', updateMember: { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null } };
+export type UpdateMemberMutation = { __typename?: 'Mutation', updateMember: { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null } };
 
 export type DeleteMemberMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -1328,7 +1346,7 @@ export type ChangeMemberStatusMutationVariables = Exact<{
 }>;
 
 
-export type ChangeMemberStatusMutation = { __typename?: 'Mutation', changeMemberStatus: { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null } };
+export type ChangeMemberStatusMutation = { __typename?: 'Mutation', changeMemberStatus: { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, telefonos?: Array<{ __typename?: 'Telephone', id: string, numero_telefono: string }> | null } };
 
 export type GetPaymentQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2460,6 +2478,10 @@ export const GetFamilyDocument = gql`
     esposo_apellidos
     esposa_nombre
     esposa_apellidos
+    telefonos {
+      id
+      numero_telefono
+    }
     familiares {
       id
       nombre
@@ -2467,6 +2489,10 @@ export const GetFamilyDocument = gql`
       fecha_nacimiento
       dni_nie
       correo_electronico
+      telefonos {
+        id
+        numero_telefono
+      }
     }
   }
 }
@@ -2522,6 +2548,10 @@ export const GetFamilyByOriginMemberDocument = gql`
     esposa_fecha_nacimiento
     esposa_documento_identidad
     esposa_correo_electronico
+    telefonos {
+      id
+      numero_telefono
+    }
     familiares {
       id
       nombre
@@ -2529,6 +2559,10 @@ export const GetFamilyByOriginMemberDocument = gql`
       fecha_nacimiento
       dni_nie
       correo_electronico
+      telefonos {
+        id
+        numero_telefono
+      }
     }
   }
 }
@@ -2582,6 +2616,10 @@ export const ListFamiliesDocument = gql`
       esposo_apellidos
       esposa_nombre
       esposa_apellidos
+      telefonos {
+        id
+        numero_telefono
+      }
       familiares {
         id
         nombre
@@ -2589,6 +2627,10 @@ export const ListFamiliesDocument = gql`
         fecha_nacimiento
         dni_nie
         correo_electronico
+        telefonos {
+          id
+          numero_telefono
+        }
       }
     }
     pageInfo {
@@ -2641,6 +2683,10 @@ export const GetFamilyMembersDocument = gql`
     fecha_nacimiento
     dni_nie
     correo_electronico
+    telefonos {
+      id
+      numero_telefono
+    }
   }
 }
     `;
@@ -2692,6 +2738,10 @@ export const CreateFamilyDocument = gql`
     esposo_apellidos
     esposa_nombre
     esposa_apellidos
+    telefonos {
+      id
+      numero_telefono
+    }
     familiares {
       id
       nombre
@@ -2699,6 +2749,10 @@ export const CreateFamilyDocument = gql`
       fecha_nacimiento
       dni_nie
       correo_electronico
+      telefonos {
+        id
+        numero_telefono
+      }
     }
   }
 }
@@ -2744,6 +2798,10 @@ export const UpdateFamilyDocument = gql`
     esposo_apellidos
     esposa_nombre
     esposa_apellidos
+    telefonos {
+      id
+      numero_telefono
+    }
     familiares {
       id
       nombre
@@ -2751,6 +2809,10 @@ export const UpdateFamilyDocument = gql`
       fecha_nacimiento
       dni_nie
       correo_electronico
+      telefonos {
+        id
+        numero_telefono
+      }
     }
   }
 }
@@ -2796,6 +2858,10 @@ export const AddFamilyMemberDocument = gql`
     esposo_apellidos
     esposa_nombre
     esposa_apellidos
+    telefonos {
+      id
+      numero_telefono
+    }
     familiares {
       id
       nombre
@@ -2803,6 +2869,10 @@ export const AddFamilyMemberDocument = gql`
       fecha_nacimiento
       dni_nie
       correo_electronico
+      telefonos {
+        id
+        numero_telefono
+      }
     }
   }
 }
@@ -3172,6 +3242,10 @@ export const GetMemberDocument = gql`
     profesion
     nacionalidad
     observaciones
+    telefonos {
+      id
+      numero_telefono
+    }
   }
 }
     `;
@@ -3231,6 +3305,10 @@ export const ListMembersDocument = gql`
       profesion
       nacionalidad
       observaciones
+      telefonos {
+        id
+        numero_telefono
+      }
     }
     pageInfo {
       hasNextPage
@@ -3295,6 +3373,10 @@ export const SearchMembersDocument = gql`
     profesion
     nacionalidad
     observaciones
+    telefonos {
+      id
+      numero_telefono
+    }
   }
 }
     `;
@@ -3400,6 +3482,10 @@ export const CreateMemberDocument = gql`
     profesion
     nacionalidad
     observaciones
+    telefonos {
+      id
+      numero_telefono
+    }
   }
 }
     `;
@@ -3451,6 +3537,10 @@ export const UpdateMemberDocument = gql`
     profesion
     nacionalidad
     observaciones
+    telefonos {
+      id
+      numero_telefono
+    }
   }
 }
     `;
@@ -3537,6 +3627,10 @@ export const ChangeMemberStatusDocument = gql`
     profesion
     nacionalidad
     observaciones
+    telefonos {
+      id
+      numero_telefono
+    }
   }
 }
     `;

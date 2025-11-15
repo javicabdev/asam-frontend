@@ -14,6 +14,10 @@ query GetFamily($id: ID!) {
     esposo_apellidos
     esposa_nombre
     esposa_apellidos
+    telefonos {
+      id
+      numero_telefono
+    }
     familiares {
       id
       nombre
@@ -21,6 +25,10 @@ query GetFamily($id: ID!) {
       fecha_nacimiento
       dni_nie
       correo_electronico
+      telefonos {
+        id
+        numero_telefono
+      }
     }
   }
 }
@@ -42,6 +50,10 @@ query GetFamilyByOriginMember($memberId: ID!) {
     esposa_fecha_nacimiento
     esposa_documento_identidad
     esposa_correo_electronico
+    telefonos {
+      id
+      numero_telefono
+    }
     familiares {
       id
       nombre
@@ -49,6 +61,10 @@ query GetFamilyByOriginMember($memberId: ID!) {
       fecha_nacimiento
       dni_nie
       correo_electronico
+      telefonos {
+        id
+        numero_telefono
+      }
     }
   }
 }
@@ -68,6 +84,10 @@ query ListFamilies($filter: FamilyFilter) {
       esposo_apellidos
       esposa_nombre
       esposa_apellidos
+      telefonos {
+        id
+        numero_telefono
+      }
       familiares {
         id
         nombre
@@ -75,6 +95,10 @@ query ListFamilies($filter: FamilyFilter) {
         fecha_nacimiento
         dni_nie
         correo_electronico
+        telefonos {
+          id
+          numero_telefono
+        }
       }
     }
     pageInfo {
@@ -93,6 +117,10 @@ query GetFamilyMembers($familyId: ID!) {
     fecha_nacimiento
     dni_nie
     correo_electronico
+    telefonos {
+      id
+      numero_telefono
+    }
   }
 }
 
@@ -110,6 +138,10 @@ mutation CreateFamily($input: CreateFamilyInput!) {
     esposo_apellidos
     esposa_nombre
     esposa_apellidos
+    telefonos {
+      id
+      numero_telefono
+    }
     familiares {
       id
       nombre
@@ -117,6 +149,10 @@ mutation CreateFamily($input: CreateFamilyInput!) {
       fecha_nacimiento
       dni_nie
       correo_electronico
+      telefonos {
+        id
+        numero_telefono
+      }
     }
   }
 }
@@ -135,6 +171,10 @@ mutation UpdateFamily($input: UpdateFamilyInput!) {
     esposo_apellidos
     esposa_nombre
     esposa_apellidos
+    telefonos {
+      id
+      numero_telefono
+    }
     familiares {
       id
       nombre
@@ -142,6 +182,10 @@ mutation UpdateFamily($input: UpdateFamilyInput!) {
       fecha_nacimiento
       dni_nie
       correo_electronico
+      telefonos {
+        id
+        numero_telefono
+      }
     }
   }
 }
@@ -160,6 +204,10 @@ mutation AddFamilyMember($family_id: ID!, $familiar: FamiliarInput!) {
     esposo_apellidos
     esposa_nombre
     esposa_apellidos
+    telefonos {
+      id
+      numero_telefono
+    }
     familiares {
       id
       nombre
@@ -167,6 +215,10 @@ mutation AddFamilyMember($family_id: ID!, $familiar: FamiliarInput!) {
       fecha_nacimiento
       dni_nie
       correo_electronico
+      telefonos {
+        id
+        numero_telefono
+      }
     }
   }
 }

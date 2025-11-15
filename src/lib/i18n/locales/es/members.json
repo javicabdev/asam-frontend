@@ -121,6 +121,10 @@
       "update": "Error al actualizar el miembro",
       "delete": "Error al eliminar el miembro",
       "load": "Error al cargar el miembro"
+    },
+    "helpers": {
+      "noPhones": "No hay teléfonos registrados",
+      "addPhone": "Añadir teléfono"
     }
   },
   "details": {
@@ -444,6 +448,8 @@
     "leaveDate": "Fecha de Baja",
     "contactInfo": "Información de Contacto",
     "email": "Correo Electrónico",
+    "phone": "Teléfono",
+    "phones": "Teléfonos",
     "fullAddress": "Dirección Completa",
     "profession": "Profesión",
     "nationality": "Nacionalidad",

@@ -29,7 +29,7 @@ import { es } from 'date-fns/locale'
 import { useTranslation } from 'react-i18next'
 
 import { useMemberDetails } from '@/features/members/hooks/useMemberDetails'
-import { MemberDetailsSkeleton, FamilyMembersDisplay } from '@/features/members/components'
+import { MemberDetailsSkeleton, FamilyMembersDisplay, TelephoneList } from '@/features/members/components'
 import { MemberPaymentHistory } from '@/features/payments/components'
 import { MemberStatus, MembershipType } from '@/features/members/types'
 import { useAuthStore } from '@/stores/authStore'
@@ -233,6 +233,13 @@ export function MemberDetailsPage() {
                       t('details.notSpecified')
                     )}
                   </Typography>
+                </Box>
+
+                <Box>
+                  <Typography variant="caption" color="text.secondary">
+                    {t('details.phones')}
+                  </Typography>
+                  <TelephoneList telefonos={member.telefonos} />
                 </Box>
 
                 <Box>

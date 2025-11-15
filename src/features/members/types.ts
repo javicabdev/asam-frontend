@@ -1,5 +1,15 @@
 // Member types based on GraphQL schema
 
+// Telephone types
+export interface Telephone {
+  id: string
+  numero_telefono: string
+}
+
+export interface TelephoneInput {
+  numero_telefono: string
+}
+
 // Using const assertions for better type compatibility with GraphQL
 export const MembershipType = {
   INDIVIDUAL: 'INDIVIDUAL',
@@ -42,6 +52,7 @@ export interface Member {
   profesion?: string | null
   nacionalidad?: string | null
   observaciones?: string | null
+  telefonos?: Telephone[]
 }
 
 export interface MemberFilter {
@@ -86,6 +97,7 @@ export interface FamilyMember {
   dni_nie?: string
   correo_electronico?: string
   parentesco?: string
+  telefonos?: Telephone[]
 }
 
 export interface Family {
@@ -101,6 +113,7 @@ export interface Family {
   esposa_nombre: string
   esposa_apellidos: string
   familiares?: FamilyMember[]
+  telefonos?: Telephone[]
 }
 
 export interface CreateFamilyInput {
@@ -125,4 +138,5 @@ export interface FamiliarInput {
   dni_nie?: string
   correo_electronico?: string
   parentesco: string
+  telefonos?: TelephoneInput[]
 }

@@ -385,10 +385,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       return
     }
 
-    // 🔍 DEBUG: Log teléfonos antes de formatear
-    console.log('[MemberForm DEBUG] Estado telefonos:', telefonos)
     const telefonosFormateados = telefonos.filter(t => t.trim() !== '').map(numero_telefono => ({ numero_telefono }))
-    console.log('[MemberForm DEBUG] Telefonos formateados:', telefonosFormateados)
 
     const formattedData: MemberFormSubmitData = {
       ...data,
@@ -415,8 +412,6 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       // @ts-expect-error - telefonos se agrega dinámicamente
       telefonos: telefonosFormateados,
     } as MemberFormSubmitData
-
-    console.log('[MemberForm DEBUG] formattedData completo:', formattedData)
 
     if (onSubmit) {
       await onSubmit(formattedData)

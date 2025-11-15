@@ -69,7 +69,7 @@ export default function ReportsPage() {
         {/* Error state */}
         {error && (
           <Alert severity="error" sx={{ mb: 3 }}>
-            {t('delinquent.errors.loadError')}: {error.message}
+            {t('delinquent.errors.loadFailed')}: {error.message}
           </Alert>
         )}
 
@@ -107,7 +107,7 @@ export default function ReportsPage() {
             {/* Table */}
             {data.debtors.length === 0 ? (
               <Alert severity="info">
-                {t('delinquent.errors.noDebtors')}
+                {t('delinquent.noData')}
               </Alert>
             ) : (
               <Box

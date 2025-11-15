@@ -13,7 +13,7 @@ import {
 } from '@mui/x-data-grid'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { Visibility, Person } from '@mui/icons-material'
+import { Visibility, Person, Phone as PhoneIcon } from '@mui/icons-material'
 import { IconButton, Tooltip } from '@mui/material'
 import { DebtorType } from '../types'
 import type { Debtor } from '../types'
@@ -52,15 +52,15 @@ function getDebtorMemberNumber(debtor: Debtor): string {
 }
 
 /**
- * Obtiene la información de contacto del deudor
+ * Obtiene la información de contacto del deudor (teléfono prioritario)
  */
 function getDebtorContact(debtor: Debtor): string {
   if (debtor.type === 'INDIVIDUAL' && debtor.member) {
-    return debtor.member.email || debtor.member.phone || '-'
+    return debtor.member.phone || debtor.member.email || '-'
   } else if (debtor.type === 'FAMILY' && debtor.family) {
     return (
-      debtor.family.primaryMember.email ||
       debtor.family.primaryMember.phone ||
+      debtor.family.primaryMember.email ||
       '-'
     )
   }
@@ -169,6 +169,24 @@ export function DelinquentTable({
       flex: 1,
       minWidth: 200,
       valueGetter: (params) => getDebtorContact(params.row),
+      renderCell: (params: GridRenderCellParams<Debtor>) => {
+        const contact = getDebtorContact(params.row)
+        if (contact === '-') return '-'
+
+        // Check if it's a phone number (prioritized now)
+        const isPhone = params.row.type === 'INDIVIDUAL'
+          ? !!params.row.member?.phone
+          : !!params.row.family?.primaryMember.phone
+
+        return (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {isPhone && <PhoneIcon sx={{ fontSize: 16, mr: 0.5, color: 'text.secondary' }} />}
+            <Typography variant="body2" noWrap>
+              {contact}
+            </Typography>
+          </Box>
+        )
+      },
     },
     {
       field: 'totalDebt',

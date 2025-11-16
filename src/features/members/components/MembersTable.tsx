@@ -8,10 +8,7 @@ import {
   GridRowParams,
   GridRowSelectionModel,
   GridToolbarContainer,
-  GridToolbarColumnsButton,
-  GridToolbarFilterButton,
   GridToolbarDensitySelector,
-  GridToolbarQuickFilter,
   esES,
 } from '@mui/x-data-grid'
 import {
@@ -29,6 +26,8 @@ import {
   Alert,
   Snackbar,
   useTheme,
+  TextField,
+  InputAdornment,
 } from '@mui/material'
 import {
   Visibility as VisibilityIcon,
@@ -40,13 +39,12 @@ import {
   TableChart as TableChartIcon,
   Description as DescriptionIcon,
   PersonAdd as PersonAddIcon,
+  Search as SearchIcon,
 } from '@mui/icons-material'
 import { format } from 'date-fns'
-import { es } from 'date-fns/locale'
 
-import { Member, MemberStatus, MembershipType } from '../types'
+import { Member, MemberStatus, MembershipType, MemberFilter } from '../types'
 import { useExportMembers } from '@/features/members/hooks'
-import { MemberFilter } from '@/graphql/generated/operations'
 import { useOnlineStatus } from '@/hooks/useOnlineStatus'
 
 interface MembersTableProps {
@@ -63,6 +61,7 @@ interface MembersTableProps {
   onEditClick: (member: Member) => void
   onDeactivateClick: (member: Member) => void
   onSelectionChange?: (selectedIds: string[]) => void
+  onFilterChange?: (filter: Partial<MemberFilter>) => void
   selectable?: boolean
   isAdmin?: boolean
   onAddMember?: () => void
@@ -70,31 +69,30 @@ interface MembersTableProps {
 
 // Custom toolbar component
 interface CustomToolbarProps {
-  selectedCount: number
   filters?: MemberFilter
   onExportAll: () => void
   onExportFiltered: () => void
-  onExportSelected: () => void
   isExporting: boolean
   exportProgress: number
   onAddMember?: () => void
   isAdmin?: boolean
+  onSearchChange?: (searchTerm: string) => void
 }
 
 function CustomToolbar({
-  selectedCount,
   filters,
   onExportAll,
   onExportFiltered,
-  onExportSelected,
   isExporting,
   exportProgress,
   onAddMember,
   isAdmin,
+  onSearchChange,
 }: CustomToolbarProps) {
   const { t } = useTranslation('members')
   const { isOnline } = useOnlineStatus()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [searchTerm, setSearchTerm] = useState<string>(filters?.search_term || '')
   const open = Boolean(anchorEl)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -115,16 +113,18 @@ function CustomToolbar({
     onExportFiltered()
   }
 
-  const handleExportSelected = () => {
-    handleClose()
-    onExportSelected()
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+    setSearchTerm(value)
+    // Debounce the search to avoid too many API calls
+    if (onSearchChange) {
+      onSearchChange(value)
+    }
   }
 
   return (
     <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-        <GridToolbarColumnsButton />
-        <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
         <Divider orientation="vertical" flexItem />
 
@@ -139,16 +139,23 @@ function CustomToolbar({
         >
           {isExporting ? t('table.exporting') + ` ${Math.round(exportProgress)}%` : t('table.export')}
         </Button>
-
-        {selectedCount > 0 && (
-          <Typography variant="body2" color="text.secondary">
-            {t('table.selectionCount', { count: selectedCount })}
-          </Typography>
-        )}
       </Box>
 
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-        <GridToolbarQuickFilter debounceMs={500} />
+        <TextField
+          size="small"
+          placeholder={t('table.toolbar.search')}
+          value={searchTerm}
+          onChange={handleSearchChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon fontSize="small" />
+              </InputAdornment>
+            ),
+          }}
+          sx={{ minWidth: 200 }}
+        />
         {onAddMember && (
           <Tooltip
             title={
@@ -197,13 +204,6 @@ function CustomToolbar({
           </MenuItem>
         )}
 
-        {selectedCount > 0 && (
-          <MenuItem onClick={handleExportSelected}>
-            <TableChartIcon sx={{ mr: 1, fontSize: 20 }} />
-            {t('table.exportSelected', { count: selectedCount })}
-          </MenuItem>
-        )}
-
         <Divider />
 
         <MenuItem disabled>
@@ -229,6 +229,7 @@ export function MembersTable({
   onEditClick,
   onDeactivateClick,
   onSelectionChange,
+  onFilterChange,
   selectable = false,
   isAdmin = false,
   onAddMember,
@@ -240,6 +241,9 @@ export function MembersTable({
 
   // Track if we initiated the change (to ignore reflection events)
   const changingRef = useRef(false)
+
+  // Debounce timer for search
+  const searchDebounceRef = useRef<NodeJS.Timeout | null>(null)
 
   const [snackbar, setSnackbar] = useState<{
     open: boolean
@@ -291,7 +295,6 @@ export function MembersTable({
   const {
     exportAllMembers,
     exportFilteredMembers,
-    exportSelectedMembers,
     isExporting,
     exportProgress,
   } = useExportMembers({
@@ -326,12 +329,19 @@ export function MembersTable({
     }
   }, [exportFilteredMembers, filters])
 
-  const handleExportSelected = useCallback(() => {
-    const selectedIds = rowSelectionModel as string[]
-    if (selectedIds.length > 0) {
-      void exportSelectedMembers(selectedIds, filters)
+  const handleSearchChange = useCallback((searchTerm: string) => {
+    // Clear existing debounce timer
+    if (searchDebounceRef.current) {
+      clearTimeout(searchDebounceRef.current)
     }
-  }, [exportSelectedMembers, rowSelectionModel, filters])
+
+    // Set new debounce timer
+    searchDebounceRef.current = setTimeout(() => {
+      if (onFilterChange) {
+        onFilterChange({ search_term: searchTerm || undefined })
+      }
+    }, 500) // 500ms debounce
+  }, [onFilterChange])
 
   const columns: GridColDef<Member>[] = useMemo(
     () => [
@@ -405,24 +415,6 @@ export function MembersTable({
         ),
       },
       {
-        field: 'poblacion',
-        headerName: t('list.columns.population'),
-        width: 150,
-        sortable: true,
-        filterable: true,
-      },
-      {
-        field: 'provincia',
-        headerName: t('list.columns.province'),
-        width: 130,
-        sortable: true,
-        filterable: true,
-        renderCell: (params) => {
-          const value = params.value as string | null | undefined
-          return value || '-'
-        },
-      },
-      {
         field: 'telefonos',
         headerName: t('list.columns.phone'),
         width: 200,
@@ -446,38 +438,6 @@ export function MembersTable({
                 </Typography>
               </Tooltip>
             </Box>
-          )
-        },
-      },
-      {
-        field: 'fecha_alta',
-        headerName: t('table.dateHigh'),
-        width: 130,
-        sortable: true,
-        filterable: true,
-        valueFormatter: (params) => {
-          const dateValue = params.value as string
-          if (!dateValue) return ''
-          return format(new Date(dateValue), 'dd/MM/yyyy', { locale: es })
-        },
-      },
-      {
-        field: 'fecha_baja',
-        headerName: t('table.dateLow'),
-        width: 130,
-        sortable: true,
-        filterable: true,
-        valueFormatter: (params) => {
-          const dateValue = params.value as string
-          if (!dateValue) return '-'
-          return format(new Date(dateValue), 'dd/MM/yyyy', { locale: es })
-        },
-        renderCell: (params) => {
-          if (!params.value) return '-'
-          return (
-            <Typography variant="body2" color="error" sx={{ fontWeight: 'medium' }}>
-              {params.formattedValue}
-            </Typography>
           )
         },
       },
@@ -659,15 +619,14 @@ export function MembersTable({
         }}
         slotProps={{
           toolbar: {
-            selectedCount: rowSelectionModel.length,
             filters,
             onExportAll: handleExportAll,
             onExportFiltered: handleExportFiltered,
-            onExportSelected: handleExportSelected,
             isExporting,
             exportProgress,
             onAddMember,
             isAdmin,
+            onSearchChange: handleSearchChange,
           } as CustomToolbarProps,
         }}
         localeText={customLocaleText}

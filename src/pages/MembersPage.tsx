@@ -1,18 +1,16 @@
 import React from 'react'
-import { Box, Typography, Alert, Chip, Stack, useTheme, Paper } from '@mui/material'
+import { Box, Alert, Paper } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/stores/authStore'
 import { useTranslation } from 'react-i18next'
 
 import { MembersTable } from '@/features/members/components/MembersTable'
-import { MembersFilters } from '@/features/members/components/MembersFilters'
 import { ConfirmDeactivateDialog } from '@/features/members/components/ConfirmDeactivateDialog'
 import { useMembersTable } from '@/features/members/hooks/useMembersTable'
 import type { Member } from '@/features/members/types'
 
 export default function MembersPage() {
   const navigate = useNavigate()
-  const theme = useTheme()
   const { t } = useTranslation('members')
   const { user } = useAuthStore()
   const isAdmin = user?.role === 'admin'
@@ -37,7 +35,6 @@ export default function MembersPage() {
     handleRowClick,
     handleFilterChange,
     handleSelectionChange,
-    selectedMembers,
   } = useMembersTable()
 
   const handleEditClick = (member: Member) => {
@@ -50,32 +47,6 @@ export default function MembersPage() {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      {/* Header */}
-      <Box mb={3}>
-        <Typography
-          variant="h4"
-          component="h1"
-          sx={{
-            color: theme.palette.text.primary,
-            fontWeight: 600,
-          }}
-        >
-          👥 {t('title', 'Gestión de Socios')}
-        </Typography>
-        <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 1 }}>
-          <Typography variant="body2" color="text.secondary">
-            {t('total', 'Total')}: {totalCount} {t('members', 'socios')}
-          </Typography>
-          {selectedMembers.length > 0 && (
-            <Chip
-              label={`${selectedMembers.length} ${t('selected', 'seleccionados')}`}
-              color="primary"
-              size="small"
-            />
-          )}
-        </Stack>
-      </Box>
-
       {/* Error Alert */}
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>
@@ -83,19 +54,8 @@ export default function MembersPage() {
         </Alert>
       )}
 
-      {/* Filters */}
-      <Paper sx={{ p: 2, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          🔍 {t('filters.title', 'Filtros')}
-        </Typography>
-        <MembersFilters onFilterChange={handleFilterChange} />
-      </Paper>
-
       {/* Table */}
       <Paper sx={{ p: 2, mb: 3, display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
-        <Typography variant="h6" gutterBottom>
-          📊 {t('table.title', 'Listado de Socios')} ({totalCount})
-        </Typography>
         <Box sx={{ flex: 1, minHeight: 400, width: '100%' }}>
           <MembersTable
             members={members}
@@ -111,7 +71,8 @@ export default function MembersPage() {
             onEditClick={handleEditClick}
             onDeactivateClick={handleDeactivateClick}
             onSelectionChange={handleSelectionChange}
-            selectable={true}
+            onFilterChange={handleFilterChange}
+            selectable={false}
             isAdmin={isAdmin}
             onAddMember={() => navigate('/members/new')}
           />

@@ -14,7 +14,7 @@ import {
   GridRenderCellParams,
   esES,
 } from '@mui/x-data-grid'
-import { Box, Chip } from '@mui/material'
+import { Box, Tooltip } from '@mui/material'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -177,25 +177,10 @@ export const CashFlowTable = ({
       sortable: false,
       renderCell: (params: GridRenderCellParams<CashFlowTransaction, OperationType>) => {
         const config = getOperationTypeConfig(params.value as OperationType)
-        return <span>{config.icon}</span>
-      },
-    },
-    {
-      field: 'category',
-      headerName: t('table.columns.category'),
-      width: 180,
-      sortable: false,
-      renderCell: (params: GridRenderCellParams<CashFlowTransaction>) => {
-        const config = getOperationTypeConfig(params.row.operationType)
         return (
-          <Chip
-            label={t(`operationTypes.${params.row.operationType}`)}
-            size="small"
-            sx={{
-              bgcolor: config.color,
-              color: 'white',
-            }}
-          />
+          <Tooltip title={t(`operationTypes.${params.value}`)} arrow>
+            <span style={{ fontSize: '1.2rem', cursor: 'help' }}>{config.icon}</span>
+          </Tooltip>
         )
       },
     },

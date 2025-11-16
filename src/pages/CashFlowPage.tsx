@@ -102,10 +102,7 @@ export default function CashFlowPage() {
       <BalanceCard balance={balance} loading={balanceLoading} />
 
       {/* Filtros */}
-      <Paper sx={{ mt: 3, p: 2 }}>
-        <Typography variant="h6" gutterBottom>
-          🔍 {t('filters.title')}
-        </Typography>
+      <Paper sx={{ mt: 2, p: 1.5 }}>
         <CashFlowFilters filters={filters} onChange={setFilters} />
       </Paper>
 

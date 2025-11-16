@@ -57,9 +57,9 @@ export const CashFlowFilters = ({ filters, onChange }: CashFlowFiltersProps) => 
 
   return (
     <Box>
-      <Grid container spacing={2}>
+      <Grid container spacing={1.5} alignItems="center">
         {/* Rango de fechas */}
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} md={2.5}>
           <DatePicker
             label={t('filters.dateFrom')}
             value={startDate}
@@ -70,7 +70,7 @@ export const CashFlowFilters = ({ filters, onChange }: CashFlowFiltersProps) => 
           />
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} md={2.5}>
           <DatePicker
             label={t('filters.dateTo')}
             value={endDate}
@@ -82,7 +82,7 @@ export const CashFlowFilters = ({ filters, onChange }: CashFlowFiltersProps) => 
         </Grid>
 
         {/* Tipo de operación */}
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} md={2.5}>
           <TextField
             select
             fullWidth
@@ -101,7 +101,7 @@ export const CashFlowFilters = ({ filters, onChange }: CashFlowFiltersProps) => 
         </Grid>
 
         {/* Búsqueda de socio */}
-        <Grid item xs={12} md={3}>
+        <Grid item xs={12} sm={6} md={2.5}>
           <MemberAutocomplete
             value={selectedMember}
             onChange={setSelectedMember}
@@ -111,12 +111,22 @@ export const CashFlowFilters = ({ filters, onChange }: CashFlowFiltersProps) => 
         </Grid>
 
         {/* Botones */}
-        <Grid item xs={12}>
-          <Box display="flex" gap={2}>
-            <Button variant="contained" onClick={handleApplyFilters}>
+        <Grid item xs={12} md={2}>
+          <Box display="flex" gap={1} flexDirection={{ xs: 'row', md: 'row' }}>
+            <Button
+              variant="contained"
+              onClick={handleApplyFilters}
+              size="small"
+              fullWidth
+            >
               {t('filters.apply')}
             </Button>
-            <Button variant="outlined" onClick={handleClearFilters}>
+            <Button
+              variant="outlined"
+              onClick={handleClearFilters}
+              size="small"
+              fullWidth
+            >
               {t('filters.clear')}
             </Button>
           </Box>

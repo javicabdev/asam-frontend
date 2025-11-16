@@ -16,22 +16,18 @@ export const BalanceCard = ({ balance }: BalanceCardProps) => {
   const isPositive = currentBalance >= 0
 
   return (
-    <Card elevation={3}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          💰 {t('balance.title')}
-        </Typography>
-
-        <Grid container spacing={3} sx={{ mt: 1 }}>
+    <Card elevation={2}>
+      <CardContent sx={{ py: 1.5, '&:last-child': { pb: 1.5 } }}>
+        <Grid container spacing={2} alignItems="center">
           {/* Total Ingresos */}
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} sm={4}>
             <Box>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="caption" color="text.secondary" display="block">
                 {t('balance.totalIncome')}
               </Typography>
               <Typography
-                variant="h4"
-                sx={{ color: '#4caf50', fontWeight: 'bold', mt: 1 }}
+                variant="h6"
+                sx={{ color: '#4caf50', fontWeight: 'bold' }}
               >
                 +{formatCurrency(totalIncome)}
               </Typography>
@@ -39,14 +35,14 @@ export const BalanceCard = ({ balance }: BalanceCardProps) => {
           </Grid>
 
           {/* Total Gastos */}
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} sm={4}>
             <Box>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="caption" color="text.secondary" display="block">
                 {t('balance.totalExpenses')}
               </Typography>
               <Typography
-                variant="h4"
-                sx={{ color: '#f44336', fontWeight: 'bold', mt: 1 }}
+                variant="h6"
+                sx={{ color: '#f44336', fontWeight: 'bold' }}
               >
                 -{formatCurrency(Math.abs(totalExpenses))}
               </Typography>
@@ -54,14 +50,14 @@ export const BalanceCard = ({ balance }: BalanceCardProps) => {
           </Grid>
 
           {/* Balance Final */}
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} sm={4}>
             <Box>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="caption" color="text.secondary" display="block">
                 {t('balance.currentBalance')}
               </Typography>
-              <Box display="flex" alignItems="center" gap={1} mt={1}>
+              <Box display="flex" alignItems="center" gap={0.5}>
                 <Typography
-                  variant="h4"
+                  variant="h6"
                   sx={{
                     color: isPositive ? '#4caf50' : '#f44336',
                     fontWeight: 'bold',
@@ -70,9 +66,9 @@ export const BalanceCard = ({ balance }: BalanceCardProps) => {
                   {formatCurrency(currentBalance)}
                 </Typography>
                 {isPositive ? (
-                  <TrendingUpIcon sx={{ color: '#4caf50', fontSize: 32 }} />
+                  <TrendingUpIcon sx={{ color: '#4caf50', fontSize: 24 }} />
                 ) : (
-                  <TrendingDownIcon sx={{ color: '#f44336', fontSize: 32 }} />
+                  <TrendingDownIcon sx={{ color: '#f44336', fontSize: 24 }} />
                 )}
               </Box>
             </Box>

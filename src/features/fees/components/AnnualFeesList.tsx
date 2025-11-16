@@ -98,7 +98,7 @@ export const AnnualFeesList: React.FC = () => {
 
   const formatDate = (dateString: string) => {
     try {
-      return format(new Date(dateString), 'dd/MM/yyyy HH:mm', { locale: es })
+      return format(new Date(dateString), 'dd/MM/yyyy', { locale: es })
     } catch {
       return dateString
     }
@@ -130,9 +130,6 @@ export const AnnualFeesList: React.FC = () => {
               </TableCell>
               <TableCell>
                 <strong>{t('list.columns.dueDate')}</strong>
-              </TableCell>
-              <TableCell align="center">
-                <strong>{t('list.columns.status')}</strong>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -180,14 +177,6 @@ export const AnnualFeesList: React.FC = () => {
                     <Typography variant="body2" color="text.secondary">
                       {formatDate(fee.dueDate.toISOString())}
                     </Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Chip
-                      label={t('list.statusActive')}
-                      color="success"
-                      size="small"
-                      variant="outlined"
-                    />
                   </TableCell>
                 </TableRow>
               )

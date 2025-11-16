@@ -1,4 +1,4 @@
-import { Box, TextField, IconButton, Button, Typography } from '@mui/material'
+import { Box, TextField, IconButton, Button } from '@mui/material'
 import { Delete as DeleteIcon, Add as AddIcon } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 
@@ -42,19 +42,15 @@ export function TelephoneInput({
 
   return (
     <Box>
-      <Typography variant="body2" fontWeight="medium" gutterBottom>
-        {t('details.phone')}
-      </Typography>
-
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 1 }}>
         {displayTelefonos.map((tel, index) => (
           <Box key={index} sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
             <TextField
               fullWidth
-              size="small"
               value={tel}
               onChange={(e) => handleChange(index, e.target.value)}
-              placeholder="+34 612 345 678"
+              label={index === 0 ? t('memberForm.fields.phone') : undefined}
+              placeholder={index === 0 ? undefined : "+34 612 345 678"}
               error={error}
               helperText={index === 0 ? helperText : undefined}
               disabled={disabled}
@@ -67,7 +63,6 @@ export function TelephoneInput({
                 onClick={() => handleRemove(index)}
                 disabled={disabled}
                 color="error"
-                sx={{ mt: 0.5 }}
               >
                 <DeleteIcon fontSize="small" />
               </IconButton>

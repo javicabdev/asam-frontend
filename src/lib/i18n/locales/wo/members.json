@@ -121,6 +121,10 @@
       "update": "Njuumte ci yeesal mbooloo bi",
       "delete": "Njuumte ci far mbooloo bi",
       "load": "Njuumte ci yab mbooloo bi"
+    },
+    "helpers": {
+      "noPhones": "Amul telefon bu bind",
+      "addPhone": "Yokk telefon"
     }
   },
   "details": {
@@ -370,8 +374,15 @@
       "nombre": "Tur",
       "apellidos": "Sant",
       "fechaNacimiento": "Bésu Juddu",
-      "dniNie": "DNI/NIE",
+      "tipoDocumento": "Xeetu Kàddu",
+      "dniNie": "Limu Kàddu",
+      "documentLabel": {
+        "dniNie": "DNI/NIE",
+        "passportSenegal": "Pasapooru Senegaal",
+        "other": "Kàddu Beneen"
+      },
       "correoElectronico": "Adres Email",
+      "phone": "Telefon",
       "profesion": "Liggéey",
       "calleNumeroPiso": "Gàllu, Limu, Naat",
       "codigoPostal": "Kood Postal",
@@ -383,7 +394,13 @@
       "esposa": {
         "nombre": "Tur bu jabar",
         "apellidos": "Sant bu jabar",
-        "dniNie": "DNI/NIE bu jabar",
+        "tipoDocumento": "Xeetu Kàddu",
+        "dniNie": "Limu Kàddu",
+        "documentLabel": {
+          "dniNie": "DNI/NIE",
+          "passportSenegal": "Pasapooru Senegaal",
+          "other": "Kàddu Beneen"
+        },
         "email": "Email bu jabar"
       }
     },
@@ -391,12 +408,20 @@
       "individual": "Kenn",
       "family": "Njaboot"
     },
+    "documentTypes": {
+      "dniNie": "DNI/NIE",
+      "passportSenegal": "Pasapooru Senegaal",
+      "other": "Beneen"
+    },
     "helpers": {
       "validating": "Yam tëkki...",
       "numeroSocioError": "Njuumte ci yàpp limu bi. Mën nga ko dugal sa bopp.",
       "numeroSocioFormat": "Mën nga bind limu rekk (mb: 2) te dina ko soppi otomatik",
       "fieldDisabled": "Njàngat bii mënul ko soppi",
       "dniNieHelper": "Dugal DNI walla NIE",
+      "documentHelperDniNie": "Jëm: 12345678A walla X1234567A (dina ko tëkki otomatik)",
+      "documentHelperPassportSenegal": "Dugal fukki 10 karakter ci MRZ bu pasapooru bi (dina ko tëkki otomatik)",
+      "documentHelperOther": "Dugal limu bi bu ñuul tëkki. Mën nga tëkki DNI/NIE walla Pasapooru Senegaal bu soppi xeetu kàddu bi",
       "familyDataOptional": "Xibaar jabar ak mbooloo yu njaboot yu yokk doo waar.",
       "fechaAltaOptional": "Su mbooloo bi bokkoon ci démb bi wees, teral bésu bi. Bàyyi ko ngir jëfandikoo bésu bu leeb."
     },

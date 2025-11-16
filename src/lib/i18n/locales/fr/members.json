@@ -121,6 +121,10 @@
       "update": "Erreur lors de la mise à jour du membre",
       "delete": "Erreur lors de la suppression du membre",
       "load": "Erreur lors du chargement du membre"
+    },
+    "helpers": {
+      "noPhones": "Aucun téléphone enregistré",
+      "addPhone": "Ajouter un téléphone"
     }
   },
   "details": {
@@ -370,8 +374,15 @@
       "nombre": "Prénom",
       "apellidos": "Nom",
       "fechaNacimiento": "Date de Naissance",
-      "dniNie": "DNI/NIE",
+      "tipoDocumento": "Type de Document",
+      "dniNie": "Numéro de Document",
+      "documentLabel": {
+        "dniNie": "DNI/NIE",
+        "passportSenegal": "Passeport Sénégal",
+        "other": "Autre Document"
+      },
       "correoElectronico": "Adresse Email",
+      "phone": "Téléphone",
       "profesion": "Profession",
       "calleNumeroPiso": "Rue, Numéro, Étage",
       "codigoPostal": "Code Postal",
@@ -383,7 +394,13 @@
       "esposa": {
         "nombre": "Prénom de l'Épouse",
         "apellidos": "Nom de l'Épouse",
-        "dniNie": "DNI/NIE de l'Épouse",
+        "tipoDocumento": "Type de Document",
+        "dniNie": "Numéro de Document",
+        "documentLabel": {
+          "dniNie": "DNI/NIE",
+          "passportSenegal": "Passeport Sénégal",
+          "other": "Autre Document"
+        },
         "email": "Email de l'Épouse"
       }
     },
@@ -391,12 +408,20 @@
       "individual": "Individuel",
       "family": "Familial"
     },
+    "documentTypes": {
+      "dniNie": "DNI/NIE",
+      "passportSenegal": "Passeport Sénégal",
+      "other": "Autre"
+    },
     "helpers": {
       "validating": "Validation en cours...",
       "numeroSocioError": "Erreur lors de l'obtention du numéro. Vous pouvez le saisir manuellement.",
       "numeroSocioFormat": "Vous pouvez écrire seulement le numéro (ex: 2) et il sera formaté automatiquement",
       "fieldDisabled": "Ce champ ne peut pas être modifié",
       "dniNieHelper": "Entrez le DNI ou NIE",
+      "documentHelperDniNie": "Format: 12345678A ou X1234567A (sera validé automatiquement)",
+      "documentHelperPassportSenegal": "Entrez les 10 caractères de la Zone de Lecture Automatique (MRZ) du passeport (sera validé automatiquement)",
+      "documentHelperOther": "Entrez le numéro sans validation. Vous pouvez valider DNI/NIE ou Passeport Sénégal en changeant le type de document",
       "familyDataOptional": "Les données de l'épouse et des membres additionnels sont optionnelles.",
       "fechaAltaOptional": "Si le membre a adhéré dans le passé, spécifiez la date. Laissez vide pour utiliser la date actuelle."
     },

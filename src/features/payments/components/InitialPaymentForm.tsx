@@ -17,7 +17,6 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { es } from 'date-fns/locale'
 import { useTranslation } from 'react-i18next'
 import type { InitialPaymentFormData } from '../types'
-import { PAYMENT_METHODS } from '../types'
 import type { MemberPayment } from '../hooks/useMemberPayments'
 
 interface InitialPaymentFormComponentProps {
@@ -119,9 +118,9 @@ export const InitialPaymentForm: React.FC<InitialPaymentFormComponentProps> = ({
             label={t('initialPaymentForm.paymentMethodLabel')}
             onChange={(e) => setPaymentMethod(e.target.value)}
           >
-            <MenuItem value="CASH">{PAYMENT_METHODS.CASH}</MenuItem>
-            <MenuItem value="TRANSFER">{PAYMENT_METHODS.TRANSFER}</MenuItem>
-            <MenuItem value="CARD">{PAYMENT_METHODS.CARD}</MenuItem>
+            <MenuItem value="CASH">{t('methods.cash')}</MenuItem>
+            <MenuItem value="TRANSFER">{t('methods.transfer')}</MenuItem>
+            <MenuItem value="CARD">{t('methods.card')}</MenuItem>
           </Select>
         </FormControl>
 

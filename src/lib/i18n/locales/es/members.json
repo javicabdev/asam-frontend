@@ -377,7 +377,13 @@
       "fechaNacimiento": "Fecha de Nacimiento",
       "tipoDocumento": "Tipo de Documento",
       "dniNie": "Número de Documento",
+      "documentLabel": {
+        "dniNie": "DNI/NIE",
+        "passportSenegal": "Pasaporte Senegal",
+        "other": "Otro Documento"
+      },
       "correoElectronico": "Correo Electrónico",
+      "phone": "Teléfono",
       "profesion": "Profesión",
       "calleNumeroPiso": "Calle, Número, Piso",
       "codigoPostal": "Código Postal",
@@ -391,6 +397,11 @@
         "apellidos": "Apellidos de la Esposa",
         "tipoDocumento": "Tipo de Documento",
         "dniNie": "Número de Documento",
+        "documentLabel": {
+          "dniNie": "DNI/NIE",
+          "passportSenegal": "Pasaporte Senegal",
+          "other": "Otro Documento"
+        },
         "email": "Email de la Esposa"
       }
     },

@@ -648,39 +648,46 @@ export const MemberForm: React.FC<MemberFormProps> = ({
               <Controller
                 name="documento_identidad"
                 control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    fullWidth
-                    label={t('memberForm.fields.dniNie')}
-                    error={
-                      !!errors.documento_identidad ||
-                      (documentValidation ? !documentValidation.isValid : false)
-                    }
-                    helperText={
-                      errors.documento_identidad?.message ||
-                      (documentValidation && !documentValidation.isValid && documentValidation.errorMessage) ||
-                      (isValidatingDocument && t('memberForm.helpers.validating')) ||
-                      (watch('tipo_documento') === DocumentType.DNI_NIE && t('memberForm.helpers.documentHelperDniNie')) ||
-                      (watch('tipo_documento') === DocumentType.PASSPORT_SENEGAL && t('memberForm.helpers.documentHelperPassportSenegal')) ||
-                      (watch('tipo_documento') === DocumentType.OTHER && t('memberForm.helpers.documentHelperOther'))
-                    }
-                    required
-                    onChange={(e) => {
-                      clearErrors('documento_identidad')
-                      const normalized = normalizeDocument(e.target.value)
-                      field.onChange(normalized)
-                    }}
-                    onBlur={() => {
-                      field.onBlur()
-                      // Only validate if not type OTHER
-                      const tipoDoc = watch('tipo_documento')
-                      if (tipoDoc !== DocumentType.OTHER && field.value) {
-                        void validateDocument(field.value, tipoDoc)
+                render={({ field }) => {
+                  const tipoDoc = watch('tipo_documento')
+                  const getDocumentLabel = () => {
+                    if (tipoDoc === DocumentType.DNI_NIE) return t('memberForm.fields.documentLabel.dniNie')
+                    if (tipoDoc === DocumentType.PASSPORT_SENEGAL) return t('memberForm.fields.documentLabel.passportSenegal')
+                    return t('memberForm.fields.documentLabel.other')
+                  }
+                  return (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      label={getDocumentLabel()}
+                      error={
+                        !!errors.documento_identidad ||
+                        (documentValidation ? !documentValidation.isValid : false)
                       }
-                    }}
-                  />
-                )}
+                      helperText={
+                        errors.documento_identidad?.message ||
+                        (documentValidation && !documentValidation.isValid && documentValidation.errorMessage) ||
+                        (isValidatingDocument && t('memberForm.helpers.validating')) ||
+                        (tipoDoc === DocumentType.DNI_NIE && t('memberForm.helpers.documentHelperDniNie')) ||
+                        (tipoDoc === DocumentType.PASSPORT_SENEGAL && t('memberForm.helpers.documentHelperPassportSenegal')) ||
+                        (tipoDoc === DocumentType.OTHER && t('memberForm.helpers.documentHelperOther'))
+                      }
+                      required
+                      onChange={(e) => {
+                        clearErrors('documento_identidad')
+                        const normalized = normalizeDocument(e.target.value)
+                        field.onChange(normalized)
+                      }}
+                      onBlur={() => {
+                        field.onBlur()
+                        // Only validate if not type OTHER
+                        if (tipoDoc !== DocumentType.OTHER && field.value) {
+                          void validateDocument(field.value, tipoDoc)
+                        }
+                      }}
+                    />
+                  )
+                }}
               />
             </Grid>
 
@@ -916,38 +923,45 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   <Controller
                     name="esposa_documento_identidad"
                     control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        label={t('memberForm.fields.esposa.dniNie')}
-                        error={
-                          !!errors.esposa_documento_identidad ||
-                          (esposaDocValidation ? !esposaDocValidation.isValid : false)
-                        }
-                        helperText={
-                          errors.esposa_documento_identidad?.message ||
-                          (esposaDocValidation && !esposaDocValidation.isValid && esposaDocValidation.errorMessage) ||
-                          (isValidatingEsposaDoc && t('memberForm.helpers.validating')) ||
-                          (watch('esposa_tipo_documento') === DocumentType.DNI_NIE && t('memberForm.helpers.documentHelperDniNie')) ||
-                          (watch('esposa_tipo_documento') === DocumentType.PASSPORT_SENEGAL && t('memberForm.helpers.documentHelperPassportSenegal')) ||
-                          (watch('esposa_tipo_documento') === DocumentType.OTHER && t('memberForm.helpers.documentHelperOther'))
-                        }
-                        onChange={(e) => {
-                          clearErrors('esposa_documento_identidad')
-                          const normalized = normalizeDocument(e.target.value)
-                          field.onChange(normalized)
-                        }}
-                        onBlur={() => {
-                          field.onBlur()
-                          // Only validate if not type OTHER
-                          const tipoDoc = watch('esposa_tipo_documento')
-                          if (tipoDoc && tipoDoc !== DocumentType.OTHER && field.value) {
-                            void validateEsposaDocument(field.value, tipoDoc)
+                    render={({ field }) => {
+                      const tipoDoc = watch('esposa_tipo_documento')
+                      const getEsposaDocumentLabel = () => {
+                        if (tipoDoc === DocumentType.DNI_NIE) return t('memberForm.fields.esposa.documentLabel.dniNie')
+                        if (tipoDoc === DocumentType.PASSPORT_SENEGAL) return t('memberForm.fields.esposa.documentLabel.passportSenegal')
+                        return t('memberForm.fields.esposa.documentLabel.other')
+                      }
+                      return (
+                        <TextField
+                          {...field}
+                          fullWidth
+                          label={getEsposaDocumentLabel()}
+                          error={
+                            !!errors.esposa_documento_identidad ||
+                            (esposaDocValidation ? !esposaDocValidation.isValid : false)
                           }
-                        }}
-                      />
-                    )}
+                          helperText={
+                            errors.esposa_documento_identidad?.message ||
+                            (esposaDocValidation && !esposaDocValidation.isValid && esposaDocValidation.errorMessage) ||
+                            (isValidatingEsposaDoc && t('memberForm.helpers.validating')) ||
+                            (tipoDoc === DocumentType.DNI_NIE && t('memberForm.helpers.documentHelperDniNie')) ||
+                            (tipoDoc === DocumentType.PASSPORT_SENEGAL && t('memberForm.helpers.documentHelperPassportSenegal')) ||
+                            (tipoDoc === DocumentType.OTHER && t('memberForm.helpers.documentHelperOther'))
+                          }
+                          onChange={(e) => {
+                            clearErrors('esposa_documento_identidad')
+                            const normalized = normalizeDocument(e.target.value)
+                            field.onChange(normalized)
+                          }}
+                          onBlur={() => {
+                            field.onBlur()
+                            // Only validate if not type OTHER
+                            if (tipoDoc && tipoDoc !== DocumentType.OTHER && field.value) {
+                              void validateEsposaDocument(field.value, tipoDoc)
+                            }
+                          }}
+                        />
+                      )
+                    }}
                   />
                 </Grid>
 

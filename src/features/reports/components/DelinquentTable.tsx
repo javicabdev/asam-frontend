@@ -5,8 +5,6 @@ import {
   GridColDef,
   GridRenderCellParams,
   GridToolbarContainer,
-  GridToolbarColumnsButton,
-  GridToolbarFilterButton,
   GridToolbarDensitySelector,
   GridToolbarQuickFilter,
   esES,
@@ -18,7 +16,7 @@ import { IconButton, Tooltip } from '@mui/material'
 import { DebtorType } from '../types'
 import type { Debtor } from '../types'
 import { DebtorTypeChip } from './DebtorTypeChip'
-import { formatCurrency, formatDate } from '../utils/delinquentFormatters'
+import { formatCurrency } from '../utils/delinquentFormatters'
 import { getDebtorId } from '../utils/debtorId'
 
 interface DelinquentTableProps {
@@ -34,7 +32,8 @@ function getDebtorName(debtor: Debtor): string {
   if (debtor.type === 'INDIVIDUAL' && debtor.member) {
     return `${debtor.member.firstName} ${debtor.member.lastName}`
   } else if (debtor.type === 'FAMILY' && debtor.family) {
-    return debtor.family.familyName
+    // Remove "Familia " prefix if it exists
+    return debtor.family.familyName.replace(/^Familia\s+/i, '')
   }
   return '-'
 }
@@ -99,8 +98,6 @@ export function DelinquentTable({
     return (
       <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <GridToolbarColumnsButton />
-          <GridToolbarFilterButton />
           <GridToolbarDensitySelector />
         </Box>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
@@ -143,25 +140,25 @@ export function DelinquentTable({
 
   const columns: GridColDef<Debtor>[] = [
     {
+      field: 'memberNumber',
+      headerName: t('delinquent.table.memberNumber'),
+      width: 120,
+      valueGetter: (params) => getDebtorMemberNumber(params.row),
+    },
+    {
       field: 'name',
       headerName: t('delinquent.table.debtor'),
       flex: 1,
-      minWidth: 200,
+      minWidth: 180,
       valueGetter: (params) => getDebtorName(params.row),
     },
     {
       field: 'type',
       headerName: t('delinquent.table.type'),
-      width: 140,
+      width: 120,
       renderCell: (params: GridRenderCellParams<Debtor>) => (
         <DebtorTypeChip type={params.row.type as DebtorType} />
       ),
-    },
-    {
-      field: 'memberNumber',
-      headerName: t('delinquent.table.memberNumber'),
-      width: 140,
-      valueGetter: (params) => getDebtorMemberNumber(params.row),
     },
     {
       field: 'contact',
@@ -195,24 +192,6 @@ export function DelinquentTable({
       align: 'right',
       headerAlign: 'right',
       valueGetter: (params) => formatCurrency(params.row.totalDebt),
-    },
-    {
-      field: 'oldestDebtDays',
-      headerName: t('delinquent.table.oldestDebt'),
-      width: 140,
-      align: 'right',
-      headerAlign: 'right',
-      valueGetter: (params) =>
-        t('delinquent.table.daysOverdue', { count: params.row.oldestDebtDays }),
-    },
-    {
-      field: 'lastPaymentDate',
-      headerName: t('delinquent.table.lastPayment'),
-      width: 150,
-      valueGetter: (params) =>
-        params.row.lastPaymentDate
-          ? formatDate(params.row.lastPaymentDate)
-          : '-',
     },
     {
       field: 'actions',
@@ -257,13 +236,7 @@ export function DelinquentTable({
 
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <CardContent sx={{ flex: 1, minHeight: 300, display: 'flex', flexDirection: 'column' }}>
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="h6">
-            {t('delinquent.table.title')} ({debtors.length})
-          </Typography>
-        </Box>
-
+      <CardContent sx={{ flex: 1, minHeight: 300, display: 'flex', flexDirection: 'column', p: 1.5, '&:last-child': { pb: 1.5 } }}>
         <Box sx={{ width: '100%', height: '100%', flex: 1, minHeight: 300 }}>
           <DataGrid
             rows={debtors}

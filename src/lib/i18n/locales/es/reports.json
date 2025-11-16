@@ -30,7 +30,7 @@
 
     "table": {
       "title": "Lista de Cuotas Pendientes",
-      "debtor": "Socio/Familia",
+      "debtor": "Socio",
       "type": "Tipo",
       "memberNumber": "Nº Socio",
       "contact": "Contacto",

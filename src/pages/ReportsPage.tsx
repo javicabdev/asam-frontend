@@ -5,7 +5,6 @@ import { Assessment } from '@mui/icons-material'
 import { useDelinquentReport } from '@/features/reports/hooks/useDelinquentReport'
 import { useExportDelinquent } from '@/features/reports/hooks/useExportDelinquent'
 import { DelinquentSummaryCards } from '@/features/reports/components/DelinquentSummaryCards'
-import { DelinquentFilters } from '@/features/reports/components/DelinquentFilters'
 import { DelinquentTable } from '@/features/reports/components/DelinquentTable'
 import { DelinquentExportButtons } from '@/features/reports/components/DelinquentExportButtons'
 import { DebtDetailsDialog } from '@/features/reports/components/DebtDetailsDialog'
@@ -36,23 +35,23 @@ export default function ReportsPage() {
 
   return (
     <Container maxWidth="xl" sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Box sx={{ py: 4, display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
+      <Box sx={{ py: 2, display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
         {/* Header */}
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            mb: 4,
+            mb: 2,
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Assessment sx={{ fontSize: 40, color: 'primary.main' }} />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Assessment sx={{ fontSize: 32, color: 'primary.main' }} />
             <Box>
-              <Typography variant="h4" component="h1" gutterBottom>
+              <Typography variant="h5" component="h1" sx={{ mb: 0.25 }}>
                 {t('delinquent.title')}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.8125rem' }}>
                 {t('delinquent.subtitle')}
               </Typography>
             </Box>
@@ -91,17 +90,8 @@ export default function ReportsPage() {
         {data && (
           <>
             {/* Summary Cards */}
-            <Box sx={{ mb: 4 }}>
+            <Box sx={{ mb: 2 }}>
               <DelinquentSummaryCards summary={data.summary} />
-            </Box>
-
-            {/* Filters */}
-            <Box sx={{ mb: 4 }}>
-              <DelinquentFilters
-                filters={filters}
-                onUpdateFilters={updateFilters}
-                onResetFilters={resetFilters}
-              />
             </Box>
 
             {/* Table */}

@@ -1,13 +1,5 @@
 import { Grid, Card, CardContent, Typography, Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import {
-  People,
-  Person,
-  Group,
-  EuroSymbol,
-  CalendarToday,
-  TrendingUp,
-} from '@mui/icons-material'
 import type { DelinquentSummary } from '../types'
 import { formatCurrency } from '../utils/delinquentFormatters'
 
@@ -16,7 +8,6 @@ interface DelinquentSummaryCardsProps {
 }
 
 interface MetricCardProps {
-  icon: React.ReactNode
   label: string
   value: string | number
   color: string
@@ -25,32 +16,18 @@ interface MetricCardProps {
 /**
  * Tarjeta individual de métrica
  */
-function MetricCard({ icon, label, value, color }: MetricCardProps) {
+function MetricCard({ label, value, color }: MetricCardProps) {
   return (
     <Card sx={{ height: '100%' }}>
-      <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 48,
-              height: 48,
-              borderRadius: 2,
-              bgcolor: `${color}.light`,
-              color: `${color}.main`,
-            }}
-          >
-            {icon}
-          </Box>
-          <Typography variant="body2" color="text.secondary">
+      <CardContent sx={{ p: 1, '&:last-child': { pb: 1 } }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.75rem' }}>
             {label}
           </Typography>
+          <Typography variant="h6" component="div" fontWeight="bold">
+            {value}
+          </Typography>
         </Box>
-        <Typography variant="h4" component="div" fontWeight="bold">
-          {value}
-        </Typography>
       </CardContent>
     </Card>
   )
@@ -66,47 +43,31 @@ export function DelinquentSummaryCards({
 
   const metrics = [
     {
-      icon: <People />,
       label: t('delinquent.summary.totalDebtors'),
       value: summary.totalDebtors,
       color: 'error',
     },
     {
-      icon: <Person />,
       label: t('delinquent.summary.individualDebtors'),
       value: summary.individualDebtors,
       color: 'primary',
     },
     {
-      icon: <Group />,
       label: t('delinquent.summary.familyDebtors'),
       value: summary.familyDebtors,
       color: 'secondary',
     },
     {
-      icon: <EuroSymbol />,
       label: t('delinquent.summary.totalDebt'),
       value: formatCurrency(summary.totalDebtAmount),
       color: 'error',
     },
-    {
-      icon: <CalendarToday />,
-      label: t('delinquent.summary.avgDaysOverdue'),
-      value: t('delinquent.table.daysOverdue', { count: summary.averageDaysOverdue }),
-      color: 'warning',
-    },
-    {
-      icon: <TrendingUp />,
-      label: t('delinquent.summary.avgDebtPerDebtor'),
-      value: formatCurrency(summary.averageDebtPerDebtor),
-      color: 'info',
-    },
   ]
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={1.5}>
       {metrics.map((metric, index) => (
-        <Grid item xs={12} sm={6} md={4} lg={2} key={index}>
+        <Grid item xs={12} sm={6} md={3} key={index}>
           <MetricCard {...metric} />
         </Grid>
       ))}

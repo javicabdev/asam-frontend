@@ -30,7 +30,7 @@
 
     "table": {
       "title": "Liste des Cotisations en Attente",
-      "debtor": "Membre/Famille",
+      "debtor": "Membre",
       "type": "Type",
       "memberNumber": "Nº Membre",
       "contact": "Contact",

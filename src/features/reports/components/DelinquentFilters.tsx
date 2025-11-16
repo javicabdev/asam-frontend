@@ -5,11 +5,9 @@ import {
   TextField,
   MenuItem,
   Button,
-  Box,
-  Typography,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { FilterList, Clear } from '@mui/icons-material'
+import { Clear } from '@mui/icons-material'
 import { DebtorType, SortBy } from '../types'
 import type { DelinquentReportInput } from '../types'
 
@@ -55,17 +53,13 @@ export function DelinquentFilters({
 
   return (
     <Card>
-      <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-          <FilterList color="primary" />
-          <Typography variant="h6">{t('delinquent.filters.title')}</Typography>
-        </Box>
-
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6} md={4}>
+      <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
+        <Grid container spacing={1.5} alignItems="center">
+          <Grid item xs={12} sm={6} md={3}>
             <TextField
               fullWidth
               select
+              size="small"
               label={t('delinquent.filters.debtorType')}
               value={filters.debtorType ?? ''}
               onChange={(e) =>
@@ -85,10 +79,11 @@ export function DelinquentFilters({
             </TextField>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <TextField
               fullWidth
               select
+              size="small"
               label={t('delinquent.filters.sortBy.label')}
               value={filters.sortBy ?? SortBy.DAYS_DESC}
               onChange={(e) =>
@@ -103,10 +98,11 @@ export function DelinquentFilters({
             </TextField>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <TextField
               fullWidth
               type="number"
+              size="small"
               label={t('delinquent.filters.minAmount')}
               value={filters.minAmount ?? 0}
               onChange={(e) =>
@@ -116,11 +112,13 @@ export function DelinquentFilters({
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6} md={3}>
             <Button
               variant="outlined"
+              size="small"
               startIcon={<Clear />}
               onClick={onResetFilters}
+              fullWidth
             >
               {t('delinquent.filters.reset')}
             </Button>

@@ -77,14 +77,14 @@ export default function QuickActions() {
         height: '100%',
       }}
     >
-      <CardContent>
+      <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
         <Typography
           variant="h6"
           gutterBottom
           sx={{
             fontWeight: 600,
             color: 'text.primary',
-            mb: 3,
+            mb: 1.5,
           }}
         >
           {t('quickActions.title')}
@@ -96,9 +96,9 @@ export default function QuickActions() {
             gridTemplateColumns: {
               xs: '1fr',
               sm: 'repeat(2, 1fr)',
-              md: 'repeat(auto-fit, minmax(280px, 1fr))',
+              md: 'repeat(4, 1fr)',
             },
-            gap: 2,
+            gap: 1.5,
           }}
         >
           {actions.map((action, index) => (
@@ -108,11 +108,11 @@ export default function QuickActions() {
               variant="outlined"
               onClick={() => navigate(action.path, { state: action.state })}
               sx={{
-                p: 2,
+                p: 1.5,
                 justifyContent: 'flex-start',
                 textAlign: 'left',
                 borderColor: 'divider',
-                borderRadius: 2,
+                borderRadius: 1.5,
                 transition: 'all 0.3s ease',
                 '&:hover': {
                   borderColor: getColorValue(action.color),
@@ -125,15 +125,15 @@ export default function QuickActions() {
               <Box display="flex" alignItems="center" width="100%">
                 <Box
                   sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 1.5,
+                    width: 32,
+                    height: 32,
+                    borderRadius: 1,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     backgroundColor: alpha(getColorValue(action.color), 0.1),
                     color: getColorValue(action.color),
-                    mr: 2,
+                    mr: 1.5,
                     flexShrink: 0,
                   }}
                 >
@@ -145,20 +145,10 @@ export default function QuickActions() {
                     sx={{
                       fontWeight: 600,
                       color: 'text.primary',
-                      mb: 0.5,
+                      fontSize: '0.875rem',
                     }}
                   >
                     {action.title}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    sx={{
-                      display: 'block',
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {action.description}
                   </Typography>
                 </Box>
                 <ArrowForward

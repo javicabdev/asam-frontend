@@ -46,6 +46,7 @@ query GetFamilyByOriginMember($memberId: ID!) {
     esposa_nombre
     esposa_apellidos
     esposa_fecha_nacimiento
+    esposa_document_type
     esposa_documento_identidad
     esposa_correo_electronico
     telefonos {

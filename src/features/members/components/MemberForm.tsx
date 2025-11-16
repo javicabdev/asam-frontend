@@ -57,7 +57,7 @@ interface MemberFormData {
   pais: string
   fecha_alta: Date | null | undefined // ⭐ NUEVO - Fecha de alta histórica
   fecha_nacimiento: Date | null | undefined
-  tipo_documento: string
+  document_type: string
   documento_identidad: string
   correo_electronico: string | null | undefined
   profesion: string | null | undefined
@@ -67,7 +67,7 @@ interface MemberFormData {
   esposa_nombre: string | null | undefined
   esposa_apellidos: string | null | undefined
   esposa_fecha_nacimiento: Date | null | undefined
-  esposa_tipo_documento: string | null | undefined
+  esposa_document_type: string | null | undefined
   esposa_documento_identidad: string | null | undefined
   esposa_correo_electronico: string | null | undefined
 }
@@ -80,11 +80,11 @@ interface MemberFormSubmitData extends Omit<MemberFormData, 'fecha_alta' | 'fech
   esposo_nombre: string
   esposo_apellidos: string
   esposo_fecha_nacimiento: string | null
-  esposo_tipo_documento: string | null
+  esposo_document_type: string | null
   esposo_documento_identidad: string | null
   esposo_correo_electronico: string | null
   esposa_fecha_nacimiento: string | null
-  esposa_tipo_documento: string | null
+  esposa_document_type: string | null
   familyMembers: FamilyMember[]
 }
 
@@ -166,12 +166,14 @@ export const MemberForm: React.FC<MemberFormProps> = ({
     isValidating: isValidatingDocument,
     validationResult: documentValidation,
     validateDocument,
+    clearValidation: clearDocumentValidation,
   } = useDocumentValidation()
 
   const {
     isValidating: isValidatingEsposaDoc,
     validationResult: esposaDocValidation,
     validateDocument: validateEsposaDocument,
+    clearValidation: clearEsposaDocValidation,
   } = useDocumentValidation()
 
   // Estado para teléfonos
@@ -199,7 +201,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
         pais: initialData.pais || 'España',
         fecha_alta: initialData.fecha_alta ? new Date(initialData.fecha_alta) : null,
         fecha_nacimiento: initialData.fecha_nacimiento ? new Date(initialData.fecha_nacimiento) : null,
-        tipo_documento: initialData.tipo_documento || DocumentType.DNI_NIE,
+        document_type: initialData.document_type || DocumentType.DNI_NIE,
         documento_identidad: initialData.documento_identidad || '',
         correo_electronico: initialData.correo_electronico || '',
         profesion: initialData.profesion || '',
@@ -208,7 +210,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
         esposa_nombre: initialData.esposa_nombre || '',
         esposa_apellidos: initialData.esposa_apellidos || '',
         esposa_fecha_nacimiento: initialData.esposa_fecha_nacimiento ? new Date(initialData.esposa_fecha_nacimiento) : null,
-        esposa_tipo_documento: initialData.esposa_tipo_documento || DocumentType.DNI_NIE,
+        esposa_document_type: initialData.esposa_document_type || DocumentType.DNI_NIE,
         esposa_documento_identidad: initialData.esposa_documento_identidad || '',
         esposa_correo_electronico: initialData.esposa_correo_electronico || '',
       }
@@ -226,7 +228,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       pais: 'España',
       fecha_alta: null,
       fecha_nacimiento: null,
-      tipo_documento: DocumentType.OTHER,
+      document_type: DocumentType.OTHER,
       documento_identidad: '',
       correo_electronico: '',
       profesion: '',
@@ -235,7 +237,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       esposa_nombre: '',
       esposa_apellidos: '',
       esposa_fecha_nacimiento: null,
-      esposa_tipo_documento: DocumentType.OTHER,
+      esposa_document_type: DocumentType.OTHER,
       esposa_documento_identidad: '',
       esposa_correo_electronico: '',
     }
@@ -354,6 +356,20 @@ export const MemberForm: React.FC<MemberFormProps> = ({
     }
   }, [externalErrors, setError])
 
+  // Clear document validation when document type changes
+  const documentType = watch('document_type')
+  React.useEffect(() => {
+    clearDocumentValidation()
+    clearErrors('documento_identidad')
+  }, [documentType, clearDocumentValidation, clearErrors])
+
+  // Clear spouse document validation when spouse document type changes
+  const esposaDocumentType = watch('esposa_document_type')
+  React.useEffect(() => {
+    clearEsposaDocValidation()
+    clearErrors('esposa_documento_identidad')
+  }, [esposaDocumentType, clearEsposaDocValidation, clearErrors])
+
   // Función interna que maneja el submit
   const handleFormSubmit = React.useCallback(
     async (data: MemberFormData) => {
@@ -367,7 +383,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
     }
 
     // Check document validation results
-    if (data.tipo_documento !== DocumentType.OTHER && documentValidation && !documentValidation.isValid) {
+    if (data.document_type !== DocumentType.OTHER && documentValidation && !documentValidation.isValid) {
       setError('documento_identidad', {
         type: 'manual',
         message: documentValidation.errorMessage || t('memberForm.errors.documentoInvalido'),
@@ -379,7 +395,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
     if (
       isFamily &&
       data.esposa_documento_identidad &&
-      data.esposa_tipo_documento !== DocumentType.OTHER &&
+      data.esposa_document_type !== DocumentType.OTHER &&
       esposaDocValidation &&
       !esposaDocValidation.isValid
     ) {
@@ -405,12 +421,12 @@ export const MemberForm: React.FC<MemberFormProps> = ({
       esposo_nombre: data.nombre,
       esposo_apellidos: data.apellidos,
       esposo_fecha_nacimiento: data.fecha_nacimiento ? format(data.fecha_nacimiento, 'yyyy-MM-dd') : null,
-      esposo_tipo_documento: data.tipo_documento,
+      esposo_document_type: data.document_type,
       esposo_documento_identidad: normalizeDocument(data.documento_identidad),
       esposo_correo_electronico: data.correo_electronico,
 
       // Campos de esposa
-      esposa_tipo_documento: data.esposa_tipo_documento,
+      esposa_document_type: data.esposa_document_type,
       esposa_documento_identidad: data.esposa_documento_identidad ? normalizeDocument(data.esposa_documento_identidad) : null,
       fecha_nacimiento: data.fecha_nacimiento ? format(data.fecha_nacimiento, 'yyyy-MM-dd') : null,
       esposa_fecha_nacimiento: data.esposa_fecha_nacimiento
@@ -629,7 +645,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
 
             <Grid item xs={12} sm={6}>
               <Controller
-                name="tipo_documento"
+                name="document_type"
                 control={control}
                 render={({ field }) => (
                   <FormControl fullWidth required>
@@ -649,7 +665,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                 name="documento_identidad"
                 control={control}
                 render={({ field }) => {
-                  const tipoDoc = watch('tipo_documento')
+                  const tipoDoc = watch('document_type')
                   const getDocumentLabel = () => {
                     if (tipoDoc === DocumentType.DNI_NIE) return t('memberForm.fields.documentLabel.dniNie')
                     if (tipoDoc === DocumentType.PASSPORT_SENEGAL) return t('memberForm.fields.documentLabel.passportSenegal')
@@ -682,7 +698,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                         field.onBlur()
                         // Only validate if not type OTHER
                         if (tipoDoc !== DocumentType.OTHER && field.value) {
-                          void validateDocument(field.value, tipoDoc)
+                          void validateDocument(field.value)
                         }
                       }}
                     />
@@ -904,7 +920,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
 
                 <Grid item xs={12} sm={6}>
                   <Controller
-                    name="esposa_tipo_documento"
+                    name="esposa_document_type"
                     control={control}
                     render={({ field }) => (
                       <FormControl fullWidth>
@@ -924,7 +940,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                     name="esposa_documento_identidad"
                     control={control}
                     render={({ field }) => {
-                      const tipoDoc = watch('esposa_tipo_documento')
+                      const tipoDoc = watch('esposa_document_type')
                       const getEsposaDocumentLabel = () => {
                         if (tipoDoc === DocumentType.DNI_NIE) return t('memberForm.fields.esposa.documentLabel.dniNie')
                         if (tipoDoc === DocumentType.PASSPORT_SENEGAL) return t('memberForm.fields.esposa.documentLabel.passportSenegal')
@@ -956,7 +972,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                             field.onBlur()
                             // Only validate if not type OTHER
                             if (tipoDoc && tipoDoc !== DocumentType.OTHER && field.value) {
-                              void validateEsposaDocument(field.value, tipoDoc)
+                              void validateEsposaDocument(field.value)
                             }
                           }}
                         />

@@ -1,7 +1,7 @@
 # Member validation queries
 
-query ValidateDocument($documentNumber: String!, $documentType: DocumentType!) {
-  checkDocumentValidity(documentNumber: $documentNumber, documentType: $documentType) {
+query ValidateDocument($documentNumber: String!) {
+  checkDocumentValidity(documentNumber: $documentNumber) {
     isValid
     normalizedValue
     errorMessage
@@ -33,6 +33,7 @@ query GetMember($id: ID!) {
     fecha_alta
     fecha_baja
     fecha_nacimiento
+    document_type
     documento_identidad
     correo_electronico
     profesion
@@ -163,6 +164,7 @@ mutation UpdateMember($input: UpdateMemberInput!) {
     fecha_alta
     fecha_baja
     fecha_nacimiento
+    document_type
     documento_identidad
     correo_electronico
     profesion

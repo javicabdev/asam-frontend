@@ -39,6 +39,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
     isValidating: isValidatingDocument,
     validationResult: documentValidation,
     validateDocument,
+    clearValidation: clearDocumentValidation,
   } = useDocumentValidation()
 
   const PARENTESCO_OPTIONS = [
@@ -106,6 +107,12 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
     }
   }, [documentValidation, t])
 
+  // Clear document validation when document type changes
+  React.useEffect(() => {
+    clearDocumentValidation()
+    setDocumentError('')
+  }, [formData.tipo_documento, clearDocumentValidation])
+
   const handleChange =
     (field: keyof FamilyMember) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setFormData((prev) => ({
@@ -135,7 +142,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
   const handleDniBlur = () => {
     // Only validate if not type OTHER
     if (formData.dni_nie && formData.tipo_documento && formData.tipo_documento !== DocumentType.OTHER) {
-      void validateDocument(formData.dni_nie, formData.tipo_documento)
+      void validateDocument(formData.dni_nie)
     }
   }
 

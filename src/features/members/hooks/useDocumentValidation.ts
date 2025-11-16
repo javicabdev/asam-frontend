@@ -16,7 +16,7 @@ interface UseDocumentValidationResult {
   isValidating: boolean
   validationResult: DocumentValidationResult | null
   error: string | null
-  validateDocument: (documentNumber: string, documentType: string) => Promise<DocumentValidationResult | null>
+  validateDocument: (documentNumber: string) => Promise<DocumentValidationResult | null>
   clearValidation: () => void
 }
 
@@ -41,7 +41,7 @@ export function useDocumentValidation(): UseDocumentValidationResult {
   )
 
   const validateDocument = useCallback(
-    async (documentNumber: string, documentType: string): Promise<DocumentValidationResult | null> => {
+    async (documentNumber: string): Promise<DocumentValidationResult | null> => {
       // Clear any existing timeout
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
@@ -66,8 +66,7 @@ export function useDocumentValidation(): UseDocumentValidationResult {
               const { data, error: queryError } = await checkDocument({
                 variables: {
                   documentNumber: documentNumber.trim(),
-                  documentType,
-                } as any,
+                },
               })
 
               if (queryError) {

@@ -87,11 +87,13 @@ export type CreateFamilyInput = {
   direccion?: InputMaybe<Scalars['String']['input']>;
   esposa_apellidos?: InputMaybe<Scalars['String']['input']>;
   esposa_correo_electronico?: InputMaybe<Scalars['String']['input']>;
+  esposa_document_type?: InputMaybe<DocumentType>;
   esposa_documento_identidad?: InputMaybe<Scalars['String']['input']>;
   esposa_fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
   esposa_nombre?: InputMaybe<Scalars['String']['input']>;
   esposo_apellidos: Scalars['String']['input'];
   esposo_correo_electronico?: InputMaybe<Scalars['String']['input']>;
+  esposo_document_type?: InputMaybe<DocumentType>;
   esposo_documento_identidad?: InputMaybe<Scalars['String']['input']>;
   esposo_fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
   esposo_nombre: Scalars['String']['input'];
@@ -109,6 +111,7 @@ export type CreateMemberInput = {
   calle_numero_piso: Scalars['String']['input'];
   codigo_postal: Scalars['String']['input'];
   correo_electronico?: InputMaybe<Scalars['String']['input']>;
+  document_type?: InputMaybe<DocumentType>;
   documento_identidad?: InputMaybe<Scalars['String']['input']>;
   fecha_alta?: InputMaybe<Scalars['Time']['input']>;
   fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
@@ -262,6 +265,11 @@ export type DelinquentSummary = {
   totalDebtors: Scalars['Int']['output'];
 };
 
+export type DocumentType =
+  | 'DNI_NIE'
+  | 'OTHER'
+  | 'SENEGAL_PASSPORT';
+
 export type DocumentValidationResult = {
   __typename?: 'DocumentValidationResult';
   errorMessage?: Maybe<Scalars['String']['output']>;
@@ -274,6 +282,7 @@ export type Familiar = {
   apellidos: Scalars['String']['output'];
   correo_electronico?: Maybe<Scalars['String']['output']>;
   dni_nie?: Maybe<Scalars['String']['output']>;
+  document_type?: Maybe<DocumentType>;
   fecha_nacimiento?: Maybe<Scalars['Time']['output']>;
   id: Scalars['ID']['output'];
   nombre: Scalars['String']['output'];
@@ -285,6 +294,7 @@ export type FamiliarInput = {
   apellidos: Scalars['String']['input'];
   correo_electronico?: InputMaybe<Scalars['String']['input']>;
   dni_nie?: InputMaybe<Scalars['String']['input']>;
+  document_type?: InputMaybe<DocumentType>;
   fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
   nombre: Scalars['String']['input'];
   parentesco: Scalars['String']['input'];
@@ -295,11 +305,13 @@ export type Family = {
   __typename?: 'Family';
   esposa_apellidos: Scalars['String']['output'];
   esposa_correo_electronico?: Maybe<Scalars['String']['output']>;
+  esposa_document_type?: Maybe<DocumentType>;
   esposa_documento_identidad?: Maybe<Scalars['String']['output']>;
   esposa_fecha_nacimiento?: Maybe<Scalars['Time']['output']>;
   esposa_nombre: Scalars['String']['output'];
   esposo_apellidos: Scalars['String']['output'];
   esposo_correo_electronico?: Maybe<Scalars['String']['output']>;
+  esposo_document_type?: Maybe<DocumentType>;
   esposo_documento_identidad?: Maybe<Scalars['String']['output']>;
   esposo_fecha_nacimiento?: Maybe<Scalars['Time']['output']>;
   esposo_nombre: Scalars['String']['output'];
@@ -355,6 +367,7 @@ export type Member = {
   calle_numero_piso: Scalars['String']['output'];
   codigo_postal: Scalars['String']['output'];
   correo_electronico?: Maybe<Scalars['String']['output']>;
+  document_type?: Maybe<DocumentType>;
   documento_identidad?: Maybe<Scalars['String']['output']>;
   estado: MemberStatus;
   fecha_alta: Scalars['Time']['output'];
@@ -969,10 +982,12 @@ export type UpdateCashFlowInput = {
 export type UpdateFamilyInput = {
   esposa_apellidos?: InputMaybe<Scalars['String']['input']>;
   esposa_correo_electronico?: InputMaybe<Scalars['String']['input']>;
+  esposa_document_type?: InputMaybe<DocumentType>;
   esposa_documento_identidad?: InputMaybe<Scalars['String']['input']>;
   esposa_nombre?: InputMaybe<Scalars['String']['input']>;
   esposo_apellidos?: InputMaybe<Scalars['String']['input']>;
   esposo_correo_electronico?: InputMaybe<Scalars['String']['input']>;
+  esposo_document_type?: InputMaybe<DocumentType>;
   esposo_documento_identidad?: InputMaybe<Scalars['String']['input']>;
   esposo_nombre?: InputMaybe<Scalars['String']['input']>;
   familia_id: Scalars['ID']['input'];
@@ -984,6 +999,7 @@ export type UpdateMemberInput = {
   calle_numero_piso?: InputMaybe<Scalars['String']['input']>;
   codigo_postal?: InputMaybe<Scalars['String']['input']>;
   correo_electronico?: InputMaybe<Scalars['String']['input']>;
+  document_type?: InputMaybe<DocumentType>;
   documento_identidad?: InputMaybe<Scalars['String']['input']>;
   fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
   miembro_id: Scalars['ID']['input'];
@@ -1203,7 +1219,7 @@ export type GetFamilyByOriginMemberQueryVariables = Exact<{
 }>;
 
 
-export type GetFamilyByOriginMemberQuery = { __typename?: 'Query', getFamilyByOriginMember?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, esposa_fecha_nacimiento?: string | null, esposa_documento_identidad?: string | null, esposa_correo_electronico?: string | null, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, telefonos?: Array<{ __typename?: 'Telephone', numero_telefono: string }> | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null, telefonos?: Array<{ __typename?: 'Telephone', numero_telefono: string }> | null }> | null } | null };
+export type GetFamilyByOriginMemberQuery = { __typename?: 'Query', getFamilyByOriginMember?: { __typename?: 'Family', id: string, numero_socio: string, esposo_nombre: string, esposo_apellidos: string, esposa_nombre: string, esposa_apellidos: string, esposa_fecha_nacimiento?: string | null, esposa_document_type?: DocumentType | null, esposa_documento_identidad?: string | null, esposa_correo_electronico?: string | null, miembro_origen?: { __typename?: 'Member', miembro_id: string, numero_socio: string, nombre: string, apellidos: string } | null, telefonos?: Array<{ __typename?: 'Telephone', numero_telefono: string }> | null, familiares?: Array<{ __typename?: 'Familiar', id: string, nombre: string, apellidos: string, fecha_nacimiento?: string | null, dni_nie?: string | null, correo_electronico?: string | null, telefonos?: Array<{ __typename?: 'Telephone', numero_telefono: string }> | null }> | null } | null };
 
 export type ListFamiliesQueryVariables = Exact<{
   filter?: InputMaybe<FamilyFilter>;
@@ -1296,7 +1312,7 @@ export type GetMemberQueryVariables = Exact<{
 }>;
 
 
-export type GetMemberQuery = { __typename?: 'Query', getMember?: { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, telefonos?: Array<{ __typename?: 'Telephone', numero_telefono: string }> | null } | null };
+export type GetMemberQuery = { __typename?: 'Query', getMember?: { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, document_type?: DocumentType | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, telefonos?: Array<{ __typename?: 'Telephone', numero_telefono: string }> | null } | null };
 
 export type ListMembersQueryVariables = Exact<{
   filter?: InputMaybe<MemberFilter>;
@@ -1331,7 +1347,7 @@ export type UpdateMemberMutationVariables = Exact<{
 }>;
 
 
-export type UpdateMemberMutation = { __typename?: 'Mutation', updateMember: { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, telefonos?: Array<{ __typename?: 'Telephone', numero_telefono: string }> | null } };
+export type UpdateMemberMutation = { __typename?: 'Mutation', updateMember: { __typename?: 'Member', miembro_id: string, numero_socio: string, tipo_membresia: MembershipType, nombre: string, apellidos: string, calle_numero_piso: string, codigo_postal: string, poblacion: string, provincia: string, pais: string, estado: MemberStatus, fecha_alta: string, fecha_baja?: string | null, fecha_nacimiento?: string | null, document_type?: DocumentType | null, documento_identidad?: string | null, correo_electronico?: string | null, profesion?: string | null, nacionalidad?: string | null, observaciones?: string | null, telefonos?: Array<{ __typename?: 'Telephone', numero_telefono: string }> | null } };
 
 export type DeleteMemberMutationVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -2544,6 +2560,7 @@ export const GetFamilyByOriginMemberDocument = gql`
     esposa_nombre
     esposa_apellidos
     esposa_fecha_nacimiento
+    esposa_document_type
     esposa_documento_identidad
     esposa_correo_electronico
     telefonos {
@@ -3224,6 +3241,7 @@ export const GetMemberDocument = gql`
     fecha_alta
     fecha_baja
     fecha_nacimiento
+    document_type
     documento_identidad
     correo_electronico
     profesion
@@ -3515,6 +3533,7 @@ export const UpdateMemberDocument = gql`
     fecha_alta
     fecha_baja
     fecha_nacimiento
+    document_type
     documento_identidad
     correo_electronico
     profesion

@@ -38,6 +38,7 @@ interface MemberFormSubmitData {
   provincia: string
   pais: string
   fecha_nacimiento: string | null
+  document_type: string | null | undefined
   documento_identidad: string
   correo_electronico: string | null | undefined
   profesion: string | null | undefined
@@ -85,6 +86,7 @@ export const EditMemberPage: React.FC = () => {
       esposa_nombre: family.esposa_nombre,
       esposa_apellidos: family.esposa_apellidos,
       esposa_fecha_nacimiento: family.esposa_fecha_nacimiento,
+      esposa_document_type: family.esposa_document_type,
       esposa_documento_identidad: family.esposa_documento_identidad,
       esposa_correo_electronico: family.esposa_correo_electronico,
       familyMembers: familiares || []
@@ -142,6 +144,7 @@ export const EditMemberPage: React.FC = () => {
         provincia: data.provincia,
         pais: data.pais || 'España',
         correo_electronico: data.correo_electronico || null,
+        document_type: data.document_type as any,
         documento_identidad: data.documento_identidad || null,
         profesion: data.profesion || null,
         observaciones: data.observaciones || null,

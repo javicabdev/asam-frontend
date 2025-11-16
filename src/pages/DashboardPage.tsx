@@ -14,12 +14,9 @@ import {
 import {
   People,
   AccountBalance,
-  TrendingUp,
   Warning,
   CheckCircle,
   Refresh,
-  Group,
-  TrendingDown,
 } from '@mui/icons-material'
 import {
   StatsCard,
@@ -110,6 +107,15 @@ export default function DashboardPage() {
         </Grid>
       </Grid>
 
+      {/* Actividad reciente */}
+      <Grid container spacing={3} mb={4}>
+        <Grid item xs={12}>
+          <Paper elevation={0} sx={{ p: 3, height: '400px' }}>
+            <RecentActivity activities={recentActivity ?? []} loading={loading} />
+          </Paper>
+        </Grid>
+      </Grid>
+
       {/* Stats Cards - Grid mejorado para la estructura del backend */}
       <Grid container spacing={3} mb={4}>
         {/* Primera fila - 4 cards principales */}
@@ -153,49 +159,9 @@ export default function DashboardPage() {
           />
         </Grid>
 
-        {/* Segunda fila - 4 cards adicionales */}
-        <Grid item xs={12} sm={6} md={3}>
-          <StatsCard
-            title={t('stats.familiesRegistered')}
-            value={backendStats?.familyMembers ?? 0}
-            icon={<Group />}
-            loading={loading}
-            color="info"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatsCard
-            title={t('stats.averageContribution')}
-            value={backendStats?.averagePayment ?? 0}
-            icon={<TrendingUp />}
-            loading={loading}
-            color="success"
-            isCurrency
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatsCard
-            title={t('stats.monthlyGrowth')}
-            value={backendStats?.memberGrowthPercentage ?? 0}
-            icon={<TrendingUp />}
-            loading={loading}
-            color="primary"
-            isPercentage
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatsCard
-            title={t('stats.paymentRate')}
-            value={backendStats?.paymentCompletionRate ?? 0}
-            icon={(backendStats?.paymentCompletionRate ?? 0) >= 80 ? <CheckCircle /> : <TrendingDown />}
-            loading={loading}
-            color={(backendStats?.paymentCompletionRate ?? 0) >= 80 ? 'success' : 'error'}
-            isPercentage
-          />
-        </Grid>
       </Grid>
 
-      {/* Charts and Activity */}
+      {/* Charts */}
       <Grid container spacing={3}>
         {/* Gráfico de miembros */}
         <Grid item xs={12} md={6}>
@@ -208,13 +174,6 @@ export default function DashboardPage() {
         <Grid item xs={12} md={6}>
           <Paper elevation={0} sx={{ p: 3, height: '100%' }}>
             <PaymentsChart data={monthlyData ?? []} loading={loading} />
-          </Paper>
-        </Grid>
-
-        {/* Actividad reciente */}
-        <Grid item xs={12}>
-          <Paper elevation={0} sx={{ p: 3, height: '400px' }}>
-            <RecentActivity activities={recentActivity ?? []} loading={loading} />
           </Paper>
         </Grid>
       </Grid>

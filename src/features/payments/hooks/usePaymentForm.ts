@@ -104,7 +104,7 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
       // ⭐ Usar la fecha que viene del formulario (puede ser fecha histórica o actual)
       const confirmedPayment = await confirmPayment(
         pendingPaymentId,
-        'CASH', // Always CASH for initial payments
+        formData.payment_method, // Use payment method from form (CASH, TRANSFER, or CARD)
         formData.payment_date, // Usar fecha del formulario (ya viene como string ISO)
         formData.notes?.trim() || undefined,
         formData.amount // Pass the amount (can be modified from the original)
@@ -114,7 +114,7 @@ export const usePaymentForm = (options: UsePaymentFormOptions) => {
         throw new Error('Error al confirmar el pago')
       }
 
-      console.log('✅ [usePaymentForm] Payment confirmed successfully with CASH method')
+      console.log(`✅ [usePaymentForm] Payment confirmed successfully with ${formData.payment_method} method`)
 
       // Success callback
       if (onSuccess) {

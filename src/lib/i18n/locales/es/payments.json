@@ -217,13 +217,14 @@
     "notes": "Notas:"
   },
   "initialPaymentForm": {
-    "title": "Confirmar Pago en Efectivo",
+    "title": "Confirmar Pago",
     "paymentMethod": "Método de pago:",
     "cash": "Efectivo",
     "amountLabel": "Importe a pagar",
     "amountHelper": "Puede modificar el importe si es necesario",
+    "paymentMethodLabel": "Forma de pago",
     "paymentDateLabel": "Fecha del Pago",
-    "paymentDateHelper": "Fecha en que se recibió el pago en efectivo",
+    "paymentDateHelper": "Fecha en que se recibió el pago",
     "notesLabel": "Notas (opcional)",
     "notesPlaceholder": "Ej: Recibido por [nombre], número de recibo, etc.",
     "cancel": "Cancelar",
@@ -340,12 +341,12 @@
       "family": "Familia"
     },
     "alert": {
-      "cashPaymentTitle": "Pago en efectivo:",
-      "cashPaymentMessage": "Confirme que ha recibido el pago de la cuota inicial en efectivo. El pago se marcará como PAGADO tras la confirmación."
+      "cashPaymentTitle": "Pago de cuota inicial:",
+      "cashPaymentMessage": "Seleccione la forma de pago y confirme que ha recibido el pago de la cuota inicial. El pago se marcará como PAGADO tras la confirmación."
     },
     "success": {
       "title": "✓ Pago Confirmado",
-      "message": "El pago en efectivo ha sido registrado correctamente.",
+      "message": "El pago ha sido registrado correctamente.",
       "amount": "Monto:",
       "receiptGenerated": "El recibo se ha generado automáticamente.",
       "redirecting": "Redirigiendo al detalle del socio..."

@@ -19,8 +19,7 @@ export default function ReportsPage() {
   const [selectedDebtor, setSelectedDebtor] = useState<Debtor | null>(null)
 
   // Hook principal del informe
-  const { data, loading, error, filters, updateFilters, resetFilters } =
-    useDelinquentReport()
+  const { data, loading, error } = useDelinquentReport()
 
   // Hook de exportación
   const { exportPDF, exportCSV, isExporting } = useExportDelinquent()

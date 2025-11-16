@@ -10,13 +10,12 @@ interface DelinquentSummaryCardsProps {
 interface MetricCardProps {
   label: string
   value: string | number
-  color: string
 }
 
 /**
  * Tarjeta individual de métrica
  */
-function MetricCard({ label, value, color }: MetricCardProps) {
+function MetricCard({ label, value }: MetricCardProps) {
   return (
     <Card sx={{ height: '100%' }}>
       <CardContent sx={{ p: 1, '&:last-child': { pb: 1 } }}>
@@ -45,22 +44,18 @@ export function DelinquentSummaryCards({
     {
       label: t('delinquent.summary.totalDebtors'),
       value: summary.totalDebtors,
-      color: 'error',
     },
     {
       label: t('delinquent.summary.individualDebtors'),
       value: summary.individualDebtors,
-      color: 'primary',
     },
     {
       label: t('delinquent.summary.familyDebtors'),
       value: summary.familyDebtors,
-      color: 'secondary',
     },
     {
       label: t('delinquent.summary.totalDebt'),
       value: formatCurrency(summary.totalDebtAmount),
-      color: 'error',
     },
   ]
 

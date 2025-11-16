@@ -6,10 +6,7 @@ import {
   GridPaginationModel,
   GridSortModel,
   GridToolbarContainer,
-  GridToolbarColumnsButton,
-  GridToolbarFilterButton,
   GridToolbarDensitySelector,
-  GridToolbarQuickFilter,
   esES,
 } from '@mui/x-data-grid'
 import { Box, Chip, IconButton, Tooltip, useTheme } from '@mui/material'
@@ -18,8 +15,6 @@ import {
   CheckCircleOutline as ConfirmIcon,
   Receipt as ReceiptIcon,
 } from '@mui/icons-material'
-import { format, parseISO } from 'date-fns'
-import { es } from 'date-fns/locale'
 
 import { PaymentStatusChip } from './PaymentStatusChip'
 import type { PaymentListItem } from '../types'
@@ -44,12 +39,7 @@ function CustomToolbar() {
   return (
     <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-        <GridToolbarColumnsButton />
-        <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
-      </Box>
-      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-        <GridToolbarQuickFilter debounceMs={500} />
       </Box>
     </GridToolbarContainer>
   )
@@ -85,35 +75,6 @@ export function PaymentsTable({
       style: 'currency',
       currency: 'EUR',
     }).format(amount)
-  }
-
-  // Format date to DD/MM/YYYY HH:mm
-  const formatDate = (dateString: string | null): string => {
-    if (!dateString) return ''
-    try {
-      // Use parseISO to correctly parse ISO date strings
-      const date = parseISO(dateString)
-      // Check if date is valid
-      if (isNaN(date.getTime())) return ''
-
-      // Check if this looks like a date-only value (stored as UTC midnight)
-      // When backend stores a date without time as UTC 00:00:00Z, it becomes 01:00 or 02:00 in local time
-      const hours = date.getHours()
-      const minutes = date.getMinutes()
-      const seconds = date.getSeconds()
-
-      // If it's midnight (00:00:00) or 01:00:00/02:00:00 with no minutes/seconds (UTC conversion artifact)
-      const isProbablyDateOnly =
-        (hours === 0 && minutes === 0 && seconds === 0) || // Midnight local
-        ((hours === 1 || hours === 2) && minutes === 0 && seconds === 0) // UTC midnight -> local conversion
-
-      // If it looks like a date-only, show only date; otherwise show date and time
-      return isProbablyDateOnly
-        ? format(date, 'dd/MM/yyyy', { locale: es })
-        : format(date, 'dd/MM/yyyy HH:mm', { locale: es })
-    } catch {
-      return ''
-    }
   }
 
   // Column definitions
@@ -170,23 +131,6 @@ export function PaymentsTable({
       renderCell: (params) => {
         if (!params.value) return t('table.otherPayment')
         return t('table.annualFeeYear', { year: params.value })
-      },
-    },
-    {
-      field: 'paymentDate',
-      headerName: t('table.date'),
-      width: 150,
-      sortable: true,
-      renderCell: (params) => formatDate(params.value),
-    },
-    {
-      field: 'paymentMethod',
-      headerName: t('table.paymentMethod'),
-      width: 130,
-      sortable: true,
-      renderCell: (params) => {
-        if (!params.value) return ''
-        return t(`table.paymentMethods.${params.value}`) || params.value
       },
     },
     {

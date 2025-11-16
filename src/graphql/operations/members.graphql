@@ -137,6 +137,7 @@ mutation CreateMember($input: CreateMemberInput!) {
     fecha_alta
     fecha_baja
     fecha_nacimiento
+    document_type
     documento_identidad
     correo_electronico
     profesion

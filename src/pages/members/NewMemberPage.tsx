@@ -46,6 +46,7 @@ interface MemberFormSubmitData {
   pais: string
   fecha_alta: string | null // ⭐ NUEVO CAMPO
   fecha_nacimiento: string | null
+  document_type: string | null | undefined
   documento_identidad: string
   correo_electronico: string | null | undefined
   profesion: string | null | undefined
@@ -54,11 +55,13 @@ interface MemberFormSubmitData {
   esposo_nombre: string | null | undefined
   esposo_apellidos: string | null | undefined
   esposo_fecha_nacimiento: string | null
+  esposo_document_type: string | null | undefined
   esposo_documento_identidad: string | null | undefined
   esposo_correo_electronico: string | null | undefined
   esposa_nombre: string | null | undefined
   esposa_apellidos: string | null | undefined
   esposa_fecha_nacimiento: string | null
+  esposa_document_type: string | null | undefined
   esposa_documento_identidad: string | null | undefined
   esposa_correo_electronico: string | null | undefined
   telefonos?: Array<{ numero_telefono: string }> // ⭐ NUEVO CAMPO
@@ -152,6 +155,7 @@ export const NewMemberPage: React.FC = () => {
           pais: data.pais || 'España',
           fecha_alta: data.fecha_alta || undefined, // ⭐ NUEVO CAMPO
           fecha_nacimiento: formatDateToRFC3339(data.fecha_nacimiento),
+          document_type: data.document_type as any,
           documento_identidad: data.documento_identidad,
           correo_electronico: data.correo_electronico || null,
           profesion: data.profesion || null,
@@ -242,6 +246,7 @@ export const NewMemberPage: React.FC = () => {
         esposo_nombre: data.nombre,
         esposo_apellidos: data.apellidos,
         esposo_fecha_nacimiento: formatDateToRFC3339(data.fecha_nacimiento),
+        esposo_document_type: data.esposo_document_type as any,
         esposo_documento_identidad: data.documento_identidad || undefined,
         esposo_correo_electronico: data.correo_electronico || undefined,
 
@@ -249,6 +254,7 @@ export const NewMemberPage: React.FC = () => {
         esposa_nombre: data.esposa_nombre || undefined,
         esposa_apellidos: data.esposa_apellidos || undefined,
         esposa_fecha_nacimiento: formatDateToRFC3339(data.esposa_fecha_nacimiento),
+        esposa_document_type: data.esposa_document_type as any,
         esposa_documento_identidad: data.esposa_documento_identidad || undefined,
         esposa_correo_electronico: data.esposa_correo_electronico || undefined,
 

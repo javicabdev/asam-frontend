@@ -222,6 +222,7 @@
     "cash": "Espèces",
     "amountLabel": "Montant à payer",
     "amountHelper": "Vous pouvez modifier le montant si nécessaire",
+    "paymentMethodLabel": "Mode de paiement",
     "paymentDateLabel": "Date du Paiement",
     "paymentDateHelper": "Date à laquelle le paiement en espèces a été reçu",
     "notesLabel": "Notes (optionnel)",

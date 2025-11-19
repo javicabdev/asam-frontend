@@ -198,7 +198,7 @@
     "error": "Njumte ci génne: {{message}}"
   },
   "deactivateDialog": {
-    "title": "Tànnee Fay Mbooloo Bi",
+    "title": "Dëggal Fay Mbooloo Bi",
     "confirmMessage": "Ndax dëgg la bëgg fay mbooloo bii?",
     "memberNumber": "Limub Mbooloo",
     "fullName": "Tur bu mat sëkk",
@@ -241,6 +241,7 @@
       "firstName": "Tur",
       "lastName": "Sant",
       "birthDate": "Bésu juddu",
+      "documentType": "Xeetu Kàddu",
       "dni": "DNI/NIE",
       "dniPlaceholder": "Dugal DNI walla NIE",
       "email": "Adres email",
@@ -469,6 +470,8 @@
     "leaveDate": "Bisu Génne",
     "contactInfo": "Xibaar Bu Jokkante",
     "email": "Email",
+    "phone": "Telefon",
+    "phones": "Telefon yi",
     "fullAddress": "Kasalaalug Lépp",
     "profession": "Liggéey",
     "nationality": "Réew",

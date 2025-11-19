@@ -114,7 +114,7 @@
     "notes": "Xeeti",
     "signature": "Sañ-sañ bu njëkkal ci ASAM",
     "footer": "Jërëjëf ci sa fay",
-    "errorOnlyPaid": "Kàddu yi man nañu def rekk ci fay yu tànnee",
+    "errorOnlyPaid": "Kàddu yi man nañu def rekk ci fay yu dëggal",
     "errorUnknown": "Njuumte bu xam wul ci def kàddu bi"
   },
   "stats": {
@@ -175,7 +175,7 @@
     "viewDetails": "Xool faramfacce",
     "downloadReceipt": "Yeb kàddu",
     "editPayment": "Soppi fay bi",
-    "confirmPayment": "Tànnee fay bi",
+    "confirmPayment": "Dëggal fay bi",
     "empty": "Amul fay bu bindu",
     "toolbar": {
       "columns": "Njàll",
@@ -208,8 +208,8 @@
   },
   "summary": {
     "title": "Fay Bi Bindu Na Bu Baax",
-    "confirmedMessage": "Fay bi bindu na te tànnee nañu ko",
-    "pendingMessage": "Fay bi bindu na te mungi xaar tànnee",
+    "confirmedMessage": "Fay bi bindu na te dëggal nañu ko",
+    "pendingMessage": "Fay bi bindu na te mungi xaar dëggal",
     "amount": "Dayoo:",
     "paymentMethod": "Anamu Fay:",
     "status": "Tekki:",
@@ -217,22 +217,23 @@
     "notes": "Karmat:"
   },
   "initialPaymentForm": {
-    "title": "Tànnee Fay Bu Xaalis",
+    "title": "Dëggal Fay Bu Xaalis",
     "paymentMethod": "Anamu fay:",
     "cash": "Xaalis",
     "amountLabel": "Dayoo bu fay",
     "amountHelper": "Man nga soppi dayoo bi su la bëggee",
+    "paymentMethodLabel": "Anamu fay",
     "paymentDateLabel": "Bisu Fay",
     "paymentDateHelper": "Bis bu ñu jot xaalis bi",
     "notesLabel": "Karmat (amul solo)",
     "notesPlaceholder": "Misaal: Ñu ko jot ci [tur], nimero kàddu, njk.",
     "cancel": "Neenal",
-    "confirming": "Mungi tànnee...",
-    "confirmPayment": "Tànnee Fay Bi"
+    "confirming": "Mungi dëggal...",
+    "confirmPayment": "Dëggal Fay Bi"
   },
   "confirmDialog": {
-    "title": "Tànnee Fay Bi",
-    "subtitle": "Tëral faramfacce yu fay balaa tànnee:",
+    "title": "Dëggal Fay Bi",
+    "subtitle": "Tëral faramfacce yu fay balaa dëggal:",
     "member": "Mbooloo:",
     "memberNumber": "Nimero Mbooloo:",
     "concept": "Lu muy:",
@@ -248,12 +249,12 @@
     "methodCard": "Kaar",
     "notesLabel": "Karmat",
     "notesPlaceholder": "Yokk karmat yu amul solo ci fay bi...",
-    "infoMessage": "Li nga def laa wut tekki fay bi ba FAY NA. Fay bi dinaa bindu ni tànnee nañu ko ci sistem bi.",
+    "infoMessage": "Li nga def laa wut tekki fay bi ba FAY NA. Fay bi dinaa bindu ni dëggal nañu ko ci sistem bi.",
     "cancel": "Neenal",
-    "confirming": "Mungi tànnee...",
-    "confirmButton": "Tànnee Fay Bi",
-    "successMessage": "Tànnee nañu fay bi bu baax",
-    "errorMessage": "Njuumte ci tànnee fay bi"
+    "confirming": "Mungi dëggal...",
+    "confirmButton": "Dëggal Fay Bi",
+    "successMessage": "Dëggal nañu fay bi bu baax",
+    "errorMessage": "Njuumte ci dëggal fay bi"
   },
   "editDialog": {
     "title": "Soppi Fay Bi",
@@ -298,7 +299,7 @@
     "methodTransfer": "Yóbbale",
     "methodCard": "Kaar",
     "receiptButton": "Kàddu",
-    "confirmButton": "Tànnee",
+    "confirmButton": "Dëggal",
     "viewRemaining": "Gis {{count}} fay yi des →",
     "errorNoMemberData": "Njuumte: Fay bi amul xëtu mbooloo. Jokkon ak soporte.",
     "receiptSuccess": "Kàddu bi def na bu baax",

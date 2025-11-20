@@ -27,8 +27,8 @@ export const FeeGenerationForm: React.FC<FeeGenerationFormProps> = ({
 
   const [formData, setFormData] = useState<FeeGenerationFormData>({
     year: currentYear,
-    baseFeeAmount: 30,
-    familyFeeExtra: 10,
+    baseFeeAmount: 24,
+    familyFeeExtra: 16,
   })
 
   const [errors, setErrors] = useState<ValidationErrors>({})

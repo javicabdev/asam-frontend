@@ -27,10 +27,15 @@ export default function PaymentsPage() {
   const [familySnackbar, setFamilySnackbar] = useState(false)
 
   // Filter state management
-  const { filters, setPage, setPageSize, setSort } = usePaymentFilters()
+  const { filters, setPage, setPageSize, setSort, updateFilter } = usePaymentFilters()
 
   // Fetch payments with current filters
   const { payments, pageInfo, loading, error } = usePayments(filters)
+
+  // Handle search change
+  const handleSearchChange = (searchTerm: string) => {
+    updateFilter('searchTerm', searchTerm)
+  }
 
   // Receipt generator hook
   const { generateReceipt, isGenerating: isGeneratingReceipt } = useReceiptGenerator()
@@ -73,9 +78,11 @@ export default function PaymentsPage() {
             loading={loading || isGeneratingReceipt}
             page={filters.page}
             pageSize={filters.pageSize}
+            searchTerm={filters.searchTerm}
             onPageChange={setPage}
             onPageSizeChange={setPageSize}
             onSortChange={setSort}
+            onSearchChange={handleSearchChange}
             onRowClick={handleRowClick}
             onConfirmClick={handleConfirmClick}
             onDownloadReceipt={handleDownloadReceipt}

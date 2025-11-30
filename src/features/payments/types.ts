@@ -31,6 +31,7 @@ export interface PaymentFiltersState {
   startDate: Date | null
   endDate: Date | null
   memberId?: string | null
+  searchTerm?: string
   page: number
   pageSize: number
   sortField?: string

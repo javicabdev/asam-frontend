@@ -1,4 +1,4 @@
-import { useCallback, useRef, useMemo } from 'react'
+import { useCallback, useRef, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   DataGrid,
@@ -9,11 +9,12 @@ import {
   GridToolbarDensitySelector,
   esES,
 } from '@mui/x-data-grid'
-import { Box, Chip, IconButton, Tooltip, useTheme } from '@mui/material'
+import { Box, Chip, IconButton, Tooltip, useTheme, TextField, InputAdornment } from '@mui/material'
 import {
   Visibility as VisibilityIcon,
   CheckCircleOutline as ConfirmIcon,
   Receipt as ReceiptIcon,
+  Search as SearchIcon,
 } from '@mui/icons-material'
 
 import { PaymentStatusChip } from './PaymentStatusChip'
@@ -25,9 +26,11 @@ interface PaymentsTableProps {
   loading: boolean
   page: number
   pageSize: number
+  searchTerm?: string
   onPageChange: (page: number) => void
   onPageSizeChange: (pageSize: number) => void
   onSortChange?: (field: string, direction: 'ASC' | 'DESC' | null) => void
+  onSearchChange?: (searchTerm: string) => void
   onRowClick?: (payment: PaymentListItem) => void
   onConfirmClick?: (payment: PaymentListItem) => void
   onDownloadReceipt?: (payment: PaymentListItem) => void
@@ -35,11 +38,44 @@ interface PaymentsTableProps {
 }
 
 // Custom Toolbar component
-function CustomToolbar() {
+interface CustomToolbarProps {
+  searchTerm?: string
+  onSearchChange?: (searchTerm: string) => void
+}
+
+function CustomToolbar({ searchTerm = '', onSearchChange }: CustomToolbarProps) {
+  const { t } = useTranslation('payments')
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm)
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+    setLocalSearchTerm(value)
+    if (onSearchChange) {
+      onSearchChange(value)
+    }
+  }
+
   return (
     <GridToolbarContainer sx={{ justifyContent: 'space-between' }}>
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         <GridToolbarDensitySelector />
+      </Box>
+
+      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        <TextField
+          size="small"
+          placeholder={t('table.toolbar.search')}
+          value={localSearchTerm}
+          onChange={handleSearchChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon fontSize="small" />
+              </InputAdornment>
+            ),
+          }}
+          sx={{ minWidth: 200 }}
+        />
       </Box>
     </GridToolbarContainer>
   )
@@ -54,9 +90,11 @@ export function PaymentsTable({
   loading,
   page,
   pageSize,
+  searchTerm = '',
   onPageChange,
   onPageSizeChange,
   onSortChange,
+  onSearchChange,
   onRowClick,
   onConfirmClick,
   onDownloadReceipt,
@@ -68,6 +106,9 @@ export function PaymentsTable({
   // Track if we initiated the change (to ignore reflection events)
   const changingRef = useRef(false)
 
+  // Debounce timer for search
+  const searchDebounceRef = useRef<NodeJS.Timeout | null>(null)
+
   // Format currency to EUR
   const formatCurrency = (amount: number): string => {
     const locale = i18n.language === 'wo' ? 'fr-SN' : i18n.language === 'fr' ? 'fr-FR' : 'es-ES'
@@ -76,6 +117,39 @@ export function PaymentsTable({
       currency: 'EUR',
     }).format(amount)
   }
+
+  // Handle search change with debouncing
+  const handleSearchChange = useCallback((searchValue: string) => {
+    // Clear existing debounce timer
+    if (searchDebounceRef.current) {
+      clearTimeout(searchDebounceRef.current)
+    }
+
+    // Set new debounce timer
+    searchDebounceRef.current = setTimeout(() => {
+      if (onSearchChange) {
+        onSearchChange(searchValue)
+      }
+    }, 500) // 500ms debounce
+  }, [onSearchChange])
+
+  // Filter payments locally by search term
+  const filteredPayments = useMemo(() => {
+    if (!searchTerm || searchTerm.trim() === '') {
+      return payments
+    }
+
+    const lowerSearchTerm = searchTerm.toLowerCase().trim()
+    return payments.filter((payment) => {
+      const memberName = payment.memberName.toLowerCase()
+      const memberNumber = payment.memberNumber.toLowerCase()
+
+      return (
+        memberName.includes(lowerSearchTerm) ||
+        memberNumber.includes(lowerSearchTerm)
+      )
+    })
+  }, [payments, searchTerm])
 
   // Column definitions
   const columns: GridColDef<PaymentListItem>[] = [
@@ -283,7 +357,7 @@ export function PaymentsTable({
   return (
     <Box sx={{ width: '100%', height: '100%' }}>
       <DataGrid
-        rows={payments}
+        rows={filteredPayments}
         columns={columns}
         loading={loading}
         pageSizeOptions={[10, 25, 50, 100]}
@@ -300,6 +374,12 @@ export function PaymentsTable({
         disableRowSelectionOnClick
         slots={{
           toolbar: CustomToolbar,
+        }}
+        slotProps={{
+          toolbar: {
+            searchTerm,
+            onSearchChange: handleSearchChange,
+          } as CustomToolbarProps,
         }}
         localeText={customLocaleText}
         sx={{

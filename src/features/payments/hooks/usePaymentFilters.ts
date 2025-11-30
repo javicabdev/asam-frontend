@@ -11,6 +11,7 @@ export function usePaymentFilters() {
     startDate: null,
     endDate: null,
     memberId: null,
+    searchTerm: '',
     page: 1,
     pageSize: 25,
   })
@@ -48,6 +49,7 @@ export function usePaymentFilters() {
       startDate: null,
       endDate: null,
       memberId: null,
+      searchTerm: '',
       page: 1,
       pageSize: filters.pageSize, // Preserve page size
     })

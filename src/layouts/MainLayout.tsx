@@ -26,7 +26,7 @@ import {
   Menu as MenuIcon,
   Dashboard as DashboardIcon,
   People as PeopleIcon,
-  SupervisedUserCircle as UsersIcon,
+  AdminPanelSettings as UsersIcon,
   Payment as PaymentIcon,
   PointOfSale as PointOfSaleIcon,
   Assessment as AssessmentIcon,
@@ -68,12 +68,6 @@ const navigationItems: NavItem[] = [
     path: '/members',
   },
   {
-    text: 'menu.users',
-    icon: <UsersIcon />,
-    path: '/users',
-    roles: ['admin'],
-  },
-  {
     text: 'menu.payments',
     icon: <PaymentIcon />,
     path: '/payments',
@@ -94,6 +88,12 @@ const navigationItems: NavItem[] = [
     text: 'menu.reports',
     icon: <AssessmentIcon />,
     path: '/reports',
+    roles: ['admin'],
+  },
+  {
+    text: 'menu.users',
+    icon: <UsersIcon />,
+    path: '/users',
     roles: ['admin'],
   },
 ]

@@ -4,7 +4,7 @@
     "generateButton": "Générer les Cotisations",
     "about": {
       "title": "À propos des Cotisations Annuelles",
-      "description": "Les cotisations annuelles sont générées automatiquement pour tous les membres actifs au début de chaque année.",
+      "description": "Les cotisations annuelles sont générées manuellement depuis cette page pour tous les membres actifs. Un administrateur doit lancer le processus chaque année.",
       "howItWorks": "Le système calcule le montant de la cotisation selon le type d'adhésion (individuelle ou familiale) et crée des paiements en attente pour chaque membre."
     }
   },

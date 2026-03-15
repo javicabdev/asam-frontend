@@ -112,7 +112,7 @@
     "method": "Método de pago",
     "paymentDetails": "Detalles del Pago",
     "notes": "Observaciones",
-    "signature": "Firmado digitalmente por ASAM",
+    "signature": "Emitido por ASAM",
     "footer": "Gracias por su pago",
     "errorOnlyPaid": "Solo se pueden generar recibos para pagos confirmados",
     "errorUnknown": "Error desconocido al generar el recibo"

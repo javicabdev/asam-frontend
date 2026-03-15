@@ -4,7 +4,7 @@
     "generateButton": "Generar Cuotas",
     "about": {
       "title": "Acerca de las Cuotas Anuales",
-      "description": "Las cuotas anuales se generan automáticamente para todos los socios activos al inicio de cada año.",
+      "description": "Las cuotas anuales se generan manualmente desde esta página para todos los socios activos. Un administrador debe iniciar el proceso cada año.",
       "howItWorks": "El sistema calcula el monto de la cuota según el tipo de membresía (individual o familiar) y crea pagos pendientes para cada socio."
     }
   },

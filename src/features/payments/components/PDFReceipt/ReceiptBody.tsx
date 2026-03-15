@@ -12,7 +12,7 @@ interface ReceiptBodyProps {
 
 export function ReceiptBody({ receipt, translations, language }: ReceiptBodyProps) {
   const memberInfo = receipt.familyName
-    ? `${receipt.memberName} (${translations.family}: ${receipt.familyName})`
+    ? `${receipt.memberName} (${receipt.familyName})`
     : receipt.memberName
 
   return (

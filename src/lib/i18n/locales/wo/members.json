@@ -262,6 +262,7 @@
     },
     "validation": {
       "invalidEmail": "Email baaxul. Jëm bu war: jëfandikukat@domain.com",
+      "invalidDate": "Taariix baaxul. Jëm bu war: jj/mm/aaaa",
       "validating": "Yam tëkki..."
     },
     "cancel": "Neenal",

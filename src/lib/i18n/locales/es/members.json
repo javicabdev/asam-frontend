@@ -262,6 +262,7 @@
     },
     "validation": {
       "invalidEmail": "Email inválido. Formato esperado: usuario@dominio.com",
+      "invalidDate": "Fecha no válida. Formato esperado: dd/mm/aaaa",
       "validating": "Validando..."
     },
     "cancel": "Cancelar",

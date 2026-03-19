@@ -67,6 +67,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
 
   const [fechaNacimiento, setFechaNacimiento] = React.useState<Date | null>(null)
   const [emailError, setEmailError] = React.useState<string>('')
+  const [dateError, setDateError] = React.useState<string>('')
   const [documentError, setDocumentError] = React.useState<string>('')
 
   React.useEffect(() => {
@@ -81,6 +82,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
       } else {
         setEmailError('')
       }
+      setDateError('')
       setDocumentError('')
     } else {
       setFormData({
@@ -94,6 +96,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
       })
       setFechaNacimiento(null)
       setEmailError('')
+      setDateError('')
       setDocumentError('')
     }
   }, [member, open, t])
@@ -123,10 +126,15 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
 
   const handleDateChange = (newValue: Date | null) => {
     setFechaNacimiento(newValue)
-    setFormData((prev) => ({
-      ...prev,
-      fecha_nacimiento: newValue ? format(newValue, 'yyyy-MM-dd') : '',
-    }))
+    // No formateamos aquí — se formatea solo al hacer submit.
+    // Mientras el usuario teclea, newValue puede ser un Date inválido.
+    if (newValue === null) {
+      setDateError('')
+    } else if (isNaN(newValue.getTime())) {
+      setDateError(t('familyMemberForm.validation.invalidDate'))
+    } else {
+      setDateError('')
+    }
   }
 
   const handleDniChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -167,6 +175,12 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
       return
     }
 
+    // Validar fecha si se introdujo algo
+    if (fechaNacimiento !== null && isNaN(fechaNacimiento.getTime())) {
+      setDateError(t('familyMemberForm.validation.invalidDate'))
+      return
+    }
+
     // Check document validation result if provided and not type OTHER
     if (
       formData.dni_nie &&
@@ -185,7 +199,15 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
       return
     }
 
-    onSave(formData)
+    // Formatear la fecha solo al guardar (mismo patrón que MemberForm)
+    const dataToSave: FamilyMember = {
+      ...formData,
+      fecha_nacimiento: fechaNacimiento && !isNaN(fechaNacimiento.getTime())
+        ? format(fechaNacimiento, 'yyyy-MM-dd')
+        : '',
+    }
+
+    onSave(dataToSave)
     onClose()
   }
 
@@ -195,6 +217,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
     !formData.apellidos ||
     !formData.parentesco ||
     // Si hay errores de validación
+    !!dateError ||
     !!emailError ||
     !!documentError
 
@@ -232,6 +255,8 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
                 slotProps={{
                   textField: {
                     fullWidth: true,
+                    error: !!dateError,
+                    helperText: dateError,
                   },
                 }}
                 maxDate={new Date()}

@@ -317,7 +317,8 @@
     },
     "familySection": {
       "title": "Miembros de la Familia",
-      "readOnlyMessage": "La visualización de los miembros de la familia es solo de lectura. Para editar familiares, utilice el formulario de gestión de familias."
+      "loadError": "Error al cargar los datos de la familia.",
+      "operationError": "Error al realizar la operación."
     },
     "debug": {
       "authenticated": "Autenticado",

@@ -24,6 +24,7 @@ query GetFamily($id: ID!) {
       fecha_nacimiento
       dni_nie
       correo_electronico
+      parentesco
       telefonos {
         numero_telefono
       }
@@ -59,6 +60,7 @@ query GetFamilyByOriginMember($memberId: ID!) {
       fecha_nacimiento
       dni_nie
       correo_electronico
+      parentesco
       telefonos {
         numero_telefono
       }
@@ -91,6 +93,7 @@ query ListFamilies($filter: FamilyFilter) {
         fecha_nacimiento
         dni_nie
         correo_electronico
+        parentesco
         telefonos {
           numero_telefono
         }
@@ -112,6 +115,7 @@ query GetFamilyMembers($familyId: ID!) {
     fecha_nacimiento
     dni_nie
     correo_electronico
+    parentesco
     telefonos {
       numero_telefono
     }
@@ -142,6 +146,7 @@ mutation CreateFamily($input: CreateFamilyInput!) {
       fecha_nacimiento
       dni_nie
       correo_electronico
+      parentesco
       telefonos {
         numero_telefono
       }
@@ -173,6 +178,7 @@ mutation UpdateFamily($input: UpdateFamilyInput!) {
       fecha_nacimiento
       dni_nie
       correo_electronico
+      parentesco
       telefonos {
         numero_telefono
       }
@@ -204,6 +210,7 @@ mutation AddFamilyMember($family_id: ID!, $familiar: FamiliarInput!) {
       fecha_nacimiento
       dni_nie
       correo_electronico
+      parentesco
       telefonos {
         numero_telefono
       }

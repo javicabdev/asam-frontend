@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '@/stores/authStore'
 
 import { MemberForm } from '@/features/members/components/MemberForm'
-import { FamilyMembersDisplay } from '@/features/members/components'
+import { EditableFamilyMembers } from '@/features/members/components'
 import { UPDATE_MEMBER_MUTATION } from '@/features/members/api/mutations'
 import { useGetMemberQuery } from '@/graphql/generated/operations'
 import { MembershipType } from '@/features/members/types'
@@ -293,19 +293,11 @@ export const EditMemberPage: React.FC = () => {
 
           {/* Family Members Section - Only for FAMILY membership type */}
           {member.tipo_membresia === MembershipType.FAMILY && (
-            <Box sx={{ mt: 3 }}>
-              <Typography variant="h6" gutterBottom color="primary">
-                {t('editMemberPage.familySection.title')}
-              </Typography>
-              <Alert severity="info" sx={{ mb: 2 }}>
-                {t('editMemberPage.familySection.readOnlyMessage')}
-              </Alert>
-              <Box sx={{ p: 3, bgcolor: 'background.paper', borderRadius: 1, border: 1, borderColor: 'divider' }}>
-                <FamilyMembersDisplay
-                  memberId={member.miembro_id}
-                  membershipType={member.tipo_membresia}
-                />
-              </Box>
+            <Box sx={{ mt: 3, p: 3, bgcolor: 'background.paper', borderRadius: 1, border: 1, borderColor: 'divider' }}>
+              <EditableFamilyMembers
+                memberId={member.miembro_id}
+                membershipType={member.tipo_membresia}
+              />
             </Box>
           )}
         </>

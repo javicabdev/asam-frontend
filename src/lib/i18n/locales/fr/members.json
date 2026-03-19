@@ -317,7 +317,8 @@
     },
     "familySection": {
       "title": "Membres de la Famille",
-      "readOnlyMessage": "L'affichage des membres de la famille est en lecture seule. Pour modifier les membres de la famille, utilisez le formulaire de gestion des familles."
+      "loadError": "Erreur lors du chargement des données de la famille.",
+      "operationError": "Erreur lors de l'opération."
     },
     "debug": {
       "authenticated": "Authentifié",

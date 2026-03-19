@@ -317,7 +317,8 @@
     },
     "familySection": {
       "title": "Mbooloo yu Njaboot",
-      "readOnlyMessage": "Wonewu mbooloo yu njaboot dafa am ci xool rekk. Ngir soppi mbooloo yu njaboot, jëfandikoo fórom bu gésti njaboot yi."
+      "loadError": "Njuumte ci yégle bàyyikoo njaboot bi.",
+      "operationError": "Njuumte ci liggéey bi."
     },
     "debug": {
       "authenticated": "Tëkki na",

@@ -991,18 +991,20 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                   />
                 </Grid>
 
-                {/* Lista de Familiares */}
-                <Grid item xs={12} sx={{ mt: 3 }}>
-                  <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                    {t('memberForm.sections.miembrosAdicionales')}
-                  </Typography>
-                  <FamilyMembersList
-                    members={familyMembers}
-                    onAdd={addFamilyMember}
-                    onEdit={editFamilyMember}
-                    onRemove={removeFamilyMember}
-                  />
-                </Grid>
+                {/* Lista de Familiares — solo en creación; en edición se usa EditableFamilyMembers */}
+                {mode === 'create' && (
+                  <Grid item xs={12} sx={{ mt: 3 }}>
+                    <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                      {t('memberForm.sections.miembrosAdicionales')}
+                    </Typography>
+                    <FamilyMembersList
+                      members={familyMembers}
+                      onAdd={addFamilyMember}
+                      onEdit={editFamilyMember}
+                      onRemove={removeFamilyMember}
+                    />
+                  </Grid>
+                )}
               </>
             )}
           </Grid>

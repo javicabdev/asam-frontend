@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Paper,
   Typography,
@@ -178,13 +178,11 @@ export const MemberForm: React.FC<MemberFormProps> = ({
 
   // Estado para teléfonos
   const [telefonos, setTelefonos] = useState<string[]>([])
-  const telefonosInitialized = useRef(false)
 
-  // Inicializar teléfonos desde initialData (solo una vez)
+  // Inicializar teléfonos desde initialData
   useEffect(() => {
-    if (mode === 'edit' && initialData?.telefonos && !telefonosInitialized.current) {
+    if (mode === 'edit' && initialData?.telefonos) {
       setTelefonos(initialData.telefonos.map((t: any) => t.numero_telefono))
-      telefonosInitialized.current = true
     }
   }, [mode, initialData])
 

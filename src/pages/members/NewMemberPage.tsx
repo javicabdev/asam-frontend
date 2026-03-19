@@ -267,7 +267,7 @@ export const NewMemberPage: React.FC = () => {
           dni_nie: fm.dni_nie || null,
           document_type: (fm.tipo_documento as any) || null,
           correo_electronico: fm.correo_electronico || null,
-          parentesco: fm.parentesco || 'Hijo/a',
+          parentesco: fm.parentesco || 'HIJO',
           telefonos: fm.telefonos || [],
         })),
 

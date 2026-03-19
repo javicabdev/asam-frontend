@@ -249,15 +249,8 @@
       "relationship": "Mbokk"
     },
     "relationship": {
-      "child": "Doom",
-      "father": "Baay",
-      "mother": "Yaay",
-      "sibling": "Rakk/Mag",
-      "grandparent": "Maam/Naam",
-      "grandchild": "Doom-doom",
-      "uncle_aunt": "Bajjan/Tante",
-      "nephew_niece": "Doom-rakk",
-      "cousin": "Nijaay",
+      "child": "Doom bu góor",
+      "child_female": "Doom bu jigéen",
       "other": "Beneen"
     },
     "validation": {

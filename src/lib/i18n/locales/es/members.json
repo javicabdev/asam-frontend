@@ -249,15 +249,8 @@
       "relationship": "Parentesco"
     },
     "relationship": {
-      "child": "Hijo/a",
-      "father": "Padre",
-      "mother": "Madre",
-      "sibling": "Hermano/a",
-      "grandparent": "Abuelo/a",
-      "grandchild": "Nieto/a",
-      "uncle_aunt": "Tío/a",
-      "nephew_niece": "Sobrino/a",
-      "cousin": "Primo/a",
+      "child": "Hijo",
+      "child_female": "Hija",
       "other": "Otro"
     },
     "validation": {

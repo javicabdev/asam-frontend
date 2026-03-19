@@ -17,7 +17,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { useTranslation } from 'react-i18next'
-import { FamilyMember, DocumentType, PARENTESCO_VALUES, ParentescoValue } from '../types'
+import { FamilyMember, DocumentType, Parentesco, PARENTESCO_I18N_KEY } from '../types'
 import { isValidEmail, normalizeDocument } from '@/utils/validation'
 import { useDocumentValidation } from '../hooks'
 
@@ -42,12 +42,10 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
     clearValidation: clearDocumentValidation,
   } = useDocumentValidation()
 
-  const PARENTESCO_OPTIONS = (Object.entries(PARENTESCO_VALUES) as [ParentescoValue, string][]).map(
-    ([value, i18nKey]) => ({
-      value,
-      label: t(`familyMemberForm.relationship.${i18nKey}`),
-    })
-  )
+  const PARENTESCO_OPTIONS = Object.values(Parentesco).map((value) => ({
+    value,
+    label: t(`familyMemberForm.relationship.${PARENTESCO_I18N_KEY[value]}`),
+  }))
 
   const [formData, setFormData] = React.useState<FamilyMember>({
     nombre: '',
@@ -56,7 +54,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
     tipo_documento: DocumentType.OTHER,
     dni_nie: '',
     correo_electronico: '',
-    parentesco: 'Hijo/a',
+    parentesco: Parentesco.HIJO,
   })
 
   const [fechaNacimiento, setFechaNacimiento] = React.useState<Date | null>(null)
@@ -86,7 +84,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
         tipo_documento: DocumentType.OTHER,
         dni_nie: '',
         correo_electronico: '',
-        parentesco: 'Hijo/a',
+        parentesco: Parentesco.HIJO,
       })
       setFechaNacimiento(null)
       setEmailError('')

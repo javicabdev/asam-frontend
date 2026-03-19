@@ -267,6 +267,11 @@ export type DocumentType =
   | 'OTHER'
   | 'SENEGAL_PASSPORT';
 
+export type Parentesco =
+  | 'HIJO'
+  | 'HIJA'
+  | 'OTRO';
+
 export type DocumentValidationResult = {
   __typename?: 'DocumentValidationResult';
   errorMessage?: Maybe<Scalars['String']['output']>;
@@ -283,7 +288,7 @@ export type Familiar = {
   fecha_nacimiento?: Maybe<Scalars['Time']['output']>;
   id: Scalars['ID']['output'];
   nombre: Scalars['String']['output'];
-  parentesco: Scalars['String']['output'];
+  parentesco: Parentesco;
   telefonos?: Maybe<Array<Telephone>>;
 };
 
@@ -294,7 +299,7 @@ export type FamiliarInput = {
   document_type?: InputMaybe<DocumentType>;
   fecha_nacimiento?: InputMaybe<Scalars['Time']['input']>;
   nombre: Scalars['String']['input'];
-  parentesco: Scalars['String']['input'];
+  parentesco: Parentesco;
   telefonos?: InputMaybe<Array<TelephoneInput>>;
 };
 

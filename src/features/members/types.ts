@@ -96,21 +96,21 @@ export interface MemberConnection {
   pageInfo: PageInfo
 }
 
-// Parentesco: mapa de valor almacenado en BD (español) → clave i18n
-export const PARENTESCO_VALUES = {
-  'Hijo/a': 'child',
-  'Padre': 'father',
-  'Madre': 'mother',
-  'Hermano/a': 'sibling',
-  'Abuelo/a': 'grandparent',
-  'Nieto/a': 'grandchild',
-  'Tío/a': 'uncle_aunt',
-  'Sobrino/a': 'nephew_niece',
-  'Primo/a': 'cousin',
-  'Otro': 'other',
+// Parentesco: enum del backend → clave i18n para traducción en la UI
+export const Parentesco = {
+  HIJO: 'HIJO',
+  HIJA: 'HIJA',
+  OTRO: 'OTRO',
 } as const
 
-export type ParentescoValue = keyof typeof PARENTESCO_VALUES
+export type Parentesco = (typeof Parentesco)[keyof typeof Parentesco]
+
+// Mapa enum → clave i18n para mostrar en la UI
+export const PARENTESCO_I18N_KEY: Record<string, string> = {
+  HIJO: 'child',
+  HIJA: 'child_female',
+  OTRO: 'other',
+}
 
 // Family types
 export interface FamilyMember {

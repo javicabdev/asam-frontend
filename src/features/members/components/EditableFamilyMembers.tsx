@@ -96,7 +96,7 @@ export function EditableFamilyMembers({ memberId, membershipType }: EditableFami
     dni_nie: member.dni_nie || null,
     document_type: (member.tipo_documento as any) || null,
     correo_electronico: member.correo_electronico || null,
-    parentesco: member.parentesco || 'child',
+    parentesco: member.parentesco || 'Hijo/a',
   })
 
   const handleAdd = () => {

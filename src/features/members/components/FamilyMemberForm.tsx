@@ -43,16 +43,16 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
   } = useDocumentValidation()
 
   const PARENTESCO_OPTIONS = [
-    { value: 'child', label: t('familyMemberForm.relationship.child') },
-    { value: 'father', label: t('familyMemberForm.relationship.father') },
-    { value: 'mother', label: t('familyMemberForm.relationship.mother') },
-    { value: 'sibling', label: t('familyMemberForm.relationship.sibling') },
-    { value: 'grandparent', label: t('familyMemberForm.relationship.grandparent') },
-    { value: 'grandchild', label: t('familyMemberForm.relationship.grandchild') },
-    { value: 'uncle_aunt', label: t('familyMemberForm.relationship.uncle_aunt') },
-    { value: 'nephew_niece', label: t('familyMemberForm.relationship.nephew_niece') },
-    { value: 'cousin', label: t('familyMemberForm.relationship.cousin') },
-    { value: 'other', label: t('familyMemberForm.relationship.other') },
+    { value: 'Hijo/a', label: t('familyMemberForm.relationship.child') },
+    { value: 'Padre', label: t('familyMemberForm.relationship.father') },
+    { value: 'Madre', label: t('familyMemberForm.relationship.mother') },
+    { value: 'Hermano/a', label: t('familyMemberForm.relationship.sibling') },
+    { value: 'Abuelo/a', label: t('familyMemberForm.relationship.grandparent') },
+    { value: 'Nieto/a', label: t('familyMemberForm.relationship.grandchild') },
+    { value: 'Tío/a', label: t('familyMemberForm.relationship.uncle_aunt') },
+    { value: 'Sobrino/a', label: t('familyMemberForm.relationship.nephew_niece') },
+    { value: 'Primo/a', label: t('familyMemberForm.relationship.cousin') },
+    { value: 'Otro', label: t('familyMemberForm.relationship.other') },
   ]
 
   const [formData, setFormData] = React.useState<FamilyMember>({
@@ -62,7 +62,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
     tipo_documento: DocumentType.OTHER,
     dni_nie: '',
     correo_electronico: '',
-    parentesco: 'child',
+    parentesco: 'Hijo/a',
   })
 
   const [fechaNacimiento, setFechaNacimiento] = React.useState<Date | null>(null)
@@ -92,7 +92,7 @@ export const FamilyMemberForm: React.FC<FamilyMemberFormProps> = ({
         tipo_documento: DocumentType.OTHER,
         dni_nie: '',
         correo_electronico: '',
-        parentesco: 'child',
+        parentesco: 'Hijo/a',
       })
       setFechaNacimiento(null)
       setEmailError('')

@@ -33,7 +33,7 @@ export type SortDirection = (typeof SortDirection)[keyof typeof SortDirection]
 
 export const DocumentType = {
   DNI_NIE: 'DNI_NIE',
-  PASSPORT_SENEGAL: 'PASSPORT_SENEGAL',
+  PASSPORT_SENEGAL: 'SENEGAL_PASSPORT',
   OTHER: 'OTHER',
 } as const
 

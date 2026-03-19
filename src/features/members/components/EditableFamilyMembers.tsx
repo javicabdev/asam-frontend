@@ -24,9 +24,10 @@ import { useTranslation } from 'react-i18next'
 
 import { FamilyMemberForm } from './FamilyMemberForm'
 import { useFamilyData } from '../hooks'
-import { MembershipType, FamilyMember } from '../types'
+import { MembershipType, FamilyMember, DocumentType } from '../types'
 import {
   useAddFamilyMemberMutation,
+  useUpdateFamilyMemberMutation,
   useRemoveFamilyMemberMutation,
   GetFamilyByOriginMemberDocument,
 } from '@/graphql/generated/operations'
@@ -50,6 +51,7 @@ export function EditableFamilyMembers({ memberId, membershipType }: EditableFami
   ]
 
   const [addFamilyMember] = useAddFamilyMemberMutation({ refetchQueries })
+  const [updateFamilyMember] = useUpdateFamilyMemberMutation({ refetchQueries })
   const [removeFamilyMember] = useRemoveFamilyMemberMutation({ refetchQueries })
 
   if (membershipType !== MembershipType.FAMILY) return null
@@ -81,8 +83,21 @@ export function EditableFamilyMembers({ memberId, membershipType }: EditableFami
 
   const formatDateToRFC3339 = (dateString: string | null | undefined): string | null => {
     if (!dateString) return null
+    // Si ya viene en RFC3339 (contiene 'T'), devolver tal cual
+    if (dateString.includes('T')) return dateString
+    // Convertir yyyy-MM-dd a RFC3339
     return `${dateString}T00:00:00Z`
   }
+
+  const buildFamiliarInput = (member: FamilyMember) => ({
+    nombre: member.nombre,
+    apellidos: member.apellidos,
+    fecha_nacimiento: formatDateToRFC3339(member.fecha_nacimiento),
+    dni_nie: member.dni_nie || null,
+    document_type: (member.tipo_documento as any) || null,
+    correo_electronico: member.correo_electronico || null,
+    parentesco: member.parentesco || 'child',
+  })
 
   const handleAdd = () => {
     setEditingFamiliar(null)
@@ -98,32 +113,23 @@ export function EditableFamilyMembers({ memberId, membershipType }: EditableFami
     setOperationError(null)
     setOperationLoading(true)
     try {
-      // Si estamos editando, primero eliminamos y luego re-añadimos
       if (editingFamiliar?.id) {
-        const removeResult = await removeFamilyMember({
-          variables: { familiar_id: editingFamiliar.id },
-        })
-        if (removeResult.data?.removeFamilyMember?.error) {
-          setOperationError(removeResult.data.removeFamilyMember.error)
-          setOperationLoading(false)
-          return
-        }
-      }
-
-      // Añadir (nuevo o re-añadir tras editar)
-      await addFamilyMember({
-        variables: {
-          family_id: family.id,
-          familiar: {
-            nombre: member.nombre,
-            apellidos: member.apellidos,
-            fecha_nacimiento: formatDateToRFC3339(member.fecha_nacimiento),
-            dni_nie: member.dni_nie || null,
-            correo_electronico: member.correo_electronico || null,
-            parentesco: member.parentesco || 'child',
+        // Editar: usar updateFamilyMember
+        await updateFamilyMember({
+          variables: {
+            familiarId: editingFamiliar.id,
+            familiar: buildFamiliarInput(member),
           },
-        },
-      })
+        })
+      } else {
+        // Añadir nuevo
+        await addFamilyMember({
+          variables: {
+            family_id: family.id,
+            familiar: buildFamiliarInput(member),
+          },
+        })
+      }
     } catch (err) {
       const msg = err instanceof Error ? err.message : t('editMemberPage.familySection.operationError')
       setOperationError(msg)
@@ -154,7 +160,6 @@ export function EditableFamilyMembers({ memberId, membershipType }: EditableFami
     if (!parentesco) return ''
     const key = `familyMemberForm.relationship.${parentesco}`
     const translated = t(key)
-    // Si no hay traducción, devolver el valor tal cual
     return translated === key ? parentesco : translated
   }
 
@@ -276,6 +281,7 @@ export function EditableFamilyMembers({ memberId, membershipType }: EditableFami
           nombre: editingFamiliar.nombre,
           apellidos: editingFamiliar.apellidos,
           fecha_nacimiento: editingFamiliar.fecha_nacimiento || undefined,
+          tipo_documento: (editingFamiliar.document_type as DocumentType) || undefined,
           dni_nie: editingFamiliar.dni_nie || undefined,
           correo_electronico: editingFamiliar.correo_electronico || undefined,
           parentesco: editingFamiliar.parentesco || undefined,

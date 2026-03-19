@@ -465,6 +465,7 @@ export type Mutation = {
   sendVerificationEmail: MutationResponse;
   updateCashFlow: CashFlow;
   updateFamily: Family;
+  updateFamilyMember: Family;
   updateMember: Member;
   updatePayment: Payment;
   updateTransaction: CashFlow;
@@ -606,6 +607,12 @@ export type MutationUpdateCashFlowArgs = {
 
 export type MutationUpdateFamilyArgs = {
   input: UpdateFamilyInput;
+};
+
+
+export type MutationUpdateFamilyMemberArgs = {
+  familiar_id: Scalars['ID']['input'];
+  familiar: FamiliarInput;
 };
 
 

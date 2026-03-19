@@ -69,10 +69,11 @@ interface MemberFormSubmitData {
     nombre: string
     apellidos: string
     fecha_nacimiento?: string | null
+    tipo_documento?: string
     dni_nie?: string
     correo_electronico?: string
     parentesco?: string
-    telefonos?: Array<{ numero_telefono: string }> // ⭐ NUEVO CAMPO
+    telefonos?: Array<{ numero_telefono: string }>
   }>
 }
 
@@ -264,9 +265,10 @@ export const NewMemberPage: React.FC = () => {
           apellidos: fm.apellidos,
           fecha_nacimiento: formatDateToRFC3339(fm.fecha_nacimiento),
           dni_nie: fm.dni_nie || null,
+          document_type: (fm.tipo_documento as any) || null,
           correo_electronico: fm.correo_electronico || null,
-          parentesco: fm.parentesco || 'Hijo/a', // Required field
-          telefonos: fm.telefonos || [], // ⭐ NUEVO CAMPO
+          parentesco: fm.parentesco || 'Hijo/a',
+          telefonos: fm.telefonos || [],
         })),
 
         // Address data to create member automatically

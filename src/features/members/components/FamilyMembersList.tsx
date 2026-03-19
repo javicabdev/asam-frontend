@@ -20,7 +20,7 @@ import {
   Person as PersonIcon,
 } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
-import { FamilyMember } from '../types'
+import { FamilyMember, PARENTESCO_VALUES, ParentescoValue } from '../types'
 import { FamilyMemberForm } from './FamilyMemberForm'
 
 interface FamilyMembersListProps {
@@ -66,6 +66,13 @@ export const FamilyMembersList: React.FC<FamilyMembersListProps> = ({
     return date.toLocaleDateString('es-ES')
   }
 
+  const getParentescoLabel = (parentesco?: string) => {
+    if (!parentesco) return ''
+    const i18nKey = PARENTESCO_VALUES[parentesco as ParentescoValue]
+    if (i18nKey) return t(`familyMemberForm.relationship.${i18nKey}`)
+    return parentesco
+  }
+
   return (
     <Card variant="outlined">
       <CardContent>
@@ -107,7 +114,7 @@ export const FamilyMembersList: React.FC<FamilyMembersListProps> = ({
                         {member.nombre} {member.apellidos}
                       </Typography>
                       {member.parentesco && (
-                        <Chip label={member.parentesco} size="small" variant="outlined" />
+                        <Chip label={getParentescoLabel(member.parentesco)} size="small" variant="outlined" />
                       )}
                     </Box>
                   }

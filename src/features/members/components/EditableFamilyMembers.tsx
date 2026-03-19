@@ -24,7 +24,7 @@ import { useTranslation } from 'react-i18next'
 
 import { FamilyMemberForm } from './FamilyMemberForm'
 import { useFamilyData } from '../hooks'
-import { MembershipType, FamilyMember, DocumentType } from '../types'
+import { MembershipType, FamilyMember, DocumentType, PARENTESCO_VALUES, ParentescoValue } from '../types'
 import {
   useAddFamilyMemberMutation,
   useUpdateFamilyMemberMutation,
@@ -158,9 +158,15 @@ export function EditableFamilyMembers({ memberId, membershipType }: EditableFami
 
   const getParentescoLabel = (parentesco?: string | null) => {
     if (!parentesco) return ''
-    const key = `familyMemberForm.relationship.${parentesco}`
-    const translated = t(key)
-    return translated === key ? parentesco : translated
+    // Buscar la clave i18n desde el valor almacenado en BD (español)
+    const i18nKey = PARENTESCO_VALUES[parentesco as ParentescoValue]
+    if (i18nKey) {
+      return t(`familyMemberForm.relationship.${i18nKey}`)
+    }
+    // Fallback: intentar como clave directa (datos legacy en inglés)
+    const directKey = `familyMemberForm.relationship.${parentesco}`
+    const translated = t(directKey)
+    return translated === directKey ? parentesco : translated
   }
 
   return (

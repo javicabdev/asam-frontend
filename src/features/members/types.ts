@@ -96,6 +96,22 @@ export interface MemberConnection {
   pageInfo: PageInfo
 }
 
+// Parentesco: mapa de valor almacenado en BD (español) → clave i18n
+export const PARENTESCO_VALUES = {
+  'Hijo/a': 'child',
+  'Padre': 'father',
+  'Madre': 'mother',
+  'Hermano/a': 'sibling',
+  'Abuelo/a': 'grandparent',
+  'Nieto/a': 'grandchild',
+  'Tío/a': 'uncle_aunt',
+  'Sobrino/a': 'nephew_niece',
+  'Primo/a': 'cousin',
+  'Otro': 'other',
+} as const
+
+export type ParentescoValue = keyof typeof PARENTESCO_VALUES
+
 // Family types
 export interface FamilyMember {
   id?: string

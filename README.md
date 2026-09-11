@@ -77,7 +77,7 @@ La aplicación permite a los administradores generar las cuotas anuales para tod
 
 ## 📋 Requisitos Previos
 
-- Node.js 18+
+- Node.js 24 LTS (minimum 22.12)
 - npm o yarn
 - Backend ASAM ejecutándose en http://localhost:8080
 

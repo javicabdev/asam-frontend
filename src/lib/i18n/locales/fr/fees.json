@@ -30,7 +30,7 @@
     },
     "preview": {
       "title": "Aperçu - Année {{year}}",
-      "alreadyExistsWarning": "Il existe déjà des cotisations générées pour cette année. En confirmant, seuls les paiements manquants seront créés.",
+      "alreadyExistsWarning": "La cotisation de cette année existe déjà. En confirmant, ses montants et ceux des paiements en attente seront mis à jour, et les paiements manquants seront créés. Les paiements déjà encaissés ne changent pas.",
       "amountConfig": "Configuration des Montants",
       "baseFeeAmount": "Cotisation de Base",
       "familyFeeExtra": "Supplément Familial",
@@ -39,7 +39,7 @@
       "familyMembers": "Membres Familiaux",
       "totalMembers": "Total des Membres",
       "totalExpected": "Total Attendu",
-      "confirmMessage": "En confirmant, des paiements en attente seront générés pour tous les membres actifs. Cette opération est réversible.",
+      "confirmMessage": "En confirmant, des paiements en attente seront générés pour les membres actifs inscrits cette année-là ou avant.",
       "confirm": "Confirmer et Générer"
     },
     "generating": {

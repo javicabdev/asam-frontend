@@ -13,11 +13,13 @@ import { useFeeValidation, type ValidationErrors } from '../hooks/useFeeValidati
 import type { FeeGenerationFormData } from '../types'
 
 interface FeeGenerationFormProps {
+  initialValues: FeeGenerationFormData
   onSubmit: (data: FeeGenerationFormData) => void
   disabled?: boolean
 }
 
 export const FeeGenerationForm: React.FC<FeeGenerationFormProps> = ({
+  initialValues,
   onSubmit,
   disabled = false,
 }) => {
@@ -25,11 +27,7 @@ export const FeeGenerationForm: React.FC<FeeGenerationFormProps> = ({
   const { validateForm, isValid } = useFeeValidation()
   const currentYear = new Date().getFullYear()
 
-  const [formData, setFormData] = useState<FeeGenerationFormData>({
-    year: currentYear,
-    baseFeeAmount: 30,
-    familyFeeExtra: 20,
-  })
+  const [formData, setFormData] = useState<FeeGenerationFormData>(initialValues)
 
   const [errors, setErrors] = useState<ValidationErrors>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})

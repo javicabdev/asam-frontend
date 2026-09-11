@@ -15,7 +15,7 @@ import {
 import { Close as CloseIcon } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { useFeeGeneration } from '../hooks/useFeeGeneration'
-import { FeeGenerationForm } from './FeeGenerationForm'
+import { FeeGenerationFormStep } from './FeeGenerationFormStep'
 import { FeeGenerationPreviewComponent } from './FeeGenerationPreview'
 import { FeeGenerationResult } from './FeeGenerationResult'
 
@@ -104,7 +104,8 @@ export const FeeGenerationDialog: React.FC<FeeGenerationDialogProps> = ({
 
           <Box sx={{ minHeight: 400 }}>
             {state.step === 'form' && (
-              <FeeGenerationForm
+              <FeeGenerationFormStep
+                savedFormData={state.formData}
                 onSubmit={validateAndPreview}
                 disabled={generating}
               />

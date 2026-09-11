@@ -48,7 +48,7 @@ export const useFeeGeneration = () => {
    * Validate form data and show preview
    */
   const validateAndPreview = useCallback(
-    async (formData: FeeGenerationFormData) => {
+    async (formData: FeeGenerationFormData, existingYears: readonly number[]) => {
       try {
         setState((prev) => ({ ...prev, step: 'preview' }))
 
@@ -63,7 +63,7 @@ export const useFeeGeneration = () => {
           estimatedIndividualMembers: 0,
           estimatedFamilyMembers: 0,
           estimatedTotalAmount: 0,
-          feeExists: false,
+          feeExists: existingYears.includes(formData.year),
         }
 
         setState((prev) => ({
